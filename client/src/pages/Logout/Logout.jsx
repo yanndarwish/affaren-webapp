@@ -1,12 +1,13 @@
 import LogoutDialog from "../../components/Card/LogoutCard/LogoutCard.component.jsx"
 import { useSelector } from "react-redux"
+import { CenterContainer } from "../../assets/styles/common.styles.js"
 
 const Logout = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	return (
-		<div>
+		<CenterContainer theme={theme}>
 			<LogoutDialog theme={theme} />
-		</div>
+		</CenterContainer>
 	)
 }
 export default Logout

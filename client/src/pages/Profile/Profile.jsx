@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux"
+import { Body, Container, Header, SubTitle, Title } from "../../assets/styles/common.styles"
 import { useGetProfileQuery } from "../../redux/services/api"
 
 const Profile = () => {
@@ -8,16 +9,16 @@ const Profile = () => {
 	const user = useSelector((state) => state.user.user)
 
 	return (
-		<div>
-			<div>
-				<h1>
+		<Container theme={theme}>
+			<Header>
+				<Title>
 					{user && user.firstName} {user && user.lastName}
-				</h1>
-			</div>
+				</Title>
+			</Header>
 			<div></div>
-			<div>
+			<Body theme={theme}>
 				<div>
-					<h2>Performances</h2>
+					<SubTitle>Performances</SubTitle>
 				</div>
 				<div></div>
 
@@ -25,8 +26,8 @@ const Profile = () => {
 					<div></div>
 					<div></div>
 				</div>
-			</div>
-		</div>
+			</Body>
+		</Container>
 	)
 }
 

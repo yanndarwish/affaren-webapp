@@ -3,6 +3,8 @@ import { logout } from "../../../redux/features/login"
 import { userLogout } from "../../../redux/features/user"
 import Button from "../../Button/Button.component"
 import { useNavigate } from "react-router-dom"
+import { SubTitle } from "../../../assets/styles/common.styles"
+import { Container, Footer, Text } from "../Card.styles"
 
 const LogoutDialog = ({ theme }) => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -20,18 +22,18 @@ const LogoutDialog = ({ theme }) => {
 	}
 
 	return (
-		<div>
+		<Container theme={theme}>
 			<div>
-				<h1>Logout</h1>
+				<SubTitle>Logout</SubTitle>
 			</div>
 			<div>
-				<p>Are you sure you want to logout ?</p>
+				<Text>Are you sure you want to logout ?</Text>
 			</div>
-			<div>
+			<Footer>
 				<Button title="Cancel" color="red" onPress={handleCancel}></Button>
 				<Button title="Logout" color="green" onPress={handleLogout}></Button>
-			</div>
-		</div>
+			</Footer>
+		</Container>
 	)
 }
 

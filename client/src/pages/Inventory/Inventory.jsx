@@ -4,27 +4,29 @@ import { useSelector } from "react-redux"
 import Input from "../../components/Input/Input.component"
 import Button from "../../components/Button/Button.component"
 
+import { Body, Container, Flex, Header, SearchSection, SubTitle, Title } from "../../assets/styles/common.styles"
+
 const Inventory = () => {
 	const theme = useSelector((state) => state.theme.theme)
 
 	return (
-		<div>
-			<div>
-				<h1>Inventory</h1>
-			</div>
-			<div>
-				<div>
+		<Container theme={theme}>
+			<Header>
+				<Title>Inventory</Title>
+			</Header>
+			<SearchSection>
+				<Flex>
 					<Input theme={theme} />
 					<Button color="purple" title="Search" />
-				</div>
-				<div>
+				</Flex>
+				<Flex>
 					<Input theme={theme} />
 					<Button color="purple" title="Search" />
-				</div>
-			</div>
-			<div>
+				</Flex>
+			</SearchSection>
+			<Body theme={theme}>
 				<div>
-					<h2>Products</h2>
+					<SubTitle>Products</SubTitle>
 				</div>
 				<div></div>
 
@@ -32,8 +34,8 @@ const Inventory = () => {
 					<div></div>
 					<div></div>
 				</div>
-			</div>
-		</div>
+			</Body>
+		</Container>
 	)
 }
 

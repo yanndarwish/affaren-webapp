@@ -34,49 +34,61 @@ export const constant = {
 	CLR_DANGER: "#EF4565",
 }
 
-// export const Container = styled.main`
-// 	display: flex;
-// 	flex: 1;
-// 	padding: ${constant.PADDING_L};
-//     color: ${(props) =>
-// 			props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT}
-// 	background-color: ${(props) =>
-// 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
-// `
+export const Container = styled.main`
+	display: flex;
+	flex-direction: column;
+	padding: ${constant.PADDING_L}px;
+	width: 100%;
+	gap: ${constant.GAP * 2}px;
+	color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
+	background-color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
+`
 
-// export const CenterContainer = styled.div`
-// 	display: flex;
-// 	justify-content: center;
-// 	align-items: center;
-// 	background-color: ${(props) =>
-// 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
-// `
+export const CenterContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	background-color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
+`
 
-// export const Header = styled.header`
-// 	display: flex;
-// 	align-items: flex-start;
-// `
+export const Header = styled.header`
+	display: flex;
+	align-items: flex-start;
+`
 
-// export const Title = styled.h1`
-// 	font-size: ${constant.FONT_PAGE_TITLE};
-// 	font-weight: bold;
-// 	color: ${(props) =>
-// 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
-// `
+export const SpaceHeader = styled.header`
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+`
 
-// export const SearchSection = styled.div`
-// 	display: flex;
-// `
+export const Title = styled.h1`
+	font-size: ${constant.FONT_PAGE_TITLE}px;
+	font-weight: bold;
+`
 
-// export const Body = styled.div`
-// 	padding: ${constant.PADDING_M};
-// 	box-shadow: 3px 3px 3px black;
-// 	background-color: ${(props) =>
-// 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
-// `
+export const SearchSection = styled.div`
+	display: flex;
+	gap: ${constant.GAP * 2}px;
+`
 
-// export const SubTitle = styled.h2`
-// 	font-size: ${constant.FONT_SECTION_TITLE};
-// 	color: ${(props) =>
-// 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
-// `
+export const Flex = styled.div`
+	display: flex;
+`
+
+export const Body = styled.div`
+	padding: ${constant.PADDING_M}px;
+	box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);
+	background-color: ${(props) =>
+		props.theme === "dark"
+			? dark.COLOR_BG_SECONDARY
+			: light.COLOR_BG_SECONDARY};
+`
+
+export const SubTitle = styled.h2`
+	font-size: ${constant.FONT_SECTION_TITLE}px;
+`

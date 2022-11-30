@@ -2,22 +2,23 @@
 import { useSelector } from "react-redux" 
 import Input from "../../components/Input/Input.component"
 import Button from "../../components/Button/Button.component"
+import { Body, Container, Flex, SpaceHeader, SubTitle, Title } from "../../assets/styles/common.styles"
 
 const Help = () => {
 	const theme = useSelector((state) => state.theme.theme)
 
 	return (
-		<div>
-			<div>
-				<h1>Help</h1>
-				<div>
+		<Container theme={theme}>
+			<SpaceHeader>
+				<Title>Help</Title>
+				<Flex>
 					<Input theme={theme} />
 					<Button color="purple" title="Search" />
-				</div>
-			</div>
-			<div>
+				</Flex>
+			</SpaceHeader>
+			<Body theme={theme}>
 				<div>
-					<h2>Products</h2>
+					<SubTitle>Section</SubTitle>
 				</div>
 				<div></div>
 
@@ -25,8 +26,8 @@ const Help = () => {
 					<div></div>
 					<div></div>
 				</div>
-			</div>
-		</div>
+			</Body>
+		</Container>
 	)
 }
 

@@ -1,9 +1,10 @@
-
 import Input from "../../components/Input/Input.component"
 import Button from "../../components/Button/Button.component"
 import { useGetProfilesMutation } from "../../redux/services/api"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
+import { Body, Container, Flex, SpaceHeader, SubTitle, Title } from "../../assets/styles/common.styles"
+
 const Dashboard = () => {
 	const user = useSelector((state) => state.user.user)
 	const users = useSelector((state) => state.user.users)
@@ -16,26 +17,18 @@ const Dashboard = () => {
 	}, [user])
 
 	return (
-		<div
-			
-		>
-			<div >
-				<h1
-					
-				>
-					Dashboard
-				</h1>
-				<div>
+		<Container theme={theme}>
+			<SpaceHeader>
+				<Title>Dashboard</Title>
+				<Flex>
 					{/* replace by datepicker */}
 					<Input theme={theme} />
 					<Button color="purple" title="Search" />
-				</div>
-			</div>
-			<div
-				
-			>
+				</Flex>
+			</SpaceHeader>
+			<Body theme={theme}>
 				<div>
-					<h2>Charts</h2>
+					<SubTitle>Charts</SubTitle>
 				</div>
 				<div></div>
 
@@ -43,8 +36,8 @@ const Dashboard = () => {
 					<div></div>
 					<div></div>
 				</div>
-			</div>
-		</div>
+			</Body>
+		</Container>
 	)
 }
 
