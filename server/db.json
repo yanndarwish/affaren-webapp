@@ -1,0 +1,2254 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "first_name": "Marrilee",
+      "last_name": "Loyley",
+      "email": "mloyley0@shinystat.com",
+      "password": "xB11DvxWc",
+      "is_admin": false
+    },
+    {
+      "id": 2,
+      "first_name": "Ninnetta",
+      "last_name": "Leindecker",
+      "email": "nleindecker1@nyu.edu",
+      "password": "aUMI8W8",
+      "is_admin": false
+    },
+    {
+      "id": 3,
+      "first_name": "Anastasie",
+      "last_name": "McGroarty",
+      "email": "amcgroarty2@patch.com",
+      "password": "0xoorB",
+      "is_admin": false
+    },
+    {
+      "id": 4,
+      "first_name": "Gerty",
+      "last_name": "De Bernardis",
+      "email": "gdebernardis3@buzzfeed.com",
+      "password": "UF5NyiiLqe",
+      "is_admin": false
+    },
+    {
+      "id": 5,
+      "first_name": "Joyous",
+      "last_name": "Ciementini",
+      "email": "jciementini4@ucoz.ru",
+      "password": "M1BaOo",
+      "is_admin": false
+    },
+    {
+      "firstName": "al",
+      "lastName": "mil",
+      "email": "al@gmail.com",
+      "password": "$2a$10$RanqvH9JwoOuTrTCrvwqaeby6.w2Gc19mQt0HOU.iexoArgoIvmfi",
+      "isAdmin": true,
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2LCJlbWFpbCI6IkFsQGdtYWlsLmNvbSIsImlhdCI6MTY2OTQ2OTk0OCwiZXhwIjoxNjY5NDc3MTQ4fQ.x9AP88rTIt7h5JXEGNYgFozhvE3TWXIQ3iBllN4CWlQ",
+      "id": 6
+    }
+  ],
+  "sales": [
+    {
+      "id": 1,
+      "date": "2022-11-18",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 99.44,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 2,
+      "date": "2022-11-18",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 22,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 3,
+      "date": "2022-11-13",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 33.08,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 4,
+      "date": "2022-10-20",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 89.51,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 5,
+      "date": "2022-11-13",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 40.72,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 6,
+      "date": "2022-11-23",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 43.82,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 7,
+      "date": "2022-10-21",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 6.92,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 8,
+      "date": "2022-10-20",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 40.05,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 9,
+      "date": "2022-11-20",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 50.22,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 10,
+      "date": "2022-11-05",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 99.07,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 11,
+      "date": "2022-10-25",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 14.38,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 12,
+      "date": "2022-10-21",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 37.7,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 13,
+      "date": "2022-10-31",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 11.85,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 14,
+      "date": "2022-11-14",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 68.58,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 15,
+      "date": "2022-10-31",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 33.07,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 16,
+      "date": "2022-11-19",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 56.8,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 17,
+      "date": "2022-11-21",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 51.72,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 18,
+      "date": "2022-11-01",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 89.03,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 19,
+      "date": "2022-10-26",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 8.76,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 20,
+      "date": "2022-10-19",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 93.2,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 21,
+      "date": "2022-11-19",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 1.11,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 22,
+      "date": "2022-11-02",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 83.75,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 23,
+      "date": "2022-10-25",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 88.66,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 24,
+      "date": "2022-11-16",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 68.4,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 25,
+      "date": "2022-11-09",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 84.25,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 26,
+      "date": "2022-11-04",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 53.84,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 27,
+      "date": "2022-11-13",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 14.42,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 28,
+      "date": "2022-11-10",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 71.45,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 29,
+      "date": "2022-11-13",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 93.73,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 30,
+      "date": "2022-10-29",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 17.94,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 31,
+      "date": "2022-11-17",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 71.85,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 32,
+      "date": "2022-11-16",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 54.21,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 33,
+      "date": "2022-10-26",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 34.87,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 34,
+      "date": "2022-11-21",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 25.28,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 35,
+      "date": "2022-10-27",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 35.18,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 36,
+      "date": "2022-11-08",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 72.84,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 37,
+      "date": "2022-11-16",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 25.76,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 38,
+      "date": "2022-11-03",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 11.21,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 39,
+      "date": "2022-11-14",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 9.01,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 40,
+      "date": "2022-10-19",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 3.87,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 41,
+      "date": "2022-10-29",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 17.16,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 42,
+      "date": "2022-10-22",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 81.15,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 43,
+      "date": "2022-10-24",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 52.56,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 44,
+      "date": "2022-11-11",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 20.59,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 45,
+      "date": "2022-11-04",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 60.81,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 46,
+      "date": "2022-10-29",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 46,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 47,
+      "date": "2022-10-24",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 10,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 48,
+      "date": "2022-10-23",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 25.06,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 49,
+      "date": "2022-11-10",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 83.99,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 50,
+      "date": "2022-11-05",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 30.87,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 51,
+      "date": "2022-11-19",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 32.41,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 52,
+      "date": "2022-11-19",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 66.32,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 53,
+      "date": "2022-11-04",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 48.37,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 54,
+      "date": "2022-11-14",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 68.71,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 55,
+      "date": "2022-10-21",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 78.99,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 56,
+      "date": "2022-11-04",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 85.91,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 57,
+      "date": "2022-10-25",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 48.24,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 58,
+      "date": "2022-11-15",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 30.71,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 59,
+      "date": "2022-11-06",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 48.92,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 60,
+      "date": "2022-10-20",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 30.27,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 61,
+      "date": "2022-10-22",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 55.76,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 62,
+      "date": "2022-10-21",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 60,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 63,
+      "date": "2022-11-18",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 59.66,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 64,
+      "date": "2022-11-15",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 54.03,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 65,
+      "date": "2022-11-01",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 32.21,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 66,
+      "date": "2022-11-02",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 48.03,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 67,
+      "date": "2022-11-23",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 76.57,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 68,
+      "date": "2022-10-27",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 24.52,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 69,
+      "date": "2022-11-21",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 81.53,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 70,
+      "date": "2022-11-22",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 63.45,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 71,
+      "date": "2022-10-29",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 94.81,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 72,
+      "date": "2022-11-23",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 2.13,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 73,
+      "date": "2022-11-06",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 89.52,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 74,
+      "date": "2022-10-28",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 46.39,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 75,
+      "date": "2022-11-15",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 54.93,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 76,
+      "date": "2022-11-15",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 69.88,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 77,
+      "date": "2022-11-18",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 28.79,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 78,
+      "date": "2022-11-22",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 9.14,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 79,
+      "date": "2022-11-04",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 96.43,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 80,
+      "date": "2022-11-18",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 90.19,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 81,
+      "date": "2022-11-15",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 13.05,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 82,
+      "date": "2022-11-07",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 62.61,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 83,
+      "date": "2022-11-06",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 32.81,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 84,
+      "date": "2022-11-04",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 86.43,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 85,
+      "date": "2022-11-17",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 1.58,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 86,
+      "date": "2022-10-24",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 39.95,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 87,
+      "date": "2022-10-28",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 6.72,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 88,
+      "date": "2022-11-11",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 44.51,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 89,
+      "date": "2022-11-02",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 34.31,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 90,
+      "date": "2022-10-26",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 5.12,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 91,
+      "date": "2022-11-01",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 44.79,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 92,
+      "date": "2022-10-27",
+      "payment_methods": [
+        {}
+      ],
+      "amount": 71.92,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 93,
+      "date": "2022-11-02",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 84.03,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 94,
+      "date": "2022-10-23",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 89.16,
+      "products": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 95,
+      "date": "2022-10-28",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 86.19,
+      "products": [
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 96,
+      "date": "2022-11-05",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 32.5,
+      "products": [
+        {}
+      ]
+    },
+    {
+      "id": 97,
+      "date": "2022-11-07",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 84.99,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 98,
+      "date": "2022-11-02",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 81.13,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 99,
+      "date": "2022-10-26",
+      "payment_methods": [
+        {},
+        {},
+        {}
+      ],
+      "amount": 49.12,
+      "products": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 100,
+      "date": "2022-10-21",
+      "payment_methods": [
+        {},
+        {}
+      ],
+      "amount": 28.44,
+      "products": [
+        {},
+        {},
+        {}
+      ]
+    }
+  ],
+  "days": [
+    {
+      "id": 1,
+      "date": "2022-11-11",
+      "opened_at": "9:59",
+      "closed_at": "19:00",
+      "user": "jpresley0",
+      "total": 500.26,
+      "total_cash": 113.07,
+      "total_card": 1317.86,
+      "total_check": 41.53
+    },
+    {
+      "id": 2,
+      "date": "2022-11-09",
+      "opened_at": "9:55",
+      "closed_at": "19:29",
+      "user": "tcoppock1",
+      "total": 552.43,
+      "total_cash": 224.78,
+      "total_card": 1674.22,
+      "total_check": 84.67
+    },
+    {
+      "id": 3,
+      "date": "2022-10-21",
+      "opened_at": "10:21",
+      "closed_at": "18:57",
+      "user": "ssiggin2",
+      "total": 1805.08,
+      "total_cash": 166.5,
+      "total_card": 871.03,
+      "total_check": 172.74
+    },
+    {
+      "id": 4,
+      "date": "2022-11-19",
+      "opened_at": "10:29",
+      "closed_at": "18:49",
+      "user": "svanderkruys3",
+      "total": 851.6,
+      "total_cash": 292.2,
+      "total_card": 545.93,
+      "total_check": 16.42
+    },
+    {
+      "id": 5,
+      "date": "2022-11-08",
+      "opened_at": "10:47",
+      "closed_at": "18:37",
+      "user": "bchadwell4",
+      "total": 1321.88,
+      "total_cash": 83.74,
+      "total_card": 1243.49,
+      "total_check": 163.81
+    },
+    {
+      "id": 6,
+      "date": "2022-11-23",
+      "opened_at": "10:07",
+      "closed_at": "19:15",
+      "user": "delders5",
+      "total": 1934.19,
+      "total_cash": 269.99,
+      "total_card": 1787.74,
+      "total_check": 78.38
+    },
+    {
+      "id": 7,
+      "date": "2022-11-04",
+      "opened_at": "10:05",
+      "closed_at": "19:24",
+      "user": "dstronghill6",
+      "total": 1622.2,
+      "total_cash": 189.51,
+      "total_card": 1302.65,
+      "total_check": 167.98
+    },
+    {
+      "id": 8,
+      "date": "2022-10-22",
+      "opened_at": "10:06",
+      "closed_at": "19:03",
+      "user": "alorens7",
+      "total": 774.64,
+      "total_cash": 88.77,
+      "total_card": 721.08,
+      "total_check": 56.88
+    },
+    {
+      "id": 9,
+      "date": "2022-10-27",
+      "opened_at": "10:02",
+      "closed_at": "18:43",
+      "user": "lrampley8",
+      "total": 1479.16,
+      "total_cash": 248.25,
+      "total_card": 554.79,
+      "total_check": 41.91
+    },
+    {
+      "id": 10,
+      "date": "2022-10-24",
+      "opened_at": "9:42",
+      "closed_at": "19:18",
+      "user": "mfroude9",
+      "total": 1007.47,
+      "total_cash": 144.22,
+      "total_card": 1164.56,
+      "total_check": 159.47
+    },
+    {
+      "id": 11,
+      "date": "2022-11-16",
+      "opened_at": "9:49",
+      "closed_at": "18:57",
+      "user": "spallistera",
+      "total": 1067.49,
+      "total_cash": 54.69,
+      "total_card": 952.5,
+      "total_check": 142.63
+    },
+    {
+      "id": 12,
+      "date": "2022-10-19",
+      "opened_at": "10:04",
+      "closed_at": "19:15",
+      "user": "agrzeskowskib",
+      "total": 1115.4,
+      "total_cash": 77.95,
+      "total_card": 1329.61,
+      "total_check": 77.02
+    },
+    {
+      "id": 13,
+      "date": "2022-10-26",
+      "opened_at": "9:46",
+      "closed_at": "18:51",
+      "user": "josbornec",
+      "total": 1150.66,
+      "total_cash": 111.43,
+      "total_card": 271.98,
+      "total_check": 107.4
+    },
+    {
+      "id": 14,
+      "date": "2022-11-07",
+      "opened_at": "10:39",
+      "closed_at": "19:27",
+      "user": "hlyburnd",
+      "total": 880.38,
+      "total_cash": 132.85,
+      "total_card": 1306.93,
+      "total_check": 23.74
+    },
+    {
+      "id": 15,
+      "date": "2022-11-13",
+      "opened_at": "10:16",
+      "closed_at": "18:46",
+      "user": "lbadgere",
+      "total": 521.14,
+      "total_cash": 206.92,
+      "total_card": 1236.48,
+      "total_check": 110.76
+    },
+    {
+      "id": 16,
+      "date": "2022-10-21",
+      "opened_at": "10:58",
+      "closed_at": "19:13",
+      "user": "wchoulesf",
+      "total": 788.65,
+      "total_cash": 29.38,
+      "total_card": 226.21,
+      "total_check": 198.44
+    },
+    {
+      "id": 17,
+      "date": "2022-11-18",
+      "opened_at": "9:30",
+      "closed_at": "18:35",
+      "user": "egerrillg",
+      "total": 1025.58,
+      "total_cash": 156.32,
+      "total_card": 1065.28,
+      "total_check": 0.82
+    },
+    {
+      "id": 18,
+      "date": "2022-11-15",
+      "opened_at": "10:59",
+      "closed_at": "18:35",
+      "user": "rguirauh",
+      "total": 691.19,
+      "total_cash": 211.3,
+      "total_card": 1361.27,
+      "total_check": 196.47
+    },
+    {
+      "id": 19,
+      "date": "2022-10-25",
+      "opened_at": "10:06",
+      "closed_at": "19:09",
+      "user": "emohringi",
+      "total": 1650.58,
+      "total_cash": 230.89,
+      "total_card": 318.33,
+      "total_check": 11.81
+    },
+    {
+      "id": 20,
+      "date": "2022-11-02",
+      "opened_at": "9:32",
+      "closed_at": "19:16",
+      "user": "mnewlinj",
+      "total": 1342.59,
+      "total_cash": 53.24,
+      "total_card": 1012.82,
+      "total_check": 120.32
+    },
+    {
+      "id": 21,
+      "date": "2022-11-21",
+      "opened_at": "10:12",
+      "closed_at": "19:20",
+      "user": "cchillesk",
+      "total": 1424.6,
+      "total_cash": 291.79,
+      "total_card": 773.28,
+      "total_check": 49.34
+    },
+    {
+      "id": 22,
+      "date": "2022-11-07",
+      "opened_at": "9:30",
+      "closed_at": "18:50",
+      "user": "smcartanl",
+      "total": 707.69,
+      "total_cash": 201.95,
+      "total_card": 1016.22,
+      "total_check": 129.59
+    },
+    {
+      "id": 23,
+      "date": "2022-11-05",
+      "opened_at": "9:52",
+      "closed_at": "19:09",
+      "user": "aeddisforthm",
+      "total": 859.92,
+      "total_cash": 241.85,
+      "total_card": 772.62,
+      "total_check": 158
+    },
+    {
+      "id": 24,
+      "date": "2022-10-31",
+      "opened_at": "9:52",
+      "closed_at": "19:12",
+      "user": "ahattigann",
+      "total": 1085.37,
+      "total_cash": 187,
+      "total_card": 1793.68,
+      "total_check": 174.31
+    },
+    {
+      "id": 25,
+      "date": "2022-11-09",
+      "opened_at": "10:50",
+      "closed_at": "18:59",
+      "user": "etiplingo",
+      "total": 1220.73,
+      "total_cash": 218.01,
+      "total_card": 1149.05,
+      "total_check": 159.86
+    },
+    {
+      "id": 26,
+      "date": "2022-11-22",
+      "opened_at": "9:40",
+      "closed_at": "18:58",
+      "user": "lprobartp",
+      "total": 544.48,
+      "total_cash": 285.65,
+      "total_card": 1633.95,
+      "total_check": 182.97
+    },
+    {
+      "id": 27,
+      "date": "2022-11-17",
+      "opened_at": "9:58",
+      "closed_at": "18:51",
+      "user": "cbuntq",
+      "total": 1971.14,
+      "total_cash": 250.8,
+      "total_card": 722.84,
+      "total_check": 32.68
+    },
+    {
+      "id": 28,
+      "date": "2022-11-09",
+      "opened_at": "10:48",
+      "closed_at": "18:40",
+      "user": "rbernotr",
+      "total": 1513.11,
+      "total_cash": 14.96,
+      "total_card": 1171.9,
+      "total_check": 16.18
+    },
+    {
+      "id": 29,
+      "date": "2022-11-17",
+      "opened_at": "10:21",
+      "closed_at": "18:38",
+      "user": "gslites",
+      "total": 428.24,
+      "total_cash": 215.62,
+      "total_card": 1440.95,
+      "total_check": 37.54
+    },
+    {
+      "id": 30,
+      "date": "2022-11-20",
+      "opened_at": "9:47",
+      "closed_at": "19:28",
+      "user": "aelist",
+      "total": 1171.4,
+      "total_cash": 92.35,
+      "total_card": 884.52,
+      "total_check": 14.09
+    },
+    {
+      "id": 31,
+      "date": "2022-11-20",
+      "opened_at": "10:25",
+      "closed_at": "18:56",
+      "user": "sfairrieu",
+      "total": 1070.46,
+      "total_cash": 90.91,
+      "total_card": 1778.44,
+      "total_check": 174.44
+    },
+    {
+      "id": 32,
+      "date": "2022-10-27",
+      "opened_at": "10:25",
+      "closed_at": "19:06",
+      "user": "ghowv",
+      "total": 489.75,
+      "total_cash": 62.24,
+      "total_card": 727.65,
+      "total_check": 10.42
+    },
+    {
+      "id": 33,
+      "date": "2022-10-19",
+      "opened_at": "10:01",
+      "closed_at": "19:22",
+      "user": "kisenorw",
+      "total": 1636.09,
+      "total_cash": 251.54,
+      "total_card": 787.87,
+      "total_check": 59.6
+    },
+    {
+      "id": 34,
+      "date": "2022-11-02",
+      "opened_at": "10:45",
+      "closed_at": "19:24",
+      "user": "wkinnyx",
+      "total": 1707.53,
+      "total_cash": 101.64,
+      "total_card": 1191.72,
+      "total_check": 6.49
+    },
+    {
+      "id": 35,
+      "date": "2022-11-01",
+      "opened_at": "9:52",
+      "closed_at": "18:42",
+      "user": "rbriddeny",
+      "total": 1528.87,
+      "total_cash": 137.92,
+      "total_card": 729.38,
+      "total_check": 104.05
+    },
+    {
+      "id": 36,
+      "date": "2022-11-03",
+      "opened_at": "10:09",
+      "closed_at": "19:22",
+      "user": "jrochez",
+      "total": 1731.04,
+      "total_cash": 267.7,
+      "total_card": 289.07,
+      "total_check": 165.27
+    },
+    {
+      "id": 37,
+      "date": "2022-10-26",
+      "opened_at": "10:01",
+      "closed_at": "19:16",
+      "user": "jbowhay10",
+      "total": 1444.41,
+      "total_cash": 289.66,
+      "total_card": 1768.69,
+      "total_check": 108.76
+    },
+    {
+      "id": 38,
+      "date": "2022-11-16",
+      "opened_at": "9:31",
+      "closed_at": "19:13",
+      "user": "mfaughny11",
+      "total": 794.39,
+      "total_cash": 277.45,
+      "total_card": 258.79,
+      "total_check": 49.26
+    },
+    {
+      "id": 39,
+      "date": "2022-11-22",
+      "opened_at": "9:44",
+      "closed_at": "19:26",
+      "user": "radolfsen12",
+      "total": 1458.34,
+      "total_cash": 179.8,
+      "total_card": 734.53,
+      "total_check": 128.57
+    },
+    {
+      "id": 40,
+      "date": "2022-11-12",
+      "opened_at": "10:47",
+      "closed_at": "18:47",
+      "user": "gcuddon13",
+      "total": 1502.52,
+      "total_cash": 296.11,
+      "total_card": 1513.51,
+      "total_check": 166.24
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Flower - Commercial Bronze",
+      "price": 17.35,
+      "stock": 14,
+      "barcode": "1132761409",
+      "taxe": 2
+    },
+    {
+      "id": 2,
+      "name": "Cheese - Cheddarsliced",
+      "price": 41.71,
+      "stock": 10,
+      "barcode": "7277741536",
+      "taxe": 3
+    },
+    {
+      "id": 3,
+      "name": "Cookies - Englishbay Chochip",
+      "price": 26.64,
+      "stock": 3,
+      "barcode": "5959683369",
+      "taxe": 1
+    },
+    {
+      "id": 4,
+      "name": "Pate Pans Yellow",
+      "price": 35.61,
+      "stock": 8,
+      "barcode": "8832889099",
+      "taxe": 1
+    },
+    {
+      "id": 5,
+      "name": "Juice - Clam, 46 Oz",
+      "price": 60.21,
+      "stock": 3,
+      "barcode": "7007895808",
+      "taxe": 3
+    },
+    {
+      "id": 6,
+      "name": "Beef Cheek Fresh",
+      "price": 31.97,
+      "stock": 3,
+      "barcode": "6204101870",
+      "taxe": 2
+    },
+    {
+      "id": 7,
+      "name": "Chocolate - Semi Sweet",
+      "price": 59.96,
+      "stock": 9,
+      "barcode": "3240985365",
+      "taxe": 1
+    },
+    {
+      "id": 8,
+      "name": "Steam Pan Full Lid",
+      "price": 58.75,
+      "stock": 10,
+      "barcode": "8072434462",
+      "taxe": 3
+    },
+    {
+      "id": 9,
+      "name": "Oil - Margarine",
+      "price": 59.89,
+      "stock": 2,
+      "barcode": "9748497763",
+      "taxe": 3
+    },
+    {
+      "id": 10,
+      "name": "Wine - Placido Pinot Grigo",
+      "price": 0.73,
+      "stock": 18,
+      "barcode": "7998182563",
+      "taxe": 1
+    },
+    {
+      "id": 11,
+      "name": "Sauce - Vodka Blush",
+      "price": 16.04,
+      "stock": 15,
+      "barcode": "5801157220",
+      "taxe": 3
+    },
+    {
+      "id": 12,
+      "name": "Steam Pan Full Lid",
+      "price": 41.47,
+      "stock": 5,
+      "barcode": "3979615804",
+      "taxe": 2
+    },
+    {
+      "id": 13,
+      "name": "Cabbage Roll",
+      "price": 69.83,
+      "stock": 19,
+      "barcode": "2910039498",
+      "taxe": 1
+    },
+    {
+      "id": 14,
+      "name": "Wine - Chablis J Moreau Et Fils",
+      "price": 30.97,
+      "stock": 18,
+      "barcode": "4619104175",
+      "taxe": 2
+    },
+    {
+      "id": 15,
+      "name": "Worcestershire Sauce",
+      "price": 73.17,
+      "stock": 20,
+      "barcode": "3245773730",
+      "taxe": 3
+    },
+    {
+      "id": 16,
+      "name": "Graham Cracker Mix",
+      "price": 10.86,
+      "stock": 13,
+      "barcode": "3939338990",
+      "taxe": 1
+    },
+    {
+      "id": 17,
+      "name": "Pepper - Chillies, Crushed",
+      "price": 20.45,
+      "stock": 11,
+      "barcode": "5176647990",
+      "taxe": 3
+    },
+    {
+      "id": 18,
+      "name": "Olives - Nicoise",
+      "price": 44.76,
+      "stock": 3,
+      "barcode": "7045383649",
+      "taxe": 3
+    },
+    {
+      "id": 19,
+      "name": "Wine - Chateau Timberlay",
+      "price": 70.82,
+      "stock": 14,
+      "barcode": "5635903649",
+      "taxe": 3
+    },
+    {
+      "id": 20,
+      "name": "Bar Bran Honey Nut",
+      "price": 20.55,
+      "stock": 14,
+      "barcode": "6913588380",
+      "taxe": 2
+    },
+    {
+      "id": 21,
+      "name": "Sauce - Oyster",
+      "price": 76.94,
+      "stock": 14,
+      "barcode": "8715555496",
+      "taxe": 3
+    },
+    {
+      "id": 22,
+      "name": "Onions - Green",
+      "price": 24.75,
+      "stock": 20,
+      "barcode": "3729802593",
+      "taxe": 1
+    },
+    {
+      "id": 23,
+      "name": "Okra",
+      "price": 63.43,
+      "stock": 19,
+      "barcode": "7286960466",
+      "taxe": 3
+    },
+    {
+      "id": 24,
+      "name": "Ecolab - Lime - A - Way 4/4 L",
+      "price": 33.39,
+      "stock": 15,
+      "barcode": "1901223019",
+      "taxe": 1
+    },
+    {
+      "id": 25,
+      "name": "Dip - Tapenade",
+      "price": 66.2,
+      "stock": 16,
+      "barcode": "1960025554",
+      "taxe": 2
+    },
+    {
+      "id": 26,
+      "name": "Oil - Safflower",
+      "price": 62.99,
+      "stock": 13,
+      "barcode": "1550041924",
+      "taxe": 2
+    },
+    {
+      "id": 27,
+      "name": "Beef - Outside, Round",
+      "price": 44.85,
+      "stock": 11,
+      "barcode": "9962837758",
+      "taxe": 2
+    },
+    {
+      "id": 28,
+      "name": "Lobster - Base",
+      "price": 19.7,
+      "stock": 9,
+      "barcode": "1775389502",
+      "taxe": 1
+    },
+    {
+      "id": 29,
+      "name": "Beer - Muskoka Cream Ale",
+      "price": 65.17,
+      "stock": 15,
+      "barcode": "6490023121",
+      "taxe": 1
+    },
+    {
+      "id": 30,
+      "name": "Nougat - Paste / Cream",
+      "price": 64.75,
+      "stock": 8,
+      "barcode": "2367500460",
+      "taxe": 3
+    },
+    {
+      "id": 31,
+      "name": "Tomatoes - Yellow Hot House",
+      "price": 23.31,
+      "stock": 8,
+      "barcode": "2013619707",
+      "taxe": 3
+    },
+    {
+      "id": 32,
+      "name": "Sambuca - Ramazzotti",
+      "price": 32.24,
+      "stock": 4,
+      "barcode": "7554190652",
+      "taxe": 1
+    },
+    {
+      "id": 33,
+      "name": "Bread - White, Sliced",
+      "price": 13.07,
+      "stock": 15,
+      "barcode": "2352751098",
+      "taxe": 1
+    },
+    {
+      "id": 34,
+      "name": "Wine - Montecillo Rioja Crianza",
+      "price": 19.42,
+      "stock": 13,
+      "barcode": "6142381638",
+      "taxe": 1
+    },
+    {
+      "id": 35,
+      "name": "Tart Shells - Savory, 3",
+      "price": 73.77,
+      "stock": 1,
+      "barcode": "5193255868",
+      "taxe": 3
+    },
+    {
+      "id": 36,
+      "name": "Prunes - Pitted",
+      "price": 65.66,
+      "stock": 8,
+      "barcode": "1605637599",
+      "taxe": 1
+    },
+    {
+      "id": 37,
+      "name": "Pepper - Black, Ground",
+      "price": 44.11,
+      "stock": 8,
+      "barcode": "0940303760",
+      "taxe": 1
+    },
+    {
+      "id": 38,
+      "name": "Chocolate - Compound Coating",
+      "price": 15.14,
+      "stock": 13,
+      "barcode": "9582498382",
+      "taxe": 3
+    },
+    {
+      "id": 39,
+      "name": "Chicken Thigh - Bone Out",
+      "price": 66.99,
+      "stock": 17,
+      "barcode": "0497871475",
+      "taxe": 1
+    },
+    {
+      "id": 40,
+      "name": "Aromat Spice / Seasoning",
+      "price": 60.94,
+      "stock": 14,
+      "barcode": "1810667305",
+      "taxe": 2
+    }
+  ]
+}
