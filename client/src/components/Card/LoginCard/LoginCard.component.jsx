@@ -23,7 +23,7 @@ const LoginCard = ({ theme }) => {
 	return (
 		<div>
 			<div>
-				<h1>Login</h1>
+				<h2 theme={theme}>Login</h2>
 			</div>
 			<div>
 				<Input value={email} theme={theme} onChange={setEmail} />

@@ -1,0 +1,82 @@
+import styled from "styled-components"
+import dark from "./dark.theme.styles"
+import light from "./light.theme.styles"
+
+export const constant = {
+	// padding
+	PADDING_XS: 6,
+	PADDING_S: 12,
+	PADDING_M: 24,
+	PADDING_L: 48,
+	PADDING_XL: 96,
+	// margin
+	MARGIN_XS: 6,
+	MARGIN_S: 12,
+	MARGIN_M: 24,
+	MARGIN_L: 48,
+	MARGIN_XL: 96,
+	// gap
+	GAP: 24,
+	// font-size
+	FONT_PAGE_TITLE: 52,
+	FONT_SECTION_TITLE: 36,
+	FONT_ARTICLE_TITLE: 24,
+	FONT_SUBTITLE: 24,
+	FONT_LABEL: 16,
+	FONT_BODY: 20,
+	// border-radius
+	BORDER_RADIUS_S: 4,
+	BORDER_RADIUS_M: 6,
+	//base colors
+	CLR_ACCENT: "#7F5AF0",
+	CLR_SUCCESS: "#2CB67D",
+	CLR_WARNING: "#FAAE2B",
+	CLR_DANGER: "#EF4565",
+}
+
+// export const Container = styled.main`
+// 	display: flex;
+// 	flex: 1;
+// 	padding: ${constant.PADDING_L};
+//     color: ${(props) =>
+// 			props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT}
+// 	background-color: ${(props) =>
+// 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
+// `
+
+// export const CenterContainer = styled.div`
+// 	display: flex;
+// 	justify-content: center;
+// 	align-items: center;
+// 	background-color: ${(props) =>
+// 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
+// `
+
+// export const Header = styled.header`
+// 	display: flex;
+// 	align-items: flex-start;
+// `
+
+// export const Title = styled.h1`
+// 	font-size: ${constant.FONT_PAGE_TITLE};
+// 	font-weight: bold;
+// 	color: ${(props) =>
+// 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
+// `
+
+// export const SearchSection = styled.div`
+// 	display: flex;
+// `
+
+// export const Body = styled.div`
+// 	padding: ${constant.PADDING_M};
+// 	box-shadow: 3px 3px 3px black;
+// 	background-color: ${(props) =>
+// 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
+// `
+
+// export const SubTitle = styled.h2`
+// 	font-size: ${constant.FONT_SECTION_TITLE};
+// 	color: ${(props) =>
+// 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
+// `

@@ -5,7 +5,7 @@ const Login = () => {
 	const theme = useSelector((state) => state.theme.theme)
 
 	return (
-		<div>
+		<div theme={theme}>
 			<LoginCard theme={theme} />
 		</div>
 	)
