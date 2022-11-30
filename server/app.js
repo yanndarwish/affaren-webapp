@@ -5,10 +5,12 @@ const jwt = require("jsonwebtoken")
 const auth = require("./middleware/auth")
 const authorize = require("./middleware/authorize")
 const express = require("express")
+const cors = require('cors')
 
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 app.post("/register", async (req, res) => {
 	try {
