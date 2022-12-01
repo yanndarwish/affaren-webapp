@@ -9,7 +9,7 @@ export const api = createApi({
 			const token = store.getState().login?.token
             console.log(token)
 			if (token) {
-                console.log(headers)
+
 				headers.set("x-access-token", token)
 				return headers
 			}

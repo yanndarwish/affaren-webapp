@@ -89,12 +89,17 @@ app.post("/login", async (req, res) => {
 		}
 
 		// validate if user exists in db
-		const foundUser = users.find((user) => user.email === email.toLowerCase())
+		// const foundUser = users.find((user) => user.email === email.toLowerCase())
+		let foundUser = await pool.query(
+			"SELECT * FROM users WHERE user_email = $1", [email.toLowerCase()]
+		)
 
-		if (foundUser && (await bcrypt.compare(password, foundUser.password))) {
+		foundUser = foundUser.rows[0]
+
+		if (foundUser && (await bcrypt.compare(password, foundUser.user_password))) {
 			// create token
 			const token = jwt.sign(
-				{ user_id: foundUser.id, email },
+				{ user_id: foundUser.user_id, email },
 				process.env.TOKEN_KEY,
 				{
 					expiresIn: "2h",
@@ -104,26 +109,27 @@ app.post("/login", async (req, res) => {
 			// update user's token
 			const user = {
 				...foundUser,
-				token: token,
+				user_token: token,
 			}
 
 			// save user token
-			const response = await fetch(
-				`http://localhost:3000/users/${foundUser.id}`,
-				{
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(user),
-				}
-			)
-			const data = await response.json()
-			console.log(data)
+			// const response = await fetch(
+			// 	`http://localhost:3000/users/${foundUser.user_id}`,
+			// 	{
+			// 		method: "PUT",
+			// 		headers: {
+			// 			"Content-Type": "application/json",
+			// 		},
+			// 		body: JSON.stringify(user),
+			// 	}
+			// )
+			// const data = await response.json()
+			// console.log(data)
+			const response = await pool.query("UPDATE users SET user_token = $1 WHERE user_id = $2", [token, user.user_id])
+			console.log(response)
 			res.status(200).json({ token: token })
 			return
 		}
-		console.log("niet")
 		res.status(400).send("Invalid Credentials")
 		return
 	} catch (err) {
@@ -132,14 +138,16 @@ app.post("/login", async (req, res) => {
 })
 
 app.get("/profile", auth, async (req, res) => {
-	const response = await fetch(
-		`http://localhost:3000/users/${req.user.user_id}`
-	)
-	const data = await response.json()
+	// const response = await fetch(
+	// 	`http://localhost:3000/users/${req.user.user_id}`
+	// )
+	// const data = await response.json()
+	const response = await pool.query("SELECT * FROM users WHERE user_id = $1", [req.user.user_id])
+	const data = response.rows[0]
 
 	let clone = Object.assign({}, data)
-	delete clone.password
-	delete clone.token
+	delete clone.user_password
+	delete clone.user_token
 
 	res.status(200).send({ user: clone })
 	return
@@ -147,13 +155,17 @@ app.get("/profile", auth, async (req, res) => {
 
 app.post("/profiles", authorize, async (req, res) => {
 	
-	const response = await fetch("http://localhost:3000/users")
-	const data = await response.json()
+	// const response = await fetch("http://localhost:3000/users")
+	// const data = await response.json()
+	const response = await pool.query("SELECT * FROM users")
+	const data = response.rows
+	console.log(data)
+
 	let clone = Object.assign([], data)
 
 	clone && clone.forEach(item => {
-		delete item.password
-		delete item.token
+		delete item.user_password
+		delete item.user_token
 	})
 
 	res.status(200).send({ users: clone })

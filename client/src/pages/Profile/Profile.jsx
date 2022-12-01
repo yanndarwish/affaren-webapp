@@ -12,7 +12,7 @@ const Profile = () => {
 		<Container theme={theme}>
 			<Header>
 				<Title>
-					{user && user.firstName} {user && user.lastName}
+					{user && user.user_first_name} {user && user.user_last_name}
 				</Title>
 			</Header>
 			<div></div>
