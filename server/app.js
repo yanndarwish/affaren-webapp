@@ -6,11 +6,15 @@ const auth = require("./middleware/auth")
 const authorize = require("./middleware/authorize")
 const express = require("express")
 const cors = require('cors')
+const pool = require("./db")
+const { query } = require("express")
 
 const app = express()
 
 app.use(express.json())
 app.use(cors())
+
+// Create a product
 
 app.post("/register", async (req, res) => {
 	try {
@@ -54,16 +58,21 @@ app.post("/register", async (req, res) => {
 		user.token = token
 
 		// return a new user
-		const response = await fetch("http://localhost:3000/users", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(user),
-		})
-		const data = await response.json()
-		console.log(data)
-		res.status(200).json(user)
+		// const response = await fetch("http://localhost:3000/users", {
+		// 	method: "POST",
+		// 	headers: {
+		// 		"Content-Type": "application/json",
+		// 	},
+		// 	body: JSON.stringify(user),
+		// })
+		// const data = await response.json()
+		// console.log(data)
+		const newUser = await pool.query(
+			"INSERT INTO users(user_first_name,user_last_name,user_email,user_password,user_is_admin,user_token) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
+			[firstName, lastName, email, encryptedPassword, isAdmin, token]
+		)
+		// res.status(200).json(user)
+		res.status(200).json(newUser.rows[0])
 	} catch (err) {
 		console.log(err)
 	}
