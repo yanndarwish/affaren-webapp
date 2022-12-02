@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Input from "../../Input/Input.component"
 import Button from "../../Button/Button.component"
-import { useGetAuthMutation } from "../../../redux/services/api"
+import { useGetAuthMutation } from "../../../redux/services/loginApi"
 import { useNavigate } from "react-router-dom"
 import { SubTitle } from "../../../assets/styles/common.styles"
 import { Container, Text, Footer } from "../Card.styles"

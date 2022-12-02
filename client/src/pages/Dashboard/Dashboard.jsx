@@ -1,6 +1,6 @@
 import Input from "../../components/Input/Input.component"
 import Button from "../../components/Button/Button.component"
-import { useGetUsersMutation } from "../../redux/services/api"
+import { useGetUsersMutation } from "../../redux/services/userApi"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { Body, Container, Flex, SpaceHeader, SubTitle, Title } from "../../assets/styles/common.styles"

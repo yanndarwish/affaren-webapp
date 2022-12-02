@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { Body, Container, Header, SubTitle, Title } from "../../assets/styles/common.styles"
-import { useGetUserQuery } from "../../redux/services/api"
+import { useGetUserQuery } from "../../redux/services/userApi"
 
 const Profile = () => {
 	const { data, isLoading, error } = useGetUserQuery()
