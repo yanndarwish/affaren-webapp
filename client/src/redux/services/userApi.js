@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import store from "../store/store"
 
 export const userApi = createApi({
-	reducerPath: "loginApi",
+	reducerPath: "userApi",
 	baseQuery: fetchBaseQuery({
 		baseUrl: "http://localhost:4001/",
 		prepareHeaders: (headers) => {

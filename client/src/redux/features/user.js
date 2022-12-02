@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { api } from "../services/api"
+import userApi from "../services/userApi"
 
 const initialState = {
 	user: {},
@@ -16,10 +16,10 @@ const userSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addMatcher(api.endpoints.getUser.matchFulfilled, (state, action) => {
+			.addMatcher(userApi.endpoints.getUser.matchFulfilled, (state, action) => {
 				state.user = action.payload.user
 			})
-			.addMatcher(api.endpoints.getUsers.matchFulfilled, (state, action) => {
+			.addMatcher(userApi.endpoints.getUsers.matchFulfilled, (state, action) => {
 				state.users = action.payload.users
 			})
 	},
