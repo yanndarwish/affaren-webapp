@@ -7,9 +7,10 @@ export const api = createApi({
 		baseUrl: "http://localhost:4001/",
 		prepareHeaders: (headers) => {
 			const token = store.getState().login?.token
-			const role = store.getState().user?.user.user_is_admin === "true" ? "admin" : "none"
+			const role =
+				store.getState().user?.user.user_is_admin === "true" ? "admin" : "none"
 
-            console.log(role)
+			console.log(role)
 			if (token) {
 				headers.set("x-access-token", token)
 				headers.set("role", role)
@@ -18,15 +19,15 @@ export const api = createApi({
 			return headers
 		},
 	}),
-	tagTypes: ["Users", "User"],
+	tagTypes: ["Users", "User", "Products", "Sales"],
 	endpoints: (builder) => ({
 		register: builder.mutation({
 			query: (payload) => ({
 				url: "register",
 				method: "POST",
-				body: payload
+				body: payload,
 			}),
-			invalidatesTags: ["Users"]
+			invalidatesTags: ["Users"],
 		}),
 		getAuth: builder.mutation({
 			query: (payload) => ({
@@ -35,6 +36,7 @@ export const api = createApi({
 				body: payload,
 			}),
 		}),
+		// users
 		getUser: builder.query({
 			query: () => ({
 				url: "user",
@@ -46,26 +48,115 @@ export const api = createApi({
 			query: (payload) => ({
 				url: "users",
 				method: "POST",
-				body: payload
+				body: payload,
 			}),
-			providesTags: ["Users"]
+			providesTags: ["Users"],
 		}),
 		updateUser: builder.mutation({
 			query: (payload) => ({
 				url: "users",
 				method: "PUT",
-				body: payload
+				body: payload,
 			}),
-			invalidatesTags: ["User"]
+			invalidatesTags: ["User"],
 		}),
 		patchUser: builder.mutation({
 			query: (payload) => ({
 				url: "users",
 				method: "PATCH",
-				body: payload
+				body: payload,
 			}),
-			invalidatesTags: ["Users"]
-		})
+			invalidatesTags: ["Users"],
+		}),
+		// products
+		postProduct: builder.mutation({
+			query: (payload) => ({
+				url: "products",
+				method: "POST",
+				body: payload,
+			}),
+			invalidatesTags: ["Products"],
+		}),
+		updateProducts: builder.mutation({
+			query: ({ payload, id }) => ({
+				url: `products/${id}`,
+				method: "PUT",
+				body: payload,
+			}),
+			invalidatesTags: ["Products"],
+		}),
+		getProducts: builder.query({
+			query: () => ({
+				url: "products",
+			}),
+			providesTags: ["Products"],
+		}),
+		getProduct: builder.query({
+			query: ({ barcode }) => ({
+				url: `products/${barcode}`,
+			}),
+		}),
+		deleteProduct: builder.mutation({
+			query: ({ id }) => ({
+				url: `products/${id}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: ["Products"],
+		}),
+		// sales
+		postSale: builder.mutation({
+			query: ({ payload }) => ({
+				url: "sales",
+				method: "POST",
+				body: payload,
+			}),
+			invalidatesTags: ["Sales"],
+		}),
+		updateSale: builder.mutation({
+			query: ({ id, payload }) => ({
+				url: `sales/${id}`,
+				method: "PUT",
+				body: payload,
+			}),
+			invalidatesTags: ["Sales"],
+		}),
+		getSales: builder.query({
+			query: () => ({
+				url: "sales",
+			}),
+			providesTags: ["Sales"],
+		}),
+		getSale: builder.query({
+			query: ({ id }) => ({
+				url: `sales/${id}`,
+			}),
+		}),
+		deleteSale: builder.mutation({
+			query: ({ id }) => ({
+				url: `sales/${id}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: ["Sales"],
+		}),
+		// sales_products
+		postSaleProducts: builder.mutation({
+			query: ({ id, payload }) => ({
+				url: `sales/${id}/products`,
+				method: "POST",
+				body: payload,
+			}),
+		}),
+		getSalesProducts: builder.query({
+			query: ({ id }) => ({
+				url: `sales/${id}/products`,
+			}),
+		}),
+		deleteSaleProducts: builder.mutation({
+			query: ({ id }) => ({
+				url: `sales/${id}/products`,
+				method: "DELETE",
+			}),
+		}),
 	}),
 })
 
@@ -75,6 +166,6 @@ export const {
 	useGetUserQuery,
 	useGetUsersMutation,
 	useUpdateUserMutation,
-	usePatchUserMutation
+	usePatchUserMutation,
 } = api
 export default api

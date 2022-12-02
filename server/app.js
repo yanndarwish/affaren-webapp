@@ -14,9 +14,66 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
+// ******************************* //
+// *********** LOGIN ************* //
+// ******************************* //
+
+app.post("/login", async (req, res) => {
+	try {
+		// get user input
+		const { email, password } = req.body
+		console.log(email)
+		// validate user input
+		if (!(email && password)) {
+			res.status(400).send("All inputs are required")
+		}
+
+		// validate if user exists in db
+		// const foundUser = users.find((user) => user.email === email.toLowerCase())
+		let foundUser = await pool.query(
+			"SELECT * FROM users WHERE user_email = $1",
+			[email.toLowerCase()]
+		)
+
+		foundUser = foundUser.rows[0]
+
+		if (
+			foundUser &&
+			(await bcrypt.compare(password, foundUser.user_password))
+		) {
+			// create token
+			const token = jwt.sign(
+				{ user_id: foundUser.user_id, email },
+				process.env.TOKEN_KEY,
+				{
+					expiresIn: "2h",
+				}
+			)
+
+			// update user's token
+			const user = {
+				...foundUser,
+				user_token: token,
+			}
+
+			// save user token
+			const response = await pool.query(
+				"UPDATE users SET user_token = $1 WHERE user_id = $2",
+				[token, user.user_id]
+			)
+			console.log(response)
+			res.status(200).json({ token: token })
+			return
+		}
+		res.status(400).send("Invalid Credentials")
+		return
+	} catch (err) {
+		console.log(err)
+	}
+})
 
 // ******************************* //
-// *********** Users ************* //
+// *********** USERS ************* //
 // ******************************* //
 
 // Create a new user
@@ -88,7 +145,7 @@ app.get("/user", auth, async (req, res) => {
 	return
 })
 
-// Get all users
+// As admin, Get all users
 
 app.post("/users", authorize, async (req, res) => {
 	const response = await pool.query("SELECT * FROM users")
@@ -161,74 +218,218 @@ app.patch("/users", authorize, async (req, res) => {
 			res.status(400).send("All inputs are required")
 		}
 
-		const response = await pool.query("UPDATE users SET user_is_admin = $1 WHERE user_id = $2", [user_is_admin, user_id])
+		const response = await pool.query(
+			"UPDATE users SET user_is_admin = $1 WHERE user_id = $2",
+			[user_is_admin, user_id]
+		)
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
 	}
 })
 
-app.post("/login", async (req, res) => {
+// ******************************* //
+// ********* PRODUCTS ************ //
+// ******************************* //
+
+// create a product
+app.post("/products", auth, async (req, res) => {
 	try {
-		// get user input
-		const { email, password } = req.body
-		console.log(email)
-		// validate user input
-		if (!(email && password)) {
+		const { name, price, quantity, taxe, barcode, alert } = req.body
+
+		if (!(name, price, quantity, taxe, barcode, alert)) {
 			res.status(400).send("All inputs are required")
 		}
 
-		// validate if user exists in db
-		// const foundUser = users.find((user) => user.email === email.toLowerCase())
-		let foundUser = await pool.query(
-			"SELECT * FROM users WHERE user_email = $1",
-			[email.toLowerCase()]
+		const response = await pool.query(
+			"INSERT INTO products (product_name, product_price, product_taxe, product_quantity, product_barcode, product_alert) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+			[name, price, taxe, quantity, barcode, alert]
 		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
 
-		foundUser = foundUser.rows[0]
+// update a product
+app.put("/products/:id", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+		const { name, price, taxe, quantity, alert } = req.body
+		const response = await pool.query(
+			"UPDATE products SET product_name = $1, product_price = $2, product_taxe = $3, product_quantity = $4, product_alert = $5 WHERE product_id = $6 RETURNING *",
+			[name, price, taxe, quantity, alert, id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
 
-		if (
-			foundUser &&
-			(await bcrypt.compare(password, foundUser.user_password))
-		) {
-			// create token
-			const token = jwt.sign(
-				{ user_id: foundUser.user_id, email },
-				process.env.TOKEN_KEY,
-				{
-					expiresIn: "2h",
-				}
-			)
+// get all products
+app.get("/products", auth, async (req, res) => {
+	try {
+		const response = await pool.query("SELECT * FROM products")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
 
-			// update user's token
-			const user = {
-				...foundUser,
-				user_token: token,
-			}
+// get a product by barcode
+app.get("/products/:barcode", auth, async (req, res) => {
+	try {
+		const barcode = req.params.barcode
 
-			// save user token
-			// const response = await fetch(
-			// 	`http://localhost:3000/users/${foundUser.user_id}`,
-			// 	{
-			// 		method: "PUT",
-			// 		headers: {
-			// 			"Content-Type": "application/json",
-			// 		},
-			// 		body: JSON.stringify(user),
-			// 	}
-			// )
-			// const data = await response.json()
-			// console.log(data)
-			const response = await pool.query(
-				"UPDATE users SET user_token = $1 WHERE user_id = $2",
-				[token, user.user_id]
-			)
-			console.log(response)
-			res.status(200).json({ token: token })
-			return
-		}
-		res.status(400).send("Invalid Credentials")
-		return
+		const response = await pool.query(
+			"SELECT * FROM products WHERE product_barcode = $1",
+			[barcode]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// delete a product by id
+app.delete("/products/:id", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+
+		const response = await pool.query(
+			"DELETE FROM products WHERE product_id = $1",
+			[id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// ******************************* //
+// ************ SALES ************ //
+// ******************************* //
+
+// create a sale
+app.post("/sales", auth, async (req, res) => {
+	try {
+		const { date, amount, paymentMethods, discount, taxes, user } = req.body
+
+		const response = await pool.query(
+			"INSERT INTO sales (sale_date, sale_amount, sale_payment_methods, sale_discount, sale_taxes, sale_user) VALUES ($1, $2, $3, $4, $5, $6)",
+			[date, amount, paymentMethods, discount, taxes, user]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get all sales
+app.get("/sales", auth, async (req, res) => {
+	try {
+		const response = await pool.query("SELECT * FROM sales")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get a specific sale by id
+app.get("/sales/:id", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+
+		const response = await pool.query(
+			"SELECT * FROM sales WHERe sale_id = $1",
+			[id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// update a sale
+app.put("/sales/:id", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+
+		const { amount, paymentMethods, discount, taxes } = req.body
+
+		const response = await pool.query(
+			"UPDATE sales SET sale_amount = $1, sale_payment_methods = $2, sale_discount = $3, sale_taxes = $4 WHERE sale_id = $5",
+			[amount, paymentMethods, discount, taxes, id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// delete a sale
+app.delete("/sales/:id", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+
+		const response = await pool.query("DELETE FROM sales WHERE sale_id = $1", [
+			id,
+		])
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// ******************************* //
+// ******* SALES_PRODUCTS ******** //
+// ******************************* //
+
+//  create a product in a sale
+app.post("/sales/:id/products", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+
+		const products = req.body.products
+
+		let responses = []
+		products.forEach(async (product) => {
+			const { name, quantity, discount, price, taxe, barcode, productId } =
+				product
+
+				const response = await pool.query(
+					"INSERT INTO sales_products (sale_id, product_name, product_quantity, product_discount, product_price, product_taxe, product_barcode) VALUEs ($1, $2, $3, $4, $5, $6, $7)",
+					[id, name, quantity, discount, price, taxe, barcode]
+				)
+
+				responses.push(response.rows)
+			})
+			res.status(200).send(responses)
+			
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get all products of a sale
+app.get("/sales/:id/products", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+
+		const response = await pool.query("SELECT * FROM sales_products WHERE sale_id = $1", [id])
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// delete all products from a sale
+app.delete("/sales/:id/products", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+
+		const response = await pool.query("DELETE FROM sales_products WHERE sale_id = $1", [id])
+		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
 	}
