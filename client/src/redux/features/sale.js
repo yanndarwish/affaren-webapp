@@ -25,7 +25,7 @@ const saleSlice = createSlice({
 			state.date = action.payload.date
 		},
 		addProduct: (state, action) => {
-			state.products = state.products.push(action.payload.products)
+			state.products.push(action.payload.products)
 		},
 		setSaleAmount: (state, action) => {
 			state.amount = action.payload.amount
@@ -59,6 +59,6 @@ export const {
 	setTaxes,
 	setDiscount,
 	setUser,
-} = saleSlice
+} = saleSlice.actions
 
 export default saleSlice.reducer

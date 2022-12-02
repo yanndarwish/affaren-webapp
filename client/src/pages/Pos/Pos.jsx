@@ -2,6 +2,7 @@ import { useSelector } from "react-redux"
 import Button from "../../components/Button/Button.component"
 import Input from "../../components/Input/Input.component"
 import { Body, Container, Header, SearchSection, SubTitle, Title } from "../../assets/styles/common.styles"
+import BarcodeInput from "../../components/BarcodeInput/BarcodeInput"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -11,7 +12,7 @@ const Pos = () => {
 				<Title theme={theme}>Pos</Title>
 			</Header>
 			<SearchSection>
-				<Input theme={theme} />
+				<BarcodeInput />
 				<Button color="purple" title="No Barcode" />
 			</SearchSection>
 			<Body theme={theme}>

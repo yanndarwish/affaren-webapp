@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 const Input = ({ value, onChange, secure = false, theme, style }) => {
 	return (
 		<input

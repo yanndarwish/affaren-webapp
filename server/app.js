@@ -285,7 +285,7 @@ app.get("/products/:barcode", auth, async (req, res) => {
 			"SELECT * FROM products WHERE product_barcode = $1",
 			[barcode]
 		)
-		res.status(200).send(response.rows)
+		res.status(200).send(response.rows[0])
 	} catch (err) {
 		console.log(err)
 	}
