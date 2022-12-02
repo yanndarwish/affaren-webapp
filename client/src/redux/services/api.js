@@ -7,17 +7,27 @@ export const api = createApi({
 		baseUrl: "http://localhost:4001/",
 		prepareHeaders: (headers) => {
 			const token = store.getState().login?.token
-            console.log(token)
-			if (token) {
+			const role = store.getState().user?.user.user_is_admin === "true" ? "admin" : "none"
 
+            console.log(role)
+			if (token) {
 				headers.set("x-access-token", token)
+				headers.set("role", role)
 				return headers
 			}
 			return headers
 		},
 	}),
-	tagTypes: ["Profiles", "Profile"],
+	tagTypes: ["Users", "User"],
 	endpoints: (builder) => ({
+		register: builder.mutation({
+			query: (payload) => ({
+				url: "register",
+				method: "POST",
+				body: payload
+			}),
+			invalidatesTags: ["Users"]
+		}),
 		getAuth: builder.mutation({
 			query: (payload) => ({
 				url: "login",
@@ -25,23 +35,46 @@ export const api = createApi({
 				body: payload,
 			}),
 		}),
-		getProfile: builder.query({
+		getUser: builder.query({
 			query: () => ({
-				url: "profile",
+				url: "user",
 				method: "GET",
 			}),
-			providesTags: ["Profile"],
+			providesTags: ["User"],
 		}),
-		getProfiles: builder.mutation({
+		getUsers: builder.mutation({
 			query: (payload) => ({
-				url: "profiles",
+				url: "users",
 				method: "POST",
 				body: payload
 			}),
-			providesTags: ["Profiles"]
+			providesTags: ["Users"]
+		}),
+		updateUser: builder.mutation({
+			query: (payload) => ({
+				url: "users",
+				method: "PUT",
+				body: payload
+			}),
+			invalidatesTags: ["User"]
+		}),
+		patchUser: builder.mutation({
+			query: (payload) => ({
+				url: "users",
+				method: "PATCH",
+				body: payload
+			}),
+			invalidatesTags: ["Users"]
 		})
 	}),
 })
 
-export const { useGetAuthMutation, useGetProfileQuery, useGetProfilesMutation } = api
+export const {
+	useRegisterMutation,
+	useGetAuthMutation,
+	useGetUserQuery,
+	useGetUsersMutation,
+	useUpdateUserMutation,
+	usePatchUserMutation
+} = api
 export default api

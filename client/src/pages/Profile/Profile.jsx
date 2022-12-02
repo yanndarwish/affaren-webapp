@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux"
 import { Body, Container, Header, SubTitle, Title } from "../../assets/styles/common.styles"
-import { useGetProfileQuery } from "../../redux/services/api"
+import { useGetUserQuery } from "../../redux/services/api"
 
 const Profile = () => {
-	const { data, isLoading, error } = useGetProfileQuery()
+	const { data, isLoading, error } = useGetUserQuery()
 	const theme = useSelector((state) => state.theme.theme)
 	const token = useSelector((state) => state.login.token)
 	const user = useSelector((state) => state.user.user)

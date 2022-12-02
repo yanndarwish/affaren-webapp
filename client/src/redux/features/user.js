@@ -16,10 +16,10 @@ const userSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addMatcher(api.endpoints.getProfile.matchFulfilled, (state, action) => {
+			.addMatcher(api.endpoints.getUser.matchFulfilled, (state, action) => {
 				state.user = action.payload.user
 			})
-			.addMatcher(api.endpoints.getProfiles.matchFulfilled, (state, action) => {
+			.addMatcher(api.endpoints.getUsers.matchFulfilled, (state, action) => {
 				state.users = action.payload.users
 			})
 	},
