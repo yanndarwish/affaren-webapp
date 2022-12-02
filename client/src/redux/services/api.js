@@ -28,69 +28,10 @@ export const api = createApi({
 				body: payload,
 			}),
 		}),
-		// sales
-		postSale: builder.mutation({
-			query: ({ payload }) => ({
-				url: "sales",
-				method: "POST",
-				body: payload,
-			}),
-			invalidatesTags: ["Sales"],
-		}),
-		updateSale: builder.mutation({
-			query: ({ id, payload }) => ({
-				url: `sales/${id}`,
-				method: "PUT",
-				body: payload,
-			}),
-			invalidatesTags: ["Sales"],
-		}),
-		getSales: builder.query({
-			query: () => ({
-				url: "sales",
-			}),
-			providesTags: ["Sales"],
-		}),
-		getSale: builder.query({
-			query: ({ id }) => ({
-				url: `sales/${id}`,
-			}),
-		}),
-		deleteSale: builder.mutation({
-			query: ({ id }) => ({
-				url: `sales/${id}`,
-				method: "DELETE",
-			}),
-			invalidatesTags: ["Sales"],
-		}),
-		// sales_products
-		postSaleProducts: builder.mutation({
-			query: ({ id, payload }) => ({
-				url: `sales/${id}/products`,
-				method: "POST",
-				body: payload,
-			}),
-		}),
-		getSalesProducts: builder.query({
-			query: ({ id }) => ({
-				url: `sales/${id}/products`,
-			}),
-		}),
-		deleteSaleProducts: builder.mutation({
-			query: ({ id }) => ({
-				url: `sales/${id}/products`,
-				method: "DELETE",
-			}),
-		}),
 	}),
 })
 
 export const {
-	useRegisterMutation,
 	useGetAuthMutation,
-	useGetUserQuery,
-	useGetUsersMutation,
-	useUpdateUserMutation,
-	usePatchUserMutation,
 } = api
 export default api

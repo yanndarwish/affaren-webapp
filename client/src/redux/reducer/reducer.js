@@ -5,6 +5,7 @@ import user from "../features/user"
 import { api } from "../services/api"
 import productsApi from "../services/productsApi"
 import userApi from "../services/userApi"
+import salesApi from "../services/salesApi"
 
 const rootReducer = combineReducers({
 	theme,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
 	user,
 	[api.reducerPath]: api.reducer,
 	[productsApi.reducerPath]: productsApi.reducer,
-	[userApi.reducerPath]: userApi.reducer
+	[userApi.reducerPath]: userApi.reducer,
+	[salesApi.reducerPath]: salesApi.reducer
 })
 
 export default rootReducer
