@@ -68,41 +68,6 @@ export const api = createApi({
 			}),
 			invalidatesTags: ["Users"],
 		}),
-		// products
-		postProduct: builder.mutation({
-			query: (payload) => ({
-				url: "products",
-				method: "POST",
-				body: payload,
-			}),
-			invalidatesTags: ["Products"],
-		}),
-		updateProducts: builder.mutation({
-			query: ({ payload, id }) => ({
-				url: `products/${id}`,
-				method: "PUT",
-				body: payload,
-			}),
-			invalidatesTags: ["Products"],
-		}),
-		getProducts: builder.query({
-			query: () => ({
-				url: "products",
-			}),
-			providesTags: ["Products"],
-		}),
-		getProduct: builder.query({
-			query: ({ barcode }) => ({
-				url: `products/${barcode}`,
-			}),
-		}),
-		deleteProduct: builder.mutation({
-			query: ({ id }) => ({
-				url: `products/${id}`,
-				method: "DELETE",
-			}),
-			invalidatesTags: ["Products"],
-		}),
 		// sales
 		postSale: builder.mutation({
 			query: ({ payload }) => ({
