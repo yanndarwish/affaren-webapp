@@ -19,54 +19,14 @@ export const api = createApi({
 			return headers
 		},
 	}),
-	tagTypes: ["Users", "User", "Products", "Sales"],
+	tagTypes: ["Sales"],
 	endpoints: (builder) => ({
-		register: builder.mutation({
-			query: (payload) => ({
-				url: "register",
-				method: "POST",
-				body: payload,
-			}),
-			invalidatesTags: ["Users"],
-		}),
 		getAuth: builder.mutation({
 			query: (payload) => ({
 				url: "login",
 				method: "POST",
 				body: payload,
 			}),
-		}),
-		// users
-		getUser: builder.query({
-			query: () => ({
-				url: "user",
-				method: "GET",
-			}),
-			providesTags: ["User"],
-		}),
-		getUsers: builder.mutation({
-			query: (payload) => ({
-				url: "users",
-				method: "POST",
-				body: payload,
-			}),
-			providesTags: ["Users"],
-		}),
-		updateUser: builder.mutation({
-			query: (payload) => ({
-				url: "users",
-				method: "PUT",
-				body: payload,
-			}),
-			invalidatesTags: ["User"],
-		}),
-		patchUser: builder.mutation({
-			query: (payload) => ({
-				url: "users",
-				method: "PATCH",
-				body: payload,
-			}),
-			invalidatesTags: ["Users"],
 		}),
 		// sales
 		postSale: builder.mutation({
