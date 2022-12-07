@@ -1,28 +1,11 @@
-import {
-	StyledButton,
-	SuccessButton,
-	WarningButton,
-	DangerButton,
-} from "./Button.styles"
+import { Button as MuiButton } from "@mui/material"
 
-const Button = ({ title, color, onPress }) => {
-	const handlePress = () => {
+const Button = ({ title, color="primary", onPress }) => {
+	const handleClick = () => {
 		onPress()
 	}
 
-	if (color === "green") {
-		return <SuccessButton onClick={handlePress}>{title}</SuccessButton>
-	}
-
-	if (color === "yellow") {
-		return <WarningButton onClick={handlePress}>{title}</WarningButton>
-	}
-
-	if (color === "red") {
-		return <DangerButton onClick={handlePress}>{title}</DangerButton>
-	}
-
-	return <StyledButton onClick={handlePress}>{title}</StyledButton>
+	return <MuiButton variant="contained" color={color} onClick={handleClick}>{title}</MuiButton>
 }
 
 export default Button

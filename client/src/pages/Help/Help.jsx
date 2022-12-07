@@ -14,7 +14,7 @@ const Help = () => {
 				<Title>Help</Title>
 				<Flex>
 					<Input label="Help"/>
-					<Button color="purple" title="Search" />
+					<Button title="Search" />
 				</Flex>
 			</SpaceHeader>
 			<Body theme={theme}>

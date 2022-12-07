@@ -30,8 +30,8 @@ const LogoutDialog = ({ theme }) => {
 				<Text>Are you sure you want to logout ?</Text>
 			</div>
 			<Footer>
-				<Button title="Cancel" color="red" onPress={handleCancel}></Button>
-				<Button title="Logout" color="green" onPress={handleLogout}></Button>
+				<Button title="Cancel" color="error" onPress={handleCancel}></Button>
+				<Button title="Logout" color="success" onPress={handleLogout}></Button>
 			</Footer>
 		</Container>
 	)

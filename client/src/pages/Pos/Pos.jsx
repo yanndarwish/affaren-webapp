@@ -14,7 +14,7 @@ const Pos = () => {
 			</Header>
 			<SearchSection>
 				<BarcodeInput />
-				<Button color="purple" title="No Barcode" />
+				<Button title="No Barcode" />
 			</SearchSection>
 			<Body theme={theme}>
 				<div>
@@ -24,12 +24,12 @@ const Pos = () => {
 
 				<div>
 					<div>
-						<Button color="purple" title="Receipt" />
-						<Button color="purple" title="Drawer" />
-						<Button color="purple" title="Discount" />
+						<Button title="Receipt" />
+						<Button title="Drawer" />
+						<Button title="Discount" />
 					</div>
 					<div>
-						<Button color="green" title="Continue to Payment" />
+						<Button color="success" title="Continue to Payment" />
 					</div>
 				</div>
 			</Body>

@@ -24,7 +24,7 @@ const Dashboard = () => {
 				<Flex>
 					{/* replace by datepicker */}
 					<Input theme={theme} />
-					<Button color="purple" title="Search" />
+					<Button title="Search" />
 				</Flex>
 			</SpaceHeader>
 			<Body theme={theme}>

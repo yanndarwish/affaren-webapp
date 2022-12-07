@@ -32,7 +32,7 @@ const LoginCard = ({ theme }) => {
 				<Input label="Password" value={password} theme={theme} onChange={setPassword} secure />
 			</div>
 			<Footer>
-				<Button title="Login" color="green" onPress={handleLogin}></Button>
+				<Button title="Login" color="success" onPress={handleLogin}></Button>
 			</Footer>
 		</Container>
 	)

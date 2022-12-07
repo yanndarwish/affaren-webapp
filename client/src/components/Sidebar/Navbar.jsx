@@ -27,7 +27,6 @@ const Navbar = () => {
 		dispatch(toggleTheme())
 	}
 
-	console.log(router.routes)
 	return (
 		<Drawer
 			sx={{
@@ -60,14 +59,14 @@ const Navbar = () => {
 			<Divider />
 			<List>
 				{navbarItems.map((item) => (
-					<ListItem key={item.dispatch} disablePadding>
+					<ListItem key={item.id} disablePadding>
 						<ListItemButton
 							sx={{
 								minHeight: 72,
 								justifyContent: "center",
 								px: 2.5,
 							}}
-                            onClick={() => navigate(item.route)}
+							onClick={() => navigate(item.route)}
 						>
 							{item.icon}
 						</ListItemButton>

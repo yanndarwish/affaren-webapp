@@ -17,11 +17,11 @@ const Inventory = () => {
 			<SearchSection>
 				<Flex>
 					<Input label="Barcode" />
-					<Button color="purple" title="Search" />
+					<Button title="Search" />
 				</Flex>
 				<Flex>
 					<Input label="Name" />
-					<Button color="purple" title="Search" />
+					<Button title="Search" />
 				</Flex>
 			</SearchSection>
 			<Body theme={theme}>
