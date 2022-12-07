@@ -10,7 +10,7 @@ const Inventory = () => {
 	const theme = useSelector((state) => state.theme.theme)
 
 	return (
-		<Grid item>
+		<Grid item xs>
 			<Header>
 				<Title>Inventory</Title>
 			</Header>

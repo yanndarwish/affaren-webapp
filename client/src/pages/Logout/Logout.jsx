@@ -6,7 +6,7 @@ import { Grid } from "@mui/material"
 const Logout = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	return (
-		<Grid item>
+		<Grid item xs>
 			<LogoutDialog theme={theme} />
 		</Grid>
 	)

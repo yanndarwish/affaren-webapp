@@ -9,11 +9,11 @@ const Help = () => {
 	const theme = useSelector((state) => state.theme.theme)
 
 	return (
-		<Grid item>
+		<Grid item xs>
 			<SpaceHeader>
 				<Title>Help</Title>
 				<Flex>
-					<Input label="Help"/>
+					<Input label="Help" />
 					<Button title="Search" />
 				</Flex>
 			</SpaceHeader>

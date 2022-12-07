@@ -8,7 +8,7 @@ const Login = () => {
 	const theme = useSelector((state) => state.theme.theme)
 
 	return (
-		<Grid item>
+		<Grid item xs>
 			<LoginCard theme={theme} />
 		</Grid>
 	)

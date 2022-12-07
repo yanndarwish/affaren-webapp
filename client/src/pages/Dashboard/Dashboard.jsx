@@ -18,7 +18,7 @@ const Dashboard = () => {
 	}, [user])
 
 	return (
-		<Grid item>
+		<Grid item xs>
 			<SpaceHeader>
 				<Title>Dashboard</Title>
 				<Flex>

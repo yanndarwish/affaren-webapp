@@ -5,7 +5,7 @@ import { Grid } from "@mui/material"
 
 const Root = () => {
 	return (
-		<Grid container display="flex">
+		<Grid container>
 			{/* <Sidebar /> */}
 			<Navbar />
 			<Outlet />

@@ -10,7 +10,7 @@ const Profile = () => {
 	const user = useSelector((state) => state.user.user)
 
 	return (
-		<Grid item>
+		<Grid item xs>
 			<Header>
 				<Title>
 					{user && user.user_first_name} {user && user.user_last_name}
