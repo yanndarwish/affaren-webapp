@@ -13,7 +13,7 @@ const Help = () => {
 			<SpaceHeader>
 				<Title>Help</Title>
 				<Flex>
-					<Input theme={theme} />
+					<Input label="Help"/>
 					<Button color="purple" title="Search" />
 				</Flex>
 			</SpaceHeader>

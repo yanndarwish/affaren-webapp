@@ -1,6 +1,9 @@
-const Input = ({ value, onChange, secure = false, theme, style }) => {
+import { TextField } from "@mui/material"
+
+const Input = ({ label, value, onChange, secure = false, theme, style }) => {
 	return (
-		<input
+		<TextField
+			label={label}
 			value={value}
 			onChange={(e) => onChange(e.target.value)}
 			type={secure ? "password" : "text"}

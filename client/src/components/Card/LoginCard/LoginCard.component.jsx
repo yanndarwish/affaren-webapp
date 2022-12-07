@@ -28,8 +28,8 @@ const LoginCard = ({ theme }) => {
 				<SubTitle theme={theme}>Login</SubTitle>
 			</div>
 			<div>
-				<Input value={email} theme={theme} onChange={setEmail} />
-				<Input value={password} theme={theme} onChange={setPassword} secure />
+				<Input label="Email" value={email} theme={theme} onChange={setEmail} />
+				<Input label="Password" value={password} theme={theme} onChange={setPassword} secure />
 			</div>
 			<Footer>
 				<Button title="Login" color="green" onPress={handleLogin}></Button>
