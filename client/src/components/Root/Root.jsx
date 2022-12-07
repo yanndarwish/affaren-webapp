@@ -1,13 +1,16 @@
 import { Outlet } from "react-router-dom"
 import Sidebar from "../Sidebar/Sidebar.component"
+import Navbar from "../Sidebar/Navbar"
 import styled from "styled-components"
+import { Grid } from "@mui/material"
 
 const Root = () => {
 	return (
-		<Container>
-			<Sidebar />
+		<Grid container display="flex">
+			{/* <Sidebar /> */}
+			<Navbar />
 			<Outlet />
-		</Container>
+		</Grid>
 	)
 }
 

@@ -3,6 +3,7 @@ import Button from "../../components/Button/Button.component"
 import { useGetUsersMutation } from "../../redux/services/userApi"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
+import { Grid } from "@mui/material"
 import { Body, Container, Flex, SpaceHeader, SubTitle, Title } from "../../assets/styles/common.styles"
 
 const Dashboard = () => {
@@ -17,7 +18,7 @@ const Dashboard = () => {
 	}, [user])
 
 	return (
-		<Container theme={theme}>
+		<Grid item>
 			<SpaceHeader>
 				<Title>Dashboard</Title>
 				<Flex>
@@ -37,7 +38,7 @@ const Dashboard = () => {
 					<div></div>
 				</div>
 			</Body>
-		</Container>
+		</Grid>
 	)
 }
 

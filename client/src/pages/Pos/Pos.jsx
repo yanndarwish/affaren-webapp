@@ -3,11 +3,12 @@ import Button from "../../components/Button/Button.component"
 import Input from "../../components/Input/Input.component"
 import { Body, Container, Header, SearchSection, SubTitle, Title } from "../../assets/styles/common.styles"
 import BarcodeInput from "../../components/BarcodeInput/BarcodeInput"
+import { Grid } from "@mui/material"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	return (
-		<Container theme={theme}>
+		<Grid item>
 			<Header>
 				<Title theme={theme}>Pos</Title>
 			</Header>
@@ -32,7 +33,7 @@ const Pos = () => {
 					</div>
 				</div>
 			</Body>
-		</Container>
+		</Grid>
 	)
 }
 

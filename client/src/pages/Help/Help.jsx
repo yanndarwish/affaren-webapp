@@ -2,13 +2,14 @@
 import { useSelector } from "react-redux" 
 import Input from "../../components/Input/Input.component"
 import Button from "../../components/Button/Button.component"
+import { Grid } from "@mui/material"
 import { Body, Container, Flex, SpaceHeader, SubTitle, Title } from "../../assets/styles/common.styles"
 
 const Help = () => {
 	const theme = useSelector((state) => state.theme.theme)
 
 	return (
-		<Container theme={theme}>
+		<Grid item>
 			<SpaceHeader>
 				<Title>Help</Title>
 				<Flex>
@@ -27,7 +28,7 @@ const Help = () => {
 					<div></div>
 				</div>
 			</Body>
-		</Container>
+		</Grid>
 	)
 }
 
