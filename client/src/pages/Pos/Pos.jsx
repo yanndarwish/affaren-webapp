@@ -18,11 +18,13 @@ import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
 import { CardSectionButton } from "../../components/ProductCardSection/ProductCardSection.styles"
 import { useState } from "react"
 import PaymentSlider from "../../components/Sliders/PaymentSlider/PaymentSlider"
+import NoBarcodeSlider from "../../components/Sliders/NoBarcodeSlider/NoBarcodeSlider"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const [cardSection, setCardSection] = useState(false)
 	const [paymentSlider, setPaymentSlider] = useState(false)
+	const [noBarcodeSlider, setNoBarcodeSlider] = useState(false)
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
@@ -46,6 +48,10 @@ const Pos = () => {
 		setPaymentSlider(true)
 	}
 
+	const opentNoBarcodeSlider = () => {
+		setNoBarcodeSlider(true)
+	}
+
 	return (
 		<PosContainer>
 			<Container theme={theme} className="pos-main-section">
@@ -54,7 +60,7 @@ const Pos = () => {
 				</Header>
 				<SearchSection>
 					<BarcodeInput />
-					<Button title="No Barcode" />
+					<Button title="No Barcode" onClick={() => opentNoBarcodeSlider()} />
 				</SearchSection>
 				<Body theme={theme}>
 					<Box>
@@ -95,6 +101,11 @@ const Pos = () => {
 				theme={theme}
 				isOpen={paymentSlider}
 				setIsOpen={setPaymentSlider}
+			/>
+			<NoBarcodeSlider
+				theme={theme}
+				isOpen={noBarcodeSlider}
+				setIsOpen={setNoBarcodeSlider}
 			/>
 		</PosContainer>
 	)
