@@ -21,7 +21,6 @@ const LoginCard = ({ theme }) => {
 		navigate("/profile")
 	}
 
-	
 	return (
 		<Container theme={theme}>
 			<div>
@@ -29,10 +28,16 @@ const LoginCard = ({ theme }) => {
 			</div>
 			<div>
 				<Input label="Email" value={email} theme={theme} onChange={setEmail} />
-				<Input label="Password" value={password} theme={theme} onChange={setPassword} secure />
+				<Input
+					label="Password"
+					value={password}
+					theme={theme}
+					onChange={setPassword}
+					secure
+				/>
 			</div>
 			<Footer>
-				<Button title="Login" color="success" onPress={handleLogin}></Button>
+				<Button title="Login" color="success" onClick={handleLogin}></Button>
 			</Footer>
 		</Container>
 	)
