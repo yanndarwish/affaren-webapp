@@ -61,7 +61,11 @@ const Pos = () => {
 						<Typography variant="h3">Total</Typography>
 						<Typography variant="h3">14,60€</Typography>
 					</Box>
-					<Box display="flex" justifyContent="space-between">
+					<Box
+						display="flex"
+						justifyContent="space-between"
+						className="button-section"
+					>
 						<Box className="button-section">
 							<Button title="Receipt" />
 							<Button title="Drawer" />
