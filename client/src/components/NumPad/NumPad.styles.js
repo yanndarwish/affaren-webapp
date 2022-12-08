@@ -7,7 +7,6 @@ export const Display = styled.div`
 	display: flex;
 	justify-content: flex-end;
     align-items:center;
-	padding: ${constant.PADDING_M}px;
 `
 
 export const CorrectBtn = styled.div`

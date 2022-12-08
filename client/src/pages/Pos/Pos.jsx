@@ -17,10 +17,12 @@ import "./Pos.css"
 import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
 import { CardSectionButton } from "../../components/ProductCardSection/ProductCardSection.styles"
 import { useState } from "react"
+import PaymentSlider from "../../components/Sliders/PaymentSlider/PaymentSlider"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const [cardSection, setCardSection] = useState(false)
+	const [paymentSlider, setPaymentSlider] = useState(false)
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
@@ -38,6 +40,10 @@ const Pos = () => {
 			cardSectionEl.style.width = "148px"
 		}
 		setCardSection(!cardSection)
+	}
+
+	const openPaymentSlider = () => {
+		setPaymentSlider(true)
 	}
 
 	return (
@@ -72,7 +78,11 @@ const Pos = () => {
 							<Button title="Discount" />
 						</Box>
 						<Box>
-							<Button color="success" title="Continue to Payment" />
+							<Button
+								color="success"
+								title="Continue to Payment"
+								onClick={() => openPaymentSlider()}
+							/>
 						</Box>
 					</Box>
 				</Body>
@@ -81,6 +91,11 @@ const Pos = () => {
 				</CardSectionButton>
 			</Container>
 			<ProductCardSection theme={theme} />
+			<PaymentSlider
+				theme={theme}
+				isOpen={paymentSlider}
+				setIsOpen={setPaymentSlider}
+			/>
 		</PosContainer>
 	)
 }
