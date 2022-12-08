@@ -99,3 +99,7 @@ export const Body = styled.div`
 export const SubTitle = styled.h2`
 	font-size: ${constant.FONT_SECTION_TITLE}px;
 `
+
+export const ArtTitle = styled.h3`
+	font-size: ${constant.FONT_ARTICLE_TITLE}px;
+`
