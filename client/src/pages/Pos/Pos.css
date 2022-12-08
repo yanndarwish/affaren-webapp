@@ -1,0 +1,10 @@
+.pos-container {
+    display: flex;
+    height:100vh;
+}
+
+.button-section {
+    display: flex;
+    gap:1rem;
+
+}

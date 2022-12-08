@@ -35,10 +35,13 @@ export const constant = {
 }
 
 export const Container = styled.main`
+	position: relative;
 	display: flex;
 	flex-direction: column;
+	flex:1;
 	padding: ${constant.PADDING_L}px;
-	width: 100%;
+	height: 100%;
+	overflow: scroll;
 	gap: ${constant.GAP * 2}px;
 	color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
@@ -81,8 +84,12 @@ export const Flex = styled.div`
 `
 
 export const Body = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
 	padding: ${constant.PADDING_M}px;
 	box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);
+
 	background-color: ${(props) =>
 		props.theme === "dark"
 			? dark.COLOR_BG_SECONDARY

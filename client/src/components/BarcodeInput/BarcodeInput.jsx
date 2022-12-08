@@ -38,7 +38,7 @@ const BarcodeInput = () => {
         addToCart(data)
     }, [data])
 
-	return <Input value={barcode} onChange={setBarcode} />
+	return <Input label="Barcode" value={barcode} onChange={setBarcode} />
 }
 
 export default BarcodeInput

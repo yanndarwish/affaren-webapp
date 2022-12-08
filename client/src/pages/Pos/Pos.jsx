@@ -1,39 +1,83 @@
 import { useSelector } from "react-redux"
-import Button from "../../components/Button/Button.component"
-import Input from "../../components/Input/Input.component"
-import { Body, Container, Header, SearchSection, SubTitle, Title } from "../../assets/styles/common.styles"
+import ProductCardSection from "../../components/ProductCardSection/ProductCardSection"
 import BarcodeInput from "../../components/BarcodeInput/BarcodeInput"
-import { Box, Grid } from "@mui/material"
+import Button from "../../components/Button/Button.component"
+import Cart from "../../components/Cart/Cart"
+import { Box, Grid, Typography } from "@mui/material"
+import {
+	Body,
+	Container,
+	Header,
+	SearchSection,
+	SubTitle,
+	Title,
+} from "../../assets/styles/common.styles"
+import { PosContainer } from "./Pos.styles"
+import "./Pos.css"
+import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
+import { CardSectionButton } from "../../components/ProductCardSection/ProductCardSection.styles"
+import { useState } from "react"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
-	return (
-		<Grid item xs>
-			<Box xs={12}>
-				<Title theme={theme}>Pos</Title>
-			</Box>
-			<SearchSection>
-				<BarcodeInput />
-				<Button title="No Barcode" />
-			</SearchSection>
-			<Body theme={theme}>
-				<div>
-					<SubTitle>Panier</SubTitle>
-				</div>
-				<div></div>
+	const [cardSection, setCardSection] = useState(false)
 
-				<div>
-					<div>
-						<Button title="Receipt" />
-						<Button title="Drawer" />
-						<Button title="Discount" />
-					</div>
-					<div>
-						<Button color="success" title="Continue to Payment" />
-					</div>
-				</div>
-			</Body>
-		</Grid>
+	const toggleCardSection = () => {
+		const cardSectionEl = document.getElementById("card-section")
+		const productCards = document.querySelectorAll(".product-card")
+
+		if (!cardSection) {
+			productCards.forEach((card) => {
+				card.style.display = "none"
+			})
+			cardSectionEl.style.width = "0"
+		} else {
+			productCards.forEach((card) => {
+				card.style.display = "flex"
+			})
+			cardSectionEl.style.width = "148px"
+		}
+		setCardSection(!cardSection)
+	}
+
+	return (
+		<PosContainer>
+			<Container theme={theme} className="pos-main-section">
+				<Header xs={12}>
+					<Title>Pos</Title>
+				</Header>
+				<SearchSection>
+					<BarcodeInput />
+					<Button title="No Barcode" />
+				</SearchSection>
+				<Body theme={theme}>
+					<Box>
+						<SubTitle>Panier</SubTitle>
+					</Box>
+					<Box>
+						<Cart />
+					</Box>
+					<Box display="flex" justifyContent="flex-end">
+						<Typography variant="h3">Total</Typography>
+						<Typography variant="h3">14,60€</Typography>
+					</Box>
+					<Box display="flex" justifyContent="space-between">
+						<Box className="button-section">
+							<Button title="Receipt" />
+							<Button title="Drawer" />
+							<Button title="Discount" />
+						</Box>
+						<Box>
+							<Button color="success" title="Continue to Payment" />
+						</Box>
+					</Box>
+				</Body>
+				<CardSectionButton onClick={toggleCardSection} id="card-section-button">
+					<CropSquareOutlinedIcon />
+				</CardSectionButton>
+			</Container>
+			<ProductCardSection theme={theme} />
+		</PosContainer>
 	)
 }
 
