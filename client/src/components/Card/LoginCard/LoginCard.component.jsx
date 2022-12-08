@@ -33,7 +33,7 @@ const LoginCard = ({ theme }) => {
 					value={password}
 					theme={theme}
 					onChange={setPassword}
-					secure
+					type="password"
 				/>
 			</div>
 			<Footer>
