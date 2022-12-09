@@ -27,6 +27,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 
 	const handleChange = (e, field) => {
 		let obj = { ...product }
+		console.log(field === "taxe")
 		obj[field] = e.target?.value ? e.target.value : e
 		setProduct(obj)
 	}
@@ -42,7 +43,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 					<ArtTitle>Product</ArtTitle>
 					<DialogCard theme={theme}>
 						<FormControl fullWidth>
-							<InputLabel id="demo-simple-select-label">Age</InputLabel>
+							<InputLabel id="demo-simple-select-label">Category</InputLabel>
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"

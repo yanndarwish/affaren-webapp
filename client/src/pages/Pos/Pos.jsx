@@ -3,7 +3,13 @@ import ProductCardSection from "../../components/ProductCardSection/ProductCardS
 import BarcodeInput from "../../components/BarcodeInput/BarcodeInput"
 import Button from "../../components/Button/Button.component"
 import Cart from "../../components/Cart/Cart"
-import { Box, Grid, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
+import { ButtonSection, ButtonSectionSpace, PosContainer, TotalSection } from "./Pos.styles"
+import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
+import { CardSectionButton } from "../../components/ProductCardSection/ProductCardSection.styles"
+import { useState } from "react"
+import PaymentSlider from "../../components/Sliders/PaymentSlider/PaymentSlider"
+import NoBarcodeSlider from "../../components/Sliders/NoBarcodeSlider/NoBarcodeSlider"
 import {
 	Body,
 	Container,
@@ -12,13 +18,6 @@ import {
 	SubTitle,
 	Title,
 } from "../../assets/styles/common.styles"
-import { PosContainer } from "./Pos.styles"
-import "./Pos.css"
-import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
-import { CardSectionButton } from "../../components/ProductCardSection/ProductCardSection.styles"
-import { useState } from "react"
-import PaymentSlider from "../../components/Sliders/PaymentSlider/PaymentSlider"
-import NoBarcodeSlider from "../../components/Sliders/NoBarcodeSlider/NoBarcodeSlider"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -54,7 +53,7 @@ const Pos = () => {
 
 	return (
 		<PosContainer>
-			<Container theme={theme} className="pos-main-section">
+			<Container theme={theme}>
 				<Header xs={12}>
 					<Title>Pos</Title>
 				</Header>
@@ -69,20 +68,16 @@ const Pos = () => {
 					<Box>
 						<Cart />
 					</Box>
-					<Box display="flex" justifyContent="flex-end">
-						<Typography variant="h3">Total</Typography>
-						<Typography variant="h3">14,60€</Typography>
-					</Box>
-					<Box
-						display="flex"
-						justifyContent="space-between"
-						className="button-section"
-					>
-						<Box className="button-section">
+					<TotalSection display="flex" justifyContent="flex-end">
+						<SubTitle>Total</SubTitle>
+						<SubTitle>14,60€</SubTitle>
+					</TotalSection>
+					<ButtonSectionSpace>
+						<ButtonSection>
 							<Button title="Receipt" />
 							<Button title="Drawer" />
 							<Button title="Discount" />
-						</Box>
+						</ButtonSection>
 						<Box>
 							<Button
 								color="success"
@@ -90,7 +85,7 @@ const Pos = () => {
 								onClick={() => openPaymentSlider()}
 							/>
 						</Box>
-					</Box>
+					</ButtonSectionSpace>
 				</Body>
 				<CardSectionButton onClick={toggleCardSection} id="card-section-button">
 					<CropSquareOutlinedIcon />
