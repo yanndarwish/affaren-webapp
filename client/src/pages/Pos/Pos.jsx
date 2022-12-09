@@ -10,6 +10,7 @@ import { CardSectionButton } from "../../components/ProductCardSection/ProductCa
 import { useState } from "react"
 import PaymentSlider from "../../components/Sliders/PaymentSlider/PaymentSlider"
 import NoBarcodeSlider from "../../components/Sliders/NoBarcodeSlider/NoBarcodeSlider"
+import DiscountSlider from "../../components/Sliders/DiscountSlider/DiscountSlider"
 import {
 	Body,
 	Container,
@@ -24,6 +25,7 @@ const Pos = () => {
 	const [cardSection, setCardSection] = useState(false)
 	const [paymentSlider, setPaymentSlider] = useState(false)
 	const [noBarcodeSlider, setNoBarcodeSlider] = useState(false)
+	const [discountSlider, setDiscountSlider] = useState(false)
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
@@ -51,6 +53,10 @@ const Pos = () => {
 		setNoBarcodeSlider(true)
 	}
 
+	const openDiscountSlider = () => {
+		setDiscountSlider(true)
+	}
+
 	return (
 		<PosContainer>
 			<Container theme={theme}>
@@ -76,7 +82,7 @@ const Pos = () => {
 						<ButtonSection>
 							<Button title="Receipt" />
 							<Button title="Drawer" />
-							<Button title="Discount" />
+							<Button title="Discount" onClick={() => openDiscountSlider()} />
 						</ButtonSection>
 						<Box>
 							<Button
@@ -101,6 +107,11 @@ const Pos = () => {
 				theme={theme}
 				isOpen={noBarcodeSlider}
 				setIsOpen={setNoBarcodeSlider}
+			/>
+			<DiscountSlider
+				theme={theme}
+				isOpen={discountSlider}
+				setIsOpen={setDiscountSlider}
 			/>
 		</PosContainer>
 	)
