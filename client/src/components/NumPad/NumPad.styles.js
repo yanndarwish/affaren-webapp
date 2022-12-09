@@ -31,5 +31,6 @@ export const Num = styled.div`
 	justify-content: center;
 	align-items: center;
 	flex: 1;
-	padding: ${constant.PADDING_M}px;
+	padding: ${(props) =>
+		props.size === "S" ? `${constant.PADDING_S}px` : `${constant.PADDING_M}px`};
 `
