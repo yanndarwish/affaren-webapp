@@ -84,15 +84,15 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
-							<NumPad />
+							<NumPad display/>
 							<EuroSymbolOutlinedIcon />
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<NumPad />
+							<NumPad display/>
 							<CreditCardOutlinedIcon />
 						</TabPanel>
 						<TabPanel value={value} index={2}>
-							<NumPad />
+							<NumPad display/>
 							<SellOutlinedIcon />
 						</TabPanel>
 					</DialogCard>

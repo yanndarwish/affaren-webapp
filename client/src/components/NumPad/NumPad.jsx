@@ -3,22 +3,26 @@ import { ArtTitle } from "../../assets/styles/common.styles"
 import { CorrectBtn, Display, Keypad, Num, NumRow } from "./NumPad.styles"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 
-const NumPad = () => {
+const NumPad = ({ display }) => {
 	const [value, setValue] = useState("")
 
-    const handleClick = e => {
-        setValue(value + e.target.dataset.value)
-    }
+	const handleClick = (e) => {
+		setValue(value + e.target.dataset.value)
+	}
 
-    const handleCorrect = () => {
-        setValue(value.slice(0,-1))
-    }
+	const handleCorrect = () => {
+		setValue(value.slice(0, -1))
+	}
 	return (
 		<div className="numpad">
-			<Display className="display">
-				<ArtTitle>{value} €</ArtTitle>
-                <CorrectBtn onClick={handleCorrect}><BackspaceOutlinedIcon /></CorrectBtn>
-			</Display>
+			{display ? (
+				<Display className="display">
+					<ArtTitle>{value} €</ArtTitle>
+					<CorrectBtn onClick={handleCorrect}>
+						<BackspaceOutlinedIcon />
+					</CorrectBtn>
+				</Display>
+			) : null}
 			<Keypad>
 				<NumRow>
 					<Num className="num" data-value={1} onClick={handleClick}>
@@ -54,9 +58,7 @@ const NumPad = () => {
 					</Num>
 				</NumRow>
 				<NumRow className="num-row">
-					<Num className="num" data-value="" onClick={handleClick}>
-						
-					</Num>
+					<Num className="num" data-value="" onClick={handleClick}></Num>
 					<Num className="num" data-value={0} onClick={handleClick}>
 						0
 					</Num>
