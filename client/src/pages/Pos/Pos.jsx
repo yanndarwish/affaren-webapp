@@ -3,7 +3,7 @@ import ProductCardSection from "../../components/ProductCardSection/ProductCardS
 import BarcodeInput from "../../components/BarcodeInput/BarcodeInput"
 import Button from "../../components/Button/Button.component"
 import Cart from "../../components/Cart/Cart"
-import { Box, Typography } from "@mui/material"
+import { Box } from "@mui/material"
 import {
 	ButtonSection,
 	ButtonSectionSpace,
@@ -20,11 +20,12 @@ import AddCardSlider from "../../components/Sliders/AddCardSlider/AddCardSlider"
 import {
 	Body,
 	Container,
-	Header,
+	SpaceHeader,
 	SearchSection,
 	SubTitle,
 	Title,
 } from "../../assets/styles/common.styles"
+import EditSaleSection from "../../components/EditSaleSection/EditSaleSection"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -70,9 +71,10 @@ const Pos = () => {
 	return (
 		<PosContainer>
 			<Container theme={theme}>
-				<Header xs={12}>
-					<Title>Pos</Title>
-				</Header>
+				<SpaceHeader xs={12}>
+					<Title>Sale N°</Title>
+					<EditSaleSection />
+				</SpaceHeader>
 				<SearchSection>
 					<BarcodeInput />
 					<Button title="No Barcode" onClick={() => opentNoBarcodeSlider()} />
