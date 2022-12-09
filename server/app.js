@@ -328,6 +328,20 @@ app.post("/sales", auth, async (req, res) => {
 // get all sales
 app.get("/sales", auth, async (req, res) => {
 	try {
+		console.log('hej')
+		const response = await pool.query("SELECT * FROM sales")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get all sales for a certain time period
+app.get("/sales/:date", auth, async (req, res) => {
+	try {
+
+		const {date} = req.params
+		console.log(date)
 		const response = await pool.query("SELECT * FROM sales")
 		res.status(200).send(response.rows)
 	} catch (err) {
