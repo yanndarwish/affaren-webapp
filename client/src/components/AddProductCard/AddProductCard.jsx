@@ -1,9 +1,9 @@
 import { StyledProductCard } from "../ProductCard/ProductCard.styles"
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined"
 
-const AddProductCard = () => {
+const AddProductCard = ({onClick}) => {
   return (
-    <StyledProductCard className="product-card">
+    <StyledProductCard className="product-card" onClick={onClick}>
         <AddOutlinedIcon />
     </StyledProductCard>
   )

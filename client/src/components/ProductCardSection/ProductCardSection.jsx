@@ -2,8 +2,7 @@ import AddProductCard from "../AddProductCard/AddProductCard"
 import ProductCard from "../ProductCard/ProductCard"
 import { StyledProductCardSection } from "./ProductCardSection.styles"
 
-
-const ProductCardSection = ({ theme }) => {
+const ProductCardSection = ({ theme, onClick }) => {
 	
 	return (
 		<StyledProductCardSection theme={theme} id="card-section">
@@ -11,18 +10,7 @@ const ProductCardSection = ({ theme }) => {
 			<ProductCard theme={theme} />
 			<ProductCard theme={theme} />
 			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<ProductCard theme={theme} />
-			<AddProductCard />
+			<AddProductCard onClick={onClick}/>
 		</StyledProductCardSection>
 	)
 }

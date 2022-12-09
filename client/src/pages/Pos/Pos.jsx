@@ -4,13 +4,19 @@ import BarcodeInput from "../../components/BarcodeInput/BarcodeInput"
 import Button from "../../components/Button/Button.component"
 import Cart from "../../components/Cart/Cart"
 import { Box, Typography } from "@mui/material"
-import { ButtonSection, ButtonSectionSpace, PosContainer, TotalSection } from "./Pos.styles"
+import {
+	ButtonSection,
+	ButtonSectionSpace,
+	PosContainer,
+	TotalSection,
+} from "./Pos.styles"
 import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
 import { CardSectionButton } from "../../components/ProductCardSection/ProductCardSection.styles"
 import { useState } from "react"
 import PaymentSlider from "../../components/Sliders/PaymentSlider/PaymentSlider"
 import NoBarcodeSlider from "../../components/Sliders/NoBarcodeSlider/NoBarcodeSlider"
 import DiscountSlider from "../../components/Sliders/DiscountSlider/DiscountSlider"
+import AddCardSlider from "../../components/Sliders/AddCardSlider/AddCardSlider"
 import {
 	Body,
 	Container,
@@ -26,6 +32,7 @@ const Pos = () => {
 	const [paymentSlider, setPaymentSlider] = useState(false)
 	const [noBarcodeSlider, setNoBarcodeSlider] = useState(false)
 	const [discountSlider, setDiscountSlider] = useState(false)
+	const [addCardSlider, setAddCardSlider] = useState(false)
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
@@ -57,6 +64,9 @@ const Pos = () => {
 		setDiscountSlider(true)
 	}
 
+	const openAddCardSlider = () => {
+		setAddCardSlider(true)
+	}
 	return (
 		<PosContainer>
 			<Container theme={theme}>
@@ -97,7 +107,7 @@ const Pos = () => {
 					<CropSquareOutlinedIcon />
 				</CardSectionButton>
 			</Container>
-			<ProductCardSection theme={theme} />
+			<ProductCardSection theme={theme} onClick={openAddCardSlider}/>
 			<PaymentSlider
 				theme={theme}
 				isOpen={paymentSlider}
@@ -112,6 +122,11 @@ const Pos = () => {
 				theme={theme}
 				isOpen={discountSlider}
 				setIsOpen={setDiscountSlider}
+			/>
+			<AddCardSlider
+				theme={theme}
+				isOpen={addCardSlider}
+				setIsOpen={setAddCardSlider}
 			/>
 		</PosContainer>
 	)
