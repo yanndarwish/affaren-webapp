@@ -1,16 +1,33 @@
-
 import { useSelector } from "react-redux"
-
 import Input from "../../components/common/Input/Input.component"
 import Button from "../../components/common/Button/Button.component"
-import { Grid } from "@mui/material"
-import { Body, Container, Flex, Header, SearchSection, SubTitle, Title } from "../../assets/styles/common.styles"
+import {
+	Body,
+	Container,
+	Flex,
+	Header,
+	SearchSection,
+	SpaceHeader,
+	SubTitle,
+	Title,
+} from "../../assets/styles/common.styles"
+import InventoryTable from "../../components/INVENTORY/InventoryTable/InventoryTable"
+import { useState } from "react"
 
 const Inventory = () => {
 	const theme = useSelector((state) => state.theme.theme)
+	const [searchString, setSearchString] = useState("")
+
+	const handleSearch = () => {
+		console.log(searchString)
+	}
+
+	const handleExport = () => {
+		console.log("export")
+	}
 
 	return (
-		<Grid item xs>
+		<Container theme={theme}>
 			<Header>
 				<Title>Inventory</Title>
 			</Header>
@@ -20,22 +37,25 @@ const Inventory = () => {
 					<Button title="Search" />
 				</Flex>
 				<Flex>
-					<Input label="Name" />
-					<Button title="Search" />
+					<Input label="Name" value={searchString} onChange={setSearchString} />
+					<Button title="Search" onClick={handleSearch}/>
 				</Flex>
 			</SearchSection>
 			<Body theme={theme}>
-				<div>
+				<SpaceHeader>
 					<SubTitle>Products</SubTitle>
+					<Button title="Export" onClick={handleExport}/>
+				</SpaceHeader>
+				<div>
+					<InventoryTable />
 				</div>
-				<div></div>
 
 				<div>
 					<div></div>
 					<div></div>
 				</div>
 			</Body>
-		</Grid>
+		</Container>
 	)
 }
 
