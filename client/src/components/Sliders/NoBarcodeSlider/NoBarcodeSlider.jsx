@@ -2,7 +2,6 @@ import { useRef, useState } from "react"
 import {
 	Dialog,
 	DialogBody,
-	DialogCard,
 	DialogFooter,
 	DialogHeader,
 	Overlay,
@@ -12,12 +11,12 @@ import { ArtTitle, SubTitle } from "../../../assets/styles/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../Button/Button.component"
 import Input from "../../Input/Input.component"
-import { Keypad } from "../../NumPad/NumPad.styles"
 import NumPad from "../../NumPad/NumPad"
+import { FormWrapper, DialogCard } from "./NoBarcodeSlider.styles"
 
 const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 	const overlayRef = useRef()
-	const [product, setProduct] = useState({ taxe: 5, quantity: 1, price:0 })
+	const [product, setProduct] = useState({ taxe: 5, quantity: 1, price: 0, name:"Alimentation" })
 
 	const closeSlider = (e) => {
 		if (overlayRef.current === e.target) {
@@ -27,7 +26,18 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 
 	const handleChange = (e, field) => {
 		let obj = { ...product }
-		console.log(field === "taxe")
+		let name
+		if (field === "taxe") {
+			if(e.target.value === 5) {
+				name = "Alimentation"
+			} else if (e.target.value === 10) {
+				name = "Magazine"
+			} else if (e.target.value === 20) {
+				name = "Décoration/Alcool"
+			}
+			obj["name"] = name 
+		}
+
 		obj[field] = e.target?.value ? e.target.value : e
 		setProduct(obj)
 	}
@@ -43,32 +53,34 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 					<ArtTitle>Product</ArtTitle>
 					<DialogCard theme={theme}>
 						<FormControl fullWidth>
-							<InputLabel id="demo-simple-select-label">Category</InputLabel>
-							<Select
-								labelId="demo-simple-select-label"
-								id="demo-simple-select"
-								value={product.taxe}
-								label="Category"
-								onChange={(e) => handleChange(e, "taxe")}
-								required
-							>
-								<MenuItem value={5}>Alimentation</MenuItem>
-								<MenuItem value={10}>Magazine</MenuItem>
-								<MenuItem value={20}>Décoration/Alcool</MenuItem>
-							</Select>
-							<Input
-								type="number"
-								label="Quantity"
-								onChange={e => handleChange(e, "quantity")}
-								value={product.quantity}
-							/>
+							<FormWrapper>
+								<InputLabel id="demo-simple-select-label">Category</InputLabel>
+								<Select
+									labelId="demo-simple-select-label"
+									id="demo-simple-select"
+									value={product.taxe}
+									label="Category"
+									onChange={(e) => handleChange(e, "taxe")}
+									required
+								>
+									<MenuItem value={5}>Alimentation</MenuItem>
+									<MenuItem value={10}>Magazine</MenuItem>
+									<MenuItem value={20}>Décoration/Alcool</MenuItem>
+								</Select>
+								<Input
+									type="number"
+									label="Quantity"
+									onChange={(e) => handleChange(e, "quantity")}
+									value={product.quantity}
+								/>
 
-							<Input
-								type="number"
-								label="Price"
-								onChange={e => handleChange(e, "price")}
-								value={product.price}
-							/>
+								<Input
+									type="number"
+									label="Price"
+									onChange={(e) => handleChange(e, "price")}
+									value={product.price}
+								/>
+							</FormWrapper>
 						</FormControl>
 						<NumPad />
 					</DialogCard>
