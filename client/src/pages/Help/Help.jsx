@@ -1,7 +1,7 @@
 
 import { useSelector } from "react-redux" 
-import Input from "../../components/Input/Input.component"
-import Button from "../../components/Button/Button.component"
+import Input from "../../components/common/Input/Input.component"
+import Button from "../../components/common/Button/Button.component"
 import { Grid } from "@mui/material"
 import { Body, Container, Flex, SpaceHeader, SubTitle, Title } from "../../assets/styles/common.styles"
 

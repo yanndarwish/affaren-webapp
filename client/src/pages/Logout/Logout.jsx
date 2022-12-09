@@ -1,4 +1,4 @@
-import LogoutDialog from "../../components/Card/LogoutCard/LogoutCard.component.jsx"
+import LogoutDialog from "../../components/Cards/LogoutCard/LogoutCard.component.jsx"
 import { useSelector } from "react-redux"
 import { CenterContainer } from "../../assets/styles/common.styles.js"
 import { Grid } from "@mui/material"

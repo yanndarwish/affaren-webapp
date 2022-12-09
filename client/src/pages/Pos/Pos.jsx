@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux"
-import ProductCardSection from "../../components/ProductCardSection/ProductCardSection"
-import BarcodeInput from "../../components/BarcodeInput/BarcodeInput"
-import Button from "../../components/Button/Button.component"
-import Cart from "../../components/Cart/Cart"
+import ProductCardSection from "../../components/POS/ProductCardSection/ProductCardSection"
+import BarcodeInput from "../../components/POS/BarcodeInput/BarcodeInput"
+import Button from "../../components/common/Button/Button.component"
+import Cart from "../../components/POS/Cart/Cart"
 import { Box } from "@mui/material"
 import {
 	ButtonSection,
@@ -11,12 +11,12 @@ import {
 	TotalSection,
 } from "./Pos.styles"
 import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
-import { CardSectionButton } from "../../components/ProductCardSection/ProductCardSection.styles"
+import { CardSectionButton } from "../../components/POS/ProductCardSection/ProductCardSection.styles"
 import { useState } from "react"
-import PaymentSlider from "../../components/Sliders/PaymentSlider/PaymentSlider"
-import NoBarcodeSlider from "../../components/Sliders/NoBarcodeSlider/NoBarcodeSlider"
-import DiscountSlider from "../../components/Sliders/DiscountSlider/DiscountSlider"
-import AddCardSlider from "../../components/Sliders/AddCardSlider/AddCardSlider"
+import PaymentSlider from "../../components/POS/Sliders/PaymentSlider/PaymentSlider"
+import NoBarcodeSlider from "../../components/POS/Sliders/NoBarcodeSlider/NoBarcodeSlider"
+import DiscountSlider from "../../components/POS/Sliders/DiscountSlider/DiscountSlider"
+import AddCardSlider from "../../components/POS/Sliders/AddCardSlider/AddCardSlider"
 import {
 	Body,
 	Container,
@@ -25,7 +25,7 @@ import {
 	SubTitle,
 	Title,
 } from "../../assets/styles/common.styles"
-import EditSaleSection from "../../components/EditSaleSection/EditSaleSection"
+import EditSaleSection from "../../components/POS/EditSaleSection/EditSaleSection"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)

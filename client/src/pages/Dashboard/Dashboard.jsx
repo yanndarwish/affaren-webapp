@@ -1,5 +1,5 @@
-import Input from "../../components/Input/Input.component"
-import Button from "../../components/Button/Button.component"
+import Input from "../../components/common/Input/Input.component"
+import Button from "../../components/common/Button/Button.component"
 import { useGetUsersMutation } from "../../redux/services/userApi"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
