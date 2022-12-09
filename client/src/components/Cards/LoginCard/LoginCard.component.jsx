@@ -7,8 +7,8 @@ import { SubTitle } from "../../../assets/styles/common.styles"
 import { Container, Text, Footer } from "../Card.styles"
 
 const LoginCard = ({ theme }) => {
-	const [email, setEmail] = useState("")
-	const [password, setPassword] = useState("")
+	const [email, setEmail] = useState("yann.darwish@gmail.com")
+	const [password, setPassword] = useState("password")
 	const [getAuth, res] = useGetAuthMutation()
 	const navigate = useNavigate()
 
