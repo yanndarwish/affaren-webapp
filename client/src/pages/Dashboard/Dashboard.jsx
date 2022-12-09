@@ -1,6 +1,7 @@
 import Input from "../../components/common/Input/Input.component"
 import Button from "../../components/common/Button/Button.component"
 import { useGetUsersMutation } from "../../redux/services/userApi"
+import { useGetMonthSalesQuery } from "../../redux/services/salesApi"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { Grid } from "@mui/material"
@@ -11,20 +12,20 @@ const Dashboard = () => {
 	const users = useSelector((state) => state.user.users)
 	const theme = useSelector((state) => state.theme.theme)
 	const [getUsers, res] = useGetUsersMutation()
+	const {data, error, isLoading} = useGetMonthSalesQuery({date:'09-12-2022'})
 	console.log(users)
-
+	console.log(data)
 	useEffect(() => {
 		getUsers({ user: user })
 	}, [user])
 
 	return (
-		<Grid item xs>
+		<Container theme={theme}>
 			<SpaceHeader>
 				<Title>Dashboard</Title>
 				<Flex>
 					{/* replace by datepicker */}
-					<Input theme={theme} />
-					<Button title="Search" />
+					<Input type="date"/>
 				</Flex>
 			</SpaceHeader>
 			<Body theme={theme}>
@@ -38,7 +39,7 @@ const Dashboard = () => {
 					<div></div>
 				</div>
 			</Body>
-		</Grid>
+		</Container>
 	)
 }
 
