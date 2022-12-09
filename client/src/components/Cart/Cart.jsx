@@ -8,8 +8,8 @@ import Paper from "@mui/material/Paper"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 
 const Cart = () => {
-	function createData(name, calories, fat, carbs, protein) {
-		return { name, calories, fat, carbs, protein }
+	function createData(name, quantity, price) {
+		return { name, quantity, price}
 	}
 
 	const rows = [
@@ -53,8 +53,8 @@ const Cart = () => {
 								{i+1}
 							</TableCell>
 							<TableCell>{row.name}</TableCell>
-							<TableCell align="right">{row.calories}</TableCell>
-							<TableCell align="right">{row.fat}</TableCell>
+							<TableCell align="right">{row.quantity}</TableCell>
+							<TableCell align="right">{row.price}</TableCell>
 							<TableCell align="right">
 								<DeleteOutlinedIcon />
 							</TableCell>
