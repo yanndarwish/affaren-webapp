@@ -15,13 +15,13 @@ const BarcodeInput = () => {
 
 	// add data (product) to cart
     const addToCart = (data) => {
-        if (data !== undefined) {
+        if (data !== undefined && data !== null) {
             console.log("now")
             console.log(data)
             dispatch(addProduct({products: data}))
-            setSkip(true)
-            setBarcode("")
         }
+		setBarcode("")
+		setSkip(true)
     }
 
 	const handleBarcodeInput = (barcode) => {
