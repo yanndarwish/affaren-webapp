@@ -3,11 +3,14 @@ import { ArtTitle } from "../../../assets/styles/common.styles"
 import { CorrectBtn, Display, Keypad, Num, NumRow } from "./NumPad.styles"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 
-const NumPad = ({ display, size }) => {
+const NumPad = ({ display, size, target }) => {
 	const [value, setValue] = useState("")
 
 	const handleClick = (e) => {
 		setValue(value + e.target.dataset.value)
+		if (target) {
+			document.getElementById(target).value += e.target.dataset.value
+		}
 	}
 
 	const handleCorrect = () => {
@@ -58,11 +61,16 @@ const NumPad = ({ display, size }) => {
 					</Num>
 				</NumRow>
 				<NumRow className="num-row">
-					<Num size={size} className="num" data-value="" onClick={handleClick}></Num>
+					<Num
+						size={size}
+						className="num"
+						data-value=""
+						onClick={handleClick}
+					></Num>
 					<Num size={size} className="num" data-value={0} onClick={handleClick}>
 						0
 					</Num>
-					<Num size={size} className="num" data-value="," onClick={handleClick}>
+					<Num size={size} className="num" data-value="." onClick={handleClick}>
 						.
 					</Num>
 				</NumRow>
