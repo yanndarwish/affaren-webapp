@@ -10,6 +10,7 @@ import { useSelector } from "react-redux"
 
 const Cart = () => {
 	const products = useSelector(state => state.sale.products)
+	console.log(products)
 
 	return (
 		<TableContainer component={Paper} sx={{ maxHeight: 280 }}>
