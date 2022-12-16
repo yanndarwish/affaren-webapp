@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import salesApi from "../services/salesApi"
 
 const initialState = {
 	id: 0,
@@ -45,6 +46,14 @@ const saleSlice = createSlice({
 		setSale: (state, action) => {
 			state = action.payload
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addMatcher(
+			salesApi.endpoints.getNextSaleId.matchFulfilled,
+			(state, action) => {
+				state.id = action.payload.nextSaleId
+			}
+		)
 	},
 })
 

@@ -19,7 +19,7 @@ export const salesApi = createApi({
 			return headers
 		},
 	}),
-	tagTypes: ["Sales"],
+	tagTypes: ["Sales", "NextId"],
 	endpoints: (builder) => ({
 		postSale: builder.mutation({
 			query: ({ payload }) => ({
@@ -27,7 +27,7 @@ export const salesApi = createApi({
 				method: "POST",
 				body: payload,
 			}),
-			invalidatesTags: ["Sales"],
+			invalidatesTags: ["Sales", "NextId"],
 		}),
 		updateSale: builder.mutation({
 			query: ({ id, payload }) => ({
@@ -38,10 +38,16 @@ export const salesApi = createApi({
 			invalidatesTags: ["Sales"],
 		}),
 		getMonthSales: builder.query({
-			query: ({date}) => ({
-					url: `sales/${date}`,
+			query: ({ date }) => ({
+				url: `sales-month/${date}`,
 			}),
 			providesTags: ["Sales"],
+		}),
+		getNextSaleId: builder.query({
+			query: () => ({
+				url: "sales-last",
+			}),
+			providesTags: ["NextId"],
 		}),
 		getSales: builder.query({
 			query: () => ({
@@ -88,6 +94,7 @@ export const {
 	useUpdateSaleMutation,
 	useGetSalesQuery,
 	useGetMonthSalesQuery,
+	useGetNextSaleIdQuery,
 	useGetSaleQuery,
 	useDeleteSaleMutation,
 	usePostSaleProductsMutation,

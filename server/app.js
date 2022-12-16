@@ -328,7 +328,6 @@ app.post("/sales", auth, async (req, res) => {
 // get all sales
 app.get("/sales", auth, async (req, res) => {
 	try {
-		console.log('hej')
 		const response = await pool.query("SELECT * FROM sales")
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -337,10 +336,9 @@ app.get("/sales", auth, async (req, res) => {
 })
 
 // get all sales for a certain time period
-app.get("/sales/:date", auth, async (req, res) => {
+app.get("/sales-month/:date", auth, async (req, res) => {
 	try {
-
-		const {date} = req.params
+		const { date } = req.params
 		console.log(date)
 		const response = await pool.query("SELECT * FROM sales")
 		res.status(200).send(response.rows)
@@ -355,10 +353,26 @@ app.get("/sales/:id", auth, async (req, res) => {
 		const id = req.params.id
 
 		const response = await pool.query(
-			"SELECT * FROM sales WHERe sale_id = $1",
+			"SELECT * FROM sales WHERE sale_id = $1",
 			[id]
 		)
-		res.status(200).send(response.rows)
+		res.status(200).send(response.rows[0])
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get next sale id
+app.get("/sales-last", auth, async (req, res) => {
+	try {
+		const response = await pool.query(
+			"SELECT * FROM sales ORDER BY sale_id DESC LIMIT 1"
+		)
+
+		const lastSale = response.rows[0]
+		const nextSaleId = lastSale.sale_id + 1
+
+		res.status(200).send({ nextSaleId: nextSaleId })
 	} catch (err) {
 		console.log(err)
 	}
@@ -411,15 +425,14 @@ app.post("/sales/:id/products", auth, async (req, res) => {
 			const { name, quantity, discount, price, taxe, barcode, productId } =
 				product
 
-				const response = await pool.query(
-					"INSERT INTO sales_products (sale_id, product_name, product_quantity, product_discount, product_price, product_taxe, product_barcode) VALUEs ($1, $2, $3, $4, $5, $6, $7)",
-					[id, name, quantity, discount, price, taxe, barcode]
-				)
+			const response = await pool.query(
+				"INSERT INTO sales_products (sale_id, product_name, product_quantity, product_discount, product_price, product_taxe, product_barcode) VALUEs ($1, $2, $3, $4, $5, $6, $7)",
+				[id, name, quantity, discount, price, taxe, barcode]
+			)
 
-				responses.push(response.rows)
-			})
-			res.status(200).send(responses)
-			
+			responses.push(response.rows)
+		})
+		res.status(200).send(responses)
 	} catch (err) {
 		console.log(err)
 	}
@@ -430,7 +443,10 @@ app.get("/sales/:id/products", auth, async (req, res) => {
 	try {
 		const id = req.params.id
 
-		const response = await pool.query("SELECT * FROM sales_products WHERE sale_id = $1", [id])
+		const response = await pool.query(
+			"SELECT * FROM sales_products WHERE sale_id = $1",
+			[id]
+		)
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
@@ -442,7 +458,10 @@ app.delete("/sales/:id/products", auth, async (req, res) => {
 	try {
 		const id = req.params.id
 
-		const response = await pool.query("DELETE FROM sales_products WHERE sale_id = $1", [id])
+		const response = await pool.query(
+			"DELETE FROM sales_products WHERE sale_id = $1",
+			[id]
+		)
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)

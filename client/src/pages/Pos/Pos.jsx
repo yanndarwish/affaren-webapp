@@ -26,14 +26,19 @@ import {
 	Title,
 } from "../../assets/styles/common.styles"
 import EditSaleSection from "../../components/POS/EditSaleSection/EditSaleSection"
+import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
+	const sale = useSelector((state) => state.sale)
+	console.log(sale)
 	const [cardSection, setCardSection] = useState(false)
 	const [paymentSlider, setPaymentSlider] = useState(false)
 	const [noBarcodeSlider, setNoBarcodeSlider] = useState(false)
 	const [discountSlider, setDiscountSlider] = useState(false)
 	const [addCardSlider, setAddCardSlider] = useState(false)
+
+	const {data, error, isLoading} = useGetNextSaleIdQuery()
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
@@ -72,7 +77,7 @@ const Pos = () => {
 		<PosContainer>
 			<Container theme={theme}>
 				<SpaceHeader xs={12}>
-					<Title>Sale N°</Title>
+					<Title>Sale N°{sale.id}</Title>
 					<EditSaleSection />
 				</SpaceHeader>
 				<SearchSection>
