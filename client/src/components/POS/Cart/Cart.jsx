@@ -6,23 +6,10 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
+import { useSelector } from "react-redux"
 
 const Cart = () => {
-	function createData(name, quantity, price) {
-		return { name, quantity, price}
-	}
-
-	const rows = [
-		createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-		createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-		createData("Eclair", 262, 16.0, 24, 6.0),
-		createData("Cupcake", 305, 3.7, 67, 4.3),
-		createData("Gingerbread", 356, 16.0, 49, 3.9),
-		createData("Cupcake", 305, 3.7, 67, 4.3),
-		createData("Gingerbread", 356, 16.0, 49, 3.9),
-		createData("Cupcake", 305, 3.7, 67, 4.3),
-		createData("Gingerbread", 356, 16.0, 49, 3.9),
-	]
+	const products = useSelector(state => state.sale.products)
 
 	return (
 		<TableContainer component={Paper} sx={{ maxHeight: 280 }}>
@@ -44,17 +31,17 @@ const Cart = () => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{rows.map((row, i) => (
+					{products.map((product, i) => (
 						<TableRow
-							key={i}
+							key={product.id}
 							sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 						>
 							<TableCell component="th" scope="row">
 								{i+1}
 							</TableCell>
-							<TableCell>{row.name}</TableCell>
-							<TableCell align="right">{row.quantity}</TableCell>
-							<TableCell align="right">{row.price}</TableCell>
+							<TableCell>{product.name}</TableCell>
+							<TableCell align="right">{product.quantity}</TableCell>
+							<TableCell align="right">{product.price}</TableCell>
 							<TableCell align="right">
 								<DeleteOutlinedIcon />
 							</TableCell>
