@@ -6,11 +6,53 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
-import { useSelector } from "react-redux"
+import AddIcon from "@mui/icons-material/Add"
+import RemoveIcon from "@mui/icons-material/Remove"
+import { Wrapper } from "./Cart.styles"
+import { useSelector, useDispatch } from "react-redux"
+import { updateProducts } from "../../../redux/features/sale"
 
 const Cart = () => {
-	const products = useSelector(state => state.sale.products)
+	const products = useSelector((state) => state.sale.products)
+	const dispatch = useDispatch()
 	console.log(products)
+
+	const updateQuantity = (e, value) => {
+		// find product in products array
+		const targetId = e.target.dataset.id
+			? e.target.dataset.id
+			: e.target.parentNode.dataset.id
+		const found = products.find((product) => product.id.toString() === targetId)
+		// update quantity with value
+		let obj = { ...found }
+		obj.price = ((obj.price / obj.quantity) * (obj.quantity + value)).toFixed(2)
+		obj.quantity = obj.quantity + value
+
+		if (obj.quantity === 0) {
+			removeProduct({ id: targetId })
+		} else {
+			const updated = products.map((product) => {
+				if (product.id === found.id) {
+					return obj
+				} else {
+					return product
+				}
+			})
+			dispatch(updateProducts({ products: updated }))
+		}
+	}
+
+	const removeProduct = ({ e, id }) => {
+		if (!id) {
+			id = e.target.dataset.id
+				? e.target.dataset.id
+				: e.target.parentNode.dataset.id
+		}
+
+		const updatedProducts = products.filter(product => product.id.toString() !== id)
+
+		dispatch(updateProducts({ products: updatedProducts }))
+	}
 
 	return (
 		<TableContainer component={Paper} sx={{ maxHeight: 280 }}>
@@ -24,7 +66,9 @@ const Cart = () => {
 					<TableRow>
 						<TableCell>N°</TableCell>
 						<TableCell>Name</TableCell>
-						<TableCell align="right">Qty</TableCell>
+						<TableCell align="right">
+							<Wrapper>Qty</Wrapper>
+						</TableCell>
 						<TableCell align="right">Price</TableCell>
 						<TableCell align="right">
 							<DeleteOutlinedIcon />
@@ -38,13 +82,28 @@ const Cart = () => {
 							sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 						>
 							<TableCell component="th" scope="row">
-								{i+1}
+								{i + 1}
 							</TableCell>
 							<TableCell>{product.name}</TableCell>
-							<TableCell align="right">{product.quantity}</TableCell>
+							<TableCell align="right">
+								<Wrapper>
+									<RemoveIcon
+										data-id={product.id}
+										onClick={(e) => updateQuantity(e, -1)}
+									/>
+									{product.quantity}
+									<AddIcon
+										data-id={product.id}
+										onClick={(e) => updateQuantity(e, 1)}
+									/>
+								</Wrapper>
+							</TableCell>
 							<TableCell align="right">{product.price}</TableCell>
 							<TableCell align="right">
-								<DeleteOutlinedIcon />
+								<DeleteOutlinedIcon
+									data-id={product.id}
+									onClick={(e) => removeProduct({ e: e })}
+								/>
 							</TableCell>
 						</TableRow>
 					))}
