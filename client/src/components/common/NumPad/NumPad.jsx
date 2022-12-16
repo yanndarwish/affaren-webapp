@@ -3,24 +3,29 @@ import { ArtTitle } from "../../../assets/styles/common.styles"
 import { CorrectBtn, Display, Keypad, Num, NumRow } from "./NumPad.styles"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 
-const NumPad = ({ display, size, target }) => {
-	const [value, setValue] = useState("")
+const NumPad = ({ display, size, target, unit, value, setValue }) => {
+	// const [value, setValue] = useState("")
 
 	const handleClick = (e) => {
-		setValue(value + e.target.dataset.value)
 		if (target) {
 			document.getElementById(target).value += e.target.dataset.value
+		} else {
+			setValue(parseFloat(value + e.target.dataset.value))
 		}
 	}
 
 	const handleCorrect = () => {
-		setValue(value.slice(0, -1))
+		let newValue = value.toString().slice(0, -1)
+
+		setValue(newValue === "" ? 0 : parseFloat(newValue))
 	}
 	return (
 		<div className="numpad">
 			{display ? (
 				<Display className="display">
-					<ArtTitle>{value} €</ArtTitle>
+					<ArtTitle>
+						{value} {unit}
+					</ArtTitle>
 					<CorrectBtn onClick={handleCorrect}>
 						<BackspaceOutlinedIcon />
 					</CorrectBtn>
