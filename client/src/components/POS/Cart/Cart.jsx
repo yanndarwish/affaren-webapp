@@ -25,7 +25,9 @@ const Cart = () => {
 		const found = products.find((product) => product.id.toString() === targetId)
 		// update quantity with value
 		let obj = { ...found }
-		obj.price = ((obj.price / obj.quantity) * (obj.quantity + value)).toFixed(2)
+		obj.price =
+			Math.floor((obj.price / obj.quantity) * (obj.quantity + value) * 100) /
+			100
 		obj.quantity = obj.quantity + value
 
 		if (obj.quantity === 0) {
@@ -49,7 +51,9 @@ const Cart = () => {
 				: e.target.parentNode.dataset.id
 		}
 
-		const updatedProducts = products.filter(product => product.id.toString() !== id)
+		const updatedProducts = products.filter(
+			(product) => product.id.toString() !== id
+		)
 
 		dispatch(updateProducts({ products: updatedProducts }))
 	}

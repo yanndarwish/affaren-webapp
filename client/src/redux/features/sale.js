@@ -8,7 +8,7 @@ const initialState = {
 	amount: "",
 	paymentMethods: {},
 	taxes: {},
-	discount: {},
+	discount: [],
 	user: "",
 }
 
@@ -41,7 +41,7 @@ const saleSlice = createSlice({
 			state.taxes = action.payload.taxes
 		},
 		setDiscount: (state, action) => {
-			state.discount = action.payload.discount
+			state.discount.push(action.payload.discount)
 		},
 		setUser: (state, action) => {
 			state.user = action.payload.user

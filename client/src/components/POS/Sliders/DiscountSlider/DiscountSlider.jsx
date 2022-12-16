@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
@@ -6,7 +7,14 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
-import { Checkbox, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from "@mui/material"
+import {
+	Checkbox,
+	FormControl,
+	FormLabel,
+	FormControlLabel,
+	Radio,
+	RadioGroup,
+} from "@mui/material"
 
 import {
 	Dialog,
@@ -20,10 +28,16 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
 import NumPad from "../../../common/NumPad/NumPad"
 import { DialogCard } from "./DiscountSlider.styles"
+import { updateProducts, setDiscount } from "../../../../redux/features/sale"
 
 const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
+	const products = useSelector((state) => state.sale.products)
+	const dispatch = useDispatch()
 	const overlayRef = useRef()
 	const [selected, setSelected] = useState([])
+	const [discountType, setDiscountType] = useState("percent")
+	const [discountAmount, setDiscountAmount] = useState(0)
+	// const [discount, setDiscount] = useState([])
 
 	const closeSlider = (e) => {
 		if (overlayRef.current === e.target) {
@@ -31,33 +45,21 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 		}
 	}
 
-	function createData(name, quantity, price) {
-		return { name, quantity, price }
-	}
-
-	const rows = [
-		createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-		createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-		createData("Eclair", 262, 16.0, 24, 6.0),
-		createData("Cupcake", 305, 3.7, 67, 4.3),
-		createData("Gingerbread", 356, 16.0, 49, 3.9),
-	]
-
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelected = rows.map((n) => n.name)
+			const newSelected = products.map((n) => n.id)
 			setSelected(newSelected)
 			return
 		}
 		setSelected([])
 	}
 
-	const handleClick = (event, name) => {
-		const selectedIndex = selected.indexOf(name)
+	const handleClick = (event, id) => {
+		const selectedIndex = selected.indexOf(id)
 		let newSelected = []
 
 		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name)
+			newSelected = newSelected.concat(selected, id)
 		} else if (selectedIndex === 0) {
 			newSelected = newSelected.concat(selected.slice(1))
 		} else if (selectedIndex === selected.length - 1) {
@@ -72,11 +74,64 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 		setSelected(newSelected)
 	}
 
-    // console.log(selected)
+	const toggleDiscountType = (e) => {
+		const discountType = document.querySelector(
+			'input[name="discount-type"]:checked'
+		).value
+		setDiscountType(discountType)
+	}
 
-	const isSelected = (name) => selected.indexOf(name) !== -1
+	const applyDiscount = () => {
+		let discountedProducts = []
+		let reduction
+		let newPrice
+		// find the products
+		selected.forEach((id) => {
+			const found = products.find((product) => product.id === id)
+			// apply discount
+			if (discountType === "percent") {
+				reduction = (found.price * discountAmount) / 100
+				newPrice = Math.floor((found.price - reduction) * 100) / 100
+			} else {
+				reduction = Math.floor((discountAmount / selected.length) * 100) / 100
+				newPrice = Math.floor((found.price - reduction) * 100) / 100
+			}
+			// create new updated object
+			let obj = { ...found }
+			obj.price = newPrice
+			discountedProducts.push(obj)
 
-	
+			let productDiscount = {
+				productId: id,
+				discountType: discountType,
+				discountAmount: discountAmount,
+				originalPrice: found.price,
+				reduction: reduction,
+				newPrice: newPrice,
+			}
+
+			dispatch(setDiscount({ discount: productDiscount }))
+		})
+
+		console.log(discountedProducts)
+		const updated = products.map((product, i) => {
+			if (product.id === discountedProducts[i].id) {
+				return discountedProducts[i]
+			} else {
+				return product
+			}
+		})
+
+		console.log(updated)
+		dispatch(updateProducts({ products: updated }))
+	}
+
+	const resetDiscount = () => {
+		console.log("reset")
+	}
+
+	const isSelected = (id) => selected.indexOf(id) !== -1
+
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
 			<Dialog id="dialog" theme={theme}>
@@ -95,7 +150,8 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 											<Checkbox
 												color="primary"
 												checked={
-													rows.length > 0 && selected.length === rows.length
+													products.length > 0 &&
+													selected.length === products.length
 												}
 												onChange={handleSelectAllClick}
 												inputProps={{
@@ -109,15 +165,15 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{rows.map((row, index) => {
-										const isItemSelected = isSelected(row.name)
+									{products.map((product, index) => {
+										const isItemSelected = isSelected(product.id)
 										const labelId = `enhanced-table-checkbox-${index}`
 
 										return (
 											<TableRow
-												key={row.name}
+												key={product.name}
 												hover
-												onClick={(event) => handleClick(event, row.name)}
+												onClick={(event) => handleClick(event, product.id)}
 												role="checkbox"
 												aria-checked={isItemSelected}
 												tabIndex={-1}
@@ -136,10 +192,10 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 													/>
 												</TableCell>
 												<TableCell component="th" scope="row">
-													{row.name}
+													{product.name}
 												</TableCell>
-												<TableCell>{row.quantity}</TableCell>
-												<TableCell>{row.price}</TableCell>
+												<TableCell>{product.quantity}</TableCell>
+												<TableCell>{product.price}</TableCell>
 											</TableRow>
 										)
 									})}
@@ -151,29 +207,37 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 							<RadioGroup
 								aria-labelledby="type-radio-buttons-group-label"
 								defaultValue="percent"
-								name="radio-buttons-group"
-                                row
+								name="discount-type"
+								row
 							>
 								<FormControlLabel
 									value="percent"
 									control={<Radio />}
 									label="Percent"
+									onClick={toggleDiscountType}
 								/>
 								<FormControlLabel
 									value="cash"
 									control={<Radio />}
 									label="Cash"
+									onClick={toggleDiscountType}
 								/>
 							</RadioGroup>
 						</FormControl>
-						<NumPad display size="S" />
+						<NumPad
+							display
+							size="S"
+							unit={discountType === "percent" ? "%" : "€"}
+							value={discountAmount}
+							setValue={setDiscountAmount}
+						/>
 					</DialogCard>
 				</DialogBody>
 				<DialogFooter>
 					<Button
 						title="Apply Discount"
 						color="success"
-						onClick={() => console.log()}
+						onClick={applyDiscount}
 					/>
 				</DialogFooter>
 			</Dialog>
