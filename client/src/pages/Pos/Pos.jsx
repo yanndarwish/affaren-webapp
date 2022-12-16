@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import ProductCardSection from "../../components/POS/ProductCardSection/ProductCardSection"
 import BarcodeInput from "../../components/POS/BarcodeInput/BarcodeInput"
 import Button from "../../components/common/Button/Button.component"
@@ -27,18 +27,20 @@ import {
 } from "../../assets/styles/common.styles"
 import EditSaleSection from "../../components/POS/EditSaleSection/EditSaleSection"
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
+import { useEffect } from "react"
+import { setSaleAmount } from "../../redux/features/sale"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const sale = useSelector((state) => state.sale)
-	console.log(sale)
+	const dispatch = useDispatch()
 	const [cardSection, setCardSection] = useState(false)
 	const [paymentSlider, setPaymentSlider] = useState(false)
 	const [noBarcodeSlider, setNoBarcodeSlider] = useState(false)
 	const [discountSlider, setDiscountSlider] = useState(false)
 	const [addCardSlider, setAddCardSlider] = useState(false)
 
-	const {data, error, isLoading} = useGetNextSaleIdQuery()
+	const { data, error, isLoading } = useGetNextSaleIdQuery()
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
@@ -73,6 +75,19 @@ const Pos = () => {
 	const openAddCardSlider = () => {
 		setAddCardSlider(true)
 	}
+
+	const updateTotalAmount = () => {
+		let total = 0
+		sale.products.forEach((product) => {
+			total += parseFloat(product.price)
+		})
+
+		dispatch(setSaleAmount({amount: total.toFixed(2)}))
+	}
+
+	useEffect(() => {
+		updateTotalAmount()
+	}, [sale.products])
 	return (
 		<PosContainer>
 			<Container theme={theme}>
@@ -93,7 +108,7 @@ const Pos = () => {
 					</Box>
 					<TotalSection display="flex" justifyContent="flex-end">
 						<SubTitle>Total</SubTitle>
-						<SubTitle>14,60€</SubTitle>
+						<SubTitle>{sale.amount}€</SubTitle>
 					</TotalSection>
 					<ButtonSectionSpace>
 						<ButtonSection>
@@ -114,7 +129,7 @@ const Pos = () => {
 					<CropSquareOutlinedIcon />
 				</CardSectionButton>
 			</Container>
-			<ProductCardSection theme={theme} onClick={openAddCardSlider}/>
+			<ProductCardSection theme={theme} onClick={openAddCardSlider} />
 			<PaymentSlider
 				theme={theme}
 				isOpen={paymentSlider}

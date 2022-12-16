@@ -5,7 +5,7 @@ const initialState = {
 	id: 0,
 	date: 0,
 	products: [],
-	amount: 0,
+	amount: "",
 	paymentMethods: {},
 	taxes: {},
 	discount: {},
@@ -27,6 +27,9 @@ const saleSlice = createSlice({
 		},
 		addProduct: (state, action) => {
 			state.products.push(action.payload.products)
+		},
+		updateProducts: (state, action) => {
+			state.products = action.payload.products
 		},
 		setSaleAmount: (state, action) => {
 			state.amount = action.payload.amount
@@ -63,6 +66,7 @@ export const {
 	setSaleId,
 	setSaleDate,
 	addProduct,
+	updateProducts,
 	setSaleAmount,
 	setSalePaymentMethods,
 	setTaxes,
