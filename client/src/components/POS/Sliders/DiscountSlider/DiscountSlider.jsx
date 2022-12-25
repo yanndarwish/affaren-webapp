@@ -37,7 +37,6 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 	const [selected, setSelected] = useState([])
 	const [discountType, setDiscountType] = useState("percent")
 	const [discountAmount, setDiscountAmount] = useState(0)
-	// const [discount, setDiscount] = useState([])
 
 	const closeSlider = (e) => {
 		if (overlayRef.current === e.target) {
@@ -113,21 +112,24 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 			dispatch(setDiscount({ discount: productDiscount }))
 		})
 
-		console.log(discountedProducts)
 		const updated = products.map((product, i) => {
-			if (product.id === discountedProducts[i].id) {
+			if (product?.id === discountedProducts[i]?.id) {
 				return discountedProducts[i]
 			} else {
 				return product
 			}
 		})
 
-		console.log(updated)
 		dispatch(updateProducts({ products: updated }))
+		resetDiscount()
+		setIsOpen(false)
 	}
 
 	const resetDiscount = () => {
-		console.log("reset")
+		setDiscountAmount(0)
+		setDiscountType("percent")
+		setSelected([])
+		document.getElementById("percent-checkbox").checked = true
 	}
 
 	const isSelected = (id) => selected.indexOf(id) !== -1
@@ -211,6 +213,7 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 								row
 							>
 								<FormControlLabel
+									id="percent-checkbox"
 									value="percent"
 									control={<Radio />}
 									label="Percent"
