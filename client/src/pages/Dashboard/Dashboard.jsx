@@ -4,7 +4,6 @@ import { useGetUsersMutation } from "../../redux/services/userApi"
 import { useGetMonthSalesQuery } from "../../redux/services/salesApi"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
-import { Grid } from "@mui/material"
 import { Body, Container, Flex, SpaceHeader, SubTitle, Title } from "../../assets/styles/common.styles"
 
 const Dashboard = () => {
