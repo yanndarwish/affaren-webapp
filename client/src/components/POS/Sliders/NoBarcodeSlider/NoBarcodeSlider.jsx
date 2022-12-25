@@ -30,7 +30,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 	const [focusedInput, setFocusedInput] = useState("")
 	const [product, setProduct] = useState({
 		id: "",
-		taxe: 5,
+		taxe: 5.5,
 		quantity: "",
 		price: "",
 		name: "Alimentation",
@@ -46,7 +46,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 		let obj = { ...product }
 		let name
 		if (field === "taxe") {
-			if (e.target.value === 5) {
+			if (e.target.value === 5.5) {
 				name = "Alimentation"
 			} else if (e.target.value === 10) {
 				name = "Magazine"

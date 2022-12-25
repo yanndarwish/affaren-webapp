@@ -21,7 +21,7 @@ import { FormFlex } from "./AddCardSlider.styles"
 const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 	const overlayRef = useRef()
 	const [product, setProduct] = useState({
-		taxe: 5,
+		taxe: 5.5,
 		quantity: 1,
 		price: 0,
 		name: "",
@@ -65,7 +65,7 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 										fullWidth
 										required
 									>
-										<MenuItem value={5}>Alimentation</MenuItem>
+										<MenuItem value={5.5}>Alimentation</MenuItem>
 										<MenuItem value={10}>Magazine</MenuItem>
 										<MenuItem value={20}>Décoration/Alcool</MenuItem>
 									</Select>
