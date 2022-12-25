@@ -35,7 +35,7 @@ const saleSlice = createSlice({
 			state.amount = action.payload.amount
 		},
 		setSalePaymentMethods: (state, action) => {
-			state.paymentMethods = action.payload.taxes
+			state.paymentMethods = action.payload.paymentMethods
 		},
 		setTaxes: (state, action) => {
 			state.taxes = action.payload.taxes
