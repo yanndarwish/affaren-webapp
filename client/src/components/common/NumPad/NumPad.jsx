@@ -5,12 +5,12 @@ import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 
 const NumPad = ({ display, size, target, unit, value, setValue }) => {
 	// const [value, setValue] = useState("")
-
 	const handleClick = (e) => {
 		if (target) {
 			document.getElementById(target).value += e.target.dataset.value
 		} else {
-			setValue(parseFloat(value + e.target.dataset.value))
+			let totalString = value === 0 ? e.target.dataset.value : value + e.target.dataset.value
+			setValue(totalString)
 		}
 	}
 
