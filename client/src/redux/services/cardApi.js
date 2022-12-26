@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import store from "../store/store"
 
 export const cardApi = createApi({
-	reducerPath: "userApi",
+	reducerPath: "cardApi",
 	baseQuery: fetchBaseQuery({
 		baseUrl: "http://localhost:4001/",
 		prepareHeaders: (headers) => {
@@ -21,18 +21,15 @@ export const cardApi = createApi({
 	tagTypes: ["Cards"],
 	endpoints: (builder) => ({
 		getCards: builder.mutation({
-			query: (payload) => ({
+			query: () => ({
 				url: "cards",
-				method: "POST",
-				body: payload,
 			}),
 			providesTags: ["Cards"],
 		}),
 		deleteCard: builder.mutation({
-			query: (payload) => ({
-				url: "cards",
+			query: ({ id }) => ({
+				url: `cards/${id}`,
 				method: "DELETE",
-				body: payload,
 			}),
 			invalidatesTags: ["Cards"],
 		}),
@@ -49,7 +46,7 @@ export const cardApi = createApi({
 
 export const {
 	useDeleteCardMutation,
-    useGetCardsMutation,
-    usePostCardMutation
+	useGetCardsMutation,
+	usePostCardMutation,
 } = cardApi
 export default cardApi

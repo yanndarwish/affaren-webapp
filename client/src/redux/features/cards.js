@@ -13,7 +13,7 @@ const cardSlice = createSlice({
 		builder.addMatcher(
 			cardApi.endpoints.getCards.matchFulfilled,
 			(state, action) => {
-				state.cards = action.payload.cards
+				state.cards = action.payload
 			}
 		)
 	},
