@@ -17,21 +17,28 @@ import {
 	DialogCard,
 } from "../NoBarcodeSlider/NoBarcodeSlider.styles"
 import { FormFlex } from "./AddCardSlider.styles"
+import { usePostCardMutation } from "../../../../redux/services/cardApi"
 
 const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 	const overlayRef = useRef()
 	const [product, setProduct] = useState({
 		taxe: 5.5,
-		quantity: 1,
 		price: 0,
 		name: "",
-		image: "",
+		imageLink: "",
 	})
+	const [postCard, res] = usePostCardMutation()
+
 
 	const handleChange = (e, field) => {
 		let obj = { ...product }
 		obj[field] = e.target?.value ? e.target.value : e
 		setProduct(obj)
+	}
+
+	const handleAddCard = () => {
+		postCard(product)
+		setIsOpen(false)
 	}
 
 	const closeSlider = (e) => {
@@ -88,8 +95,8 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 									<Input
 										type="text"
 										label="Image"
-										onChange={(e) => handleChange(e, "image")}
-										value={product.image}
+										onChange={(e) => handleChange(e, "imageLink")}
+										value={product.imageLink}
 										fullWidth
 									/>
 								</FormFlex>
@@ -102,7 +109,7 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 					<Button
 						title="Add Card"
 						color="success"
-						onClick={() => console.log(product)}
+						onClick={()=>handleAddCard()}
 					/>
 				</DialogFooter>
 			</Dialog>

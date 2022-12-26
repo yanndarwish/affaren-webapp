@@ -29,6 +29,7 @@ import EditSaleSection from "../../components/POS/EditSaleSection/EditSaleSectio
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 import { useEffect } from "react"
 import { setSaleAmount } from "../../redux/features/sale"
+import { useGetCardsMutation } from "../../redux/services/cardApi"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -40,6 +41,7 @@ const Pos = () => {
 	const [discountSlider, setDiscountSlider] = useState(false)
 	const [addCardSlider, setAddCardSlider] = useState(false)
 
+	const [getCards, res] = useGetCardsMutation()
 	const { data, error, isLoading } = useGetNextSaleIdQuery()
 
 	const toggleCardSection = () => {
@@ -85,14 +87,24 @@ const Pos = () => {
 		dispatch(setSaleAmount({amount: total.toFixed(2)}))
 	}
 
+	const updateTaxes = () => {
+		console.log('taxes')
+	}
+
+	console.log(sale)
 	useEffect(() => {
 		updateTotalAmount()
+		updateTaxes()
 	}, [sale.products])
+
+	useEffect(() => {
+		getCards()
+	}, [])
 	return (
 		<PosContainer>
 			<Container theme={theme}>
 				<SpaceHeader xs={12}>
-					<Title>Sale N°{sale.id}</Title>
+					<Title>Sale N°{sale.id ? sale.id : 1}</Title>
 					<EditSaleSection />
 				</SpaceHeader>
 				<SearchSection>
@@ -129,7 +141,7 @@ const Pos = () => {
 					<CropSquareOutlinedIcon />
 				</CardSectionButton>
 			</Container>
-			<ProductCardSection theme={theme} onClick={openAddCardSlider} />
+			<ProductCardSection theme={theme} onClick={openAddCardSlider}/>
 			<PaymentSlider
 				theme={theme}
 				isOpen={paymentSlider}
