@@ -15,7 +15,6 @@ import { updateProducts } from "../../../redux/features/sale"
 const Cart = () => {
 	const products = useSelector((state) => state.sale.products)
 	const dispatch = useDispatch()
-	console.log(products)
 
 	const updateQuantity = (e, value) => {
 		// find product in products array

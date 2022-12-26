@@ -22,10 +22,10 @@ export const salesApi = createApi({
 	tagTypes: ["Sales", "NextId"],
 	endpoints: (builder) => ({
 		postSale: builder.mutation({
-			query: ({ payload }) => ({
+			query: ({ sale }) => ({
 				url: "sales",
 				method: "POST",
-				body: payload,
+				body: sale,
 			}),
 			invalidatesTags: ["Sales", "NextId"],
 		}),
@@ -69,10 +69,10 @@ export const salesApi = createApi({
 		}),
 		// sales_products
 		postSaleProducts: builder.mutation({
-			query: ({ id, payload }) => ({
+			query: ({ id, products }) => ({
 				url: `sales/${id}/products`,
 				method: "POST",
-				body: payload,
+				body: {products},
 			}),
 		}),
 		getSalesProducts: builder.query({

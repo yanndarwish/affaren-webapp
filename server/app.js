@@ -251,14 +251,18 @@ app.post("/products", auth, async (req, res) => {
 	}
 })
 
-// update a product
-app.put("/products/:id", auth, async (req, res) => {
+// update product quantity
+app.patch("/products/:id", auth, async (req, res) => {
 	try {
 		const id = req.params.id
-		const { name, price, taxe, quantity, alert } = req.body
+		console.log(id)
+		const { quantity } = req.body
+		console.log(quantity)
+		let qty = parseInt(quantity)
+		console.log(qty)
 		const response = await pool.query(
-			"UPDATE products SET product_name = $1, product_price = $2, product_taxe = $3, product_quantity = $4, product_alert = $5 WHERE product_id = $6 RETURNING *",
-			[name, price, taxe, quantity, alert, id]
+			`UPDATE products SET product_quantity = product_quantity - $1 WHERE product_id = $2 RETURNING *`,
+			[qty, id]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -313,6 +317,7 @@ app.delete("/products/:id", auth, async (req, res) => {
 // create a sale
 app.post("/sales", auth, async (req, res) => {
 	try {
+		console.log(req.body)
 		const { date, amount, paymentMethods, discount, taxes, user } = req.body
 
 		const response = await pool.query(
@@ -416,18 +421,19 @@ app.delete("/sales/:id", auth, async (req, res) => {
 //  create a product in a sale
 app.post("/sales/:id/products", auth, async (req, res) => {
 	try {
-		const id = req.params.id
+		console.log("sales product")
+		const saleId = req.params.id
 
+		console.log(saleId)
 		const products = req.body.products
-
 		let responses = []
 		products.forEach(async (product) => {
-			const { name, quantity, discount, price, taxe, barcode, productId } =
-				product
+			console.log(product)
+			const { name, quantity, price, taxe, id } = product
 
 			const response = await pool.query(
-				"INSERT INTO sales_products (sale_id, product_name, product_quantity, product_discount, product_price, product_taxe, product_barcode) VALUEs ($1, $2, $3, $4, $5, $6, $7)",
-				[id, name, quantity, discount, price, taxe, barcode]
+				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe ) VALUEs ($1, $2, $3, $4, $5, $6)",
+				[saleId, id, name, quantity, price, taxe]
 			)
 
 			responses.push(response.rows)

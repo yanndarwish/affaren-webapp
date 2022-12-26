@@ -86,7 +86,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 
 		let obj = {...product}
 		obj["quantity"] = parseInt(quantity)
-		obj["price"] = parseFloat(price * quantity)
+		obj["price"] = parseFloat(price * quantity).toFixed(2)
 		obj["id"] = `nb-${products.length + 1}`
 		
 		setProduct(obj)

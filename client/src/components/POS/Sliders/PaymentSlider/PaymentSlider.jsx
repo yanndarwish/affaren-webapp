@@ -18,7 +18,18 @@ import SellOutlinedIcon from "@mui/icons-material/SellOutlined"
 import Button from "../../../common/Button/Button.component"
 import NumPad from "../../../common/NumPad/NumPad"
 import { useSelector, useDispatch } from "react-redux"
-import { setSalePaymentMethods } from "../../../../redux/features/sale"
+import {
+	setSalePaymentMethods,
+	setSaleDate,
+	resetSale,
+	setUser,
+} from "../../../../redux/features/sale"
+import {
+	usePostSaleProductsMutation,
+	usePostSaleMutation,
+} from "../../../../redux/services/salesApi"
+import { useUpdateProductsMutation } from "../../../../redux/services/productsApi"
+import { Modal } from "modal-rjs"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -54,7 +65,13 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const [paying, setPaying] = useState("")
 	const [leftPaying, setLeftPaying] = useState("")
 	const [giveBack, setGiveBack] = useState(0)
+	const [modalIsOpen, setModalIsOpen] = useState(false)
 	const sale = useSelector((state) => state.sale)
+	const user = useSelector((state) => state.user.user)
+
+	const [updateProduct] = useUpdateProductsMutation()
+	const [postSaleProducts] = usePostSaleProductsMutation()
+	const [postSale] = usePostSaleMutation()
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue)
@@ -71,50 +88,92 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		let leftToPay = (leftPaying - paying).toFixed(2)
 		setLeftPaying(leftToPay)
 
-		console.log(parseFloat(paying))
-		console.log(parseFloat(leftToPay))
-
 		if (
 			parseFloat(leftToPay) === 0 ||
 			(leftToPay !== 0 && paying > leftToPay && value === 0)
 		) {
+			let salePaymentMethods = {
+				...sale.paymentMethods,
+				[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : paying),
+			}
+
+			let confirmedSale = {
+				...sale,
+				date: Date.now(),
+				paymentMethods: salePaymentMethods,
+			}
+
+			dispatch(setSalePaymentMethods({ paymentMethods: salePaymentMethods }))
+			dispatch(setSaleDate({ date: Date.now() }))
 			// pay
-			console.log("pay")
+
 			// display how much ot give back
 			if (leftToPay !== 0 && paying > leftToPay && value === 0) {
 				setGiveBack(Math.abs(leftToPay))
-			} 
-				setPaying(leftToPay)
+			}
+			setPaying(leftToPay)
 
+			postSale({ sale: confirmedSale })
 			// update inventory for each products
-
-			// post sales_products
+			// if id is an int
+			sale.products.forEach((product) => {
+				if (typeof product.id === "number") {
+					updateProduct({ quantity: product.quantity, id: product.id })
+				}
+			})
 
 			// post sale
 
-			// open success payment modal
+			// post sales_products
 
+			// open success payment modal
+			setModalIsOpen(true)
+
+			postSaleProducts({ products: sale.products, id: parseInt(confirmedSale.id) })
 			// print ticket button in modal
 
-			// Close payment slider
+			// reset sale
+			dispatch(resetSale())
+		dispatch(setUser({ user: user.user_first_name }))
+
 		} else if (
 			parseFloat(leftToPay) !== 0 &&
 			parseFloat(paying) < parseFloat(leftToPay)
 		) {
 			// split
-			console.log("split")
 			// set what is left to pay
 			setPaying((sale.amount - paying).toFixed(2))
+			let salePaymentMethods = {
+				...sale.paymentMethods,
+				[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : paying),
+			}
+			dispatch(setSalePaymentMethods({ paymentMethods: salePaymentMethods }))
 		} else {
 			return
 		}
+	}
 
-		let salePaymentMethods = {
-			...sale.paymentMethods,
-			[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : paying),
+	const ModalBody = () => {
+		if (giveBack) {
+			return (
+				<>
+					<ArtTitle>Give Back {giveBack}€</ArtTitle>
+				</>
+			)
 		}
-		console.log(salePaymentMethods)
-		dispatch(setSalePaymentMethods({ paymentMethods: salePaymentMethods }))
+	}
+
+	const ModalFooter = () => {
+		return (
+			<>
+				<Button title="Print Ticket" onClick={closeModals}/>
+			</>
+		)
+	}
+
+	const closeModals = () => {
+		setModalIsOpen(false)
+		setIsOpen(false)
 	}
 
 	useEffect(() => {
@@ -166,6 +225,13 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 					/>
 				</DialogFooter>
 			</Dialog>
+			<Modal
+				isOpen={modalIsOpen}
+				setIsOpen={setModalIsOpen}
+				title="Sale Confirmed"
+				bodyContent={<ModalBody />}
+				footerContent={<ModalFooter />}
+			/>
 		</Overlay>
 	) : null
 }
