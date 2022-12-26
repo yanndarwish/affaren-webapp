@@ -475,11 +475,11 @@ app.delete("/sales/:id/products", auth, async (req, res) => {
 // create a card
 app.post("/cards", auth, async (req, res) => {
 	try {
-		const { name, price, taxe, imageLink } = req.body
+		const { name, price, taxe } = req.body
 
 		const response = await pool.query(
-			"INSERT INTO cards (card_name, card_price, card_taxe, card_image_link) VALUES ($1, $2, $3, $4)",
-			[name, price, taxe, imageLink]
+			"INSERT INTO cards (card_name, card_price, card_taxe) VALUES ($1, $2, $3)",
+			[name, price, taxe]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {

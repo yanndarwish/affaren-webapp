@@ -115,7 +115,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 									onChange={(e) => handleChange(e, "taxe")}
 									required
 								>
-									<MenuItem value={5}>Alimentation</MenuItem>
+									<MenuItem value={5.5}>Alimentation</MenuItem>
 									<MenuItem value={10}>Magazine</MenuItem>
 									<MenuItem value={20}>Décoration/Alcool</MenuItem>
 								</Select>
