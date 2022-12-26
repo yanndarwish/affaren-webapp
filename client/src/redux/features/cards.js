@@ -8,7 +8,11 @@ const initialState = {
 const cardSlice = createSlice({
 	name: "card",
 	initialState,
-	reducers: {},
+	reducers: {
+		updateCards: (state, action) => {
+			state.cards = action.payload.cards
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addMatcher(
 			cardApi.endpoints.getCards.matchFulfilled,
@@ -19,4 +23,5 @@ const cardSlice = createSlice({
 	},
 })
 
+export const { updateCards } = cardSlice.actions
 export default cardSlice.reducer
