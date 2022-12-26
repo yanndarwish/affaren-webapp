@@ -26,7 +26,6 @@ const BarcodeInput = () => {
 					name: data.product_name,
 					price: parseFloat(data.product_price),
 					taxe: data.product_taxe,
-					barcode: data.product_barcode,
 					quantity: 1,
 				}
 				dispatch(addProduct({ products: product }))
