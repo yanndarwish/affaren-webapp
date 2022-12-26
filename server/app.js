@@ -468,4 +468,47 @@ app.delete("/sales/:id/products", auth, async (req, res) => {
 	}
 })
 
+// ******************************* //
+// ************ CARDS ************ //
+// ******************************* //
+
+// create a card
+app.post("/cards", auth, async (req, res) => {
+	try {
+		const { category, name, price, taxe, imageLink } = req.body
+
+		const response = await pool.query(
+			"INSERT INTO cards (card_category, card_name, card_price, card_taxe, card_image_link) VALUES ($1, $2, $3, $4, $5)",
+			[category, name, price, taxe, imageLink]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get all cards
+app.get("/cards", auth, async (req, res) => {
+	try {
+		const response = await pool.query("SELECT * FROM cards")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// delete a card
+app.delete("/cards/:id", auth, async (req, res) => {
+	try {
+		const id = req.params.id
+
+		const response = await pool.query("DELETE FROM cards WHERE card_id = $1", [
+			id,
+		])
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
 module.exports = app
