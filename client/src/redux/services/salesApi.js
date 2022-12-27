@@ -37,9 +37,15 @@ export const salesApi = createApi({
 			}),
 			invalidatesTags: ["Sales"],
 		}),
+		getYearSales: builder.query({
+			query: ({ year }) => ({
+				url: `sales-period/${year}`,
+			}),
+			providesTags: ["Sales"],
+		}),
 		getMonthSales: builder.query({
-			query: ({ date }) => ({
-				url: `sales-month/${date}`,
+			query: ({ year, month }) => ({
+				url: `sales-period/${year}/${month}`,
 			}),
 			providesTags: ["Sales"],
 		}),
@@ -72,7 +78,7 @@ export const salesApi = createApi({
 			query: ({ id, products }) => ({
 				url: `sales/${id}/products`,
 				method: "POST",
-				body: {products},
+				body: { products },
 			}),
 		}),
 		getSalesProducts: builder.query({
@@ -93,6 +99,7 @@ export const {
 	usePostSaleMutation,
 	useUpdateSaleMutation,
 	useGetSalesQuery,
+	useGetYearSalesQuery,
 	useGetMonthSalesQuery,
 	useGetNextSaleIdQuery,
 	useGetSaleQuery,

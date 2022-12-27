@@ -10,18 +10,19 @@ const userSlice = createSlice({
 	name: "user",
 	initialState,
 	reducers: {
-		userLogout: (state) => {
-			state = initialState
-		},
+		userLogout: () => initialState,
 	},
 	extraReducers: (builder) => {
 		builder
 			.addMatcher(userApi.endpoints.getUser.matchFulfilled, (state, action) => {
 				state.user = action.payload.user
 			})
-			.addMatcher(userApi.endpoints.getUsers.matchFulfilled, (state, action) => {
-				state.users = action.payload.users
-			})
+			.addMatcher(
+				userApi.endpoints.getUsers.matchFulfilled,
+				(state, action) => {
+					state.users = action.payload.users
+				}
+			)
 	},
 })
 

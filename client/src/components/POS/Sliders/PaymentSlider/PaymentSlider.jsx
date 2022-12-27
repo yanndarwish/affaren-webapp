@@ -97,14 +97,27 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : paying),
 			}
 
+			const timestamp = new Date()
+
+			const day = timestamp.getDate()
+			const month = timestamp.getMonth() + 1
+			const year = timestamp.getFullYear()
+
+			const date = day + "-" + month + "-" + year
+
+			console.log(date)
+
 			let confirmedSale = {
 				...sale,
-				date: Date.now(),
+				year: year,
+				month: month,
+				day: day,
 				paymentMethods: salePaymentMethods,
 			}
 
+
 			dispatch(setSalePaymentMethods({ paymentMethods: salePaymentMethods }))
-			dispatch(setSaleDate({ date: Date.now() }))
+			dispatch(setSaleDate({ date: date }))
 			// pay
 
 			// display how much ot give back
