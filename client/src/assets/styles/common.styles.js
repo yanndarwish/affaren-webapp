@@ -38,7 +38,7 @@ export const Container = styled.main`
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	flex:1;
+	flex: 1;
 	padding: ${constant.PADDING_L}px;
 	height: 100%;
 	overflow: scroll;
@@ -102,4 +102,15 @@ export const SubTitle = styled.h2`
 
 export const ArtTitle = styled.h3`
 	font-size: ${constant.FONT_ARTICLE_TITLE}px;
+`
+
+export const Gap = styled.div`
+	display: flex;
+	gap: ${constant.GAP * 2}px;
+`
+
+export const Column = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: ${constant.GAP}px;
 `
