@@ -114,3 +114,20 @@ export const Column = styled.div`
 	flex-direction: column;
 	gap: ${constant.GAP}px;
 `
+
+export const VerticalCenter = styled.div`
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+`
+
+export const HorizontalCenter = styled.div`
+	display: flex;
+	justify-content: center;
+`
+
+export const SecondaryText = styled.p`
+	font-size: ${constant.FONT_BODY}px;
+	font-weight: 500;
+	color: rgb(${light.COLOR_TEXT_RGB}, 0.5);
+`

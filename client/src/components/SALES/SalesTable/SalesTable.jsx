@@ -50,14 +50,14 @@ export default function SalesTable({ data }) {
 						{data &&
 							data.map((sale, i) => {
 								return i === 0 ? (
-									<React.Fragment key={"separation " + i}>
+									<React.Fragment key={"separator " +i}>
 										<SalesTableRowSeparator sale={sale} />
 										<SalesTableRow sale={sale} onClick={handleClick} />
 									</React.Fragment>
 								) : i > 0 &&
 								  data &&
 								  data[i].sale_day !== data[i - 1].sale_day ? (
-									<React.Fragment key={"separation " + i}>
+									<React.Fragment key={"separatore" + i}>
 										<SalesTableRowSeparator sale={sale} />
 
 										<SalesTableRow sale={sale} onClick={handleClick} />
