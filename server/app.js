@@ -334,7 +334,7 @@ app.post("/sales", auth, async (req, res) => {
 // get all sales
 app.get("/sales", auth, async (req, res) => {
 	try {
-		const response = await pool.query("SELECT * FROM sales")
+		const response = await pool.query("SELECT * FROM sales ORDER BY sale_id DESC")
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)

@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom"
-import Sidebar from "../Sidebar/Sidebar.component"
 import Navbar from "../Sidebar/Navbar"
 import { Grid } from "@mui/material"
 

@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom"
 import Root from "../components/Root/Root"
 import Login from "../pages/Login/Login"
 import Pos from "../pages/Pos/Pos"
+import Sales from "../pages/Sales/Sales"
 import Dashboard from "../pages/Dashboard/Dashboard"
 import Inventory from "../pages/Inventory/Inventory"
 import Profile from "../pages/Profile/Profile"
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
 			{
 				path: "pos",
 				element: <Pos />,
+			},
+			{
+				path: "sales",
+				element: <Sales />,
 			},
 			{
 				path: "dashboard",
