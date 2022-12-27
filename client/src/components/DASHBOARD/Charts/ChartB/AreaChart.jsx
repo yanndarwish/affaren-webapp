@@ -1,15 +1,69 @@
 import Chart from "react-apexcharts"
 import { useEffect, useState } from "react"
 
-const AreaChart = ({ data }) => {
+const AreaChart = ({ data, theme }) => {
 	const [series, setSeries] = useState([])
 	const [labels, setLabels] = useState([])
 	let options = {
 		stroke: { curve: "smooth" },
-		xaxis: { type: "string", categories: labels },
+		xaxis: {
+			type: "string",
+			categories: labels,
+			labels: {
+				show: false,
+			},
+			axisBorder: { show: false },
+		},
 		yaxis: {
 			opposite: true,
-		}
+			labels: {
+				show: false,
+			},
+		},
+		grid: {
+            padding: {
+                left:-10, right: -16, top: -16, bottom: -16
+            },
+			yaxis: {
+				lines: {
+					show: false,
+				},
+			},
+		},
+		legend: {
+			show: false,
+		},
+		dataLabels: {
+            enabled: false,
+			style: {
+				fontSize: "18px",
+				opacity: 0.4,
+			},
+			background: {
+				padding: 4,
+			},
+		},
+        tooltip: {
+            style: {
+                fontSize: "25px"
+            }
+        },
+		theme: {
+			mode: theme === "dark" ? "dark" : "light",
+			palette: "palette10",
+		},
+		chart: {
+			toolbar: {
+				show: false,
+			},
+            animations: {
+                speed: 750, 
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350
+                }
+            }
+		},
 	}
 
 	const prepareData = (data) => {

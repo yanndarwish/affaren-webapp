@@ -4,7 +4,7 @@ import { useGetMonthSalesQuery } from "../../../../redux/services/salesApi"
 import { setFullArray } from "../../../../redux/features/dashboard"
 import AreaChart from "./AreaChart"
 
-const ChartB = () => {
+const ChartB = ({theme}) => {
 	const dispatch = useDispatch()
 	const [skip, setSkip] = useState(true)
 	const [month, setMonth] = useState("")
@@ -45,7 +45,7 @@ const ChartB = () => {
 	}, [data, dashboard.date])
 
 	return <div style={{width: "100%"}}>
-        <AreaChart data={dashboard.fullArray}/>
+        <AreaChart data={dashboard.fullArray} theme={theme}/>
     </div>
 }
 

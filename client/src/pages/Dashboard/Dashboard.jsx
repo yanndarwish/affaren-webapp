@@ -36,8 +36,8 @@ const Dashboard = () => {
 					<SubTitle>Charts</SubTitle>
 				</div>
 				<Flex>
-					<ChartA />
-					<ChartB />
+					<ChartA theme={theme} />
+					<ChartB theme={theme} />
 				</Flex>
 
 				<div>

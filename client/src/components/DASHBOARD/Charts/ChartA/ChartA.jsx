@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { setDayArray } from "../../../../redux/features/dashboard"
 import RadialChart from "./RadialChart"
 
-const ChartA = () => {
+const ChartA = ({theme}) => {
     const dashboard = useSelector((state) => state.dashboard)
 	const dispatch = useDispatch()
     const [targetArray, setTargetArray] = useState()
@@ -37,7 +37,7 @@ const ChartA = () => {
 
 	return (
 		<div style={{ width: "100%" }}>
-			<RadialChart data={targetArray} />
+			<RadialChart data={targetArray} theme={theme}/>
 		</div>
 	)
 }
