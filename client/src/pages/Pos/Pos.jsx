@@ -185,7 +185,6 @@ const Pos = () => {
 			<Container theme={theme}>
 				<SpaceHeader xs={12}>
 					<Title>Sale N°{sale.id ? sale.id : 1}</Title>
-					<EditSaleSection />
 				</SpaceHeader>
 				<SearchSection>
 					<BarcodeInput />

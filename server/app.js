@@ -318,11 +318,12 @@ app.delete("/products/:id", auth, async (req, res) => {
 app.post("/sales", auth, async (req, res) => {
 	try {
 		console.log(req.body)
-		const { date, amount, paymentMethods, discount, taxes, user } = req.body
+		const { year, month, day, amount, paymentMethods, discount, taxes, user } =
+			req.body
 
 		const response = await pool.query(
-			"INSERT INTO sales (sale_date, sale_amount, sale_payment_methods, sale_discount, sale_taxes, sale_user) VALUES ($1, $2, $3, $4, $5, $6)",
-			[date, amount, paymentMethods, discount, taxes, user]
+			"INSERT INTO sales (sale_year, sale_month, sale_day, sale_amount, sale_payment_methods, sale_discount, sale_taxes, sale_user) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+			[year, month, day, amount, paymentMethods, discount, taxes, user]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -340,12 +341,33 @@ app.get("/sales", auth, async (req, res) => {
 	}
 })
 
-// get all sales for a certain time period
-app.get("/sales-month/:date", auth, async (req, res) => {
+// get all sales for a specific month
+app.get("/sales-period/:year/:month", auth,  async (req, res) => {
 	try {
-		const { date } = req.params
-		console.log(date)
-		const response = await pool.query("SELECT * FROM sales")
+		const { year, month } = req.params
+		console.log("month only")
+		const response = await pool.query(
+			"SELECT * FROM sales WHERE sale_year = $1 AND sale_month = $2",
+			[year, month]
+		)
+
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get all sales for a specific year
+app.get("/sales-period/:year", auth, async (req, res) => {
+	try {
+		const { year } = req.params
+
+		console.log("full year")
+		const response = await pool.query(
+			"SELECT * FROM sales WHERE sale_year = $1",
+			[year]
+		)
+
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
@@ -421,16 +443,13 @@ app.delete("/sales/:id", auth, async (req, res) => {
 //  create a product in a sale
 app.post("/sales/:id/products", auth, async (req, res) => {
 	try {
-		console.log("sales product")
 		const saleId = req.params.id
 
-		console.log(saleId)
 		const products = req.body.products
 		let responses = []
-		products.forEach(async (product) => {
-			console.log(product)
-			const { name, quantity, price, taxe, id } = product
 
+		products.forEach(async (product) => {
+			const { name, quantity, price, taxe, id } = product
 			const response = await pool.query(
 				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe ) VALUEs ($1, $2, $3, $4, $5, $6)",
 				[saleId, id, name, quantity, price, taxe]
