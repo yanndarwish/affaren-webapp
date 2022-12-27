@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { Body, SubTitle } from "../../../../assets/styles/common.styles"
 import { setDayArray } from "../../../../redux/features/dashboard"
 import RadialChart from "./RadialChart"
 
@@ -36,9 +37,10 @@ const ChartA = ({theme}) => {
 	}, [targetArray])
 
 	return (
-		<div style={{ width: "100%" }}>
-			<RadialChart data={targetArray} theme={theme}/>
-		</div>
+		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
+			<SubTitle>{dashboard.date}</SubTitle>
+			<RadialChart data={targetArray} theme={theme} />
+		</Body>
 	)
 }
 

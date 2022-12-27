@@ -3,11 +3,13 @@ import { useEffect, useState } from "react"
 import { useGetMonthSalesQuery } from "../../../../redux/services/salesApi"
 import { setFullArray } from "../../../../redux/features/dashboard"
 import AreaChart from "./AreaChart"
+import { Body, SubTitle } from "../../../../assets/styles/common.styles"
 
 const ChartB = ({theme}) => {
 	const dispatch = useDispatch()
 	const [skip, setSkip] = useState(true)
 	const [month, setMonth] = useState("")
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 	const [year, setYear] = useState("")
 	const dashboard = useSelector((state) => state.dashboard)
 	const { data, error, isLoading } = useGetMonthSalesQuery(
@@ -44,9 +46,12 @@ const ChartB = ({theme}) => {
 		storeFullArrayInState(data)
 	}, [data, dashboard.date])
 
-	return <div style={{width: "100%"}}>
-        <AreaChart data={dashboard.fullArray} theme={theme}/>
-    </div>
+	return (
+		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
+            <SubTitle>{months[month - 1]}</SubTitle>
+			<AreaChart data={dashboard.fullArray} theme={theme} />
+		</Body>
+	)
 }
 
 export default ChartB

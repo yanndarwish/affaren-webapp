@@ -53,6 +53,7 @@ const AreaChart = ({ data, theme }) => {
 			palette: "palette10",
 		},
 		chart: {
+            background: "none",
 			toolbar: {
 				show: false,
 			},

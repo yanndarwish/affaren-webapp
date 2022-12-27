@@ -6,29 +6,28 @@ const RadialChart = ({ data, theme }) => {
 	const options = {
 		labels: ["Alimentation", "Magazines", "Décoration/Alcool"],
 		legend: {
-			show:false,
+			show: false,
 		},
-        theme: {
-            mode: theme === "dark" ? "dark" : "light",
-            palette: "palette10"
-        },
+		theme: {
+			mode: theme === "dark" ? "dark" : "light",
+			palette: "palette10",
+		},
+		chart: {
+			background: "none",
+		},
 		plotOptions: {
 			pie: {
 				donut: {
 					labels: {
 						show: true,
 						value: {
-                            fontSize: "36px",
+							fontSize: "36px",
 							fontWeight: "bold",
 						},
-                        name: {
-                            fontSize: "24px",
-                            fontWeight: "bold",
-                        },
 						total: {
 							show: true,
 							fontWeight: "bold",
-							fontSize: "36px",
+							fontSize: "20px",
 						},
 					},
 				},

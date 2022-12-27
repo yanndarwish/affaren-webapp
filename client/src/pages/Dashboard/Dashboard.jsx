@@ -37,11 +37,11 @@ const Dashboard = () => {
 				</div>
 				<Flex>
 					<ChartA theme={theme} />
-					<ChartB theme={theme} />
 				</Flex>
 
 				<div>
-					<div></div>
+					<ChartB theme={theme} />
+
 					<div></div>
 				</div>
 			</Body>
