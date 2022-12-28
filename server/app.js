@@ -549,15 +549,25 @@ app.post("/orders", auth, async (req, res) => {
 			title,
 			description,
 			status,
-			due,
+			dueDate,
+			dueTime,
 			clientPhone,
 			clientName,
 			creationDate,
 		} = req.body
 
 		const response = await pool.query(
-			"INSERT INTO orders (order_title, order_description, order_status, order_due, order_client_phone, order_client_name, order_creation_date) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-			[title, description, status, due, clientPhone, clientName, creationDate]
+			"INSERT INTO orders (order_title, order_description, order_status, order_due_date, order_due_time, order_client_phone, order_client_name, order_creation_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+			[
+				title,
+				description,
+				status,
+				dueDate,
+				dueTime,
+				clientPhone,
+				clientName,
+				creationDate,
+			]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -594,12 +604,19 @@ app.put("/orders/:id", auth, async (req, res) => {
 	try {
 		const id = req.params.id
 
-		const { title, description, status, due, clientPhone, clientName } =
-			req.body
+		const {
+			title,
+			description,
+			status,
+			dueDate,
+			dueTime,
+			clientPhone,
+			clientName,
+		} = req.body
 
 		const response = await pool.query(
-			"UPDATE orders SET order_title = $1, order_description = $2, order_status = $3, order_due = $4, order_client_phone = $5, order_client_name = $6 WHERE order_id = $7",
-			[title, description, status, due, clientPhone, clientName]
+			"UPDATE orders SET order_title = $1, order_description = $2, order_status = $3, order_due_date = $4, order_due_time = $5, order_client_phone = $6, order_client_name = $7 WHERE order_id = $8",
+			[title, description, status, dueDate, dueTime, clientPhone, clientName, id]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
