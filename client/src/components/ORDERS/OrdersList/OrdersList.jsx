@@ -2,14 +2,8 @@ import * as React from "react"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import Divider from "@mui/material/Divider"
-import ListItemText from "@mui/material/ListItemText"
-import ListItemAvatar from "@mui/material/ListItemAvatar"
-import Avatar from "@mui/material/Avatar"
-import Typography from "@mui/material/Typography"
 import OrdersListItem from "./OrdersListItem"
-import { useState } from "react"
 import AddIcon from "@mui/icons-material/Add"
-import Add from "@mui/icons-material/Add"
 
 export default function OrdersList({ orders, selected, setSelected, setAdd }) {
 	const handleClick = () => {

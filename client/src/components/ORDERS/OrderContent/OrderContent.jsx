@@ -3,6 +3,7 @@ import {
 	ButtonSection,
 	CenterContainer,
 	Container,
+	SpaceHeader,
 	SpaceHeaderCenter,
 	SubTitle,
 	Title,
@@ -13,8 +14,14 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone"
 import EditIcon from "@mui/icons-material/Edit"
 import SendIcon from "@mui/icons-material/Send"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
+import { Modal } from "modal-rjs"
+import { useState } from "react"
+import { useDeleteOrderMutation } from "../../../redux/services/orderApi"
 
-const OrderContent = ({ order, theme }) => {
+const OrderContent = ({ order, theme, setSelected }) => {
+	const [isOpen, setIsOpen] = useState(false)
+	const [deleteOrder] = useDeleteOrderMutation()
+
 	const handleEdit = () => {
 		console.log("edit")
 	}
@@ -23,10 +30,26 @@ const OrderContent = ({ order, theme }) => {
 		console.log("send")
 	}
 
-    const handleDelete = () => {
-        console.log("delete")
-    }
+	const openDeleteModal = () => {
+		setIsOpen(true)
+	}
 
+	const ModalBody = () => {
+		return <ArtTitle>Are you sure you want to delete this order ?</ArtTitle>
+	}
+
+	const ModalFooter = () => {
+		const handleDelete = () => {
+			deleteOrder({ id: order.order_id })
+            setIsOpen(false)
+            setSelected("")
+		}
+		return (
+			<SpaceHeader>
+				<Button title="Delete order" color="success" onClick={handleDelete} />
+			</SpaceHeader>
+		)
+	}
 	return order ? (
 		<Container theme={theme}>
 			<SpaceHeaderCenter>
@@ -37,7 +60,7 @@ const OrderContent = ({ order, theme }) => {
 					<Button
 						title={<DeleteOutlinedIcon />}
 						color="error"
-						onClick={handleDelete}
+						onClick={openDeleteModal}
 					/>
 				</ButtonSection>
 			</SpaceHeaderCenter>
@@ -54,6 +77,13 @@ const OrderContent = ({ order, theme }) => {
 				{order.order_description &&
 					order.order_description.map((item, i) => <li key={i}>{item}</li>)}
 			</ul>
+			<Modal
+				isOpen={isOpen}
+				setIsOpen={setIsOpen}
+				title={"Delete " + order.order_title}
+				bodyContent={<ModalBody />}
+				footerContent={<ModalFooter />}
+			/>
 		</Container>
 	) : (
 		<CenterContainer theme={theme}>

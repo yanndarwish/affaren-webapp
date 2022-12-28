@@ -12,7 +12,6 @@ const Orders = () => {
 	const [selectedOrderId, setSelectedOrderId] = useState("")
 	const [selectedOrder, setSelectedOrder] = useState({})
 	const [add, setAdd] = useState(false)
-
 	const { data } = useGetOrdersQuery()
 
 	const getTargetOrder = (orderId) => {
@@ -32,7 +31,7 @@ const Orders = () => {
 				setSelected={setSelectedOrderId}
 				setAdd={setAdd}
 			/>
-			{add ? <AddOrder theme={theme} /> : <OrderContent theme={theme} order={selectedOrder && selectedOrder} />}
+			{add ? <AddOrder theme={theme} /> : <OrderContent theme={theme} order={selectedOrder && selectedOrder} setSelected={setSelectedOrderId}/>}
 		</FullFlex>
 	)
 }
