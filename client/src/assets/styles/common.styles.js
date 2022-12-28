@@ -41,6 +41,7 @@ export const Container = styled.main`
 	flex: 1;
 	padding: ${constant.PADDING_L}px;
 	height: 100%;
+	width:100%;
 	overflow: scroll;
 	gap: ${constant.GAP * 2}px;
 	color: ${(props) =>
@@ -54,6 +55,8 @@ export const CenterContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	width: 100%;
+	color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 	background-color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
 `
@@ -81,6 +84,11 @@ export const SearchSection = styled.div`
 
 export const Flex = styled.div`
 	display: flex;
+`
+
+export const FullFlex = styled.div`
+	display: flex;
+	flex:1;
 `
 
 export const Body = styled.div`

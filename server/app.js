@@ -543,7 +543,7 @@ app.delete("/cards/:id", auth, async (req, res) => {
 // ******************************* //
 
 // create an order
-app.post("/orders", auth, async (req, res) => {
+app.post("/orders",  async (req, res) => {
 	try {
 		const {
 			title,

@@ -15,7 +15,6 @@ import ChartA from "../../components/DASHBOARD/Charts/ChartA/ChartA"
 
 const Dashboard = () => {
 	const user = useSelector((state) => state.user.user)
-	const users = useSelector((state) => state.user.users)
 	const theme = useSelector((state) => state.theme.theme)
 	const [getUsers, res] = useGetUsersMutation()
 

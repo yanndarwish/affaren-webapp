@@ -1,26 +1,63 @@
-import { Avatar, Divider, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material"
+import {
+	Avatar,
+	Divider,
+	ListItem,
+	ListItemAvatar,
+	ListItemText,
+	Typography,
+} from "@mui/material"
 import { Fragment } from "react"
 
-const OrdersListItem = () => {
-  return (
-		<Fragment>
-			<ListItem alignItems="flex-start">
-				<ListItemAvatar>
-					<Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+const OrdersListItem = ({ order, selected, setSelected, setAdd}) => {
+	const handleClick = (e) => {
+		const orderId = e.target.dataset.id
+			? e.target.dataset.id
+			: e.target.parentNode.dataset.id
+		setSelected(orderId)
+		setAdd(false)
+	}
+
+	return (
+		<Fragment key={order.order_id}>
+			<ListItem
+				selected={parseInt(selected) === order.order_id}
+				alignItems="flex-start"
+				onClick={handleClick}
+				data-id={order.order_id}
+			>
+				<ListItemAvatar data-id={order.order_id}>
+					<Avatar
+						alt={order && order.order_client_name}
+						src="/static/images/avatar/1.jpg"
+						data-id={order.order_id}
+					/>
 				</ListItemAvatar>
 				<ListItemText
-					primary="Brunch this weekend?"
+					data-id={order.order_id}
+					primary={
+						<Typography
+							sx={{ display: "inline" }}
+							component="span"
+							variant="h6"
+							color="text.primary"
+							data-id={order.order_id}
+						>
+							{order.order_title}
+						</Typography>
+					}
 					secondary={
-						<Fragment>
+						<Fragment key={order.order_id}>
 							<Typography
 								sx={{ display: "inline" }}
 								component="span"
 								variant="body2"
 								color="text.primary"
+								data-id={order.order_id}
 							>
-								Ali Connors
+								{order.order_due_date} {order.order_due_time + " "}
 							</Typography>
-							{" — I'll be in your neighborhood doing errands this…"}
+							{order.order_description &&
+								order.order_description.map((item) => item + " ")}
 						</Fragment>
 					}
 				/>
