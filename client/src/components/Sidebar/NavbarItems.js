@@ -5,6 +5,7 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined"
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined"
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered"
+import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined"
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined"
 
 export const navbarItems = [
@@ -20,26 +21,31 @@ export const navbarItems = [
 	},
 	{
 		id: 2,
+		icon: <LibraryBooksOutlinedIcon />,
+		route: "orders",
+	},
+	{
+		id: 3,
 		icon: <PieChartOutlineOutlinedIcon />,
 		route: "dashboard",
 	},
 	{
-		id: 3,
+		id: 4,
 		icon: <Inventory2OutlinedIcon />,
 		route: "inventory",
 	},
 	{
-		id: 4,
+		id: 5,
 		icon: <PersonOutlineOutlinedIcon />,
 		route: "profile",
 	},
 	{
-		id: 5,
+		id: 6,
 		icon: <HelpOutlineOutlinedIcon />,
 		route: "help",
 	},
 	{
-		id: 6,
+		id: 7,
 		icon: <LogoutOutlinedIcon />,
 		route: "logout",
 	},
