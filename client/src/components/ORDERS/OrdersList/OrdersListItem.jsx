@@ -8,13 +8,14 @@ import {
 } from "@mui/material"
 import { Fragment } from "react"
 
-const OrdersListItem = ({ order, selected, setSelected, setAdd}) => {
+const OrdersListItem = ({ order, selected, setSelected, setAdd, setIsEdit}) => {
 	const handleClick = (e) => {
 		const orderId = e.target.dataset.id
 			? e.target.dataset.id
 			: e.target.parentNode.dataset.id
 		setSelected(orderId)
 		setAdd(false)
+		setIsEdit(false)
 	}
 
 	return (

@@ -17,13 +17,16 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 import { Modal } from "modal-rjs"
 import { useState } from "react"
 import { useDeleteOrderMutation } from "../../../redux/services/orderApi"
+import EditOrder from "./EditOrder"
 
-const OrderContent = ({ order, theme, setSelected }) => {
+const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [deleteOrder] = useDeleteOrderMutation()
 
+
 	const handleEdit = () => {
 		console.log("edit")
+        setIsEdit(true)
 	}
 
 	const handleSend = () => {
@@ -51,6 +54,9 @@ const OrderContent = ({ order, theme, setSelected }) => {
 		)
 	}
 	return order ? (
+        isEdit ? (
+            <EditOrder theme={theme} order={order}/>
+        ) : ( 
 		<Container theme={theme}>
 			<SpaceHeaderCenter>
 				<Title>{order.order_title}</Title>
@@ -85,6 +91,8 @@ const OrderContent = ({ order, theme, setSelected }) => {
 				footerContent={<ModalFooter />}
 			/>
 		</Container>
+
+        )
 	) : (
 		<CenterContainer theme={theme}>
 			<Title>Select an order to start</Title>

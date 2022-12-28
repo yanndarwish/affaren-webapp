@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { useState } from "react"
 import {
 	Column,
@@ -9,16 +10,16 @@ import {
 } from "../../../assets/styles/common.styles"
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
-import { usePostOrderMutation } from "../../../redux/services/orderApi"
+import NewInput from "../../common/Input2/Input.component"
 
-const AddOrder = ({ theme }) => {
-	const [title, setTitle] = useState("")
+const EditOrder = ({ theme, order }) => {
+	const [title, setTitle] = useState(order.order_title)
 	const [inputList, setInputList] = useState([])
-	const [dueDate, setDueDate] = useState("")
-	const [dueTime, setDueTime] = useState("")
-	const [clientName, setClientName] = useState("")
-	const [clientPhone, setClientPhone] = useState("")
-	const [postOrder] = usePostOrderMutation()
+	let description = order.order_description
+	const [dueDate, setDueDate] = useState(order.order_due_date)
+	const [dueTime, setDueTime] = useState(order.order_due_time)
+	const [clientName, setClientName] = useState(order.order_client_name)
+	const [clientPhone, setClientPhone] = useState(order.order_client_phone)
 
 	const handleCreate = () => {
 		const items = document.querySelectorAll(".order-items")
@@ -36,28 +37,62 @@ const AddOrder = ({ theme }) => {
 			clientName: clientName,
 			clientPhone: clientPhone,
 		}
-
-		postOrder(newOrder)
+		console.log(newOrder)
 	}
 
-	const ItemInput = () => {
+	const handleChange = (e) => {
+        console.log(e.target.value)
+		let id = e.target.id
+        let copyArray = [...description]
+        copyArray[id] = e.target.value
+        console.log(copyArray)
+        description = copyArray
+        e.target.value = description[id]
+
+	}
+
+	const ItemInput = ({ value, id }) => {
 		return (
-			<Input
+			<NewInput
+            id={id && id}
+				value={value && value}
 				className="order-items"
-				label={"item " + parseInt(inputList.length + 2)}
+				label="item "
 				multiline
 				fullWidth
+				onChange={value && handleChange}
 			/>
 		)
 	}
-	console.log(inputList)
+
 	const handleAddItemInput = () => {
 		setInputList(inputList.concat(<ItemInput key={inputList.length} />))
 	}
+    
+	console.log(inputList)
+
+	// const populateInputList = () => {
+	// 	setInputList([])
+	// 	description &&
+	// 		description.forEach((item, i) => {
+	// 			setInputList((current) => [
+	// 				...current,
+	// 				<ItemInput key={i} value={item} id={i.toString()}/>,
+	// 			])
+	// 		})
+	// }
+
+	const handleRemoveItemInput = () => {
+		setInputList(inputList.slice(0, -1))
+	}
+
+	// useEffect(() => {
+	// 	populateInputList()
+	// }, [])
 
 	return (
 		<Container theme={theme}>
-			<Title>Create New Order</Title>
+			<Title>Edit Order</Title>
 			<Column>
 				<Column>
 					<SubTitle>Who</SubTitle>
@@ -85,11 +120,14 @@ const AddOrder = ({ theme }) => {
 						onChange={(e) => setTitle(e)}
 					/>
 					<Column>
-						<Input className="order-items" label="Item 1" multiline fullWidth />
-						{inputList}
+						{description &&
+							description.map((item, i) => (
+								<ItemInput key={i} value={description[i]} id={i.toString()} />
+							))}
 					</Column>
 					<HorizontalCenter>
 						<Button title="Add Item" onClick={handleAddItemInput} />
+						<Button title="Remove Item" onClick={handleRemoveItemInput} />
 					</HorizontalCenter>
 				</Column>
 				<Column>
@@ -117,4 +155,4 @@ const AddOrder = ({ theme }) => {
 	)
 }
 
-export default AddOrder
+export default EditOrder

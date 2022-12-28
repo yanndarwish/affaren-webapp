@@ -5,7 +5,7 @@ import Divider from "@mui/material/Divider"
 import OrdersListItem from "./OrdersListItem"
 import AddIcon from "@mui/icons-material/Add"
 
-export default function OrdersList({ orders, selected, setSelected, setAdd }) {
+export default function OrdersList({ orders, selected, setSelected, setAdd, setIsEdit }) {
 	const handleClick = () => {
 		setAdd(true)
 	}
@@ -35,6 +35,7 @@ export default function OrdersList({ orders, selected, setSelected, setAdd }) {
 						selected={selected}
 						setSelected={setSelected}
 						setAdd={setAdd}
+						setIsEdit={setIsEdit}
 					/>
 				))}
 		</List>
