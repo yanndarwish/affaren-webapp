@@ -72,6 +72,12 @@ export const SpaceHeader = styled.header`
 	align-items: flex-start;
 `
 
+export const SpaceHeaderCenter = styled.header`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+`
+
 export const Title = styled.h1`
 	font-size: ${constant.FONT_PAGE_TITLE}px;
 	font-weight: bold;
@@ -80,6 +86,11 @@ export const Title = styled.h1`
 export const SearchSection = styled.div`
 	display: flex;
 	gap: ${constant.GAP * 2}px;
+`
+
+export const ButtonSection = styled.div`
+	display: flex;
+	gap: ${constant.GAP}px;
 `
 
 export const Flex = styled.div`
@@ -139,3 +150,4 @@ export const SecondaryText = styled.p`
 	font-weight: 500;
 	color: rgb(${light.COLOR_TEXT_RGB}, 0.5);
 `
+

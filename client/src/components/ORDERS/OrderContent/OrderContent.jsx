@@ -1,9 +1,9 @@
 import {
 	ArtTitle,
+	ButtonSection,
 	CenterContainer,
 	Container,
-	SearchSection,
-	SpaceHeader,
+	SpaceHeaderCenter,
 	SubTitle,
 	Title,
 	VerticalCenter,
@@ -12,6 +12,7 @@ import Button from "../../common/Button/Button.component"
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone"
 import EditIcon from "@mui/icons-material/Edit"
 import SendIcon from "@mui/icons-material/Send"
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 
 const OrderContent = ({ order, theme }) => {
 	const handleEdit = () => {
@@ -22,15 +23,24 @@ const OrderContent = ({ order, theme }) => {
 		console.log("send")
 	}
 
+    const handleDelete = () => {
+        console.log("delete")
+    }
+
 	return order ? (
 		<Container theme={theme}>
-			<SpaceHeader>
+			<SpaceHeaderCenter>
 				<Title>{order.order_title}</Title>
-				<SearchSection>
-					<Button title={<EditIcon />} onClick={handleEdit}/>
-					<Button title={<SendIcon />} onClick={handleSend}/>
-				</SearchSection>
-			</SpaceHeader>
+				<ButtonSection>
+					<Button title={<EditIcon />} color="warning" onClick={handleEdit} />
+					<Button title={<SendIcon />} onClick={handleSend} />
+					<Button
+						title={<DeleteOutlinedIcon />}
+						color="error"
+						onClick={handleDelete}
+					/>
+				</ButtonSection>
+			</SpaceHeaderCenter>
 			<SubTitle>
 				{order.order_due_date}
 				{order.order_due_time && " at " + order.order_due_time}
