@@ -10,6 +10,7 @@ import {
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
 import { usePostOrderMutation } from "../../../redux/services/orderApi"
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 
 const AddOrder = ({ theme }) => {
 	const [title, setTitle] = useState("")
@@ -18,6 +19,7 @@ const AddOrder = ({ theme }) => {
 	const [dueTime, setDueTime] = useState("")
 	const [clientName, setClientName] = useState("")
 	const [clientPhone, setClientPhone] = useState("")
+	const [orderLocation, setOrderLocation] = useState("pick-up")
 	const [postOrder] = usePostOrderMutation()
 
 	const handleCreate = () => {
@@ -35,9 +37,14 @@ const AddOrder = ({ theme }) => {
 			dueTime: dueTime,
 			clientName: clientName,
 			clientPhone: clientPhone,
+			orderLocation: orderLocation
 		}
 
 		postOrder(newOrder)
+	}
+
+	const handleRadio = (e) => {
+		setOrderLocation(e.target.value)
 	}
 
 	const ItemInput = () => {
@@ -107,6 +114,34 @@ const AddOrder = ({ theme }) => {
 							fullWidth
 							onChange={(e) => setDueTime(e)}
 						/>
+					</SearchSection>
+				</Column>
+				<Column>
+					<SubTitle>Where</SubTitle>
+					<SearchSection>
+						<RadioGroup
+							row
+							aria-labelledby="demo-radio-buttons-group-label"
+							value={orderLocation}
+							name="radio-buttons-group"
+							onChange={handleRadio}
+						>
+							<FormControlLabel
+								value="pick-up"
+								control={<Radio />}
+								label="Pick Up"
+							/>
+							<FormControlLabel
+								value="to-deliver"
+								control={<Radio />}
+								label="To Deliver"
+							/>
+							<FormControlLabel
+								value="on-site"
+								control={<Radio />}
+								label="On Site"
+							/>
+						</RadioGroup>
 					</SearchSection>
 				</Column>
 			</Column>
