@@ -2,9 +2,9 @@ import {
 	ArtTitle,
 	ButtonSection,
 	CenterContainer,
+	Column,
 	Container,
 	SpaceHeader,
-	SpaceHeaderCenter,
 	SubTitle,
 	Title,
 	VerticalCenter,
@@ -23,10 +23,8 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [deleteOrder] = useDeleteOrderMutation()
 
-
 	const handleEdit = () => {
-		console.log("edit")
-        setIsEdit(true)
+		setIsEdit(true)
 	}
 
 	const handleSend = () => {
@@ -44,8 +42,8 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 	const ModalFooter = () => {
 		const handleDelete = () => {
 			deleteOrder({ id: order.order_id })
-            setIsOpen(false)
-            setSelected("")
+			setIsOpen(false)
+			setSelected("")
 		}
 		return (
 			<SpaceHeader>
@@ -54,45 +52,47 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 		)
 	}
 	return order ? (
-        isEdit ? (
-            <EditOrder theme={theme} order={order}/>
-        ) : ( 
-		<Container theme={theme}>
-			<SpaceHeaderCenter>
-				<Title>{order.order_title}</Title>
-				<ButtonSection>
-					<Button title={<EditIcon />} color="warning" onClick={handleEdit} />
-					<Button title={<SendIcon />} onClick={handleSend} />
-					<Button
-						title={<DeleteOutlinedIcon />}
-						color="error"
-						onClick={openDeleteModal}
-					/>
-				</ButtonSection>
-			</SpaceHeaderCenter>
-			<SubTitle>
-				{order.order_due_date}
-				{order.order_due_time && " at " + order.order_due_time}
-			</SubTitle>
-			<VerticalCenter>
-				<ArtTitle>{order.order_client_name}</ArtTitle>
-				<LocalPhoneIcon />
-				<ArtTitle>{" " + order.order_client_phone}</ArtTitle>
-			</VerticalCenter>
-			<ul>
-				{order.order_description &&
-					order.order_description.map((item, i) => <li key={i}>{item}</li>)}
-			</ul>
-			<Modal
-				isOpen={isOpen}
-				setIsOpen={setIsOpen}
-				title={"Delete " + order.order_title}
-				bodyContent={<ModalBody />}
-				footerContent={<ModalFooter />}
-			/>
-		</Container>
-
-        )
+		isEdit ? (
+			<EditOrder theme={theme} order={order} setIsEdit={setIsEdit} />
+		) : (
+			<Container theme={theme}>
+				<SpaceHeader>
+					<Title>{order.order_title}</Title>
+					<ButtonSection>
+						<Button title={<EditIcon />} color="warning" onClick={handleEdit} />
+						<Button title={<SendIcon />} onClick={handleSend} />
+						<Button
+							title={<DeleteOutlinedIcon />}
+							color="error"
+							onClick={openDeleteModal}
+						/>
+					</ButtonSection>
+				</SpaceHeader>
+				<Column>
+					<SubTitle>
+						{order.order_due_date}
+						{order.order_due_time && " at " + order.order_due_time}
+					</SubTitle>
+					<SubTitle>{order.order_location}</SubTitle>
+				</Column>
+				<VerticalCenter>
+					<ArtTitle>{order.order_client_name}</ArtTitle>
+					<LocalPhoneIcon />
+					<ArtTitle>{" " + order.order_client_phone}</ArtTitle>
+				</VerticalCenter>
+				<ul>
+					{order.order_description &&
+						order.order_description.map((item, i) => <li key={i}>{item}</li>)}
+				</ul>
+				<Modal
+					isOpen={isOpen}
+					setIsOpen={setIsOpen}
+					title={"Delete " + order.order_title}
+					bodyContent={<ModalBody />}
+					footerContent={<ModalFooter />}
+				/>
+			</Container>
+		)
 	) : (
 		<CenterContainer theme={theme}>
 			<Title>Select an order to start</Title>

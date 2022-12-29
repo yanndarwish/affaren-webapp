@@ -3,12 +3,17 @@ import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import Divider from "@mui/material/Divider"
 import OrdersListItem from "./OrdersListItem"
-import AddIcon from "@mui/icons-material/Add"
+import OrdersFilter from "./OrdersFilter"
+import OrdersAddButton from "./OrdersAddButton"
 
-export default function OrdersList({ orders, selected, setSelected, setAdd, setIsEdit }) {
-	const handleClick = () => {
-		setAdd(true)
-	}
+export default function OrdersList({
+	orders,
+	selected,
+	setSelected,
+	setAdd,
+	setIsEdit,
+}) {
+	
 	return (
 		<List
 			sx={{
@@ -18,13 +23,17 @@ export default function OrdersList({ orders, selected, setSelected, setAdd, setI
 				bgcolor: "background.paper",
 			}}
 		>
-			<ListItem
-				alignItems="center"
-				sx={{ justifyContent: "center", paddingBlock: 2.5 }}
-				onClick={handleClick}
-			>
-				<AddIcon />
-			</ListItem>
+			<OrdersAddButton
+				selected={selected}
+				setSelected={setSelected}
+				setAdd={setAdd}
+			/>
+			<Divider component="li" />
+			<OrdersFilter
+				selected={selected}
+				setSelected={setSelected}
+				setAdd={setAdd}
+			/>
 			<Divider component="li" />
 
 			{orders &&

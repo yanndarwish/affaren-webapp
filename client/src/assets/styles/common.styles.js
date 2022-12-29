@@ -145,6 +145,13 @@ export const HorizontalCenter = styled.div`
 	justify-content: center;
 `
 
+export const FullCenter = styled.div`
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	align-items: center;
+`
+
 export const SecondaryText = styled.p`
 	font-size: ${constant.FONT_BODY}px;
 	font-weight: 500;

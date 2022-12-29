@@ -3,16 +3,19 @@ import { useState } from "react"
 import {
 	Column,
 	Container,
+	FullCenter,
 	HorizontalCenter,
 	SearchSection,
+	SpaceHeader,
 	SubTitle,
 	Title,
 } from "../../../assets/styles/common.styles"
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
-import NewInput from "../../common/Input2/Input.component"
+import { useUpdateOrderMutation } from "../../../redux/services/orderApi"
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 
-const EditOrder = ({ theme, order }) => {
+const EditOrder = ({ theme, order, setIsEdit }) => {
 	const [title, setTitle] = useState(order.order_title)
 	const [inputList, setInputList] = useState([])
 	let description = order.order_description
@@ -20,47 +23,52 @@ const EditOrder = ({ theme, order }) => {
 	const [dueTime, setDueTime] = useState(order.order_due_time)
 	const [clientName, setClientName] = useState(order.order_client_name)
 	const [clientPhone, setClientPhone] = useState(order.order_client_phone)
+	const [orderLocation, setOrderLocation] = useState(order.order_location)
 
-	const handleCreate = () => {
+	const [updateOrder] = useUpdateOrderMutation()
+
+	const handleEdit = () => {
 		const items = document.querySelectorAll(".order-items")
-		let description = []
-		items.forEach((item) => {
+
+		let newDescription = []
+		// check if item input is empty, keep the original item description[i]
+		items.forEach((item, i) => {
 			let value = item.querySelector("textarea").value
-			description.push(value)
+			if (!value) {
+				newDescription.push(description[i])
+			} else {
+				newDescription.push(value)
+			}
 		})
 
 		const newOrder = {
 			title: title,
-			description: description,
+			description: newDescription,
 			dueDate: dueDate,
 			dueTime: dueTime,
 			clientName: clientName,
 			clientPhone: clientPhone,
+			orderLocation:orderLocation
 		}
-		console.log(newOrder)
+		updateOrder({ id: order.order_id, payload: newOrder })
+		setIsEdit(false)
 	}
 
-	const handleChange = (e) => {
-        console.log(e.target.value)
-		let id = e.target.id
-        let copyArray = [...description]
-        copyArray[id] = e.target.value
-        console.log(copyArray)
-        description = copyArray
-        e.target.value = description[id]
-
+	const cancelEdit = () => {
+		setIsEdit(false)
 	}
 
-	const ItemInput = ({ value, id }) => {
+	const handleRadio = (e) => {
+		setOrderLocation(e.target.value)
+	}
+
+	const ItemInput = ({ id, placeholder }) => {
 		return (
-			<NewInput
-            id={id && id}
-				value={value && value}
+			<Input
 				className="order-items"
-				label="item "
 				multiline
 				fullWidth
-				onChange={value && handleChange}
+				placeholder={placeholder}
 			/>
 		)
 	}
@@ -68,31 +76,33 @@ const EditOrder = ({ theme, order }) => {
 	const handleAddItemInput = () => {
 		setInputList(inputList.concat(<ItemInput key={inputList.length} />))
 	}
-    
-	console.log(inputList)
 
-	// const populateInputList = () => {
-	// 	setInputList([])
-	// 	description &&
-	// 		description.forEach((item, i) => {
-	// 			setInputList((current) => [
-	// 				...current,
-	// 				<ItemInput key={i} value={item} id={i.toString()}/>,
-	// 			])
-	// 		})
-	// }
+	const populateInputList = () => {
+		setInputList([])
+		description &&
+			description.forEach((item, i) => {
+				setInputList((current) => [
+					...current,
+					<ItemInput key={i} placeholder={item} />,
+				])
+			})
+	}
 
 	const handleRemoveItemInput = () => {
 		setInputList(inputList.slice(0, -1))
 	}
 
-	// useEffect(() => {
-	// 	populateInputList()
-	// }, [])
+	useEffect(() => {
+		populateInputList()
+	}, [])
 
 	return (
 		<Container theme={theme}>
+			<SpaceHeader>
+
 			<Title>Edit Order</Title>
+			<Button title="Cancel" color="warning" onClick={cancelEdit}/>
+			</SpaceHeader>
 			<Column>
 				<Column>
 					<SubTitle>Who</SubTitle>
@@ -119,16 +129,11 @@ const EditOrder = ({ theme, order }) => {
 						fullWidth
 						onChange={(e) => setTitle(e)}
 					/>
-					<Column>
-						{description &&
-							description.map((item, i) => (
-								<ItemInput key={i} value={description[i]} id={i.toString()} />
-							))}
-					</Column>
-					<HorizontalCenter>
+					<Column>{inputList}</Column>
+					<FullCenter>
 						<Button title="Add Item" onClick={handleAddItemInput} />
 						<Button title="Remove Item" onClick={handleRemoveItemInput} />
-					</HorizontalCenter>
+					</FullCenter>
 				</Column>
 				<Column>
 					<SubTitle>When</SubTitle>
@@ -147,9 +152,37 @@ const EditOrder = ({ theme, order }) => {
 						/>
 					</SearchSection>
 				</Column>
+				<Column>
+					<SubTitle>Where</SubTitle>
+					<SearchSection>
+						<RadioGroup
+							row
+							aria-labelledby="demo-radio-buttons-group-label"
+							value={orderLocation}
+							name="radio-buttons-group"
+							onChange={handleRadio}
+						>
+							<FormControlLabel
+								value="pick-up"
+								control={<Radio />}
+								label="Pick Up"
+							/>
+							<FormControlLabel
+								value="to-deliver"
+								control={<Radio />}
+								label="To Deliver"
+							/>
+							<FormControlLabel
+								value="on-site"
+								control={<Radio />}
+								label="On Site"
+							/>
+						</RadioGroup>
+					</SearchSection>
+				</Column>
 			</Column>
 			<HorizontalCenter>
-				<Button title="Create Order" color="success" onClick={handleCreate} />
+				<Button title="Edit Order" color="success" onClick={handleEdit} />
 			</HorizontalCenter>
 		</Container>
 	)
