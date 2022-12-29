@@ -41,7 +41,32 @@ export default function OrdersList({
 				)
 			}
 		})
-		setFilteredOrders(array)
+
+		setFilteredOrders(sortOrders(array))
+	}
+
+	const sortOrders = (orders) => {
+		// sort by due_date
+		let sorted = orders.sort((a, b) => {
+			if (a.order_due_date < b.order_due_date) {
+				return -1
+			}
+			if (a.order_due_date > b.order_due_date) {
+				return 1
+			}
+			// if date is the same, sort by due_time
+			if (a.order_due_date === b.order_due_date) {
+				if (a.order_due_time < b.order_due_time) {
+					return -1
+				}
+				if (a.order_due_time > b.order_due_time) {
+					return 1
+				}
+				return 0
+			}
+			return 0
+		})
+		return sorted
 	}
 
 	useEffect(() => {
@@ -53,6 +78,7 @@ export default function OrdersList({
 				width: "100%",
 				maxWidth: 360,
 				height: "100vh",
+				overflow: "auto",
 				bgcolor: "background.paper",
 			}}
 		>
