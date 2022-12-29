@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material"
 
-const Input = ({ id, className,label, value, inputAdornment, onChange, onFocus, type="text", fullWidth, multiline, onClick}) => {
+const Input = ({ id, className,label, placeholder, value, inputAdornment, onChange, onFocus, type="text", fullWidth, multiline, onClick}) => {
 	return (
 		<TextField
 			id={id}
@@ -12,7 +12,7 @@ const Input = ({ id, className,label, value, inputAdornment, onChange, onFocus, 
 			fullWidth={fullWidth}
 			multiline={multiline}
 			onClick={onClick}
-			onFocus={onFocus}
+			placeholder={placeholder}
 			InputProps={inputAdornment && inputAdornment}
 		/>
 	)
