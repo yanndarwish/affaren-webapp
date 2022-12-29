@@ -1,4 +1,4 @@
-import { ListItem } from "@mui/material"
+import { ListSubheader } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 
 const OrdersAddButton = ({selected, setSelected, setAdd}) => {
@@ -7,14 +7,14 @@ const OrdersAddButton = ({selected, setSelected, setAdd}) => {
 			setSelected("add")
 		}
   return (
-		<ListItem
+		<ListSubheader
 			selected={selected === "add"}
 			alignItems="center"
-			sx={{ justifyContent: "center", paddingBlock: 2.5 }}
+			sx={{ justifyContent: "center", paddingBlock: 1 }}
 			onClick={handleClick}
 		>
 			<AddIcon />
-		</ListItem>
+		</ListSubheader>
 	)
 }
 

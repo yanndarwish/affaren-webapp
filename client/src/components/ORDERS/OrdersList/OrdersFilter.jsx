@@ -1,6 +1,5 @@
 import {
 	ListItem,
-	Chip,
 	RadioGroup,
 	FormControlLabel,
 	Radio,
