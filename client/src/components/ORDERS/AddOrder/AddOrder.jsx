@@ -12,7 +12,7 @@ import Input from "../../common/Input/Input.component"
 import { usePostOrderMutation } from "../../../redux/services/orderApi"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 
-const AddOrder = ({ theme }) => {
+const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 	const [title, setTitle] = useState("")
 	const [inputList, setInputList] = useState([])
 	const [dueDate, setDueDate] = useState("")
@@ -39,7 +39,8 @@ const AddOrder = ({ theme }) => {
 			clientPhone: clientPhone,
 			orderLocation: orderLocation
 		}
-
+		setNewOrder(true)
+		setAdd(false)
 		postOrder(newOrder)
 	}
 

@@ -23,7 +23,7 @@ export default function OrdersList({
 			locationFilter && locationFilter,
 		]
 
-		let array = orders.filter((order) => {
+		let array = orders?.filter((order) => {
 			// if both filter = all return orders
 			if (statusFilter === "all" && locationFilter === "all") {
 				return orders
@@ -47,7 +47,7 @@ export default function OrdersList({
 
 	const sortOrders = (orders) => {
 		// sort by due_date
-		let sorted = orders.sort((a, b) => {
+		let sorted = orders?.sort((a, b) => {
 			if (a.order_due_date < b.order_due_date) {
 				return -1
 			}

@@ -11,8 +11,9 @@ const Orders = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const [selectedOrderId, setSelectedOrderId] = useState("")
 	const [selectedOrder, setSelectedOrder] = useState({})
-  const [isEdit, setIsEdit] = useState(false)
+  	const [isEdit, setIsEdit] = useState(false)
 	const [add, setAdd] = useState(false)
+	const [newOrder, setNewOrder] = useState(false)
 	const { data } = useGetOrdersQuery()
 
 	const getTargetOrder = (orderId) => {
@@ -20,9 +21,20 @@ const Orders = () => {
     setSelectedOrder(found)
 	}
 
+	const focusNewOrder = () => {
+		if (newOrder) {
+			setSelectedOrder(data && data[data.length - 1])
+		}
+		setNewOrder(false)
+	}
+
 	useEffect(() => {
 		getTargetOrder(selectedOrderId)
 	}, [selectedOrderId])
+
+	useEffect(() => {
+		focusNewOrder()
+	}, [data])
 
 	return (
 		<FullFlex>
@@ -33,7 +45,7 @@ const Orders = () => {
 				setAdd={setAdd}
         setIsEdit={setIsEdit}
 			/>
-			{add ? <AddOrder theme={theme} /> : <OrderContent theme={theme} order={selectedOrder && selectedOrder} setSelected={setSelectedOrderId} isEdit={isEdit} setIsEdit={setIsEdit}/>}
+			{add ? <AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder}/> : <OrderContent theme={theme} order={selectedOrder && selectedOrder} setSelected={setSelectedOrderId} isEdit={isEdit} setIsEdit={setIsEdit}/>}
 		</FullFlex>
 	)
 }
