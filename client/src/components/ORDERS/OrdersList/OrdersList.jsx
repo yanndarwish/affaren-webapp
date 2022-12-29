@@ -1,10 +1,10 @@
-import * as React from "react"
 import List from "@mui/material/List"
-import ListItem from "@mui/material/ListItem"
 import Divider from "@mui/material/Divider"
 import OrdersListItem from "./OrdersListItem"
 import OrdersFilter from "./OrdersFilter"
 import OrdersAddButton from "./OrdersAddButton"
+import { useSelector } from "react-redux"
+import { useEffect, useState } from "react"
 
 export default function OrdersList({
 	orders,
@@ -13,7 +13,40 @@ export default function OrdersList({
 	setAdd,
 	setIsEdit,
 }) {
-	
+	const [filteredOrders, setFilteredOrders] = useState([])
+	const statusFilter = useSelector((state) => state.orders.statusFilter)
+	const locationFilter = useSelector((state) => state.orders.locationFilter)
+
+	const filterOrders = ({ statusFilter, locationFilter, orders }) => {
+		let filters = [
+			statusFilter && statusFilter,
+			locationFilter && locationFilter,
+		]
+
+		let array = orders.filter((order) => {
+			// if both filter = all return orders
+			if (statusFilter === "all" && locationFilter === "all") {
+				return orders
+			} else if (statusFilter === "all" && locationFilter !== "all") {
+				// if statusfilter = all return array filtered only by locationFilter
+				return order.order_location === filters[1]
+			} else if (locationFilter === "all" && statusFilter !== "all") {
+				// if locationfilter = all return array filtered only by status
+				return order.order_status === filters[0]
+			} else {
+				// else couple the filters
+				return (
+					order.order_status === filters[0] &&
+					order.order_location === filters[1]
+				)
+			}
+		})
+		setFilteredOrders(array)
+	}
+
+	useEffect(() => {
+		filterOrders({ statusFilter, locationFilter, orders })
+	}, [statusFilter, locationFilter, orders])
 	return (
 		<List
 			sx={{
@@ -36,8 +69,8 @@ export default function OrdersList({
 			/>
 			<Divider component="li" />
 
-			{orders &&
-				orders.map((order) => (
+			{filteredOrders &&
+				filteredOrders.map((order) => (
 					<OrdersListItem
 						key={order.order_id}
 						order={order}
