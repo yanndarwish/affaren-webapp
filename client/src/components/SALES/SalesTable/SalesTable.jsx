@@ -12,10 +12,13 @@ import SalesTableRow from "../SalesTableRow/SalesTableRow"
 import SalesTableRowSeparator from "../SalesTableRow/SalesTableRowSeparator"
 import SalesModalBody from "../SalesModal/SalesModalBody"
 import SalesModalFooter from "../SalesModal/SalesModalFooter"
+import { useDeleteSaleMutation } from "../../../redux/services/salesApi"
+import { ArtTitle, HorizontalCenter } from "../../../assets/styles/common.styles"
 
 export default function SalesTable({ data }) {
 	const [selected, setSelected] = useState("")
 	const [isOpen, setIsOpen] = useState(false)
+	const [deleteSale, res] = useDeleteSaleMutation()
 
 	const handleClick = (e) => {
 		let id = e.target.parentNode.dataset.id
@@ -29,6 +32,15 @@ export default function SalesTable({ data }) {
 
 	const handleSaleDelete = () => {
 		console.log("delete sale " + selected)
+		deleteSale({id: selected})
+	}
+
+	const DeleteConfirmation = () => {
+		return (
+			<HorizontalCenter>
+				<ArtTitle>Sale {selected} has been deleted successfully!</ArtTitle>
+			</HorizontalCenter>
+		)
 	}
 
 	return (
@@ -77,8 +89,8 @@ export default function SalesTable({ data }) {
 				isOpen={isOpen}
 				setIsOpen={setIsOpen}
 				title={"Sale " + selected}
-				bodyContent={<SalesModalBody data={data} selected={selected} />}
-				footerContent={
+				bodyContent={res.isSuccess ? <DeleteConfirmation />: <SalesModalBody data={data} selected={selected} />}
+				footerContent={res.isSuccess ? null :
 					<SalesModalFooter
 						deleteClick={handleSaleDelete}
 						printClick={handleTicketPrint}
