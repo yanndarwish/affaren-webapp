@@ -18,6 +18,7 @@ import { Modal } from "modal-rjs"
 import { useState } from "react"
 import { useDeleteOrderMutation } from "../../../redux/services/orderApi"
 import EditOrder from "./EditOrder"
+import OrderStatusMenu from "./OrderStatusMenu"
 
 const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 	const [isOpen, setIsOpen] = useState(false)
@@ -66,6 +67,7 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 							color="error"
 							onClick={openDeleteModal}
 						/>
+						<OrderStatusMenu order={order} />
 					</ButtonSection>
 				</SpaceHeader>
 				<Column>

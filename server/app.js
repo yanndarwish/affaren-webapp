@@ -543,12 +543,11 @@ app.delete("/cards/:id", auth, async (req, res) => {
 // ******************************* //
 
 // create an order
-app.post("/orders",  async (req, res) => {
+app.post("/orders", async (req, res) => {
 	try {
 		const {
 			title,
 			description,
-			status,
 			dueDate,
 			dueTime,
 			clientPhone,
@@ -557,11 +556,10 @@ app.post("/orders",  async (req, res) => {
 		} = req.body
 
 		const response = await pool.query(
-			"INSERT INTO orders (order_title, order_description, order_status, order_due_date, order_due_time, order_client_phone, order_client_name, order_location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+			"INSERT INTO orders (order_title, order_description, order_status, order_due_date, order_due_time, order_client_phone, order_client_name, order_location) VALUES ($1, $2, 'todo', $3, $4, $5, $6, $7)",
 			[
 				title,
 				description,
-				status,
 				dueDate,
 				dueTime,
 				clientPhone,
@@ -612,12 +610,22 @@ app.put("/orders/:id", auth, async (req, res) => {
 			dueTime,
 			clientPhone,
 			clientName,
-			orderLocation
+			orderLocation,
 		} = req.body
 
 		const response = await pool.query(
 			"UPDATE orders SET order_title = $1, order_description = $2, order_status = $3, order_due_date = $4, order_due_time = $5, order_client_phone = $6, order_client_name = $7, order_location = $8 WHERE order_id = $9",
-			[title, description, status, dueDate, dueTime, clientPhone, clientName, orderLocation, id]
+			[
+				title,
+				description,
+				status,
+				dueDate,
+				dueTime,
+				clientPhone,
+				clientName,
+				orderLocation,
+				id,
+			]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {

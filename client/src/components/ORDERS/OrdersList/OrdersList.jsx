@@ -5,6 +5,7 @@ import OrdersFilter from "./OrdersFilter"
 import OrdersAddButton from "./OrdersAddButton"
 import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
+import { FullCenter, SubTitle } from "../../../assets/styles/common.styles"
 
 export default function OrdersList({
 	orders,
@@ -95,7 +96,12 @@ export default function OrdersList({
 			/>
 			<Divider component="li" />
 
-			{filteredOrders &&
+			{!filteredOrders ? (
+				<FullCenter>
+					<SubTitle>No Orders</SubTitle>
+				</FullCenter>
+			) : (
+				filteredOrders &&
 				filteredOrders.map((order) => (
 					<OrdersListItem
 						key={order.order_id}
@@ -105,7 +111,8 @@ export default function OrdersList({
 						setAdd={setAdd}
 						setIsEdit={setIsEdit}
 					/>
-				))}
+				))
+			)}
 		</List>
 	)
 }
