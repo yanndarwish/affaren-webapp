@@ -10,7 +10,7 @@ const BarcodeInput = () => {
 	const dispatch = useDispatch()
 	const [barcode, setBarcode] = useState("")
 	const [skip, setSkip] = useState(true)
-	const { data, error, isLoading } = useGetProductQuery(
+	const { data } = useGetProductQuery(
 		{ barcode: barcode.slice(0, -2) },
 		{ skip }
 	)
