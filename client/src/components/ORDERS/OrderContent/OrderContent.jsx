@@ -28,10 +28,6 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 		setIsEdit(true)
 	}
 
-	const handleSend = () => {
-		console.log("send")
-	}
-
 	const openDeleteModal = () => {
 		setIsOpen(true)
 	}
@@ -61,7 +57,6 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 					<Title>{order.order_title}</Title>
 					<ButtonSection>
 						<Button title={<EditIcon />} color="warning" onClick={handleEdit} />
-						<Button title={<SendIcon />} onClick={handleSend} />
 						<Button
 							title={<DeleteOutlinedIcon />}
 							color="error"
