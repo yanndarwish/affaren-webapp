@@ -4,10 +4,11 @@ import { useUpdateOrderMutation } from "../../../redux/services/orderApi"
 
 const OrderStatusMenu = ({ order }) => {
 	const [anchorEl, setAnchorEl] = useState(null)
-    const [status, setStatus] = useState(order && order.order_status)
+	const [status, setStatus] = useState(order && order.order_status)
 	const allStatus = ["todo", "pending", "done", "picked-up"]
 	const [updateOrder] = useUpdateOrderMutation()
 	const open = Boolean(anchorEl)
+
 	const handleClick = (e) => {
 		setAnchorEl(e.currentTarget)
 	}
@@ -26,8 +27,7 @@ const OrderStatusMenu = ({ order }) => {
 			clientName: order.order_client_name,
 			orderLocation: order.order_location,
 		}
-		console.log(newOrder)
-        setStatus(status)
+		setStatus(status)
 		updateOrder({ payload: newOrder, id: order.order_id })
 		setAnchorEl(null)
 	}

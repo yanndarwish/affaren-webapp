@@ -12,7 +12,6 @@ import {
 import Button from "../../common/Button/Button.component"
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone"
 import EditIcon from "@mui/icons-material/Edit"
-import SendIcon from "@mui/icons-material/Send"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 import { Modal } from "modal-rjs"
 import { useState } from "react"
