@@ -13,8 +13,15 @@ import {
 	useDeleteProductMutation,
 } from "../../../redux/services/productsApi"
 import { Modal } from "modal-rjs"
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 
-const EditProduct = ({ product }) => {
+const EditProduct = ({
+	product,
+	focusOnBarcode,
+	resetBarcode,
+	sent,
+	setSent,
+}) => {
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState("")
 	const [taxe, setTaxe] = useState("")
@@ -24,10 +31,10 @@ const EditProduct = ({ product }) => {
 	const [alert, setAlert] = useState("")
 	const [updateProduct, res] = useUpdateFullProductMutation()
 	const [deleteProduct, response] = useDeleteProductMutation()
-	const [sent, setSent] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
 
 	const handleEdit = () => {
+		// create new product object
 		let newProduct = {
 			name: name ? name : product.product_name,
 			price: price ? price : product.product_price,
@@ -40,24 +47,28 @@ const EditProduct = ({ product }) => {
 		}
 
 		updateProduct({ payload: newProduct, id: product.product_id })
+		// set sent to get confirmation message
 		setSent(true)
+		// reset and refocus
+		focusOnBarcode()
+		resetBarcode()
 	}
 
-	console.log(response)
-	console.log(response.isSuccess)
-
 	const handleDelete = () => {
-		console.log("delete")
 		setIsOpen(false)
 		deleteProduct({ id: product.product_id })
+		// set sent to get confirmation message
 		setSent(true)
+		// reset and refocus
+		focusOnBarcode()
+		resetBarcode()
 	}
 
 	const handleModal = () => {
 		setIsOpen(!isOpen)
 	}
 
-	const ModalBody = () => {
+	const DeletionBody = () => {
 		return (
 			<Column>
 				<h2>Are you sure you want to delete the product ?</h2>
@@ -72,11 +83,21 @@ const EditProduct = ({ product }) => {
 	return product ? (
 		sent && res.isSuccess ? (
 			<FullCenter>
-				<ArtTitle>Product edited successfully</ArtTitle>
+				<Column>
+					<FullCenter>
+						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} />
+					</FullCenter>
+					<ArtTitle>Product edited successfully</ArtTitle>
+				</Column>
 			</FullCenter>
 		) : sent && response.isSuccess ? (
 			<FullCenter>
-				<ArtTitle>Product deleted successfully</ArtTitle>
+				<Column>
+					<FullCenter>
+						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} />
+					</FullCenter>
+					<ArtTitle>Product deleted successfully</ArtTitle>
+				</Column>
 			</FullCenter>
 		) : (
 			<Column>
@@ -173,7 +194,7 @@ const EditProduct = ({ product }) => {
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
 					title={"Delete " + product.product_name}
-					bodyContent={<ModalBody />}
+					bodyContent={<DeletionBody />}
 				/>
 			</Column>
 		)

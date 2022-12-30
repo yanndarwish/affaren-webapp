@@ -257,10 +257,6 @@ app.put("/products/:id", auth, async (req, res) => {
 		const { id } = req.params
 		const { name, price, quantity, taxe, barcode, alert } = req.body
 
-		if (!(name, price, quantity, taxe, barcode, alert)) {
-			res.status(400).send("All inputs are required")
-		}
-
 		const response = await pool.query(
 			"UPDATE products SET product_name = $1, product_price = $2, product_taxe = $3, product_quantity = $4, product_barcode = $5, product_alert =$6 WHERE product_id = $7 RETURNING *",
 			[name, price, taxe, quantity, barcode, alert, id]

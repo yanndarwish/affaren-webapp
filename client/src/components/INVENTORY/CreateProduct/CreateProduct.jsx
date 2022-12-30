@@ -7,15 +7,27 @@ import {
 import { usePostProductMutation } from "../../../redux/services/productsApi"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 
-const CreateProduct = () => {
+const CreateProduct = ({
+	inputBarcode,
+	focusOnBarcode,
+	resetBarcode,
+	sent,
+	setSent,
+}) => {
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState("")
 	const [taxe, setTaxe] = useState("")
-	const [barcode, setBarcode] = useState("")
+	const [barcode, setBarcode] = useState(
+		inputBarcode
+			? inputBarcode.endsWith("/n")
+				? inputBarcode.slice(0, -2)
+				: inputBarcode
+			: ""
+	)
 	const [quantity, setQuantity] = useState("")
 	const [alert, setAlert] = useState("")
-	const [sent, setSent] = useState(false)
 	const [newProduct, setNewProduct] = useState("")
 	const [postProduct, res] = usePostProductMutation()
 
@@ -31,22 +43,39 @@ const CreateProduct = () => {
 		setNewProduct(newProduct)
 		postProduct(newProduct)
 		setSent(true)
+		focusOnBarcode()
+		resetInputs()
+		resetBarcode()
+	}
+
+	const resetInputs = () => {
+		setName("")
+		setPrice("")
+		setTaxe("")
+		setBarcode("")
+		setQuantity("")
+		setAlert("")
 	}
 
 	return sent && res.isSuccess ? (
 		<Column>
 			<FullCenter>
-				<ArtTitle>Product created successfully</ArtTitle>
+				<Column>
+					<FullCenter>
+						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} />
+					</FullCenter>
+					<ArtTitle>Product created successfully</ArtTitle>
+				</Column>
 			</FullCenter>
-            <FullCenter>
-                <Column>
-			{Object.keys(newProduct).map((key, i) => (
-                <h5 key={i}>
-					{key} : {newProduct[key]}
-				</h5>
-			))}
-            </Column>
-            </FullCenter>
+			<FullCenter>
+				<Column>
+					{Object.keys(newProduct).map((key, i) => (
+						<h5 key={i}>
+							{key} : {newProduct[key]}
+						</h5>
+					))}
+				</Column>
+			</FullCenter>
 		</Column>
 	) : (
 		<Column>

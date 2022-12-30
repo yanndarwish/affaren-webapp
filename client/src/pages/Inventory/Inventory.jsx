@@ -6,7 +6,6 @@ import {
 	Body,
 	Container,
 	Flex,
-	FullCenter,
 	SearchSection,
 	SpaceHeader,
 	SubTitle,
@@ -27,17 +26,19 @@ const Inventory = () => {
 	const [barcodeSearch, setBarcodeSearch] = useState(false)
 	const [filteredProducts, setFilteredProducts] = useState([])
 	const [editingProduct, setEditingProduct] = useState({})
-	const [isInventoryMode, setIsInventoryMode] = useState(false)
+	const [isEditMode, setIsEditMode] = useState(false)
 	const [isCreationMode, setIsCreationMode] = useState(false)
 	const [isProductFound, setIsProductFound] = useState(false)
+	const [sent, setSent] = useState(false)
+
 	const { data } = useGetProductsQuery()
 
 	const handleExport = () => {
 		console.log("export")
 	}
 
-	const toggleInventoryMode = () => {
-		setIsInventoryMode(!isInventoryMode)
+	const toggleEditMode = () => {
+		setIsEditMode(!isEditMode)
 	}
 
 	const toggleCreationMode = () => {
@@ -45,12 +46,14 @@ const Inventory = () => {
 	}
 
 	const cancelEditingMode = () => {
-		setIsProductFound(false)
+		setIsEditMode(false)
 	}
 
 	const filterProducts = ({ data, searchString }) => {
+		// if empty string, return data
 		if (!searchString) {
 			setFilteredProducts(data)
+			// else, look for string matches
 		} else {
 			let array = data?.filter((item) =>
 				item.product_name.toLowerCase().includes(searchString)
@@ -59,18 +62,26 @@ const Inventory = () => {
 		}
 	}
 
+	// when clickin on table row, open editor
 	const openEditor = (product) => {
-		console.log(product)
-		setIsInventoryMode(true)
-
-			setIsProductFound(true)
-			setEditingProduct(product)
-			setIsCreationMode(false)
-
-
+		setIsEditMode(true)
+		setIsProductFound(true)
+		setEditingProduct(product)
+		setIsCreationMode(false)
 	}
 
+	// focus automatically on barcode input
+	const focusOnBarcode = () => {
+		const input = document.getElementById("inventory-barcode-input")
+		input.focus()
+	}
+
+	// find product with barcode
 	const findBarcode = ({ nosuffix, barcode }) => {
+		// reset found values
+		setIsProductFound(false)
+		setSent(false)
+		// search for match
 		let found
 		if (nosuffix) {
 			found = data?.filter((item) => item.product_barcode === barcode)
@@ -79,22 +90,30 @@ const Inventory = () => {
 				(item) => item.product_barcode === barcode.slice(0, -2)
 			)
 		}
+		// set barcode search to update button (search or reset ?)
 		setBarcodeSearch(true)
+		// if found, close creation mode, set product found, open editor
 		if (found.length > 0) {
-			setFilteredProducts(found)
-			setIsProductFound(true)
-			setEditingProduct(found[0])
 			setIsCreationMode(false)
-			if (isInventoryMode) {
+			setIsProductFound(true)
+			setFilteredProducts(found)
+			setEditingProduct(found[0])
+			// if in edit mode, reset barcode to speed workflow
+			if (isEditMode) {
 				setBarcode("")
 				setBarcodeSearch(false)
 			}
+			// if not found, open creation mode
 		} else {
 			setIsProductFound(false)
+			setIsCreationMode(true)
 		}
 	}
 
+	console.log(isProductFound)
+
 	const resetBarcode = () => {
+		// setIsProductFound(false)
 		setBarcode("")
 		setEditingProduct({})
 		setBarcodeSearch(false)
@@ -116,10 +135,10 @@ const Inventory = () => {
 			<SpaceHeader>
 				<Title>Inventory</Title>
 				<Button
-					title="Inventory"
-					variant={isInventoryMode ? "contained" : "outlined"}
-					color={isInventoryMode ? "success" : "error"}
-					onClick={toggleInventoryMode}
+					title="Edit Mode"
+					variant={isEditMode ? "contained" : "outlined"}
+					color={isEditMode ? "success" : "error"}
+					onClick={toggleEditMode}
 				/>
 			</SpaceHeader>
 			<SearchSection>
@@ -139,52 +158,45 @@ const Inventory = () => {
 					/>
 				</Flex>
 				<Flex>
-					{!isInventoryMode && (
-						<Input
-							label="Name"
-							value={searchString}
-							onChange={setSearchString}
-						/>
-					)}
+					<Input label="Name" value={searchString} onChange={setSearchString} />
 				</Flex>
 			</SearchSection>
 			<Body theme={theme}>
 				<SpaceHeader>
-					<SubTitle>{isInventoryMode ? "Inventory Mode" : "Products"}</SubTitle>
-					{isInventoryMode ? (
-						isProductFound ? (
-							<Button title="Cancel" onClick={cancelEditingMode} />
-						) : (
-							
-								<Button
-									title={isCreationMode ? "Cancel" : "Create a Product"}
-									onClick={toggleCreationMode}
-								/>
-							
-						)
+					<SubTitle>{isEditMode ? "Edit Mode" : "Products"}</SubTitle>
+
+					{isEditMode ? (
+						<Button title="Cancel" onClick={cancelEditingMode} />
 					) : (
 						<Button
-							title="Export"
-							onClick={handleExport}
+							title={isCreationMode ? "Cancel" : "Create a Product"}
+							onClick={toggleCreationMode}
 						/>
 					)}
 				</SpaceHeader>
 				<div>
-					{isInventoryMode ? (
-						isProductFound ? (
-							<EditProduct
-								product={editingProduct}
-								setInputBarcode={setBarcode}
-							/>
-						) : isCreationMode ? (
-							<CreateProduct />
-						) : (
-							<FullCenter>
-								<ArtTitle>Scan a product to start</ArtTitle>
-							</FullCenter>
-						)
+					{isProductFound && isEditMode ? (
+						<EditProduct
+							product={editingProduct}
+							focusOnBarcode={focusOnBarcode}
+							resetBarcode={resetBarcode}
+							setIsProductFound={setIsProductFound}
+							setSent={setSent}
+							sent={sent}
+						/>
+					) : isCreationMode ? (
+						<CreateProduct
+							inputBarcode={barcode}
+							focusOnBarcode={focusOnBarcode}
+							resetBarcode={resetBarcode}
+							sent={sent}
+							setSent={setSent}
+						/>
 					) : (
-						<InventoryTable products={filteredProducts} openEditor={openEditor} />
+						<InventoryTable
+							products={filteredProducts}
+							openEditor={openEditor}
+						/>
 					)}
 				</div>
 
