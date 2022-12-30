@@ -2,9 +2,11 @@ import { useSelector } from "react-redux"
 import Input from "../../components/common/Input/Input.component"
 import Button from "../../components/common/Button/Button.component"
 import {
+	ArtTitle,
 	Body,
 	Container,
 	Flex,
+	FullCenter,
 	SearchSection,
 	SpaceHeader,
 	SubTitle,
@@ -15,6 +17,8 @@ import { useState } from "react"
 import { useGetProductsQuery } from "../../redux/services/productsApi"
 import { useEffect } from "react"
 import BarcodeInput from "../../components/INVENTORY/BarcodeInput/BarcodeInput"
+import EditProduct from "../../components/INVENTORY/EditProduct/EditProduct"
+import CreateProduct from "../../components/INVENTORY/CreateProduct/CreateProduct"
 
 const Inventory = () => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -22,12 +26,11 @@ const Inventory = () => {
 	const [barcode, setBarcode] = useState("")
 	const [barcodeSearch, setBarcodeSearch] = useState(false)
 	const [filteredProducts, setFilteredProducts] = useState([])
+	const [editingProduct, setEditingProduct] = useState({})
 	const [isInventoryMode, setIsInventoryMode] = useState(false)
+	const [isCreationMode, setIsCreationMode] = useState(false)
+	const [isProductFound, setIsProductFound] = useState(false)
 	const { data } = useGetProductsQuery()
-
-	const handleSearch = () => {
-		console.log(searchString)
-	}
 
 	const handleExport = () => {
 		console.log("export")
@@ -37,12 +40,18 @@ const Inventory = () => {
 		setIsInventoryMode(!isInventoryMode)
 	}
 
+	const toggleCreationMode = () => {
+		setIsCreationMode(!isCreationMode)
+	}
+
+	const cancelEditingMode = () => {
+		setIsProductFound(false)
+	}
+
 	const filterProducts = ({ data, searchString }) => {
 		if (!searchString) {
-			console.log("filteredroducts : return full data")
 			setFilteredProducts(data)
 		} else {
-			console.log("filteredroducts : return filtered data by name")
 			let array = data?.filter((item) =>
 				item.product_name.toLowerCase().includes(searchString)
 			)
@@ -50,24 +59,44 @@ const Inventory = () => {
 		}
 	}
 
-	const findBarcode = ({nosuffix, barcode}) => {
+	const openEditor = (product) => {
+		console.log(product)
+		setIsInventoryMode(true)
+
+			setIsProductFound(true)
+			setEditingProduct(product)
+			setIsCreationMode(false)
+
+
+	}
+
+	const findBarcode = ({ nosuffix, barcode }) => {
 		let found
-		console.log(barcode)
 		if (nosuffix) {
-			console.log(nosuffix)
 			found = data?.filter((item) => item.product_barcode === barcode)
 		} else {
-			console.log(nosuffix)
 			found = data?.filter(
 				(item) => item.product_barcode === barcode.slice(0, -2)
 			)
 		}
-		setFilteredProducts(found)
 		setBarcodeSearch(true)
+		if (found.length > 0) {
+			setFilteredProducts(found)
+			setIsProductFound(true)
+			setEditingProduct(found[0])
+			setIsCreationMode(false)
+			if (isInventoryMode) {
+				setBarcode("")
+				setBarcodeSearch(false)
+			}
+		} else {
+			setIsProductFound(false)
+		}
 	}
 
 	const resetBarcode = () => {
 		setBarcode("")
+		setEditingProduct({})
 		setBarcodeSearch(false)
 		filterProducts({ data: data })
 	}
@@ -78,7 +107,7 @@ const Inventory = () => {
 
 	useEffect(() => {
 		if (barcode.endsWith("/n")) {
-			findBarcode({barcode})
+			findBarcode({ barcode })
 		}
 	}, [barcode])
 
@@ -105,22 +134,58 @@ const Inventory = () => {
 						onClick={
 							barcodeSearch
 								? () => resetBarcode()
-								: () => findBarcode({nosuffix: true, barcode})
+								: () => findBarcode({ nosuffix: true, barcode })
 						}
 					/>
 				</Flex>
 				<Flex>
-					<Input label="Name" value={searchString} onChange={setSearchString} />
-					<Button title="Search" onClick={handleSearch} />
+					{!isInventoryMode && (
+						<Input
+							label="Name"
+							value={searchString}
+							onChange={setSearchString}
+						/>
+					)}
 				</Flex>
 			</SearchSection>
 			<Body theme={theme}>
 				<SpaceHeader>
-					<SubTitle>Products</SubTitle>
-					<Button title="Export" onClick={handleExport} />
+					<SubTitle>{isInventoryMode ? "Inventory Mode" : "Products"}</SubTitle>
+					{isInventoryMode ? (
+						isProductFound ? (
+							<Button title="Cancel" onClick={cancelEditingMode} />
+						) : (
+							
+								<Button
+									title={isCreationMode ? "Cancel" : "Create a Product"}
+									onClick={toggleCreationMode}
+								/>
+							
+						)
+					) : (
+						<Button
+							title="Export"
+							onClick={handleExport}
+						/>
+					)}
 				</SpaceHeader>
 				<div>
-					<InventoryTable products={filteredProducts} />
+					{isInventoryMode ? (
+						isProductFound ? (
+							<EditProduct
+								product={editingProduct}
+								setInputBarcode={setBarcode}
+							/>
+						) : isCreationMode ? (
+							<CreateProduct />
+						) : (
+							<FullCenter>
+								<ArtTitle>Scan a product to start</ArtTitle>
+							</FullCenter>
+						)
+					) : (
+						<InventoryTable products={filteredProducts} openEditor={openEditor} />
+					)}
 				</div>
 
 				<div>

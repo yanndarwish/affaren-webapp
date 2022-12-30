@@ -7,8 +7,15 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 
-export default function InventoryTable({products}) {
-	console.log(typeof(products))
+export default function InventoryTable({products, openEditor}) {
+	const handleClick = (e) => {
+		const targetId = e.target.dataset.id
+			? e.target.dataset.id
+			: e.target.parentNode.dataset.id
+		let found = products.find(product => product.product_id === parseInt(targetId))
+		openEditor(found)
+	}
+
 	return (
 		<TableContainer component={Paper}>
 			<Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -29,16 +36,28 @@ export default function InventoryTable({products}) {
 							<TableRow
 								key={product && product.product_id}
 								sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+								data-id={product && product.product_id}
+								onClick={handleClick}
 							>
 								<TableCell component="th" scope="row">
 									{product && product.product_id}
 								</TableCell>
 								<TableCell>{product && product.product_name}</TableCell>
-								<TableCell align="right">{product && product.product_price}</TableCell>
-								<TableCell align="right">{product && product.product_quantity}</TableCell>
-								<TableCell align="right">{product && product.product_taxe}</TableCell>
-								<TableCell align="right">{product && product.product_barcode}</TableCell>
-								<TableCell align="right">{product && product.product_alert}</TableCell>
+								<TableCell align="right">
+									{product && product.product_price}
+								</TableCell>
+								<TableCell align="right">
+									{product && product.product_quantity}
+								</TableCell>
+								<TableCell align="right">
+									{product && product.product_taxe}
+								</TableCell>
+								<TableCell align="right">
+									{product && product.product_barcode}
+								</TableCell>
+								<TableCell align="right">
+									{product && product.product_alert}
+								</TableCell>
 							</TableRow>
 						))}
 				</TableBody>

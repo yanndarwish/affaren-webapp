@@ -33,7 +33,15 @@ export const productsApi = createApi({
 			query: ({ quantity, id }) => ({
 				url: `products/${id}`,
 				method: "PATCH",
-				body: {quantity},
+				body: { quantity },
+			}),
+			invalidatesTags: ["Products"],
+		}),
+		updateFullProduct: builder.mutation({
+			query: ({ payload, id }) => ({
+				url: `products/${id}`,
+				method: "PUT",
+				body: payload,
 			}),
 			invalidatesTags: ["Products"],
 		}),
@@ -54,7 +62,7 @@ export const productsApi = createApi({
 				method: "DELETE",
 			}),
 			invalidatesTags: ["Products"],
-		})
+		}),
 	}),
 })
 
@@ -63,6 +71,7 @@ export const {
     useGetProductQuery, 
     useGetProductsQuery, 
     useUpdateProductsMutation, 
+	useUpdateFullProductMutation,
     useDeleteProductMutation
 } = productsApi
 export default productsApi

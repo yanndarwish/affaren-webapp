@@ -251,15 +251,34 @@ app.post("/products", auth, async (req, res) => {
 	}
 })
 
+// update a product fully
+app.put("/products/:id", auth, async (req, res) => {
+	try {
+		const { id } = req.params
+		const { name, price, quantity, taxe, barcode, alert } = req.body
+
+		if (!(name, price, quantity, taxe, barcode, alert)) {
+			res.status(400).send("All inputs are required")
+		}
+
+		const response = await pool.query(
+			"UPDATE products SET product_name = $1, product_price = $2, product_taxe = $3, product_quantity = $4, product_barcode = $5, product_alert =$6 WHERE product_id = $7 RETURNING *",
+			[name, price, taxe, quantity, barcode, alert, id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
 // update product quantity
 app.patch("/products/:id", auth, async (req, res) => {
 	try {
 		const id = req.params.id
-		console.log(id)
 		const { quantity } = req.body
-		console.log(quantity)
+
 		let qty = parseInt(quantity)
-		console.log(qty)
+
 		const response = await pool.query(
 			`UPDATE products SET product_quantity = product_quantity - $1 WHERE product_id = $2 RETURNING *`,
 			[qty, id]
