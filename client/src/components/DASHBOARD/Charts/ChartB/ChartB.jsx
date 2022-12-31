@@ -3,14 +3,34 @@ import { useEffect, useState } from "react"
 import { useGetMonthSalesQuery } from "../../../../redux/services/salesApi"
 import { setFullArray } from "../../../../redux/features/dashboard"
 import AreaChart from "./AreaChart"
-import { Body, SubTitle } from "../../../../assets/styles/common.styles"
+import Button from "../../../common/Button/Button.component"
+import {
+	Body,
+	SpaceHeader,
+	SubTitle,
+} from "../../../../assets/styles/common.styles"
+import DetailTable from "../../DetailTable/DetailTable"
 
-const ChartB = ({theme}) => {
+const ChartB = ({ theme }) => {
 	const dispatch = useDispatch()
 	const [skip, setSkip] = useState(true)
 	const [month, setMonth] = useState("")
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+	const months = [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	]
 	const [year, setYear] = useState("")
+	const [isDetail, setIsDetail] = useState(false)
 	const dashboard = useSelector((state) => state.dashboard)
 	const { data, error, isLoading } = useGetMonthSalesQuery(
 		{
@@ -38,6 +58,9 @@ const ChartB = ({theme}) => {
 		dispatch(setFullArray({ fullArray: data }))
 	}
 
+	const handleDetailClick = () => {
+		setIsDetail(!isDetail)
+	}
 	useEffect(() => {
 		fetchMonthArray(dashboard.date)
 	}, [dashboard.date])
@@ -48,8 +71,12 @@ const ChartB = ({theme}) => {
 
 	return (
 		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
-            <SubTitle>{months[month - 1]}</SubTitle>
+			<SpaceHeader>
+				<SubTitle>{months[month - 1]}</SubTitle>
+				<Button title="Details" onClick={handleDetailClick} />
+			</SpaceHeader>
 			<AreaChart data={dashboard.fullArray} theme={theme} />
+			{isDetail && <DetailTable data={dashboard.fullArray} months={months} month={parseInt(month)} year={year}/>}
 		</Body>
 	)
 }

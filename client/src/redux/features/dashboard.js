@@ -4,6 +4,7 @@ const initialState = {
 	date: "",
 	dayArray: [],
 	fullArray: [],
+	detailArray: []
 }
 
 const dashboardSlice = createSlice({
@@ -19,8 +20,11 @@ const dashboardSlice = createSlice({
 		setFullArray: (state, action) => {
 			state.fullArray = action.payload.fullArray
 		},
+		setDetailArray: (state, action) => {
+			state.detailArray = action.payload.detailArray
+		},
 	},
 })
 
-export const { setDate, setDayArray, setFullArray } = dashboardSlice.actions
+export const { setDate, setDayArray, setFullArray, setDetailArray } = dashboardSlice.actions
 export default dashboardSlice.reducer
