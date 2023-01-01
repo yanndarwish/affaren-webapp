@@ -12,11 +12,12 @@ import {
 import DateInput from "../../components/DASHBOARD/DateInput/DateInput"
 import ChartB from "../../components/DASHBOARD/Charts/ChartB/ChartB"
 import ChartA from "../../components/DASHBOARD/Charts/ChartA/ChartA"
+import ChartC from "../../components/DASHBOARD/Charts/ChartC/ChartC"
 
 const Dashboard = () => {
 	const user = useSelector((state) => state.user.user)
 	const theme = useSelector((state) => state.theme.theme)
-	const [getUsers, res] = useGetUsersMutation()
+	const [getUsers] = useGetUsersMutation()
 
 	useEffect(() => {
 		getUsers({ user: user })
@@ -34,15 +35,14 @@ const Dashboard = () => {
 				<div>
 					<SubTitle>Charts</SubTitle>
 				</div>
-				<Flex>
+				<div>
 					<ChartA theme={theme} />
-				</Flex>
+				</div>
 
 				<div>
 					<ChartB theme={theme} />
-
-					<div></div>
 				</div>
+				<ChartC theme={theme} />
 			</Body>
 		</Container>
 	)

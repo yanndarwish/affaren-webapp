@@ -31,6 +31,7 @@ import { login } from "../../../../redux/features/login"
 const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 	const overlayRef = useRef()
 	const [product, setProduct] = useState({
+		id: "",
 		taxe: 5.5,
 		price: "",
 		name: "",
@@ -60,12 +61,21 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 
 	const handleChange = (e, field) => {
 		let obj = { ...product }
-		obj[field] = e.target?.value ? e.target.value : e
+		let value = e.target?.value ? e.target.value : e
+		obj[field] = value
+		let id
+		if (field === "name") {
+			id = `c-${value}`
+			obj["id"] = id
+		}
 		setProduct(obj)
 	}
 
 	const handleAddCard = () => {
-		const newProduct = { ...product, price: parseFloat(document.getElementById('c-price').value) }
+		const newProduct = {
+			...product,
+			price: parseFloat(document.getElementById("c-price").value),
+		}
 		console.log(newProduct)
 		postCard(newProduct)
 		setIsOpen(false)

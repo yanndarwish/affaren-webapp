@@ -15,8 +15,8 @@ const store = configureStore({
 			userApi.middleware,
 			productsApi.middleware,
 			salesApi.middleware,
+			cardApi.middleware,
 			orderApi.middleware,
-			cardApi.middleware
 		),
 })
 

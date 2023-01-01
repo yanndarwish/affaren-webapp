@@ -29,7 +29,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 	const overlayRef = useRef()
 	const [focusedInput, setFocusedInput] = useState("")
 	const [product, setProduct] = useState({
-		id: "",
+		id: "nb-1",
 		taxe: 5.5,
 		quantity: "",
 		price: "",
@@ -45,15 +45,20 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 	const handleChange = (e, field) => {
 		let obj = { ...product }
 		let name
+		let id
 		if (field === "taxe") {
 			if (e.target.value === 5.5) {
 				name = "Alimentation"
+				id = "nb-1"
 			} else if (e.target.value === 10) {
 				name = "Magazine"
+				id = "nb-2"
 			} else if (e.target.value === 20) {
 				name = "Décoration/Alcool"
+				id = "nb-3"
 			}
 			obj["name"] = name
+			obj["id"] = id
 		}
 
 		obj[field] = e.target.value

@@ -83,7 +83,6 @@ const AreaChart = ({ data, theme }) => {
 						parseFloat(days[days.length - 1]) + parseFloat(sale.sale_amount)
 					).toFixed(2)
 				}
-				console.log(sale.sale_amount)
 			})
 
 		setLabels(labels)

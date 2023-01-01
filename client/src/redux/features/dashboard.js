@@ -4,7 +4,7 @@ const initialState = {
 	date: "",
 	dayArray: [],
 	fullArray: [],
-	detailArray: []
+	detailArray: [],
 }
 
 const dashboardSlice = createSlice({

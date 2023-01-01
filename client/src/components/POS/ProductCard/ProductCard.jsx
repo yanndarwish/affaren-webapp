@@ -12,7 +12,7 @@ import Button from "../../common/Button/Button.component"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 import { useDeleteCardMutation } from "../../../redux/services/cardApi"
 
-const ProductCard = ({ id, name, image, price, taxe, theme, onDelete }) => {
+const ProductCard = ({ id, name, price, taxe, theme }) => {
 	const products = useSelector((state) => state.sale.products)
 	const dispatch = useDispatch()
 	const cardRef = useRef()
@@ -20,7 +20,7 @@ const ProductCard = ({ id, name, image, price, taxe, theme, onDelete }) => {
 	const trashRef = useRef()
 	const [isOpen, setIsOpen] = useState(false)
 	const [deleteItem, setDeleteItem] = useState({})
-	const [deleteCard, res] = useDeleteCardMutation()
+	const [deleteCard] = useDeleteCardMutation()
 
 	const handleClick = (e) => {
 		if (cardRef.current === e.target || titleRef.current === e.target) {
@@ -83,7 +83,6 @@ const ProductCard = ({ id, name, image, price, taxe, theme, onDelete }) => {
 
 	const handleDelete = () => {
 		deleteCard({ id: deleteItem.id })
-		onDelete(deleteItem.id)
 		setIsOpen(false)
 	}
 

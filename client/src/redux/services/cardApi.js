@@ -20,7 +20,7 @@ export const cardApi = createApi({
 	}),
 	tagTypes: ["Cards"],
 	endpoints: (builder) => ({
-		getCards: builder.mutation({
+		getCards: builder.query({
 			query: () => ({
 				url: "cards",
 			}),
@@ -46,7 +46,7 @@ export const cardApi = createApi({
 
 export const {
 	useDeleteCardMutation,
-	useGetCardsMutation,
+	useGetCardsQuery,
 	usePostCardMutation,
 } = cardApi
 export default cardApi

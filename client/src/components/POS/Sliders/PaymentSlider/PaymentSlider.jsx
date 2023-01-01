@@ -115,7 +115,6 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				paymentMethods: salePaymentMethods,
 			}
 
-
 			dispatch(setSalePaymentMethods({ paymentMethods: salePaymentMethods }))
 			dispatch(setSaleDate({ date: date }))
 			// pay
@@ -142,13 +141,17 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			// open success payment modal
 			setModalIsOpen(true)
 
-			postSaleProducts({ products: sale.products, id: parseInt(confirmedSale.id) })
+			postSaleProducts({
+				products: sale.products,
+				year: year,
+				month: month,
+				id: parseInt(confirmedSale.id),
+			})
 			// print ticket button in modal
 
 			// reset sale
 			dispatch(resetSale())
-		dispatch(setUser({ user: user.user_first_name }))
-
+			dispatch(setUser({ user: user.user_first_name }))
 		} else if (
 			parseFloat(leftToPay) !== 0 &&
 			parseFloat(paying) < parseFloat(leftToPay)
@@ -179,7 +182,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const ModalFooter = () => {
 		return (
 			<>
-				<Button title="Print Ticket" onClick={closeModals}/>
+				<Button title="Print Ticket" onClick={closeModals} />
 			</>
 		)
 	}

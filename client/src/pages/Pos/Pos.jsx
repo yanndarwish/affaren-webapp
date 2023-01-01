@@ -25,11 +25,10 @@ import {
 	SubTitle,
 	Title,
 } from "../../assets/styles/common.styles"
-import EditSaleSection from "../../components/POS/EditSaleSection/EditSaleSection"
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 import { useEffect } from "react"
 import { setSaleAmount, setTaxes } from "../../redux/features/sale"
-import { useGetCardsMutation } from "../../redux/services/cardApi"
+import { useGetCardsQuery } from "../../redux/services/cardApi"
 
 const Pos = () => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -41,7 +40,7 @@ const Pos = () => {
 	const [discountSlider, setDiscountSlider] = useState(false)
 	const [addCardSlider, setAddCardSlider] = useState(false)
 
-	const [getCards, res] = useGetCardsMutation()
+	useGetCardsQuery()
 	const { data, error, isLoading } = useGetNextSaleIdQuery()
 
 	const toggleCardSection = () => {
@@ -177,9 +176,6 @@ const Pos = () => {
 		updateTaxes()
 	}, [sale.products])
 
-	useEffect(() => {
-		getCards()
-	}, [])
 	return (
 		<PosContainer>
 			<Container theme={theme}>

@@ -8,15 +8,12 @@ const initialState = {
 const cardSlice = createSlice({
 	name: "card",
 	initialState,
-	reducers: {
-		updateCards: (state, action) => {
-			state.cards = action.payload.cards
-		},
-	},
+	reducers: {},
 	extraReducers: (builder) => {
 		builder.addMatcher(
 			cardApi.endpoints.getCards.matchFulfilled,
 			(state, action) => {
+				console.log("now")
 				state.cards = action.payload
 			}
 		)

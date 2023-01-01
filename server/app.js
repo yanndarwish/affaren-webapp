@@ -463,13 +463,15 @@ app.post("/sales/:id/products", auth, async (req, res) => {
 		const saleId = req.params.id
 
 		const products = req.body.products
+		const year = req.body.year
+		const month = req.body.month
 		let responses = []
 
 		products.forEach(async (product) => {
 			const { name, quantity, price, taxe, id } = product
 			const response = await pool.query(
-				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe ) VALUEs ($1, $2, $3, $4, $5, $6)",
-				[saleId, id, name, quantity, price, taxe]
+				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe, sale_year, sale_month ) VALUEs ($1, $2, $3, $4, $5, $6, $7, $8)",
+				[saleId, id, name, quantity, price, taxe, year, month]
 			)
 
 			responses.push(response.rows)
@@ -488,6 +490,21 @@ app.get("/sales/:id/products", auth, async (req, res) => {
 		const response = await pool.query(
 			"SELECT * FROM sales_products WHERE sale_id = $1",
 			[id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get all products of the sales of a specific period
+app.get("/sales/:year/:month/products", auth, async (req, res) => {
+	try {
+		const {year, month} = req.params
+
+		const response = await pool.query(
+			"SELECT * FROM sales_products WHERE sale_year = $1 AND sale_month = $2",
+			[year, month]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -517,11 +534,11 @@ app.delete("/sales/:id/products", auth, async (req, res) => {
 // create a card
 app.post("/cards", auth, async (req, res) => {
 	try {
-		const { name, price, taxe } = req.body
+		const { id, name, price, taxe } = req.body
 
 		const response = await pool.query(
-			"INSERT INTO cards (card_name, card_price, card_taxe) VALUES ($1, $2, $3)",
-			[name, price, taxe]
+			"INSERT INTO cards (card_id, card_name, card_price, card_taxe) VALUES ($1, $2, $3, $4)",
+			[id, name, price, taxe]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
