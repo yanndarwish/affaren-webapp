@@ -22,8 +22,11 @@ const Profile = () => {
 	const users = useSelector((state) => state.user.users)
 
 	useEffect(() => {
+		console.log("getting")
 		Object.keys(user).length && getUsers({ user: user })
 	}, [user])
+
+
 
 	return (
 		<Container theme={theme}>

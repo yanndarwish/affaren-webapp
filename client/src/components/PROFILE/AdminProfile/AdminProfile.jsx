@@ -3,7 +3,7 @@ import AddUserCard from "../AddUserCard/AddUserCard"
 import UserCard from "../AdminCard/UserCard"
 
 const AdminProfile = ({ users }) => {
-	console.log(users)
+
 	return (
 		<>
 			<SubTitle>Users</SubTitle>

@@ -96,7 +96,6 @@ app.post("/password", async (req, res) => {
 			foundUser &&
 			(await bcrypt.compare(password, foundUser.user_password))
 		) {
-
 			res.status(200).json({ match: true })
 			return
 		}
@@ -255,15 +254,28 @@ app.put("/users", auth, async (req, res) => {
 // as admin, update a users role
 app.patch("/users", authorize, async (req, res) => {
 	try {
-		const { user_id, user_is_admin } = req.body
-		if (!(user_id, user_is_admin)) {
+		const { id, isAdmin } = req.body
+		if (!(id, isAdmin)) {
 			res.status(400).send("All inputs are required")
 		}
 
+		console.log(isAdmin)
+
 		const response = await pool.query(
 			"UPDATE users SET user_is_admin = $1 WHERE user_id = $2",
-			[user_is_admin, user_id]
+			[isAdmin, id]
 		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+app.delete("/users/:id", authorize, async (req, res) => {
+	try {
+		const { id } = req.params
+
+		const response = await pool.query("DELETE FROM users WHERE user_id = $1", [id])
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
@@ -542,7 +554,7 @@ app.get("/sales/:id/products", auth, async (req, res) => {
 // get all products of the sales of a specific period
 app.get("/sales/:year/:month/products", auth, async (req, res) => {
 	try {
-		const {year, month} = req.params
+		const { year, month } = req.params
 
 		const response = await pool.query(
 			"SELECT * FROM sales_products WHERE sale_year = $1 AND sale_month = $2",

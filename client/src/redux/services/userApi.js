@@ -50,7 +50,7 @@ export const userApi = createApi({
 				method: "PUT",
 				body: payload,
 			}),
-			invalidatesTags: ["User"],
+			invalidatesTags: ["User", "Users"],
 		}),
 		patchUser: builder.mutation({
 			query: (payload) => ({
@@ -60,6 +60,13 @@ export const userApi = createApi({
 			}),
 			invalidatesTags: ["Users"],
 		}),
+		deleteUser: builder.mutation({
+			query: ({id}) => ({
+				url: `users/${id}`,
+				method: "DELETE"
+			}),
+			invalidatesTags: ["Users"],
+		})
 	}),
 })
 
@@ -69,5 +76,6 @@ export const {
 	useGetUsersMutation,
 	useUpdateUserMutation,
 	usePatchUserMutation,
+	useDeleteUserMutation
 } = userApi
 export default userApi

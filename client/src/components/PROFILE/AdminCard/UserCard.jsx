@@ -1,11 +1,17 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material"
+import { useState } from "react"
 import { ArtTitle, Column } from "../../../assets/styles/common.styles"
 import Button from "../../common/Button/Button.component"
+import EditUserSlider from "../Sliders/EditUserSlider"
 
 const UserCard = ({ user }) => {
-const handleEdit = () => {
-    console.log(user)
-}
+	const [isOpen, setIsOpen] = useState(false)
+
+
+	const openEdit = () => {
+		setIsOpen(!isOpen)
+	}
+
 
 	return (
 		<Card sx={{ maxWidth: 350, textAlign: "center", paddingBottom: "1rem" }}>
@@ -18,13 +24,14 @@ const handleEdit = () => {
 						{user?.user_email}
 					</Typography>
 					<Typography variant="h5" component="div">
-						{user?.user_is_admin ? "Admin" : "Not Admin"}
+						{user?.user_is_admin === "true" ? "Admin" : "Not Admin"}
 					</Typography>
 				</Column>
 			</CardContent>
 			<CardActions sx={{ justifyContent: "center" }}>
-				<Button title="Edit" onClick={handleEdit} />
+				<Button title="Edit" onClick={openEdit} />
 			</CardActions>
+            <EditUserSlider isOpen={isOpen} setIsOpen={setIsOpen} user={user}/>
 		</Card>
 	)
 }
