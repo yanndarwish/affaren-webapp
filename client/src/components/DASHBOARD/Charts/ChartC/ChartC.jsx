@@ -77,7 +77,6 @@ const ChartC = ({ theme }) => {
 		setSortedData(sortData(formatBestSellers(data)))
 	}, [data])
 
-	console.log(sortedData)
 	return (
 		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
 			<SubTitle>Best Sellers</SubTitle>

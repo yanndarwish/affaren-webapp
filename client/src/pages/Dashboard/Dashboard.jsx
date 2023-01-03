@@ -15,6 +15,7 @@ import ChartA from "../../components/DASHBOARD/Charts/ChartA/ChartA"
 import ChartC from "../../components/DASHBOARD/Charts/ChartC/ChartC"
 import { useGetMonthSalesQuery } from "../../redux/services/salesApi"
 import { setFullArray } from "../../redux/features/dashboard"
+import ChartD from "../../components/DASHBOARD/Charts/ChartD/ChartD"
 
 const Dashboard = () => {
 	const dispatch = useDispatch()
@@ -91,6 +92,7 @@ const Dashboard = () => {
 				<ChartA theme={theme} />
 				<ChartB theme={theme} months={months} month={month} year={year}/>
 				<ChartC theme={theme} />
+				<ChartD theme={theme} />
 			</Body>
 		</Container>
 	)
