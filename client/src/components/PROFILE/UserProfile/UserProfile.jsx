@@ -28,7 +28,6 @@ const UserProfile = ({ user }) => {
 	const [confirmationPass, setConfirmationPass] = useState("")
 	const [checkPassword, res] = useCheckPasswordMutation()
 	const [updateUser, response] = useUpdateUserMutation()
-	const [incorrectPass, setIncorrectPass] = useState(false)
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -39,8 +38,6 @@ const UserProfile = ({ user }) => {
 		setIsOpen(!isOpen)
 	}
 
-	console.log(user)
-
 	const checkPass = () => {
 		checkPassword({ email: user.user_email, password: confirmationPass })
 	}
@@ -48,16 +45,11 @@ const UserProfile = ({ user }) => {
 	const handleNext = () => {
 		// check in db if pass matches
 		// if so, get to next stage
-		console.log(res.isSuccess)
 		if (res.isSuccess) {
-			setIncorrectPass(false)
 			setNext(true)
 			setPass("")
 			setConfirmationPass("")
-		} else {
-			setIncorrectPass(true)
-		}
-		// else, send password incorrect error
+		} 
 	}
 
 	const handlePassUpdate = () => {
@@ -75,7 +67,6 @@ const UserProfile = ({ user }) => {
 	const handleClose = () => {
 		setIsOpen(false)
 		setNext(false)
-		setIncorrectPass(false)
 		setPassUpdated(false)
 		setPass("")
 		setConfirmationPass("")
@@ -143,7 +134,7 @@ const UserProfile = ({ user }) => {
 								</FormHelperText>
 							)}
 						</FormControl>
-						{incorrectPass && <ArtTitle>Incorrect Password</ArtTitle>}
+						{res.error && <ArtTitle>Incorrect Password</ArtTitle>}
 					</Column>
 				) : !passUpdated ? (
 					<Column>

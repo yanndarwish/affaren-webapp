@@ -1,5 +1,5 @@
 require("dotenv").config()
-const { users, sales, days, products } = require("./db.json")
+const { users } = require("./db.json")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const auth = require("./middleware/auth")
@@ -123,10 +123,17 @@ app.post("/register", async (req, res) => {
 			res.status(400).send("All inputs are required")
 		}
 
-		// check if user already exists in db
-		const oldUser = users.find((user) => user.email === email)
+		console.log(users)
 
-		if (oldUser) {
+		// check if user already exists in db
+		let foundUser = await pool.query(
+			"SELECT * FROM users WHERE user_email = $1",
+			[email.toLowerCase()]
+		)
+
+		foundUser = foundUser.rows[0]
+
+		if (foundUser) {
 			return res.status(409).send("User already exists. Please Login.")
 		}
 

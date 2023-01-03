@@ -1,23 +1,40 @@
 import { useSelector } from "react-redux"
-import { Body, Container, Header, SubTitle, Title } from "../../assets/styles/common.styles"
-import { useGetUserQuery } from "../../redux/services/userApi"
+import {
+	Body,
+	Container,
+	Header,
+	SubTitle,
+	Title,
+} from "../../assets/styles/common.styles"
+import {
+	useGetUserQuery,
+	useGetUsersMutation,
+} from "../../redux/services/userApi"
 import UserProfile from "../../components/PROFILE/UserProfile/UserProfile"
+import AdminProfile from "../../components/PROFILE/AdminProfile/AdminProfile"
+import { useEffect } from "react"
 
 const Profile = () => {
-	const { data, isLoading, error } = useGetUserQuery()
+	useGetUserQuery()
+	const [getUsers] = useGetUsersMutation()
 	const theme = useSelector((state) => state.theme.theme)
-	const token = useSelector((state) => state.login.token)
 	const user = useSelector((state) => state.user.user)
+	const users = useSelector((state) => state.user.users)
+
+	useEffect(() => {
+		Object.keys(user).length && getUsers({ user: user })
+	}, [user])
 
 	return (
-		<Container>
+		<Container theme={theme}>
 			<Header>
 				<Title>
 					{user && user.user_first_name} {user && user.user_last_name}
 				</Title>
 			</Header>
 			<Body theme={theme}>
-					<UserProfile user={user}/>
+				<UserProfile user={user} />
+				<AdminProfile users={users} />
 			</Body>
 		</Container>
 	)
