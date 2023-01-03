@@ -79,6 +79,7 @@ const Dashboard = () => {
 		storeFullArrayInState(data)
 	}, [data, dashboard.date])
 
+		console.log(user.user_is_admin === "true")
 	return (
 		<Container theme={theme}>
 			<SpaceHeader>
@@ -92,7 +93,7 @@ const Dashboard = () => {
 				<ChartA theme={theme} />
 				<ChartB theme={theme} months={months} month={month} year={year}/>
 				<ChartC theme={theme} />
-				<ChartD theme={theme} />
+				{user?.user_is_admin === "true" && <ChartD theme={theme} />}
 			</Body>
 		</Container>
 	)
