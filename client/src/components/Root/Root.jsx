@@ -4,7 +4,7 @@ import { Grid } from "@mui/material"
 
 const Root = () => {
 	return (
-		<Grid container>
+		<Grid container sx={{height: "100%"}}>
 			{/* <Sidebar /> */}
 			<Navbar />
 			<Outlet />
