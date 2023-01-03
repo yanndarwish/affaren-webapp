@@ -1,12 +1,27 @@
 import { TextField } from "@mui/material"
 
-const Input = ({ id, className,label, placeholder, value, inputAdornment, onChange, onFocus, type="text", fullWidth, multiline, onClick}) => {
+const Input = ({
+	id,
+	className,
+	label,
+	placeholder,
+	value,
+	inputAdornment,
+	onChange,
+	onFocus,
+	type = "text",
+	fullWidth,
+	multiline,
+	onClick,
+	error,
+}) => {
 	return (
 		<TextField
+			error={error && error}
 			id={id}
 			className={className}
 			label={label && label}
-			value={value}
+			value={value && value}
 			onChange={onChange && ((e) => onChange(e.target.value))}
 			type={type}
 			fullWidth={fullWidth}

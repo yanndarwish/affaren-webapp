@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux"
 import { Body, Container, Header, SubTitle, Title } from "../../assets/styles/common.styles"
 import { useGetUserQuery } from "../../redux/services/userApi"
-import { Grid } from "@mui/material"
+import UserProfile from "../../components/PROFILE/UserProfile/UserProfile"
 
 const Profile = () => {
 	const { data, isLoading, error } = useGetUserQuery()
@@ -10,25 +10,16 @@ const Profile = () => {
 	const user = useSelector((state) => state.user.user)
 
 	return (
-		<Grid item xs>
+		<Container>
 			<Header>
 				<Title>
 					{user && user.user_first_name} {user && user.user_last_name}
 				</Title>
 			</Header>
-			<div></div>
 			<Body theme={theme}>
-				<div>
-					<SubTitle>Performances</SubTitle>
-				</div>
-				<div></div>
-
-				<div>
-					<div></div>
-					<div></div>
-				</div>
+					<UserProfile user={user}/>
 			</Body>
-		</Grid>
+		</Container>
 	)
 }
 

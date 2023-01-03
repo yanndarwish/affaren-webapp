@@ -14,10 +14,18 @@ export const loginApi = createApi({
 				body: payload,
 			}),
 		}),
+		checkPassword: builder.mutation({
+			query: (payload) => ({
+				url: "password",
+				method: "POST",
+				body: payload
+			})
+		})
 	}),
 })
 
 export const {
 	useGetAuthMutation,
+	useCheckPasswordMutation
 } = loginApi
 export default loginApi
