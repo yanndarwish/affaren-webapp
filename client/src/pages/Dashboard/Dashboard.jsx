@@ -32,16 +32,9 @@ const Dashboard = () => {
 				</Flex>
 			</SpaceHeader>
 			<Body theme={theme}>
-				<div>
-					<SubTitle>Charts</SubTitle>
-				</div>
-				<div>
-					<ChartA theme={theme} />
-				</div>
-
-				<div>
-					<ChartB theme={theme} />
-				</div>
+				<SubTitle>Charts</SubTitle>
+				<ChartA theme={theme} />
+				<ChartB theme={theme} />
 				<ChartC theme={theme} />
 			</Body>
 		</Container>
