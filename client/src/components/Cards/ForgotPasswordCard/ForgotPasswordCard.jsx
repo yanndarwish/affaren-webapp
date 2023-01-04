@@ -1,7 +1,7 @@
 import { Container, Text } from "../Card.styles"
 import { useState } from "react"
 import {
-	Column,
+	ColumnCenter,
 	ColumnSpace,
 	SubTitle,
 } from "../../../assets/styles/common.styles"
@@ -14,7 +14,6 @@ const ForgotPasswordCard = ({ theme }) => {
 	const [email, setEmail] = useState("")
 	const [forgotPassword, res] = useForgotPasswordMutation()
 
-	console.log(res)
 	const handleSubmit = () => {
 		forgotPassword({ email: email })
 	}
@@ -34,7 +33,7 @@ const ForgotPasswordCard = ({ theme }) => {
 					</>
 				) : (
 					<>
-						<Column>
+						<ColumnCenter>
 							<Text>Enter your email to receive a recovery link</Text>
 							<Input
 								label="Email"
@@ -43,7 +42,8 @@ const ForgotPasswordCard = ({ theme }) => {
 								onChange={setEmail}
 								fullWidth
 							/>
-						</Column>
+							<Link to="/">Sign in</Link>
+						</ColumnCenter>
 						<Button title="Submit" color="success" onClick={handleSubmit} />
 					</>
 				)}
