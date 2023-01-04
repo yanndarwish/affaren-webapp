@@ -81,6 +81,11 @@ export const salesApi = createApi({
 				body: { products, year, month },
 			}),
 		}),
+		getSaleProducts: builder.query({
+			query: ({ id }) => ({
+				url: `sales/${id}/products`,
+			}),
+		}),
 		getSalesProducts: builder.query({
 			query: ({ month, year }) => ({
 				url: `sales/${year}/${month}/products`,
@@ -105,6 +110,7 @@ export const {
 	useGetSaleQuery,
 	useDeleteSaleMutation,
 	usePostSaleProductsMutation,
+	useGetSaleProductsQuery,
 	useGetSalesProductsQuery,
 	useDeleteSaleProductsMutation,
 } = salesApi

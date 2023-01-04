@@ -13,17 +13,23 @@ import SalesTableRowSeparator from "../SalesTableRow/SalesTableRowSeparator"
 import SalesModalBody from "../SalesModal/SalesModalBody"
 import SalesModalFooter from "../SalesModal/SalesModalFooter"
 import { useDeleteSaleMutation } from "../../../redux/services/salesApi"
+import { useGetSaleProductsQuery } from "../../../redux/services/salesApi"
 import { ArtTitle, HorizontalCenter } from "../../../assets/styles/common.styles"
 
-export default function SalesTable({ data }) {
+export default function SalesTable({ array }) {
 	const [selected, setSelected] = useState("")
+	const [id, setId] = useState("")
+	const [skip, setSkip] = useState(true)
 	const [isOpen, setIsOpen] = useState(false)
 	const [deleteSale, res] = useDeleteSaleMutation()
+	const {data} = useGetSaleProductsQuery({id:id && id}, {skip})
 
 	const handleClick = (e) => {
 		let id = e.target.parentNode.dataset.id
 		setSelected(id)
+		setId(id)
 		setIsOpen(true)
+		setSkip(false)
 	}
 
 	const handleTicketPrint = () => {
@@ -59,16 +65,16 @@ export default function SalesTable({ data }) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data &&
-							data.map((sale, i) => {
+						{array &&
+							array.map((sale, i) => {
 								return i === 0 ? (
 									<React.Fragment key={"separator " +i}>
 										<SalesTableRowSeparator sale={sale} />
 										<SalesTableRow sale={sale} onClick={handleClick} />
 									</React.Fragment>
 								) : i > 0 &&
-								  data &&
-								  data[i].sale_day !== data[i - 1].sale_day ? (
+								  array &&
+								  array[i].sale_day !== array[i - 1].sale_day ? (
 									<React.Fragment key={"separatore" + i}>
 										<SalesTableRowSeparator sale={sale} />
 
@@ -89,7 +95,7 @@ export default function SalesTable({ data }) {
 				isOpen={isOpen}
 				setIsOpen={setIsOpen}
 				title={"Sale " + selected}
-				bodyContent={res.isSuccess ? <DeleteConfirmation />: <SalesModalBody data={data} selected={selected} />}
+				bodyContent={res.isSuccess ? <DeleteConfirmation />: <SalesModalBody data={array} selected={selected} details={data}/>}
 				footerContent={res.isSuccess ? null :
 					<SalesModalFooter
 						deleteClick={handleSaleDelete}

@@ -2,9 +2,7 @@ import { useSelector } from "react-redux"
 import {
 	Body,
 	Container,
-	Flex,
 	Header,
-	SpaceHeader,
 	SubTitle,
 	Title,
 } from "../../assets/styles/common.styles"
@@ -13,7 +11,7 @@ import SalesTable from "../../components/SALES/SalesTable/SalesTable"
 
 const Sales = () => {
 	const theme = useSelector((state) => state.theme.theme)
-    const {data, error, isLoading} = useGetSalesQuery()
+	const { data, error, isLoading } = useGetSalesQuery()
 
 	return (
 		<Container theme={theme}>
@@ -21,17 +19,8 @@ const Sales = () => {
 				<Title>Sales</Title>
 			</Header>
 			<Body theme={theme}>
-				<SpaceHeader>
-					<SubTitle>All Sales</SubTitle>
-				</SpaceHeader>
-				<div>
-					<SalesTable data={data} />
-				</div>
-
-				<div>
-					<div></div>
-					<div></div>
-				</div>
+				<SubTitle>All Sales</SubTitle>
+				<SalesTable array={data} />
 			</Body>
 		</Container>
 	)
