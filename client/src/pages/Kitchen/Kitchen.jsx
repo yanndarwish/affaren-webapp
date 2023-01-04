@@ -21,8 +21,10 @@ import {
 } from "../../redux/services/productsApi"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
+import { useNavigate } from "react-router-dom"
 
 const Kitchen = () => {
+	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const theme = useSelector((state) => state.theme.theme)
 	const [barcode, setBarcode] = useState("")
 	const [skip, setSkip] = useState(true)
@@ -33,7 +35,12 @@ const Kitchen = () => {
 		{ barcode: barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode },
 		{ skip }
 	)
+	const navigate = useNavigate()
 
+
+	const redirect = () => {
+		!loggedIn && navigate("/login")
+	}
 
 	const handleApply = () => {
 		setSkip(true)
@@ -60,6 +67,10 @@ const Kitchen = () => {
 	useEffect(() => {
 		barcode.endsWith("/n") && handleSearch()
 	}, [barcode])
+
+	useEffect(() => {
+		redirect()
+	}, [])
 
 	return (
 		<Container theme={theme}>

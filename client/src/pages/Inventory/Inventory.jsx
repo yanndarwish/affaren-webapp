@@ -18,8 +18,11 @@ import { useEffect } from "react"
 import BarcodeInput from "../../components/INVENTORY/BarcodeInput/BarcodeInput"
 import EditProduct from "../../components/INVENTORY/EditProduct/EditProduct"
 import CreateProduct from "../../components/INVENTORY/CreateProduct/CreateProduct"
+import { useNavigate } from "react-router-dom"
 
 const Inventory = () => {
+	const loggedIn = useSelector((state) => state.login.loggedIn)
+	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
 	const [searchString, setSearchString] = useState("")
 	const [barcode, setBarcode] = useState("")
@@ -32,6 +35,10 @@ const Inventory = () => {
 	const [sent, setSent] = useState(false)
 
 	const { data } = useGetProductsQuery()
+
+	const redirect = () => {
+		!loggedIn && navigate("/login")
+	}
 
 	const handleExport = () => {
 		console.log("export")
@@ -130,6 +137,10 @@ const Inventory = () => {
 		}
 	}, [barcode])
 
+	useEffect(() => {
+		redirect()
+	}, [])
+	
 	return (
 		<Container theme={theme}>
 			<SpaceHeader>

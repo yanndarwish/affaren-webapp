@@ -17,11 +17,19 @@ import AccordionSummary from "@mui/material/AccordionSummary"
 import Typography from "@mui/material/Typography"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import { help } from "../../assets/styles/data/helpData"
+import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 
 const Help = () => {
+	const loggedIn = useSelector((state) => state.login.loggedIn)
+	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
 	const [searchString, setSearchString] = useState("")
 	const [expanded, setExpanded] = useState(false)
+
+	const redirect = () => {
+		!loggedIn && navigate("/login")
+	}
 
 	const handleChange = (panel) => (event, isExpanded) => {
 		setExpanded(isExpanded ? panel : false)
@@ -34,13 +42,22 @@ const Help = () => {
 
 			if (index >= 0) {
 				setExpanded(p.id.slice(0, 3))
-				let innerHTML = p.innerHTML.substring(0, index) + "<b>" + p.innerHTML.substring(index, index + searchString.length) + "</b>" + p.innerHTML.substring(index + searchString.length)
+				let innerHTML =
+					p.innerHTML.substring(0, index) +
+					"<b>" +
+					p.innerHTML.substring(index, index + searchString.length) +
+					"</b>" +
+					p.innerHTML.substring(index + searchString.length)
 				p.innerHTML = innerHTML
 				console.log(p)
-
 			}
 		})
 	}
+
+	useEffect(() => {
+		redirect()
+	}, [])
+	
 	return (
 		<Container theme={theme}>
 			<SpaceHeader>

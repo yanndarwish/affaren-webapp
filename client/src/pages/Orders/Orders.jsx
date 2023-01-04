@@ -6,8 +6,11 @@ import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import AddOrder from "../../components/ORDERS/AddOrder/AddOrder"
 import OrderContent from "../../components/ORDERS/OrderContent/OrderContent"
+import { useNavigate } from "react-router-dom"
 
 const Orders = () => {
+	const loggedIn = useSelector((state) => state.login.loggedIn)
+	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
 	const [selectedOrderId, setSelectedOrderId] = useState("")
 	const [selectedOrder, setSelectedOrder] = useState({})
@@ -19,6 +22,10 @@ const Orders = () => {
 	const getTargetOrder = (orderId) => {
     const found = data?.find(order => order.order_id === parseInt(orderId))
     setSelectedOrder(found)
+	}
+
+	const redirect = () => {
+		!loggedIn && navigate("/login")
 	}
 
 	const focusNewOrder = () => {
@@ -35,6 +42,10 @@ const Orders = () => {
 	useEffect(() => {
 		focusNewOrder()
 	}, [data])
+
+	useEffect(() => {
+		redirect()
+	}, [])
 
 	return (
 		<FullFlex theme={theme}>

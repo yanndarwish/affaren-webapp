@@ -17,11 +17,13 @@ import ChartC from "../../components/DASHBOARD/Charts/ChartC/ChartC"
 import { useGetMonthSalesQuery } from "../../redux/services/salesApi"
 import { setFullArray } from "../../redux/features/dashboard"
 import ChartD from "../../components/DASHBOARD/Charts/ChartD/ChartD"
+import { useNavigate } from "react-router-dom"
 
 const Dashboard = () => {
 	const dispatch = useDispatch()
+	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const dashboard = useSelector((state) => state.dashboard)
-
+	const navigate = useNavigate()
 	const user = useSelector((state) => state.user.user)
 	const theme = useSelector((state) => state.theme.theme)
 	const [getUsers] = useGetUsersMutation()
@@ -49,6 +51,11 @@ const Dashboard = () => {
 		},
 		{ skip }
 	)
+
+	const redirect = () => {
+		!loggedIn && navigate("/login")
+	}
+
 
 	const getMonth = (dateString) => {
 		return dateString && dateString.split("-")[1]
@@ -80,7 +87,10 @@ const Dashboard = () => {
 		storeFullArrayInState(data)
 	}, [data, dashboard.date])
 
-	console.log(user.user_is_admin === "true")
+	useEffect(() => {
+		redirect()
+	}, [])
+
 	return (
 		<Container theme={theme}>
 			<SpaceHeader>

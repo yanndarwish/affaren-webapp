@@ -29,8 +29,11 @@ import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 import { useEffect } from "react"
 import { setSaleAmount, setTaxes } from "../../redux/features/sale"
 import { useGetCardsQuery } from "../../redux/services/cardApi"
+import { useNavigate } from "react-router-dom"
 
 const Pos = () => {
+	const loggedIn = useSelector((state) => state.login.loggedIn)
+	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
 	const sale = useSelector((state) => state.sale)
 	const dispatch = useDispatch()
@@ -42,6 +45,10 @@ const Pos = () => {
 
 	useGetCardsQuery()
 	useGetNextSaleIdQuery()
+
+	const redirect = () => {
+		!loggedIn && navigate("/login")
+	}
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
@@ -175,6 +182,10 @@ const Pos = () => {
 		updateTotalAmount()
 		updateTaxes()
 	}, [sale.products])
+
+	useEffect(() => {
+		redirect()
+	}, [])
 
 	return (
 		<PosContainer>

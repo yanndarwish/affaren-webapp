@@ -13,18 +13,29 @@ import {
 import UserProfile from "../../components/PROFILE/UserProfile/UserProfile"
 import AdminProfile from "../../components/PROFILE/AdminProfile/AdminProfile"
 import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 const Profile = () => {
 	useGetUserQuery()
-	const [getUsers] = useGetUsersMutation()
+	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const theme = useSelector((state) => state.theme.theme)
 	const user = useSelector((state) => state.user.user)
 	const users = useSelector((state) => state.user.users)
+	const [getUsers] = useGetUsersMutation()
+	const navigate = useNavigate()
+
+	const redirect = () => {
+		!loggedIn && navigate("/login")
+	}
 
 	useEffect(() => {
 		console.log("getting")
 		Object.keys(user).length && getUsers({ user: user })
 	}, [user])
+
+	useEffect(() => {
+		redirect()
+	}, [])
 
 	return (
 		<Container theme={theme}>
