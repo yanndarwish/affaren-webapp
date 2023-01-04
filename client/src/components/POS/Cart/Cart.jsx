@@ -58,7 +58,7 @@ const Cart = () => {
 	}
 
 	return (
-		<TableContainer component={Paper} sx={{ maxHeight: 280 }}>
+		<TableContainer component={Paper} sx={{ height:"100%" }}>
 			<Table
 				stickyHeader
 				sx={{ minWidth: 650 }}

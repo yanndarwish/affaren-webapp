@@ -41,7 +41,7 @@ const Pos = () => {
 	const [addCardSlider, setAddCardSlider] = useState(false)
 
 	useGetCardsQuery()
-	const { data, error, isLoading } = useGetNextSaleIdQuery()
+	useGetNextSaleIdQuery()
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
@@ -190,7 +190,7 @@ const Pos = () => {
 					<Box>
 						<SubTitle>Panier</SubTitle>
 					</Box>
-					<Box>
+					<Box sx={{height: "100%"}}>
 						<Cart />
 					</Box>
 					<TotalSection display="flex" justifyContent="flex-end">

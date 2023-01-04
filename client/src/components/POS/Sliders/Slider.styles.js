@@ -41,12 +41,14 @@ export const DialogHeader = styled.div`
 export const DialogBody = styled.div`
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 	gap: 1rem;
 	padding: ${constant.PADDING_M}px;
 `
 
 export const DialogCard = styled.div`
-    box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);
+
+	box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);
 	background-color: ${(props) =>
 		props.theme === "dark"
 			? dark.COLOR_BG_SECONDARY

@@ -144,8 +144,8 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 				<DialogBody>
 					{/* <ArtTitle>Product List</ArtTitle> */}
 					<DialogCard theme={theme}>
-						<TableContainer component={Paper} sx={{ maxHeight: 200 }}>
-							<Table sx={{ minWidth: 650 }} aria-label="simple table">
+						<TableContainer component={Paper} sx={{ height:"100%" }}>
+							<Table sx={{ minWidth: 650, height:"100%" }} aria-label="simple table">
 								<TableHead>
 									<TableRow>
 										<TableCell padding="checkbox">
@@ -229,7 +229,7 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 						</FormControl>
 						<NumPad
 							display
-							size="S"
+
 							unit={discountType === "percent" ? "%" : "€"}
 							value={discountAmount}
 							setValue={setDiscountAmount}
