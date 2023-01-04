@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/stylesheets/index.css" />
 		<title>Document</title>
 		<script>
 			let status = '<%- JSON.stringify(status) %>'
@@ -15,21 +16,26 @@
 		</script>
 	</head>
 	<body>
-		<h1><%= email%></h1>
-		<form action="" method="POST">
-			<input
-				type="password"
-				name="password"
-				id="password"
-				placeholder="Password"
-			/><br />
-			<input
-				type="password"
-				name="confirm-password"
-				id="confirm-password"
-				placeholder="Confirm Password"
-			/><br />
-			<input type="submit" value="Submit" />
-		</form>
+		<div>
+			<h1><%= email%></h1>
+			<form action="" method="POST">
+				<h2>Enter your new Password</h2>
+				<div class="input-wrapper">
+					<input
+						type="password"
+						name="password"
+						id="password"
+						placeholder="Password"
+					/>
+					<input
+						type="password"
+						name="confirm-password"
+						id="confirm-password"
+						placeholder="Confirm Password"
+					/>
+				</div>
+				<input class="button" type="submit" value="Submit" />
+			</form>
+		</div>
 	</body>
 </html>

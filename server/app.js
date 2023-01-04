@@ -8,10 +8,13 @@ const authorize = require("./middleware/authorize")
 const express = require("express")
 const cors = require("cors")
 const pool = require("./db")
+const path = require('path')
 const { query, urlencoded } = require("express")
 const app = express()
 
+
 app.set("view engine", "ejs")
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: false }))
 
 app.use(express.json())
@@ -50,7 +53,7 @@ app.post("/login", async (req, res) => {
 				{ user_id: foundUser.user_id, email },
 				process.env.TOKEN_KEY,
 				{
-					expiresIn: "2h",
+					expiresIn: "10h",
 				}
 			)
 
@@ -129,7 +132,7 @@ app.post("/forgot-password", async (req, res) => {
 		const token = jwt.sign(
 			{ email: oldUser.user_email, id: oldUser.user_id },
 			secret,
-			{ expiresIn: "5m" }
+			{ expiresIn: "15m" }
 		)
 		const link = `http://localhost:4001/reset-password/${oldUser.user_id}/${token}`
 
@@ -266,7 +269,7 @@ app.post("/register", async (req, res) => {
 			{ user_id: user._id, email },
 			process.env.TOKEN_KEY,
 			{
-				expiresIn: "2h",
+				expiresIn: "10h",
 			}
 		)
 
