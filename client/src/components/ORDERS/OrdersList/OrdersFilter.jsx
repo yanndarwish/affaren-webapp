@@ -5,7 +5,12 @@ import {
 	Radio,
 	Divider,
 } from "@mui/material"
-import { VerticalCenter } from "../../../assets/styles/common.styles"
+import {
+	ArtTitle,
+	Column,
+	ColumnCenter,
+	VerticalCenter,
+} from "../../../assets/styles/common.styles"
 import {
 	setStatusFilter,
 	setLocationFilter,
@@ -37,29 +42,36 @@ const OrdersFilter = ({ selected, setSelected, setAdd }) => {
 				sx={{ justifyContent: "center", paddingBlock: 2.5 }}
 				onClick={() => handleClick("statusFilter")}
 			>
-				<VerticalCenter>
-					<RadioGroup
-						row
-						aria-labelledby="demo-radio-buttons-group-label"
-						value={statusFilter}
-						name="status-group"
-						onChange={handleStatusFilter}
-					>
-						<FormControlLabel value="all" control={<Radio />} label="All" />
-						<FormControlLabel value="todo" control={<Radio />} label="To Do" />
-						<FormControlLabel
-							value="pending"
-							control={<Radio />}
-							label="Pending"
-						/>
-						<FormControlLabel value="done" control={<Radio />} label="Done" />
-						<FormControlLabel
-							value="picked-up"
-							control={<Radio />}
-							label="Picked Up"
-						/>
-					</RadioGroup>
-				</VerticalCenter>
+				<ColumnCenter>
+					<ArtTitle>Status Filter</ArtTitle>
+					<VerticalCenter>
+						<RadioGroup
+							row
+							aria-labelledby="demo-radio-buttons-group-label"
+							value={statusFilter}
+							name="status-group"
+							onChange={handleStatusFilter}
+						>
+							<FormControlLabel value="all" control={<Radio />} label="All" />
+							<FormControlLabel
+								value="todo"
+								control={<Radio />}
+								label="To Do"
+							/>
+							<FormControlLabel
+								value="pending"
+								control={<Radio />}
+								label="Pending"
+							/>
+							<FormControlLabel value="done" control={<Radio />} label="Done" />
+							<FormControlLabel
+								value="picked-up"
+								control={<Radio />}
+								label="Picked Up"
+							/>
+						</RadioGroup>
+					</VerticalCenter>
+				</ColumnCenter>
 			</ListItem>
 			<Divider component="li" />
 			<ListItem
@@ -68,32 +80,35 @@ const OrdersFilter = ({ selected, setSelected, setAdd }) => {
 				sx={{ justifyContent: "center", paddingBlock: 2.5 }}
 				onClick={() => handleClick("locationFilter")}
 			>
-				<VerticalCenter>
-					<RadioGroup
-						row
-						aria-labelledby="radio-buttons-group-label"
-						value={locationFilter}
-						name="location-group"
-						onChange={handleLocationFilter}
-					>
-						<FormControlLabel value="all" control={<Radio />} label="All" />
-						<FormControlLabel
-							value="pick-up"
-							control={<Radio />}
-							label="Pick Up"
-						/>
-						<FormControlLabel
-							value="on-site"
-							control={<Radio />}
-							label="On Site"
-						/>
-						<FormControlLabel
-							value="to-deliver"
-							control={<Radio />}
-							label="To Deliver"
-						/>
-					</RadioGroup>
-				</VerticalCenter>
+				<ColumnCenter>
+					<ArtTitle>Location Filter</ArtTitle>
+					<VerticalCenter>
+						<RadioGroup
+							row
+							aria-labelledby="radio-buttons-group-label"
+							value={locationFilter}
+							name="location-group"
+							onChange={handleLocationFilter}
+						>
+							<FormControlLabel value="all" control={<Radio />} label="All" />
+							<FormControlLabel
+								value="pick-up"
+								control={<Radio />}
+								label="Pick Up"
+							/>
+							<FormControlLabel
+								value="on-site"
+								control={<Radio />}
+								label="On Site"
+							/>
+							<FormControlLabel
+								value="to-deliver"
+								control={<Radio />}
+								label="To Deliver"
+							/>
+						</RadioGroup>
+					</VerticalCenter>
+				</ColumnCenter>
 			</ListItem>
 		</Fragment>
 	)
