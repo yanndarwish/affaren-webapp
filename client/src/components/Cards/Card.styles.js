@@ -4,6 +4,9 @@ import light from "../../assets/styles/light.theme.styles"
 import { constant } from "../../assets/styles/common.styles"
 
 export const Container = styled.div`
+	max-width:500px;
+	min-width:350px;
+	height:400px;
 	display: flex;
 	flex-direction: column;
 	gap: ${constant.GAP}px;
@@ -18,7 +21,8 @@ export const Container = styled.div`
 `
 
 export const Text = styled.p`
-	font-size: ${constant.FONT_BODY};
+	font-size: ${constant.FONT_BODY * 1.5}px;
+
 `
 
 export const Footer = styled.div`

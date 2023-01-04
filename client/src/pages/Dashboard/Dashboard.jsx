@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import {
 	Body,
 	Container,
+	FitContainer,
 	Flex,
 	SpaceHeader,
 	SubTitle,
@@ -79,7 +80,7 @@ const Dashboard = () => {
 		storeFullArrayInState(data)
 	}, [data, dashboard.date])
 
-		console.log(user.user_is_admin === "true")
+	console.log(user.user_is_admin === "true")
 	return (
 		<Container theme={theme}>
 			<SpaceHeader>
@@ -88,13 +89,13 @@ const Dashboard = () => {
 					<DateInput />
 				</Flex>
 			</SpaceHeader>
-			<Body theme={theme}>
+			<FitContainer theme={theme}>
 				<SubTitle>Charts</SubTitle>
 				<ChartA theme={theme} />
-				<ChartB theme={theme} months={months} month={month} year={year}/>
+				<ChartB theme={theme} months={months} month={month} year={year} />
 				<ChartC theme={theme} />
 				{user?.user_is_admin === "true" && <ChartD theme={theme} />}
-			</Body>
+			</FitContainer>
 		</Container>
 	)
 }

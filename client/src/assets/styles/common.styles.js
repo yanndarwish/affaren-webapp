@@ -41,7 +41,7 @@ export const Container = styled.main`
 	flex: 1;
 	padding: ${constant.PADDING_L}px;
 	height: 100%;
-	width:100%;
+	width: 100%;
 	overflow: scroll;
 	gap: ${constant.GAP * 2}px;
 	color: ${(props) =>
@@ -61,6 +61,20 @@ export const CenterContainer = styled.div`
 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
 `
 
+export const FitContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	height: fit-content;
+	gap: 1rem;
+	padding: ${constant.PADDING_M}px;
+	box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);
+
+	background-color: ${(props) =>
+		props.theme === "dark"
+			? dark.COLOR_BG_SECONDARY
+			: light.COLOR_BG_SECONDARY};
+`
+
 export const Header = styled.header`
 	display: flex;
 	align-items: flex-start;
@@ -68,6 +82,7 @@ export const Header = styled.header`
 
 export const SpaceHeader = styled.header`
 	display: flex;
+	width: 100%;
 	justify-content: space-between;
 	align-items: flex-start;
 `
@@ -99,13 +114,13 @@ export const Flex = styled.div`
 
 export const FullFlex = styled.div`
 	display: flex;
-	flex:1;
+	flex: 1;
 `
 
 export const Body = styled.div`
 	display: flex;
 	flex-direction: column;
-	height:100%;
+	height: 100%;
 	gap: 1rem;
 	padding: ${constant.PADDING_M}px;
 	box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);
@@ -133,6 +148,7 @@ export const Column = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: ${constant.GAP}px;
+	width: 100%;
 `
 
 export const ColumnCenter = styled.div`
@@ -140,6 +156,14 @@ export const ColumnCenter = styled.div`
 	flex-direction: column;
 	align-items: center;
 	gap: ${constant.GAP}px;
+`
+
+export const ColumnSpace = styled.div`
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
 `
 
 export const VerticalCenter = styled.div`
@@ -155,7 +179,8 @@ export const HorizontalCenter = styled.div`
 
 export const FullCenter = styled.div`
 	display: flex;
-	height:100%;
+	height: 100%;
+	width: 100%;
 	gap: 1rem;
 	justify-content: center;
 	align-items: center;

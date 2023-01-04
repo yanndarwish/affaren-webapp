@@ -3,7 +3,12 @@ import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import { useGetAuthMutation } from "../../../redux/services/loginApi"
 import { useNavigate } from "react-router-dom"
-import { SubTitle } from "../../../assets/styles/common.styles"
+import {
+	Column,
+	ColumnCenter,
+	ColumnSpace,
+	SubTitle,
+} from "../../../assets/styles/common.styles"
 import { Container, Text, Footer } from "../Card.styles"
 
 const LoginCard = ({ theme }) => {
@@ -23,22 +28,27 @@ const LoginCard = ({ theme }) => {
 
 	return (
 		<Container theme={theme}>
-			<div>
+			<ColumnSpace>
 				<SubTitle theme={theme}>Login</SubTitle>
-			</div>
-			<div>
-				<Input label="Email" value={email} theme={theme} onChange={setEmail} />
+				<Column>
 				<Input
+					label="Email"
+					value={email}
+					theme={theme}
+					onChange={setEmail}
+					fullWidth
+					/>
+				<Input
+					fullWidth
 					label="Password"
 					value={password}
 					theme={theme}
 					onChange={setPassword}
 					type="password"
-				/>
-			</div>
-			<Footer>
+					/>
+					</Column>
 				<Button title="Login" color="success" onClick={handleLogin}></Button>
-			</Footer>
+			</ColumnSpace>
 		</Container>
 	)
 }

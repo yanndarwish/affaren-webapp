@@ -3,7 +3,7 @@ import { logout } from "../../../redux/features/login"
 import { userLogout } from "../../../redux/features/user"
 import Button from "../../common/Button/Button.component"
 import { useNavigate } from "react-router-dom"
-import { SubTitle } from "../../../assets/styles/common.styles"
+import { ColumnSpace, SpaceHeader, SubTitle } from "../../../assets/styles/common.styles"
 import { Container, Footer, Text } from "../Card.styles"
 
 const LogoutDialog = ({ theme }) => {
@@ -23,16 +23,14 @@ const LogoutDialog = ({ theme }) => {
 
 	return (
 		<Container theme={theme}>
-			<div>
+			<ColumnSpace>
 				<SubTitle>Logout</SubTitle>
-			</div>
-			<div>
 				<Text>Are you sure you want to logout ?</Text>
-			</div>
-			<Footer>
+			<SpaceHeader>
 				<Button title="Cancel" color="error" onClick={handleCancel}></Button>
 				<Button title="Logout" color="success" onClick={handleLogout}></Button>
-			</Footer>
+			</SpaceHeader>
+			</ColumnSpace>
 		</Container>
 	)
 }
