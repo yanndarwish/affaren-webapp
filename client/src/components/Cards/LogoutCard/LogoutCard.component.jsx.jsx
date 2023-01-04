@@ -10,6 +10,10 @@ import {
 } from "../../../assets/styles/common.styles"
 import { Container, Text } from "../Card.styles"
 import { useEffect } from "react"
+import { resetSale } from "../../../redux/features/sale"
+import { resetCards } from "../../../redux/features/cards"
+import { resetDashboard } from "../../../redux/features/dashboard"
+import { resetOrders } from "../../../redux/features/orders"
 
 const LogoutDialog = ({ theme }) => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -27,6 +31,10 @@ const LogoutDialog = ({ theme }) => {
 	const handleLogout = () => {
 		dispatch(logout())
 		dispatch(userLogout())
+		dispatch(resetSale())
+		dispatch(resetCards())
+		dispatch(resetDashboard())
+		dispatch(resetOrders())
 		navigate("/login")
 	}
 

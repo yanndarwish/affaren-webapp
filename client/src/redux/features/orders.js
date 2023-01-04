@@ -12,6 +12,7 @@ const orderSlice = createSlice({
 	name: "orders",
 	initialState,
 	reducers: {
+		resetOrders: () => initialState,
 		setStatusFilter: (state, action) => {
 			state.statusFilter = action.payload
 		},
@@ -36,6 +37,6 @@ const orderSlice = createSlice({
 	},
 })
 
-export const { setStatusFilter, setLocationFilter } = orderSlice.actions
+export const { resetOrders, setStatusFilter, setLocationFilter } = orderSlice.actions
 
 export default orderSlice.reducer

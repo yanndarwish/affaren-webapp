@@ -10,9 +10,7 @@ const loginSlice = createSlice({
 	name: "login",
 	initialState,
 	reducers: {
-		logout: (state) => {
-			state.loggedIn = false
-		},
+		logout: () => initialState,
 	},
 	extraReducers: (builder) => {
 		builder.addMatcher(

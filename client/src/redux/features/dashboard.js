@@ -11,6 +11,7 @@ const dashboardSlice = createSlice({
 	name: "dashboard",
 	initialState,
 	reducers: {
+		resetDashboard: () => initialState,
 		setDate: (state, action) => {
 			state.date = action.payload.date
 		},
@@ -26,5 +27,11 @@ const dashboardSlice = createSlice({
 	},
 })
 
-export const { setDate, setDayArray, setFullArray, setDetailArray } = dashboardSlice.actions
+export const {
+	resetDashboard,
+	setDate,
+	setDayArray,
+	setFullArray,
+	setDetailArray,
+} = dashboardSlice.actions
 export default dashboardSlice.reducer

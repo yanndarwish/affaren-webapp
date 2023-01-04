@@ -8,7 +8,9 @@ const initialState = {
 const cardSlice = createSlice({
 	name: "card",
 	initialState,
-	reducers: {},
+	reducers: {
+		resetCards : () => initialState
+	},
 	extraReducers: (builder) => {
 		builder.addMatcher(
 			cardApi.endpoints.getCards.matchFulfilled,
@@ -20,5 +22,5 @@ const cardSlice = createSlice({
 	},
 })
 
-export const { updateCards } = cardSlice.actions
+export const { updateCards, resetCards } = cardSlice.actions
 export default cardSlice.reducer
