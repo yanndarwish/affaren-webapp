@@ -7,14 +7,19 @@ import EditUserSlider from "../Sliders/EditUserSlider"
 const UserCard = ({ user }) => {
 	const [isOpen, setIsOpen] = useState(false)
 
-
 	const openEdit = () => {
 		setIsOpen(!isOpen)
 	}
 
-
 	return (
-		<Card sx={{ flex: "1 1 auto", textAlign: "center", paddingBottom: "1rem" }}>
+		<Card
+			sx={{
+				flex: "1 1 auto",
+				minWidth: 280,
+				textAlign: "center",
+				paddingBottom: "1rem",
+			}}
+		>
 			<CardContent>
 				<Column>
 					<ArtTitle>
@@ -31,7 +36,7 @@ const UserCard = ({ user }) => {
 			<CardActions sx={{ justifyContent: "center" }}>
 				<Button title="Edit" onClick={openEdit} />
 			</CardActions>
-            <EditUserSlider isOpen={isOpen} setIsOpen={setIsOpen} user={user}/>
+			<EditUserSlider isOpen={isOpen} setIsOpen={setIsOpen} user={user} />
 		</Card>
 	)
 }
