@@ -26,8 +26,6 @@ const Profile = () => {
 		Object.keys(user).length && getUsers({ user: user })
 	}, [user])
 
-
-
 	return (
 		<Container theme={theme}>
 			<Header>
@@ -37,8 +35,12 @@ const Profile = () => {
 			</Header>
 			<Body theme={theme}>
 				<UserProfile user={user} />
-				<AdminProfile users={users} />
 			</Body>
+			{user?.user_is_admin === "true" && (
+				<Body theme={theme}>
+					<AdminProfile users={users} />
+				</Body>
+			)}
 		</Container>
 	)
 }

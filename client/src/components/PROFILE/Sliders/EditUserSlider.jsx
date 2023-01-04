@@ -14,26 +14,20 @@ import {
 	Overlay,
 } from "../../POS/Sliders/Slider.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
-import {
-	Checkbox,
-	FormControl,
-	FormControlLabel,
-	Typography,
-} from "@mui/material"
+import { Checkbox, FormControl, FormControlLabel } from "@mui/material"
 import { FormWrapper } from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
-import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import { useSelector } from "react-redux"
 import {
 	useDeleteUserMutation,
 	usePatchUserMutation,
-	useUpdateUserMutation,
 } from "../../../redux/services/userApi"
-import user from "../../../redux/features/user"
 
 const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 	const theme = useSelector((state) => state.theme.theme)
-	const [isAdmin, setIsAdmin] = useState(user.user_is_admin === "true" ? true : false)
+	const [isAdmin, setIsAdmin] = useState(
+		user.user_is_admin === "true" ? true : false
+	)
 	const overlayRef = useRef()
 	const [patchUser, res] = usePatchUserMutation()
 	const [deleteUser, response] = useDeleteUserMutation()
@@ -45,7 +39,7 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 	}
 
 	const handleDelete = () => {
-		console.log("delete")
+		deleteUser({ id: user.user_id })
 	}
 
 	const handleClose = () => {
@@ -55,13 +49,10 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 	const handleEdit = () => {
 		let newUser = {
 			isAdmin: isAdmin ? "true" : "false",
-            id: user.user_id
+			id: user.user_id,
 		}
-        patchUser(newUser)
-		console.log("edit")
+		patchUser(newUser)
 	}
-
-    console.log(user)
 
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
@@ -78,9 +69,11 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 						<Button title="Delete User" color="error" onClick={handleDelete} />
 					</SpaceHeader>
 					<DialogCard theme={theme}>
-						{res.isSuccess ? (
+						{res.isSuccess || response.isSuccess ? (
 							<FullCenter>
-								<SubTitle>User Edited Successfully</SubTitle>
+								<SubTitle>
+									User {res.isSuccess ? "Edited" : "Deleted"} Successfully
+								</SubTitle>
 							</FullCenter>
 						) : (
 							<FormControl fullWidth>
@@ -106,8 +99,10 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 				</DialogBody>
 				<DialogFooter>
 					<Button
-						title={res.isSuccess ? "Close" : "Edit"}
-						onClick={res.isSuccess ? handleClose : handleEdit}
+						title={res.isSuccess || response.isSuccess ? "Close" : "Edit"}
+						onClick={
+							res.isSuccess || response.isSuccess ? handleClose : handleEdit
+						}
 					/>
 				</DialogFooter>
 			</Dialog>
