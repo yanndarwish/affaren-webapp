@@ -47,7 +47,7 @@ export const DialogBody = styled.div`
 `
 
 export const DialogCard = styled.div`
-
+	height:100%;
 	box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);
 	background-color: ${(props) =>
 		props.theme === "dark"

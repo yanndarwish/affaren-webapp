@@ -22,9 +22,12 @@ import {
 	useDeleteUserMutation,
 	usePatchUserMutation,
 } from "../../../redux/services/userApi"
+import { Modal } from "modal-rjs"
 
 const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 	const theme = useSelector((state) => state.theme.theme)
+	const [isModalEdit, setIsModalEdit] = useState(false)
+	const [isModalDelete, setIsModalDelete] = useState(false)
 	const [isAdmin, setIsAdmin] = useState(
 		user.user_is_admin === "true" ? true : false
 	)
@@ -38,8 +41,36 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 		}
 	}
 
+	const toggleModalEdit = () => {
+		setIsModalEdit(true)
+	}
+
+	const toggleModalDelete = () => {
+		setIsModalDelete(true)
+	}
+
+	const EditBody = () => {
+		return (
+			<ArtTitle>Are you sure you want to apply this modification ?</ArtTitle>
+		)
+	}
+
+	const DeleteBody = () => {
+		return (
+			<ArtTitle>Are you sure you want to delete this user ?</ArtTitle>
+		)
+	}
+
+	const EditFooter = () => {
+		return <Button title="Edit" color="success" onClick={handleEdit}/>
+	}
+	const DeleteFooter = () => {
+		return <Button title="Delete" color="success" onClick={handleDelete}/>
+	}
+
 	const handleDelete = () => {
 		deleteUser({ id: user.user_id })
+		setIsModalDelete(false)
 	}
 
 	const handleClose = () => {
@@ -52,6 +83,7 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 			id: user.user_id,
 		}
 		patchUser(newUser)
+		setIsModalEdit(false)
 	}
 
 	return isOpen ? (
@@ -66,7 +98,11 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 						<ArtTitle>
 							{user?.user_first_name} {user?.user_last_name}
 						</ArtTitle>
-						<Button title="Delete User" color="error" onClick={handleDelete} />
+						<Button
+							title="Delete User"
+							color="error"
+							onClick={toggleModalDelete}
+						/>
 					</SpaceHeader>
 					<DialogCard theme={theme}>
 						{res.isSuccess || response.isSuccess ? (
@@ -76,8 +112,8 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 								</SubTitle>
 							</FullCenter>
 						) : (
-							<FormControl fullWidth>
-								<FormWrapper>
+							<FormControl fullWidth sx={{height:"100%"}}>
+								<FormWrapper >
 									<FullCenter>
 										<FormControlLabel
 											value="start"
@@ -101,11 +137,15 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 					<Button
 						title={res.isSuccess || response.isSuccess ? "Close" : "Edit"}
 						onClick={
-							res.isSuccess || response.isSuccess ? handleClose : handleEdit
+							res.isSuccess || response.isSuccess
+								? handleClose
+								: toggleModalEdit
 						}
 					/>
 				</DialogFooter>
 			</Dialog>
+			<Modal isOpen={isModalEdit} setIsOpen={setIsModalEdit} title="Edit User" bodyContent={<EditBody/>} footerContent={<EditFooter/>}/>
+			<Modal isOpen={isModalDelete} setIsOpen={setIsModalDelete} title="Delete User" bodyContent={<DeleteBody/>} footerContent={<DeleteFooter/>}/>
 		</Overlay>
 	) : null
 }
