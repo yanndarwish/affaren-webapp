@@ -18,9 +18,16 @@ export const loginApi = createApi({
 			query: (payload) => ({
 				url: "password",
 				method: "POST",
-				body: payload
-			})
-		})
+				body: payload,
+			}),
+		}),
+		forgotPassword: builder.mutation({
+			query: (payload) => ({
+				url: "forgot-password",
+				method: "POST",
+				body: payload,
+			}),
+		}),
 	}),
 })
 

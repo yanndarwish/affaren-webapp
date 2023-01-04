@@ -1,15 +1,18 @@
 require("dotenv").config()
 const { users } = require("./db.json")
 const bcrypt = require("bcryptjs")
+const nodemailer = require("nodemailer")
 const jwt = require("jsonwebtoken")
 const auth = require("./middleware/auth")
 const authorize = require("./middleware/authorize")
 const express = require("express")
 const cors = require("cors")
 const pool = require("./db")
-const { query } = require("express")
-
+const { query, urlencoded } = require("express")
 const app = express()
+
+app.set("view engine", "ejs")
+app.use(express.urlencoded({ extended: false }))
 
 app.use(express.json())
 app.use(cors())
@@ -103,6 +106,114 @@ app.post("/password", async (req, res) => {
 		return
 	} catch (err) {
 		console.log(err)
+	}
+})
+
+// forgot password
+app.post("/forgot-password", async (req, res) => {
+	const { email } = req.body
+	try {
+		const response = await pool.query(
+			"SELECT * FROM users WHERE user_email = $1",
+			[email.toLowerCase()]
+		)
+
+		let oldUser = response.rows[0]
+
+		if (!oldUser) {
+			return res.send("User does not exist")
+		}
+
+		console.log(oldUser)
+		const secret = process.env.TOKEN_KEY + oldUser.user_password
+		const token = jwt.sign(
+			{ email: oldUser.user_email, id: oldUser.user_id },
+			secret,
+			{ expiresIn: "5m" }
+		)
+		const link = `http://localhost:4001/reset-password/${oldUser.user_id}/${token}`
+
+		let transporter = nodemailer.createTransport({
+			service: "gmail",
+			auth: {
+				user: "svenskaaffarenparis@gmail.com",
+				pass: "ibiueuqqffrvaonf",
+			},
+		})
+
+		let mailOptions = {
+			from: "svenskaaffarenparis@gmail.com",
+			to: email,
+			subject: "Affaren password reset",
+			text: `Here is your link to reset your password: ${link}`,
+		}
+
+		transporter.sendMail(mailOptions, function (error, info) {
+			if (error) {
+				console.log(error)
+			} else {
+				console.log("Email sent: " + info.response)
+			}
+		})
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+app.get("/reset-password/:id/:token", async (req, res) => {
+	const { id, token } = req.params
+	console.log(req.params)
+	const response = await pool.query("SELECT * FROM users WHERE user_id = $1", [
+		id,
+	])
+
+	let oldUser = response.rows[0]
+	if (!oldUser) {
+		return res.send("User does not exist")
+	}
+	const secret = process.env.TOKEN_KEY + oldUser.user_password
+	try {
+		const verify = jwt.verify(token, secret)
+		res.render("index", { email: verify.email, status: "Not Verified" })
+	} catch (error) {
+		res.send("Not verified")
+	}
+})
+
+app.post("/reset-password/:id/:token", async (req, res) => {
+	const { id, token } = req.params
+	const { password } = req.body
+
+	const response = await pool.query("SELECT * FROM users WHERE user_id = $1", [
+		id,
+	])
+
+	console.log(password)
+	let oldUser = response.rows[0]
+	if (!oldUser) {
+		return res.send("User does not exist")
+	}
+	const secret = process.env.TOKEN_KEY + oldUser.user_password
+	try {
+		const verify = jwt.verify(token, secret)
+		const encryptedPassword = await bcrypt.hash(password, 10)
+
+		const response = await pool.query(
+			"UPDATE users SET user_first_name = $2, user_last_name = $3, user_email = $4, user_password = $5, user_is_admin = $6 WHERE user_id = $1",
+			[
+				oldUser.user_id,
+				oldUser.user_first_name,
+				oldUser.user_last_name,
+				oldUser.user_email,
+				encryptedPassword,
+				oldUser.user_is_admin,
+			]
+		)
+
+		// res.json({ status: "Password Updated" })
+		res.render("index", { email: verify.email, status: "verified" })
+	} catch (error) {
+		res.json({ status: "Something went wrong" })
 	}
 })
 
@@ -275,7 +386,9 @@ app.delete("/users/:id", authorize, async (req, res) => {
 	try {
 		const { id } = req.params
 
-		const response = await pool.query("DELETE FROM users WHERE user_id = $1", [id])
+		const response = await pool.query("DELETE FROM users WHERE user_id = $1", [
+			id,
+		])
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
