@@ -21,7 +21,6 @@ import {
 } from "../../redux/services/productsApi"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
-import { ServerStyleSheet } from "styled-components"
 
 const Kitchen = () => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -34,6 +33,7 @@ const Kitchen = () => {
 		{ barcode: barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode },
 		{ skip }
 	)
+
 
 	const handleApply = () => {
 		setSkip(true)
@@ -69,8 +69,15 @@ const Kitchen = () => {
 				<Button title="Search" onClick={handleSearch} />
 				<Button title="Reset" color="warning" onClick={reset} />
 			</Flex>
-			{!home && isSuccess ? (
-				<Body>
+			{data === null && (
+				<Body theme={theme}>
+					<FullCenter>
+						<SubTitle>Product Not Found</SubTitle>
+					</FullCenter>
+				</Body>
+			)}
+			{!home && isSuccess && data !== null ? (
+				<Body theme={theme}>
 					<SubTitle>{data?.product_name}</SubTitle>
 					<FullCenter>
 						<ColumnCenter>
@@ -98,7 +105,7 @@ const Kitchen = () => {
 					/>
 				</Body>
 			) : !home && isError ? (
-				<Body>
+				<Body theme={theme}>
 					<FullCenter>
 						<SubTitle>Product Not Found</SubTitle>
 					</FullCenter>
@@ -106,7 +113,7 @@ const Kitchen = () => {
 			) : (
 				!home &&
 				res.isSuccess && (
-					<Body>
+					<Body theme={theme}>
 						<FullCenter>
 							<ColumnCenter>
 								<Title>Product Stock Updated</Title>
