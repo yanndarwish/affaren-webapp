@@ -212,8 +212,8 @@ const Pos = () => {
 						</Box>
 					</ButtonSectionSpace>
 				</Body>
-				<CardSectionButton onClick={toggleCardSection} id="card-section-button">
-					<CropSquareOutlinedIcon />
+				<CardSectionButton onClick={toggleCardSection} id="card-section-button" theme={theme}>
+					<CropSquareOutlinedIcon color="primary"/>
 				</CardSectionButton>
 			</Container>
 			<ProductCardSection theme={theme} onClick={openAddCardSlider} />

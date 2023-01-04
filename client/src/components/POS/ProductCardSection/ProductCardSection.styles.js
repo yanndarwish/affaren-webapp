@@ -33,7 +33,9 @@ export const CardSectionButton = styled.button`
 	top: ${constant.GAP * 2}px;
 	right: 0px;
 	border: none;
-    border-radius:3px;
+	border-radius: 3px;
+	color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 	background-color: ${(props) =>
 		props.theme === "dark"
 			? dark.COLOR_BG_SECONDARY
