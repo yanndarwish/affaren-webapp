@@ -105,6 +105,7 @@ export const FullFlex = styled.div`
 export const Body = styled.div`
 	display: flex;
 	flex-direction: column;
+	height:100%;
 	gap: 1rem;
 	padding: ${constant.PADDING_M}px;
 	box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);
@@ -134,6 +135,13 @@ export const Column = styled.div`
 	gap: ${constant.GAP}px;
 `
 
+export const ColumnCenter = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: ${constant.GAP}px;
+`
+
 export const VerticalCenter = styled.div`
 	display: flex;
 	gap: 1rem;
@@ -147,6 +155,7 @@ export const HorizontalCenter = styled.div`
 
 export const FullCenter = styled.div`
 	display: flex;
+	height:100%;
 	gap: 1rem;
 	justify-content: center;
 	align-items: center;

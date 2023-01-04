@@ -19,7 +19,7 @@ export const productsApi = createApi({
 			return headers
 		},
 	}),
-	tagTypes: ["Products"],
+	tagTypes: ["Products", "Product"],
 	endpoints: (builder) => ({
 		postProduct: builder.mutation({
 			query: (payload) => ({
@@ -35,7 +35,7 @@ export const productsApi = createApi({
 				method: "PATCH",
 				body: { quantity },
 			}),
-			invalidatesTags: ["Products"],
+			invalidatesTags: ["Products", "Product"],
 		}),
 		updateFullProduct: builder.mutation({
 			query: ({ payload, id }) => ({
@@ -55,6 +55,7 @@ export const productsApi = createApi({
 			query: ({ barcode }) => ({
 				url: `products/${barcode}`,
 			}),
+			providesTags: ["Product"],
 		}),
 		deleteProduct: builder.mutation({
 			query: ({ id }) => ({
