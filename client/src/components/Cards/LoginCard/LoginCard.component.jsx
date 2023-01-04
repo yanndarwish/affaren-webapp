@@ -2,7 +2,7 @@ import { useState } from "react"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import { useGetAuthMutation } from "../../../redux/services/loginApi"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import {
 	Column,
 	ColumnCenter,
@@ -46,8 +46,9 @@ const LoginCard = ({ theme }) => {
 					onChange={setPassword}
 					type="password"
 					/>
+					<Link to="/forgot-password">Forgot you password ?</Link>
 					</Column>
-				<Button title="Login" color="success" onClick={handleLogin}></Button>
+				<Button title="Login" color="success" onClick={handleLogin} />
 			</ColumnSpace>
 		</Container>
 	)

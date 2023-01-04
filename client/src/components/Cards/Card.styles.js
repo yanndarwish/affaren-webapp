@@ -22,7 +22,7 @@ export const Container = styled.div`
 
 export const Text = styled.p`
 	font-size: ${constant.FONT_BODY * 1.5}px;
-
+	text-align: center;
 `
 
 export const Footer = styled.div`

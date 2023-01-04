@@ -55,6 +55,7 @@ export const CenterContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	width: 100%;
+	height:100%;
 	color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 	background-color: ${(props) =>

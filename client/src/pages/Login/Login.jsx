@@ -1,16 +1,13 @@
 import LoginCard from "../../components/Cards/LoginCard/LoginCard.component"
 import { useSelector } from "react-redux"
-import { CenterContainer, FullCenter } from "../../assets/styles/common.styles"
-import { Grid } from "@mui/material"
-
+import { CenterContainer } from "../../assets/styles/common.styles"
 
 const Login = () => {
 	const theme = useSelector((state) => state.theme.theme)
-
 	return (
-		<FullCenter>
+		<CenterContainer theme={theme}>
 			<LoginCard theme={theme} />
-		</FullCenter>
+		</CenterContainer>
 	)
 }
 

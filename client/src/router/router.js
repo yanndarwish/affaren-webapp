@@ -10,6 +10,7 @@ import Kitchen from "../pages/Kitchen/Kitchen"
 import Profile from "../pages/Profile/Profile"
 import Help from "../pages/Help/Help"
 import Logout from "../pages/Logout/Logout"
+import ForgotPassword from "../pages/ForgotPassword/ForgotPassword"
 
 const router = createBrowserRouter([
 	{
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
 			{
 				path: "logout",
 				element: <Logout />,
+			},
+			{
+				path: "forgot-password",
+				element: <ForgotPassword />,
 			},
 		],
 	},

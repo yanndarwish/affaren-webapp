@@ -33,6 +33,7 @@ export const loginApi = createApi({
 
 export const {
 	useGetAuthMutation,
-	useCheckPasswordMutation
+	useCheckPasswordMutation,
+	useForgotPasswordMutation
 } = loginApi
 export default loginApi

@@ -155,6 +155,8 @@ app.post("/forgot-password", async (req, res) => {
 				console.log("Email sent: " + info.response)
 			}
 		})
+
+		res.status(200).send()
 	} catch (err) {
 		console.log(err)
 	}
