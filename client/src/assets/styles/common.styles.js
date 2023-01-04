@@ -116,6 +116,8 @@ export const Flex = styled.div`
 export const FullFlex = styled.div`
 	display: flex;
 	flex: 1;
+	color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 `
 
 export const Body = styled.div`

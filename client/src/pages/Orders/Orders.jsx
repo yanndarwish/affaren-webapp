@@ -1,4 +1,4 @@
-import { Container, Flex, FullFlex } from "../../assets/styles/common.styles"
+import { FullFlex } from "../../assets/styles/common.styles"
 import OrdersList from "../../components/ORDERS/OrdersList/OrdersList"
 import { useGetOrdersQuery } from "../../redux/services/orderApi"
 import { useState } from "react"
@@ -37,7 +37,7 @@ const Orders = () => {
 	}, [data])
 
 	return (
-		<FullFlex>
+		<FullFlex theme={theme}>
 			<OrdersList
 				orders={data && data}
 				selected={selectedOrderId}
