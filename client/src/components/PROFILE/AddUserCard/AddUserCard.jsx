@@ -13,7 +13,7 @@ const AddUserCard = () => {
 	}
 
 	return (
-		<Card sx={{ maxWidth: 350, textAlign: "center" }}>
+		<Card sx={{ flex: "1 1 auto", textAlign: "center" }}>
 			<CardContent sx={{ height: "100%" }} onClick={handleClick}>
 				<ArtTitle>Create New User</ArtTitle>
 				<Box

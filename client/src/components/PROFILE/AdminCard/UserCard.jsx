@@ -14,7 +14,7 @@ const UserCard = ({ user }) => {
 
 
 	return (
-		<Card sx={{ maxWidth: 350, textAlign: "center", paddingBottom: "1rem" }}>
+		<Card sx={{ flex: "1 1 auto", textAlign: "center", paddingBottom: "1rem" }}>
 			<CardContent>
 				<Column>
 					<ArtTitle>

@@ -1,4 +1,4 @@
-import { Gap, SubTitle } from "../../../assets/styles/common.styles"
+import { Gap, SubTitle, Wrap } from "../../../assets/styles/common.styles"
 import AddUserCard from "../AddUserCard/AddUserCard"
 import UserCard from "../AdminCard/UserCard"
 
@@ -7,12 +7,12 @@ const AdminProfile = ({ users }) => {
 	return (
 		<>
 			<SubTitle>Users</SubTitle>
-			<Gap>
+			<Wrap>
 				<AddUserCard />
 				{users?.map((user, i) => (
 					<UserCard key={i} user={user} />
 				))}
-			</Gap>
+			</Wrap>
 		</>
 	)
 }

@@ -158,3 +158,8 @@ export const SecondaryText = styled.p`
 	color: rgb(${light.COLOR_TEXT_RGB}, 0.5);
 `
 
+export const Wrap = styled.div`
+	display: flex;
+	gap: ${constant.GAP}px;
+	flex-wrap: wrap;
+`
