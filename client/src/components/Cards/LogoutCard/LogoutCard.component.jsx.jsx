@@ -36,6 +36,7 @@ const LogoutDialog = ({ theme }) => {
 		dispatch(resetDashboard())
 		dispatch(resetOrders())
 		navigate("/login")
+		window.location.reload()
 	}
 
 	useEffect(() => {
