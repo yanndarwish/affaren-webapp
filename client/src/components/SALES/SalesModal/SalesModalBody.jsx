@@ -61,15 +61,15 @@ const SalesModalBody = ({ data, selected, details }) => {
 			<div>
 				<Column>
 					{details?.map((row) => (
-						<SpaceHeader>
-							<SecondaryText key={row.product_id}>
+						<SpaceHeader key={row.product_id}>
+							<SecondaryText key={row.product_id + "-name"}>
 								{row.product_name}
 							</SecondaryText>
 							<Gap>
-								<SecondaryText key={row.product_id}>
+								<SecondaryText key={row.product_id + "-qty"}>
 									{row.product_quantity}
 								</SecondaryText>
-								<SecondaryText key={row.product_id}>
+								<SecondaryText key={row.product_id + "-price"}>
 									{row.product_price} €
 								</SecondaryText>
 							</Gap>
