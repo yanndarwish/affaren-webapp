@@ -5,6 +5,7 @@ import {
 	ArtTitle,
 	Body,
 	Container,
+	ErrorMessage,
 	Flex,
 	SearchSection,
 	SpaceHeader,
@@ -34,7 +35,7 @@ const Inventory = () => {
 	const [isProductFound, setIsProductFound] = useState(false)
 	const [sent, setSent] = useState(false)
 
-	const { data } = useGetProductsQuery()
+	const { data, isError } = useGetProductsQuery()
 
 	const redirect = () => {
 		!loggedIn && navigate("/login")
@@ -117,8 +118,6 @@ const Inventory = () => {
 		}
 	}
 
-	console.log(isProductFound)
-
 	const resetBarcode = () => {
 		// setIsProductFound(false)
 		setBarcode("")
@@ -140,7 +139,7 @@ const Inventory = () => {
 	useEffect(() => {
 		redirect()
 	}, [])
-	
+
 	return (
 		<Container theme={theme}>
 			<SpaceHeader>
@@ -203,17 +202,14 @@ const Inventory = () => {
 							sent={sent}
 							setSent={setSent}
 						/>
+					) : isError ? (
+						<ErrorMessage>Failed to fetch products</ErrorMessage>
 					) : (
 						<InventoryTable
 							products={filteredProducts}
 							openEditor={openEditor}
 						/>
 					)}
-				</div>
-
-				<div>
-					<div></div>
-					<div></div>
 				</div>
 			</Body>
 		</Container>

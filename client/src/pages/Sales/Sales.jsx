@@ -2,6 +2,7 @@ import { useSelector } from "react-redux"
 import {
 	Body,
 	Container,
+	ErrorMessage,
 	Header,
 	SubTitle,
 	Title,
@@ -14,7 +15,7 @@ import { useEffect } from "react"
 const Sales = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const theme = useSelector((state) => state.theme.theme)
-	const { data, error, isLoading } = useGetSalesQuery()
+	const { data, isError } = useGetSalesQuery()
 	const navigate = useNavigate()
 
 	const redirect = () => {
@@ -32,6 +33,7 @@ const Sales = () => {
 			</Header>
 			<Body theme={theme}>
 				<SubTitle>All Sales</SubTitle>
+				{isError && <ErrorMessage>Failed to fetch sales</ErrorMessage>}
 				<SalesTable array={data} />
 			</Body>
 		</Container>

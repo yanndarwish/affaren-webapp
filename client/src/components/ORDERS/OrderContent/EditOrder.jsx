@@ -3,6 +3,7 @@ import { useState } from "react"
 import {
 	Column,
 	Container,
+	ErrorMessage,
 	FullCenter,
 	HorizontalCenter,
 	SearchSection,
@@ -25,7 +26,7 @@ const EditOrder = ({ theme, order, setIsEdit }) => {
 	const [clientPhone, setClientPhone] = useState(order.order_client_phone)
 	const [orderLocation, setOrderLocation] = useState(order.order_location)
 
-	const [updateOrder] = useUpdateOrderMutation()
+	const [updateOrder, res] = useUpdateOrderMutation()
 
 	const handleEdit = () => {
 		const items = document.querySelectorAll(".order-items")
@@ -48,7 +49,7 @@ const EditOrder = ({ theme, order, setIsEdit }) => {
 			dueTime: dueTime,
 			clientName: clientName,
 			clientPhone: clientPhone,
-			orderLocation:orderLocation
+			orderLocation: orderLocation,
 		}
 		updateOrder({ id: order.order_id, payload: newOrder })
 		setIsEdit(false)
@@ -98,92 +99,99 @@ const EditOrder = ({ theme, order, setIsEdit }) => {
 
 	return (
 		<Container theme={theme}>
-			<SpaceHeader>
-
-			<Title>Edit Order</Title>
-			<Button title="Cancel" color="warning" onClick={cancelEdit}/>
-			</SpaceHeader>
-			<Column>
-				<Column>
-					<SubTitle>Who</SubTitle>
-					<SearchSection>
-						<Input
-							value={clientName}
-							label="Client Name"
-							fullWidth
-							onChange={(e) => setClientName(e)}
-						/>
-						<Input
-							value={clientPhone}
-							label="Client Phone"
-							fullWidth
-							onChange={(e) => setClientPhone(e)}
-						/>
-					</SearchSection>
-				</Column>
-				<Column>
-					<SubTitle>What</SubTitle>
-					<Input
-						value={title}
-						label="Title"
-						fullWidth
-						onChange={(e) => setTitle(e)}
-					/>
-					<Column>{inputList}</Column>
-					<FullCenter>
-						<Button title="Add Item" onClick={handleAddItemInput} />
-						<Button title="Remove Item" onClick={handleRemoveItemInput} />
-					</FullCenter>
-				</Column>
-				<Column>
-					<SubTitle>When</SubTitle>
-					<SearchSection>
-						<Input
-							value={dueDate}
-							type="date"
-							fullWidth
-							onChange={(e) => setDueDate(e)}
-						/>
-						<Input
-							value={dueTime}
-							type="time"
-							fullWidth
-							onChange={(e) => setDueTime(e)}
-						/>
-					</SearchSection>
-				</Column>
-				<Column>
-					<SubTitle>Where</SubTitle>
-					<SearchSection>
-						<RadioGroup
-							row
-							aria-labelledby="demo-radio-buttons-group-label"
-							value={orderLocation}
-							name="radio-buttons-group"
-							onChange={handleRadio}
-						>
-							<FormControlLabel
-								value="pick-up"
-								control={<Radio />}
-								label="Pick Up"
+			{res.isError ? (
+				<FullCenter>
+					<ErrorMessage>Failed to create Order</ErrorMessage>
+				</FullCenter>
+			) : (
+				<>
+					<SpaceHeader>
+						<Title>Edit Order</Title>
+						<Button title="Cancel" color="warning" onClick={cancelEdit} />
+					</SpaceHeader>
+					<Column>
+						<Column>
+							<SubTitle>Who</SubTitle>
+							<SearchSection>
+								<Input
+									value={clientName}
+									label="Client Name"
+									fullWidth
+									onChange={(e) => setClientName(e)}
+								/>
+								<Input
+									value={clientPhone}
+									label="Client Phone"
+									fullWidth
+									onChange={(e) => setClientPhone(e)}
+								/>
+							</SearchSection>
+						</Column>
+						<Column>
+							<SubTitle>What</SubTitle>
+							<Input
+								value={title}
+								label="Title"
+								fullWidth
+								onChange={(e) => setTitle(e)}
 							/>
-							<FormControlLabel
-								value="to-deliver"
-								control={<Radio />}
-								label="To Deliver"
-							/>
-							<FormControlLabel
-								value="on-site"
-								control={<Radio />}
-								label="On Site"
-							/>
-						</RadioGroup>
-					</SearchSection>
-				</Column>
-			</Column>
-			<HorizontalCenter>
-				<Button title="Edit Order" color="success" onClick={handleEdit} />
-			</HorizontalCenter>
+							<Column>{inputList}</Column>
+							<FullCenter>
+								<Button title="Add Item" onClick={handleAddItemInput} />
+								<Button title="Remove Item" onClick={handleRemoveItemInput} />
+							</FullCenter>
+						</Column>
+						<Column>
+							<SubTitle>When</SubTitle>
+							<SearchSection>
+								<Input
+									value={dueDate}
+									type="date"
+									fullWidth
+									onChange={(e) => setDueDate(e)}
+								/>
+								<Input
+									value={dueTime}
+									type="time"
+									fullWidth
+									onChange={(e) => setDueTime(e)}
+								/>
+							</SearchSection>
+						</Column>
+						<Column>
+							<SubTitle>Where</SubTitle>
+							<SearchSection>
+								<RadioGroup
+									row
+									aria-labelledby="demo-radio-buttons-group-label"
+									value={orderLocation}
+									name="radio-buttons-group"
+									onChange={handleRadio}
+								>
+									<FormControlLabel
+										value="pick-up"
+										control={<Radio />}
+										label="Pick Up"
+									/>
+									<FormControlLabel
+										value="to-deliver"
+										control={<Radio />}
+										label="To Deliver"
+									/>
+									<FormControlLabel
+										value="on-site"
+										control={<Radio />}
+										label="On Site"
+									/>
+								</RadioGroup>
+							</SearchSection>
+						</Column>
+					</Column>
+					<HorizontalCenter>
+						<Button title="Edit Order" color="success" onClick={handleEdit} />
+					</HorizontalCenter>
+				</>
+			)}
 		</Container>
 	)
 }

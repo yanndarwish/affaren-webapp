@@ -24,6 +24,7 @@ import {
 	SearchSection,
 	SubTitle,
 	Title,
+	ErrorMessage,
 } from "../../assets/styles/common.styles"
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 import { useEffect } from "react"
@@ -43,8 +44,8 @@ const Pos = () => {
 	const [discountSlider, setDiscountSlider] = useState(false)
 	const [addCardSlider, setAddCardSlider] = useState(false)
 
-	useGetCardsQuery()
-	useGetNextSaleIdQuery()
+	const { isError } = useGetCardsQuery()
+	const { error } = useGetNextSaleIdQuery()
 
 	const redirect = () => {
 		!loggedIn && navigate("/login")
@@ -175,7 +176,7 @@ const Pos = () => {
 					console.log("default")
 			}
 		})
-		dispatch(setTaxes({taxes: taxesDetails}))
+		dispatch(setTaxes({ taxes: taxesDetails }))
 	}
 
 	useEffect(() => {
@@ -192,6 +193,8 @@ const Pos = () => {
 			<Container theme={theme}>
 				<SpaceHeader xs={12}>
 					<Title>Sale N°{sale.id ? sale.id : 1}</Title>
+					{error && <ErrorMessage>Failed to fetch next sale ID</ErrorMessage>}
+					{isError && <ErrorMessage>Failed to fetch cards</ErrorMessage>}
 				</SpaceHeader>
 				<SearchSection>
 					<BarcodeInput />
@@ -201,7 +204,7 @@ const Pos = () => {
 					<Box>
 						<SubTitle>Panier</SubTitle>
 					</Box>
-					<Box sx={{height: "100%"}}>
+					<Box sx={{ height: "100%" }}>
 						<Cart />
 					</Box>
 					<TotalSection display="flex" justifyContent="flex-end">
@@ -223,8 +226,12 @@ const Pos = () => {
 						</Box>
 					</ButtonSectionSpace>
 				</Body>
-				<CardSectionButton onClick={toggleCardSection} id="card-section-button" theme={theme}>
-					<CropSquareOutlinedIcon color="primary"/>
+				<CardSectionButton
+					onClick={toggleCardSection}
+					id="card-section-button"
+					theme={theme}
+				>
+					<CropSquareOutlinedIcon color="primary" />
 				</CardSectionButton>
 			</Container>
 			<ProductCardSection theme={theme} onClick={openAddCardSlider} />

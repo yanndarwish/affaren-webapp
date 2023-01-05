@@ -10,7 +10,11 @@ import {
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
-import { ArtTitle, SubTitle } from "../../../../assets/styles/common.styles"
+import {
+	ArtTitle,
+	ErrorMessage,
+	SubTitle,
+} from "../../../../assets/styles/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import EuroSymbolOutlinedIcon from "@mui/icons-material/EuroSymbolOutlined"
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined"
@@ -69,9 +73,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const sale = useSelector((state) => state.sale)
 	const user = useSelector((state) => state.user.user)
 
-	const [updateProduct] = useUpdateProductsMutation()
-	const [postSaleProducts] = usePostSaleProductsMutation()
-	const [postSale] = usePostSaleMutation()
+	const [updateProduct, res] = useUpdateProductsMutation()
+	const [postSaleProducts, resp] = usePostSaleProductsMutation()
+	const [postSale, response] = usePostSaleMutation()
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue)
@@ -189,7 +193,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 
 	const closeModals = () => {
 		setModalIsOpen(false)
-		setIsOpen(false)
+		if (!res.isError && !resp.isError && !response.isError) {
+			setIsOpen(false)
+		}
 	}
 
 	useEffect(() => {
@@ -231,6 +237,15 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 							<NumPad display value={paying} setValue={setPaying} unit="€" />
 							<SellOutlinedIcon />
 						</TabPanel>
+						{res.isError && (
+							<ErrorMessage>Failed to update Products quantity</ErrorMessage>
+						)}
+						{resp.isError && (
+							<ErrorMessage>Failed to add products to sale</ErrorMessage>
+						)}
+						{response.isError && (
+							<ErrorMessage>Failed to create sale</ErrorMessage>
+						)}
 					</DialogCard>
 				</DialogBody>
 				<DialogFooter>

@@ -2,6 +2,7 @@ import { useSelector } from "react-redux"
 import {
 	Body,
 	Container,
+	ErrorMessage,
 	Header,
 	SubTitle,
 	Title,
@@ -21,7 +22,7 @@ const Profile = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const user = useSelector((state) => state.user.user)
 	const users = useSelector((state) => state.user.users)
-	const [getUsers] = useGetUsersMutation()
+	const [getUsers, res] = useGetUsersMutation()
 	const navigate = useNavigate()
 
 	const redirect = () => {
@@ -29,8 +30,7 @@ const Profile = () => {
 	}
 
 	useEffect(() => {
-		console.log("getting")
-		Object.keys(user).length && getUsers({ user: user })
+		Object.keys(user).length && user?.user_is_admin === "true" && getUsers({ user: user })
 	}, [user])
 
 	useEffect(() => {
@@ -47,6 +47,7 @@ const Profile = () => {
 			<Body theme={theme}>
 				<UserProfile user={user} />
 			</Body>
+			{res.isError && <ErrorMessage>Failed to get users</ErrorMessage>}
 			{user?.user_is_admin === "true" && (
 				<Body theme={theme}>
 					<AdminProfile users={users} />

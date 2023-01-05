@@ -1,12 +1,13 @@
 import { Menu, MenuItem, Button } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { ErrorMessage } from "../../../assets/styles/common.styles"
 import { useUpdateOrderMutation } from "../../../redux/services/orderApi"
 
 const OrderStatusMenu = ({ order }) => {
 	const [anchorEl, setAnchorEl] = useState(null)
-	const [status, setStatus] = useState(order && order.order_status)
+	const [status, setStatus] = useState("")
 	const allStatus = ["todo", "pending", "done", "picked-up"]
-	const [updateOrder] = useUpdateOrderMutation()
+	const [updateOrder, res] = useUpdateOrderMutation()
 	const open = Boolean(anchorEl)
 
 	const handleClick = (e) => {
@@ -31,6 +32,10 @@ const OrderStatusMenu = ({ order }) => {
 		updateOrder({ payload: newOrder, id: order.order_id })
 		setAnchorEl(null)
 	}
+
+	useEffect(() => {
+		setStatus(order.order_status)
+	}, [order])
 	return (
 		<div>
 			<Button variant="contained" onClick={(e) => handleClick(e)}>
@@ -57,6 +62,9 @@ const OrderStatusMenu = ({ order }) => {
 						</MenuItem>
 					))}
 			</Menu>
+			{res.isError && (
+				<ErrorMessage>Failed to update order status</ErrorMessage>
+			)}
 		</div>
 	)
 }

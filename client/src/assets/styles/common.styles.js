@@ -62,6 +62,18 @@ export const CenterContainer = styled.div`
 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
 `
 
+export const FixedCenterContainter = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100vh;
+	color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
+	background-color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
+`
+
 export const FitContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -199,4 +211,8 @@ export const Wrap = styled.div`
 	display: flex;
 	gap: ${constant.GAP}px;
 	flex-wrap: wrap;
+`
+
+export const ErrorMessage = styled.p`
+		color: ${constant.CLR_DANGER};
 `

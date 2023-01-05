@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { Body, SubTitle } from "../../../../assets/styles/common.styles"
+import { Body, ErrorMessage, SubTitle } from "../../../../assets/styles/common.styles"
 import { useGetSalesProductsQuery } from "../../../../redux/services/salesApi"
 import BestSellersTable from "./BestSellersTable"
 
@@ -11,7 +11,7 @@ const ChartC = ({ theme }) => {
 	const [month, setMonth] = useState("")
 	const [year, setYear] = useState("")
 	const [sortedData, setSortedData] = useState([])
-	const { data } = useGetSalesProductsQuery(
+	const { data, isError } = useGetSalesProductsQuery(
 		{ month: month, year: year },
 		{ skip }
 	)
@@ -80,6 +80,7 @@ const ChartC = ({ theme }) => {
 	return (
 		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
 			<SubTitle>Best Sellers</SubTitle>
+			{isError && <ErrorMessage>Failed to fetch Data</ErrorMessage>}
 			<BestSellersTable data={sortedData} />
 		</Body>
 	)

@@ -2,6 +2,7 @@ import { useState } from "react"
 import {
 	ArtTitle,
 	Column,
+	ErrorMessage,
 	FullCenter,
 } from "../../../assets/styles/common.styles"
 import { usePostProductMutation } from "../../../redux/services/productsApi"
@@ -77,6 +78,10 @@ const CreateProduct = ({
 				</Column>
 			</FullCenter>
 		</Column>
+	) : sent && res.isError ? (
+		<FullCenter>
+			<ErrorMessage>Failed to create product</ErrorMessage>
+		</FullCenter>
 	) : (
 		<Column>
 			<FullCenter>

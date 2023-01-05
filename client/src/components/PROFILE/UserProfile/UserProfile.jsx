@@ -2,6 +2,7 @@ import { useState } from "react"
 import {
 	ArtTitle,
 	Column,
+	ErrorMessage,
 	SpaceHeader,
 	SubTitle,
 } from "../../../assets/styles/common.styles"
@@ -134,7 +135,7 @@ const UserProfile = ({ user }) => {
 								</FormHelperText>
 							)}
 						</FormControl>
-						{res.error && <ArtTitle>Incorrect Password</ArtTitle>}
+						{res.error && <ErrorMessage>Incorrect Password</ErrorMessage>}
 					</Column>
 				) : !passUpdated ? (
 					<Column>
@@ -184,6 +185,7 @@ const UserProfile = ({ user }) => {
 									Passwords don't match
 								</FormHelperText>
 							)}
+							{response.error && <ErrorMessage>Failed to update password</ErrorMessage>}
 						</FormControl>
 					</Column>
 				) : (

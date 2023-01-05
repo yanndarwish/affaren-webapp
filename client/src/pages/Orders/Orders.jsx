@@ -1,4 +1,4 @@
-import { FullFlex } from "../../assets/styles/common.styles"
+import { ErrorMessage, FullFlex } from "../../assets/styles/common.styles"
 import OrdersList from "../../components/ORDERS/OrdersList/OrdersList"
 import { useGetOrdersQuery } from "../../redux/services/orderApi"
 import { useState } from "react"
@@ -14,14 +14,14 @@ const Orders = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const [selectedOrderId, setSelectedOrderId] = useState("")
 	const [selectedOrder, setSelectedOrder] = useState({})
-  	const [isEdit, setIsEdit] = useState(false)
+	const [isEdit, setIsEdit] = useState(false)
 	const [add, setAdd] = useState(false)
 	const [newOrder, setNewOrder] = useState(false)
-	const { data } = useGetOrdersQuery()
+	const { data, isError } = useGetOrdersQuery()
 
 	const getTargetOrder = (orderId) => {
-    const found = data?.find(order => order.order_id === parseInt(orderId))
-    setSelectedOrder(found)
+		const found = data?.find((order) => order.order_id === parseInt(orderId))
+		setSelectedOrder(found)
 	}
 
 	const redirect = () => {
@@ -30,7 +30,9 @@ const Orders = () => {
 
 	const focusNewOrder = () => {
 		if (newOrder) {
-			setSelectedOrder(data && data[data.length - 1])
+			let sorted = [...data]
+			sorted = sorted.sort((a, b) => a.order_id - b.order_id)
+			setSelectedOrder(sorted && sorted[sorted.length - 1])
 		}
 		setNewOrder(false)
 	}
@@ -47,6 +49,7 @@ const Orders = () => {
 		redirect()
 	}, [])
 
+	console.log(selectedOrderId)
 	return (
 		<FullFlex theme={theme}>
 			<OrdersList
@@ -54,9 +57,20 @@ const Orders = () => {
 				selected={selectedOrderId}
 				setSelected={setSelectedOrderId}
 				setAdd={setAdd}
-        setIsEdit={setIsEdit}
+				setIsEdit={setIsEdit}
 			/>
-			{add ? <AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder}/> : <OrderContent theme={theme} order={selectedOrder && selectedOrder} setSelected={setSelectedOrderId} isEdit={isEdit} setIsEdit={setIsEdit}/>}
+			{isError && <ErrorMessage>Failed to fetch orders</ErrorMessage>}
+			{add ? (
+				<AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder} />
+			) : (
+				<OrderContent
+					theme={theme}
+					order={selectedOrder && selectedOrder}
+					setSelected={setSelectedOrderId}
+					isEdit={isEdit}
+					setIsEdit={setIsEdit}
+				/>
+			)}
 		</FullFlex>
 	)
 }

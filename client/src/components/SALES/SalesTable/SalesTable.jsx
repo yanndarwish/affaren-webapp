@@ -14,7 +14,11 @@ import SalesModalBody from "../SalesModal/SalesModalBody"
 import SalesModalFooter from "../SalesModal/SalesModalFooter"
 import { useDeleteSaleMutation } from "../../../redux/services/salesApi"
 import { useGetSaleProductsQuery } from "../../../redux/services/salesApi"
-import { ArtTitle, HorizontalCenter } from "../../../assets/styles/common.styles"
+import {
+	ArtTitle,
+	ErrorMessage,
+	HorizontalCenter,
+} from "../../../assets/styles/common.styles"
 import Button from "../../common/Button/Button.component"
 
 export default function SalesTable({ array }) {
@@ -24,7 +28,7 @@ export default function SalesTable({ array }) {
 	const [isOpen, setIsOpen] = useState(false)
 	const [isModalDelete, setIsModalDelete] = useState(false)
 	const [deleteSale, res] = useDeleteSaleMutation()
-	const {data} = useGetSaleProductsQuery({id:id && id}, {skip})
+	const { data } = useGetSaleProductsQuery({ id: id && id }, { skip })
 
 	const handleClick = (e) => {
 		let id = e.target.parentNode.dataset.id
@@ -43,7 +47,7 @@ export default function SalesTable({ array }) {
 	}
 
 	const DeleteModalFooter = () => {
-		return <Button title="Delete" color="success" onClick={handleSaleDelete}/>
+		return <Button title="Delete" color="success" onClick={handleSaleDelete} />
 	}
 
 	const handleTicketPrint = () => {
@@ -52,7 +56,7 @@ export default function SalesTable({ array }) {
 
 	const handleSaleDelete = () => {
 		console.log("delete sale " + selected)
-		deleteSale({id: selected})
+		deleteSale({ id: selected })
 		setIsModalDelete(false)
 	}
 
@@ -83,7 +87,7 @@ export default function SalesTable({ array }) {
 						{array &&
 							array.map((sale, i) => {
 								return i === 0 ? (
-									<React.Fragment key={"separator " +i}>
+									<React.Fragment key={"separator " + i}>
 										<SalesTableRowSeparator sale={sale} />
 										<SalesTableRow sale={sale} onClick={handleClick} />
 									</React.Fragment>
@@ -110,15 +114,31 @@ export default function SalesTable({ array }) {
 				isOpen={isOpen}
 				setIsOpen={setIsOpen}
 				title={"Sale " + selected}
-				bodyContent={res.isSuccess ? <DeleteConfirmation />: <SalesModalBody data={array} selected={selected} details={data}/>}
-				footerContent={res.isSuccess ? null :
-					<SalesModalFooter
-						deleteClick={toggleDeleteModal}
-						printClick={handleTicketPrint}
-					/>
+				bodyContent={
+					res.isSuccess ? (
+						<DeleteConfirmation />
+					) : res.isError ? (
+						<ErrorMessage>Failed to delete sale</ErrorMessage>
+					) : (
+						<SalesModalBody data={array} selected={selected} details={data} />
+					)
+				}
+				footerContent={
+					res.isSuccess ? null : (
+						<SalesModalFooter
+							deleteClick={toggleDeleteModal}
+							printClick={handleTicketPrint}
+						/>
+					)
 				}
 			/>
-			<Modal isOpen={isModalDelete} setIsOpen={setIsModalDelete} title="Delete Sale" bodyContent={<DeleteModalBody />} footerContent={<DeleteModalFooter />} />
+			<Modal
+				isOpen={isModalDelete}
+				setIsOpen={setIsModalDelete}
+				title="Delete Sale"
+				bodyContent={<DeleteModalBody />}
+				footerContent={<DeleteModalFooter />}
+			/>
 		</>
 	)
 }

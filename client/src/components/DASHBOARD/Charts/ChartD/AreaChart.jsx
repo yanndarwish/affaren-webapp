@@ -71,15 +71,15 @@ const AreaChart = ({ data, theme }) => {
 	}
 
 	const prepareData = (data) => {
-		console.log(data)
+
 		let series = []
 		let fullLabels = []
 		data?.forEach((user) => {
-			console.log(user)
+
 			let labels = []
 			let totals = []
 			user.forEach((sale) => {
-				console.log(sale)
+
 				if (!labels.includes(sale.sale_day)) {
 					labels.push(sale.sale_day)
 					totals.push(parseFloat(parseFloat(sale.sale_amount).toFixed(2)))

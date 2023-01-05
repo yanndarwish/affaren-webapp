@@ -6,7 +6,7 @@ import {
 	DialogHeader,
 	Overlay,
 } from "../Slider.styles"
-import { ArtTitle, SubTitle } from "../../../../assets/styles/common.styles"
+import { ArtTitle, ErrorMessage, SubTitle } from "../../../../assets/styles/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
 import NumPad from "../../../common/NumPad/NumPad"
@@ -26,7 +26,6 @@ import {
 } from "../NoBarcodeSlider/NoBarcodeSlider.styles"
 import { FormFlex } from "./AddCardSlider.styles"
 import { usePostCardMutation } from "../../../../redux/services/cardApi"
-import { login } from "../../../../redux/features/login"
 
 const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 	const overlayRef = useRef()
@@ -76,9 +75,8 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 			...product,
 			price: parseFloat(document.getElementById("c-price").value),
 		}
-		console.log(newProduct)
 		postCard(newProduct)
-		setIsOpen(false)
+		res.isUninitialized === false && res.isSuccess && setIsOpen(false)
 	}
 
 	const closeSlider = (e) => {
@@ -154,6 +152,7 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 						</FormControl>
 						<NumPad target={focusedInput} />
 					</DialogCard>
+						{res.isError && <ErrorMessage>Failed to create new card</ErrorMessage>}
 				</DialogBody>
 				<DialogFooter>
 					<Button

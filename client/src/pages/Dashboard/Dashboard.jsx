@@ -2,8 +2,8 @@ import { useGetUsersMutation } from "../../redux/services/userApi"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import {
-	Body,
 	Container,
+	ErrorMessage,
 	FitContainer,
 	Flex,
 	SpaceHeader,
@@ -26,7 +26,7 @@ const Dashboard = () => {
 	const navigate = useNavigate()
 	const user = useSelector((state) => state.user.user)
 	const theme = useSelector((state) => state.theme.theme)
-	const [getUsers] = useGetUsersMutation()
+	const [getUsers, res] = useGetUsersMutation()
 	const [skip, setSkip] = useState(true)
 	const [month, setMonth] = useState("")
 	const months = [
@@ -56,7 +56,6 @@ const Dashboard = () => {
 		!loggedIn && navigate("/login")
 	}
 
-
 	const getMonth = (dateString) => {
 		return dateString && dateString.split("-")[1]
 	}
@@ -76,7 +75,9 @@ const Dashboard = () => {
 	}
 
 	useEffect(() => {
-		getUsers({ user: user })
+		if (user?.user_is_admin === "true") {
+			getUsers({ user: user })
+		}
 	}, [user])
 
 	useEffect(() => {
@@ -104,7 +105,12 @@ const Dashboard = () => {
 				<ChartA theme={theme} />
 				<ChartB theme={theme} months={months} month={month} year={year} />
 				<ChartC theme={theme} />
-				{user?.user_is_admin === "true" && <ChartD theme={theme} />}
+				{user?.user_is_admin === "true" && !res.isError ? (
+					<ChartD theme={theme} />
+				) : (
+					user?.user_is_admin === "true" &&
+					res.isError (<ErrorMessage>Failed to fetch users</ErrorMessage>)
+				)}
 			</FitContainer>
 		</Container>
 	)

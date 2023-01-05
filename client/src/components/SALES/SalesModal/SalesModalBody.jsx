@@ -1,7 +1,6 @@
 import {
 	ArtTitle,
 	Column,
-	Flex,
 	Gap,
 	HorizontalCenter,
 	SecondaryText,
@@ -15,7 +14,6 @@ import { Fragment } from "react"
 
 const SalesModalBody = ({ data, selected, details }) => {
 	const sale = data && data.find((sale) => sale.sale_id === parseInt(selected))
-	console.log(details)
 	return (
 		<Column>
 			<HorizontalCenter>

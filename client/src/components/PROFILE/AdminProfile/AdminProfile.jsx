@@ -1,4 +1,4 @@
-import { Gap, SubTitle, Wrap } from "../../../assets/styles/common.styles"
+import { SubTitle, Wrap } from "../../../assets/styles/common.styles"
 import AddUserCard from "../AddUserCard/AddUserCard"
 import UserCard from "../AdminCard/UserCard"
 

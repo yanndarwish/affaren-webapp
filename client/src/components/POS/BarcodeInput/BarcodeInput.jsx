@@ -8,8 +8,8 @@ const BarcodeInput = () => {
 	const products = useSelector((state) => state.sale.products)
 
 	const dispatch = useDispatch()
-	const [barcode, setBarcode] = useState("")
 	const [skip, setSkip] = useState(true)
+	const [barcode, setBarcode] = useState("")
 	const { data } = useGetProductQuery(
 		{ barcode: barcode.slice(0, -2) },
 		{ skip }
@@ -30,7 +30,11 @@ const BarcodeInput = () => {
 				}
 				dispatch(addProduct({ products: product }))
 			} else {
-				found = { ...found, quantity: found.quantity + 1, price: (data.product_price * (found.quantity + 1)).toFixed(2)}
+				found = {
+					...found,
+					quantity: found.quantity + 1,
+					price: (data.product_price * (found.quantity + 1)).toFixed(2),
+				}
 
 				const updated = products.map((product) => {
 					if (product.id === found.id) {

@@ -3,6 +3,7 @@ import { useState } from "react"
 import {
 	ArtTitle,
 	Column,
+	ErrorMessage,
 	FullCenter,
 	Gap,
 } from "../../../assets/styles/common.styles"
@@ -95,6 +96,24 @@ const EditProduct = ({
 				<Column>
 					<FullCenter>
 						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} />
+					</FullCenter>
+					<ArtTitle>Product deleted successfully</ArtTitle>
+				</Column>
+			</FullCenter>
+		) : sent && res.isError ? (
+			<FullCenter>
+				<Column>
+					<FullCenter>
+						<ErrorMessage>Failed to edit the product</ErrorMessage>
+					</FullCenter>
+					<ArtTitle>Product deleted successfully</ArtTitle>
+				</Column>
+			</FullCenter>
+		) : sent && response.isError ? (
+			<FullCenter>
+				<Column>
+					<FullCenter>
+						<ErrorMessage>Failed to delete the product</ErrorMessage>
 					</FullCenter>
 					<ArtTitle>Product deleted successfully</ArtTitle>
 				</Column>

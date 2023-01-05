@@ -1,9 +1,9 @@
 import {
 	ArtTitle,
 	ButtonSection,
-	CenterContainer,
 	Column,
 	Container,
+	FixedCenterContainter,
 	SpaceHeader,
 	SubTitle,
 	Title,
@@ -47,6 +47,7 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 			</SpaceHeader>
 		)
 	}
+
 	return order ? (
 		isEdit ? (
 			<EditOrder theme={theme} order={order} setIsEdit={setIsEdit} />
@@ -90,9 +91,9 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 			</Container>
 		)
 	) : (
-		<CenterContainer theme={theme}>
+		<FixedCenterContainter theme={theme}>
 			<Title>Select an order to start</Title>
-		</CenterContainer>
+		</FixedCenterContainter>
 	)
 }
 

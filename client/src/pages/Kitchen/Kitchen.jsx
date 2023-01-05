@@ -7,6 +7,7 @@ import {
 	Body,
 	ColumnCenter,
 	Container,
+	ErrorMessage,
 	Flex,
 	FullCenter,
 	SubTitle,
@@ -118,7 +119,7 @@ const Kitchen = () => {
 			) : !home && isError ? (
 				<Body theme={theme}>
 					<FullCenter>
-						<SubTitle>Product Not Found</SubTitle>
+						<ErrorMessage>Failed to fetch product</ErrorMessage>
 					</FullCenter>
 				</Body>
 			) : (

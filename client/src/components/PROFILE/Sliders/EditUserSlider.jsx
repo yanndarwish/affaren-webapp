@@ -146,6 +146,7 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 											</Select>
 										</FormControl>
 										{res.isError && <ArtTitle>{res.error.data}</ArtTitle>}
+										{response.isError && <ArtTitle>{response.error.data}</ArtTitle>}
 									</ColumnCenter>
 								</FormWrapper>
 							</FormControl>

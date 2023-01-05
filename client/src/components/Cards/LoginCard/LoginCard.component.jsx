@@ -1,15 +1,15 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import { useGetAuthMutation } from "../../../redux/services/loginApi"
 import { Link, useNavigate } from "react-router-dom"
 import {
 	Column,
-	ColumnCenter,
 	ColumnSpace,
+	ErrorMessage,
 	SubTitle,
 } from "../../../assets/styles/common.styles"
-import { Container, Text, Footer } from "../Card.styles"
+import { Container } from "../Card.styles"
 
 const LoginCard = ({ theme }) => {
 	const [email, setEmail] = useState("yann.darwish@gmail.com")
@@ -23,13 +23,23 @@ const LoginCard = ({ theme }) => {
 			password: password,
 		}
 		await getAuth(payload)
-		navigate("/profile")
 	}
+	
+	const redirect = () => {
+		if (res.status === "fulfilled") {
+			navigate("/profile")
+		}
+	}
+
+	useEffect(() => {
+		redirect()
+	}, [res])
 
 	return (
 		<Container theme={theme}>
 			<ColumnSpace>
 				<SubTitle theme={theme}>Login</SubTitle>
+				{res.isError && <ErrorMessage>Email or Password incorrect</ErrorMessage>}
 				<Column>
 				<Input
 					label="Email"
