@@ -13,11 +13,12 @@ import { useSelector, useDispatch } from "react-redux"
 import { toggleTheme } from "../../redux/features/theme"
 import router from "../../router/router"
 import { useNavigate } from "react-router-dom"
-import { navbarItems } from "./NavbarItems"
+import { navbarItems, cookNavbarItems } from "./NavbarItems"
 
 const Navbar = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const loggedIn = useSelector((state) => state.login.loggedIn)
+	const user = useSelector((state) => state.user.user)
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
@@ -28,52 +29,69 @@ const Navbar = () => {
 	}
 
 	return (
-		<Drawer
-			sx={{
-				width: drawerWidth,
-				flexShrink: 0,
-				"& .MuiDrawer-paper": {
+		loggedIn && (
+			<Drawer
+				sx={{
 					width: drawerWidth,
-					boxSizing: "border-box",
-				},
-			}}
-			variant="permanent"
-			anchor="left"
-		>
-			<ListItem disablePadding>
-				<ListItemButton
-					sx={{
-						minHeight: 72,
-						justifyContent: "center",
-						px: 2.5,
-					}}
-					onClick={handleTheme}
-				>
-					{theme === "dark" ? (
-						<DarkModeOutlinedIcon />
-					) : (
-						<LightModeOutlinedIcon />
-					)}
-				</ListItemButton>
-			</ListItem>
-			<Divider />
-			<List>
-				{navbarItems.map((item) => (
-					<ListItem key={item.id} disablePadding>
-						<ListItemButton
-							sx={{
-								minHeight: 72,
-								justifyContent: "center",
-								px: 2.5,
-							}}
-							onClick={() => navigate(item.route)}
-						>
-							{item.icon}
-						</ListItemButton>
-					</ListItem>
-				))}
-			</List>
-		</Drawer>
+					flexShrink: 0,
+					"& .MuiDrawer-paper": {
+						width: drawerWidth,
+						boxSizing: "border-box",
+					},
+				}}
+				variant="permanent"
+				anchor="left"
+			>
+				<ListItem disablePadding>
+					<ListItemButton
+						sx={{
+							minHeight: 72,
+							justifyContent: "center",
+							px: 2.5,
+						}}
+						onClick={handleTheme}
+					>
+						{theme === "dark" ? (
+							<DarkModeOutlinedIcon />
+						) : (
+							<LightModeOutlinedIcon />
+						)}
+					</ListItemButton>
+				</ListItem>
+				<Divider />
+				<List>
+					{user?.user_role === "cook"
+						? cookNavbarItems.map((item) => (
+								<ListItem key={item.id} disablePadding>
+									<ListItemButton
+										sx={{
+											minHeight: 72,
+											justifyContent: "center",
+											px: 2.5,
+										}}
+										onClick={() => navigate(item.route)}
+									>
+										{item.icon}
+									</ListItemButton>
+								</ListItem>
+						  ))
+						: navbarItems.map((item) => (
+								<ListItem key={item.id} disablePadding>
+									<ListItemButton
+										sx={{
+											minHeight: 72,
+											justifyContent: "center",
+											px: 2.5,
+										}}
+										onClick={() => navigate(item.route)}
+									>
+										{item.icon}
+									</ListItemButton>
+								</ListItem>
+						  ))}
+				</List>
+			</Drawer>
+		)
 	)
 }
 

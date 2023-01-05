@@ -6,7 +6,6 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined"
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined"
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered"
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined"
-import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantOutlined"
 import SoupKitchenOutlinedIcon from "@mui/icons-material/SoupKitchenOutlined"
 
 export const navbarItems = [
@@ -52,6 +51,34 @@ export const navbarItems = [
 	},
 	{
 		id: 8,
+		icon: <LogoutOutlinedIcon />,
+		route: "logout",
+	},
+]
+
+export const cookNavbarItems = [
+	{
+		id: 0,
+		icon: <LibraryBooksOutlinedIcon />,
+		route: "orders",
+	},
+	{
+		id: 1,
+		icon: <SoupKitchenOutlinedIcon />,
+		route: "kitchen",
+	},
+	{
+		id: 2,
+		icon: <PersonOutlineOutlinedIcon />,
+		route: "profile",
+	},
+	{
+		id: 3,
+		icon: <HelpOutlineOutlinedIcon />,
+		route: "help",
+	},
+	{
+		id: 4,
 		icon: <LogoutOutlinedIcon />,
 		route: "logout",
 	},
