@@ -68,6 +68,8 @@ const Pos = () => {
 			cardSectionEl.style.width = "148px"
 		}
 		setCardSection(!cardSection)
+		document.getElementById("main-barcode-input").focus()
+
 	}
 
 	const openPaymentSlider = () => {
