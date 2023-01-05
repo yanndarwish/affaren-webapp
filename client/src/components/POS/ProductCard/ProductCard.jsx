@@ -65,6 +65,7 @@ const ProductCard = ({ id, name, price, taxe, theme }) => {
 				dispatch(updateProducts({ products: updated }))
 			}
 		}
+		document.getElementById("main-barcode-input").focus()
 	}
 
 	const openModal = (e) => {

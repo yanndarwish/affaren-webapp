@@ -25,6 +25,7 @@ import {
 	SubTitle,
 	Title,
 	ErrorMessage,
+	Flex,
 } from "../../assets/styles/common.styles"
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 import { useEffect } from "react"
@@ -95,7 +96,6 @@ const Pos = () => {
 	}
 
 	const updateTaxes = () => {
-		console.log(sale.products)
 		let taxesDetails = {}
 		sale.products.forEach((product) => {
 			let ht = (product.price / (1 + parseFloat(product.taxe) / 100)).toFixed(2)
@@ -183,6 +183,10 @@ const Pos = () => {
 		updateTotalAmount()
 		updateTaxes()
 	}, [sale.products])
+
+	useEffect(() => {
+		document.getElementById("main-barcode-input").focus()
+	}, [paymentSlider, noBarcodeSlider, discountSlider, addCardSlider])
 
 	useEffect(() => {
 		redirect()

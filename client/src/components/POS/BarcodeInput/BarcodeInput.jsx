@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import { useGetProductQuery } from "../../../redux/services/productsApi"
 import { addProduct, updateProducts } from "../../../redux/features/sale"
 import { useDispatch, useSelector } from "react-redux"
+import { Flex } from "../../../assets/styles/common.styles"
+import Button from "../../common/Button/Button.component"
 
 const BarcodeInput = () => {
 	const products = useSelector((state) => state.sale.products)
@@ -11,7 +13,7 @@ const BarcodeInput = () => {
 	const [skip, setSkip] = useState(true)
 	const [barcode, setBarcode] = useState("")
 	const { data } = useGetProductQuery(
-		{ barcode: barcode.slice(0, -2) },
+		{ barcode: barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode},
 		{ skip }
 	)
 
@@ -57,6 +59,11 @@ const BarcodeInput = () => {
 		}
 	}
 
+	const handleSearch = () => {
+		setSkip(false)
+		document.getElementById("main-barcode-input").focus()
+	}
+
 	useEffect(() => {
 		handleBarcodeInput(barcode)
 	}, [barcode])
@@ -65,7 +72,12 @@ const BarcodeInput = () => {
 		addToCart(data)
 	}, [data])
 
-	return <Input label="Barcode" value={barcode} onChange={setBarcode} />
+	return (
+		<Flex>
+			<Input id="main-barcode-input" label="Barcode" value={barcode} onChange={setBarcode} />
+			<Button title="Search" onClick={handleSearch}/>
+		</Flex>
+	)
 }
 
 export default BarcodeInput

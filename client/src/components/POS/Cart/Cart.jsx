@@ -41,6 +41,7 @@ const Cart = () => {
 			})
 			dispatch(updateProducts({ products: updated }))
 		}
+		document.getElementById("main-barcode-input").focus()
 	}
 
 	const removeProduct = ({ e, id }) => {
@@ -55,10 +56,11 @@ const Cart = () => {
 		)
 
 		dispatch(updateProducts({ products: updatedProducts }))
+		document.getElementById("main-barcode-input").focus()
 	}
 
 	return (
-		<TableContainer component={Paper} sx={{ height:"100%" }}>
+		<TableContainer component={Paper} sx={{ height: "100%" }}>
 			<Table
 				stickyHeader
 				sx={{ minWidth: 650 }}
