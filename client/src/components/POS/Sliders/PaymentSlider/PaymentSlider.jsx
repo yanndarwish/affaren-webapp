@@ -89,12 +89,13 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 
 	const handlePayment = () => {
 		let paymentMethod = value === 0 ? "cash" : value === 1 ? "card" : "check"
-		let leftToPay = (leftPaying - paying).toFixed(2)
-		setLeftPaying(leftToPay)
+		let leftToPay = parseFloat(leftPaying)
+
+		setLeftPaying(parseFloat(leftToPay) - parseFloat(paying))
 
 		if (
-			parseFloat(leftToPay) === 0 ||
-			(leftToPay !== 0 && paying > leftToPay && value === 0)
+			parseFloat(leftToPay) === parseFloat(paying) ||
+			(parseFloat(leftToPay) !== 0 && parseFloat(paying) > parseFloat(leftToPay))
 		) {
 			let salePaymentMethods = {
 				...sale.paymentMethods,
@@ -123,7 +124,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 
 			// display how much ot give back
 			if (leftToPay !== 0 && paying > leftToPay && value === 0) {
-				setGiveBack(Math.abs(leftToPay))
+				setGiveBack((paying - leftToPay).toFixed(2))
 			}
 			setPaying(leftToPay)
 
@@ -160,15 +161,15 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		) {
 			// split
 			// set what is left to pay
-			setPaying((sale.amount - paying).toFixed(2))
+			setPaying(parseFloat((sale.amount - paying).toFixed(2)))
 			let salePaymentMethods = {
 				...sale.paymentMethods,
 				[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : paying),
 			}
+
 			dispatch(setSalePaymentMethods({ paymentMethods: salePaymentMethods }))
-		} else {
-			return
 		}
+		leftToPay = (parseFloat(leftPaying) - parseFloat(paying)).toFixed(2)
 	}
 
 	const ModalBody = () => {
