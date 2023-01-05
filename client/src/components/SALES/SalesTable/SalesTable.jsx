@@ -55,7 +55,6 @@ export default function SalesTable({ array }) {
 	}
 
 	const handleSaleDelete = () => {
-		console.log("delete sale " + selected)
 		deleteSale({ id: selected })
 		setIsModalDelete(false)
 	}

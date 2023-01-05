@@ -12,7 +12,6 @@ const EditSaleSection = () => {
 
 	const handleEdit = () => {
 		if (saleNumber !== "") {
-			console.log(saleNumber)
 		}
 	}
 

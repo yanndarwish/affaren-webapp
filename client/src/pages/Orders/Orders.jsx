@@ -49,7 +49,6 @@ const Orders = () => {
 		redirect()
 	}, [])
 
-	console.log(selectedOrderId)
 	return (
 		<FullFlex theme={theme}>
 			<OrdersList

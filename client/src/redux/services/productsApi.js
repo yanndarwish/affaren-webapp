@@ -10,7 +10,6 @@ export const productsApi = createApi({
 			const role =
 				store.getState().user?.user.user_is_admin === "true" ? "admin" : "none"
 
-			console.log(role)
 			if (token) {
 				headers.set("x-access-token", token)
 				headers.set("role", role)

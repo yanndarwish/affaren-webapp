@@ -28,7 +28,6 @@ const DetailTable = ({ data, months, month, year }) => {
 		data?.forEach((item) => {
 			if (!days.includes(item.sale_day)) {
 				days.push(item.sale_day)
-				console.log(item)
 				let day = {
 					day: item.sale_day,
 					alimentation: item.sale_taxes.total1

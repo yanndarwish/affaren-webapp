@@ -28,7 +28,6 @@ app.post("/login", async (req, res) => {
 	try {
 		// get user input
 		const { email, password } = req.body
-		console.log(email)
 		// validate user input
 		if (!(email && password)) {
 			res.status(400).send("All inputs are required")
@@ -67,7 +66,6 @@ app.post("/login", async (req, res) => {
 				"UPDATE users SET user_token = $1 WHERE user_id = $2",
 				[token, user.user_id]
 			)
-			console.log(response)
 			res.status(200).json({ token: token })
 			return
 		}
@@ -126,7 +124,6 @@ app.post("/forgot-password", async (req, res) => {
 			return res.send("User does not exist")
 		}
 
-		console.log(oldUser)
 		const secret = process.env.TOKEN_KEY + oldUser.user_password
 		const token = jwt.sign(
 			{ email: oldUser.user_email, id: oldUser.user_id },
@@ -166,7 +163,6 @@ app.post("/forgot-password", async (req, res) => {
 
 app.get("/reset-password/:id/:token", async (req, res) => {
 	const { id, token } = req.params
-	console.log(req.params)
 	const response = await pool.query("SELECT * FROM users WHERE user_id = $1", [
 		id,
 	])
@@ -500,7 +496,6 @@ app.delete("/products/:id", auth, async (req, res) => {
 // create a sale
 app.post("/sales", auth, async (req, res) => {
 	try {
-		console.log(req.body)
 		const { year, month, day, amount, paymentMethods, discount, taxes, user } =
 			req.body
 
@@ -530,7 +525,6 @@ app.get("/sales", auth, async (req, res) => {
 app.get("/sales-period/:year/:month", auth, async (req, res) => {
 	try {
 		const { year, month } = req.params
-		console.log("month only")
 		const response = await pool.query(
 			"SELECT * FROM sales WHERE sale_year = $1 AND sale_month = $2",
 			[year, month]
@@ -546,8 +540,6 @@ app.get("/sales-period/:year/:month", auth, async (req, res) => {
 app.get("/sales-period/:year", auth, async (req, res) => {
 	try {
 		const { year } = req.params
-
-		console.log("full year")
 		const response = await pool.query(
 			"SELECT * FROM sales WHERE sale_year = $1",
 			[year]

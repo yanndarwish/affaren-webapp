@@ -9,8 +9,6 @@ export const userApi = createApi({
 			const token = store.getState().login?.token
 			const role =
 				store.getState().user?.user.user_is_admin === "true" ? "admin" : "none"
-
-			console.log(role)
 			if (token) {
 				headers.set("x-access-token", token)
 				headers.set("role", role)
@@ -61,12 +59,12 @@ export const userApi = createApi({
 			invalidatesTags: ["Users"],
 		}),
 		deleteUser: builder.mutation({
-			query: ({id}) => ({
+			query: ({ id }) => ({
 				url: `users/${id}`,
-				method: "DELETE"
+				method: "DELETE",
 			}),
 			invalidatesTags: ["Users"],
-		})
+		}),
 	}),
 })
 
@@ -76,6 +74,6 @@ export const {
 	useGetUsersMutation,
 	useUpdateUserMutation,
 	usePatchUserMutation,
-	useDeleteUserMutation
+	useDeleteUserMutation,
 } = userApi
 export default userApi

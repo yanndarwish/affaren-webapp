@@ -109,8 +109,6 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 
 			const date = day + "-" + month + "-" + year
 
-			console.log(date)
-
 			let confirmedSale = {
 				...sale,
 				year: year,

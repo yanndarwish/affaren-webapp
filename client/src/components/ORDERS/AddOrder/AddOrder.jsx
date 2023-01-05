@@ -60,12 +60,10 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 			/>
 		)
 	}
-	console.log(inputList)
 	const handleAddItemInput = () => {
 		setInputList(inputList.concat(<ItemInput key={inputList.length} />))
 	}
 
-	console.log(res)
 	return (
 		<Container theme={theme}>
 			{res.isError ? (

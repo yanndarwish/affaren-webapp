@@ -49,7 +49,6 @@ const Help = () => {
 					"</b>" +
 					p.innerHTML.substring(index + searchString.length)
 				p.innerHTML = innerHTML
-				console.log(p)
 			}
 		})
 	}

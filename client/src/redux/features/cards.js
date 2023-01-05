@@ -15,7 +15,6 @@ const cardSlice = createSlice({
 		builder.addMatcher(
 			cardApi.endpoints.getCards.matchFulfilled,
 			(state, action) => {
-				console.log("now")
 				state.cards = action.payload
 			}
 		)

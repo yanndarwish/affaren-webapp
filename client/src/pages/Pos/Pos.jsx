@@ -101,12 +101,9 @@ const Pos = () => {
 		let taxesDetails = {}
 		sale.products.forEach((product) => {
 			let ht = (product.price / (1 + parseFloat(product.taxe) / 100)).toFixed(2)
-			console.log(ht)
 			let tva = (product.price - ht).toFixed(2)
-			console.log(tva)
 			switch (parseFloat(product.taxe)) {
 				case 5.5:
-					console.log("Alim")
 					taxesDetails = {
 						...taxesDetails,
 						tva1: taxesDetails.tva1
@@ -129,7 +126,6 @@ const Pos = () => {
 					}
 					break
 				case 10:
-					console.log("Maga")
 					taxesDetails = {
 						...taxesDetails,
 						tva2: taxesDetails.tva2
@@ -152,7 +148,6 @@ const Pos = () => {
 					}
 					break
 				case 20:
-					console.log("Déco")
 					taxesDetails = {
 						...taxesDetails,
 						tva3: taxesDetails.tva3
@@ -175,7 +170,6 @@ const Pos = () => {
 					}
 					break
 				default:
-					console.log("default")
 			}
 		})
 		dispatch(setTaxes({ taxes: taxesDetails }))

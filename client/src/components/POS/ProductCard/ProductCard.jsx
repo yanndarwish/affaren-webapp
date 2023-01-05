@@ -35,7 +35,6 @@ const ProductCard = ({ id, name, price, taxe, theme }) => {
 				taxe: taxe,
 			}
 
-			console.log(data)
 			let found = products.find((product) => product.id === data.id)
 
 			if (!found) {

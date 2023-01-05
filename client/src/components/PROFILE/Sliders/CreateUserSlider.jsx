@@ -68,9 +68,6 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 			password: confirmPass,
 			isAdmin: isAdmin ? "true" : "false",
 		}
-
-
-		console.log(user)
 		register(user)
 	}
 
