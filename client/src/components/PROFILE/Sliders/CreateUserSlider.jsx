@@ -14,6 +14,9 @@ import {
 	InputAdornment,
 	IconButton,
 	FormHelperText,
+	Select,
+	MenuItem,
+	FormControlLabel,
 } from "@mui/material"
 import {
 	ArtTitle,
@@ -35,6 +38,7 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const [firstName, setFirstName] = useState("")
 	const [lastName, setLastName] = useState("")
+	const [role, setRole] = useState("")
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 	const [confirmPass, setConfirmPass] = useState("")
@@ -54,16 +58,19 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 	}
 
 	const handleCreate = () => {
-		console.log("create user")
+
 
 		let user = {
 			firstName: firstName,
 			lastName: lastName,
+			role: role,
 			email: email,
 			password: confirmPass,
 			isAdmin: isAdmin ? "true" : "false",
 		}
 
+
+		console.log(user)
 		register(user)
 	}
 
@@ -100,6 +107,19 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 										onChange={setLastName}
 										label="Last Name"
 									/>
+									<FormControl fullWidth>
+										<InputLabel id="demo-simple-select-label">Role</InputLabel>
+										<Select
+											labelId="demo-simple-select-label"
+											id="demo-simple-select"
+											value={role}
+											label="Role"
+											onChange={(e) => setRole(e.target.value)}
+										>
+											<MenuItem value="user">User</MenuItem>
+											<MenuItem value="cook">Cook</MenuItem>
+										</Select>
+									</FormControl>
 									<Input value={email} onChange={setEmail} label="Email" />
 									<Input
 										value={password}
@@ -152,9 +172,14 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 											</FormHelperText>
 										)}
 									</FormControl>
-									<Checkbox
-										checked={isAdmin}
-										onChange={() => setIsAdmin(!isAdmin)}
+									<FormControlLabel
+										control={
+											<Checkbox
+												checked={isAdmin}
+												onChange={() => setIsAdmin(!isAdmin)}
+											/>
+										}
+										label="is Admin"
 									/>
 									{res.isError && <ArtTitle>{res.error.data}</ArtTitle>}
 								</FormWrapper>
@@ -166,6 +191,7 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 					<Button
 						title={res.isSuccess ? "Close" : "Create"}
 						onClick={res.isSuccess ? handleClose : handleCreate}
+						disabled={password !== confirmPass}
 					/>
 				</DialogFooter>
 			</Dialog>

@@ -8,13 +8,12 @@ const authorize = require("./middleware/authorize")
 const express = require("express")
 const cors = require("cors")
 const pool = require("./db")
-const path = require('path')
+const path = require("path")
 const { query, urlencoded } = require("express")
 const app = express()
 
-
 app.set("view engine", "ejs")
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, "public")))
 app.use(express.urlencoded({ extended: false }))
 
 app.use(express.json())
@@ -231,14 +230,12 @@ app.post("/reset-password/:id/:token", async (req, res) => {
 app.post("/register", async (req, res) => {
 	try {
 		// get user input
-		const { firstName, lastName, email, password, isAdmin } = req.body
+		const { firstName, lastName, role, email, password, isAdmin } = req.body
 
 		// validate user input (make sure all data has been provided)
-		if (!(email && password && firstName && lastName && isAdmin)) {
+		if (!(email && password && firstName && lastName && role && isAdmin)) {
 			res.status(400).send("All inputs are required")
 		}
-
-		console.log(users)
 
 		// check if user already exists in db
 		let foundUser = await pool.query(
@@ -259,6 +256,7 @@ app.post("/register", async (req, res) => {
 		const user = {
 			firstName: firstName,
 			lastName: lastName,
+			role: role,
 			email: email,
 			password: encryptedPassword,
 			isAdmin: isAdmin,
@@ -277,8 +275,8 @@ app.post("/register", async (req, res) => {
 		user.token = token
 
 		const newUser = await pool.query(
-			"INSERT INTO users(user_first_name,user_last_name,user_email,user_password,user_is_admin,user_token) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
-			[firstName, lastName, email, encryptedPassword, isAdmin, token]
+			"INSERT INTO users(user_first_name,user_last_name, user_role,user_email,user_password,user_is_admin,user_token) VALUES ($1,$2,$3,$4,$5,$6, $7) RETURNING *",
+			[firstName, lastName, role, email, encryptedPassword, isAdmin, token]
 		)
 		res.status(200).json(newUser.rows[0])
 	} catch (err) {
@@ -370,16 +368,14 @@ app.put("/users", auth, async (req, res) => {
 // as admin, update a users role
 app.patch("/users", authorize, async (req, res) => {
 	try {
-		const { id, isAdmin } = req.body
-		if (!(id, isAdmin)) {
+		const { id, isAdmin, role } = req.body
+		if (!(id, isAdmin, role)) {
 			res.status(400).send("All inputs are required")
 		}
 
-		console.log(isAdmin)
-
 		const response = await pool.query(
-			"UPDATE users SET user_is_admin = $1 WHERE user_id = $2",
-			[isAdmin, id]
+			"UPDATE users SET user_is_admin = $1, user_role = $2 WHERE user_id = $3",
+			[isAdmin, role, id]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {

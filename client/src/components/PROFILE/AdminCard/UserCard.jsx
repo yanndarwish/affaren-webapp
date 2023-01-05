@@ -31,6 +31,9 @@ const UserCard = ({ user }) => {
 					<Typography variant="h5" component="div">
 						{user?.user_is_admin === "true" ? "Admin" : "Not Admin"}
 					</Typography>
+					<Typography variant="h6" component="div">
+						{user?.user_role}
+					</Typography>
 				</Column>
 			</CardContent>
 			<CardActions sx={{ justifyContent: "center" }}>

@@ -25,6 +25,7 @@ export const Dialog = styled.div`
 	bottom: 0;
 	right: 0;
 	left: 50%;
+	overflow-y: scroll;
 	padding: ${constant.PADDING_M}px;
 	color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};

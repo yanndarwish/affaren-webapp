@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react"
 import {
 	ArtTitle,
+	Column,
+	ColumnCenter,
 	FullCenter,
 	SpaceHeader,
 	SubTitle,
@@ -14,7 +16,7 @@ import {
 	Overlay,
 } from "../../POS/Sliders/Slider.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
-import { Checkbox, FormControl, FormControlLabel } from "@mui/material"
+import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material"
 import { FormWrapper } from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
 import Button from "../../common/Button/Button.component"
 import { useSelector } from "react-redux"
@@ -28,6 +30,7 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 	const theme = useSelector((state) => state.theme.theme)
 	const [isModalEdit, setIsModalEdit] = useState(false)
 	const [isModalDelete, setIsModalDelete] = useState(false)
+	const [role, setRole] = useState("")
 	const [isAdmin, setIsAdmin] = useState(
 		user.user_is_admin === "true" ? true : false
 	)
@@ -56,16 +59,14 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 	}
 
 	const DeleteBody = () => {
-		return (
-			<ArtTitle>Are you sure you want to delete this user ?</ArtTitle>
-		)
+		return <ArtTitle>Are you sure you want to delete this user ?</ArtTitle>
 	}
 
 	const EditFooter = () => {
-		return <Button title="Edit" color="success" onClick={handleEdit}/>
+		return <Button title="Edit" color="success" onClick={handleEdit} />
 	}
 	const DeleteFooter = () => {
-		return <Button title="Delete" color="success" onClick={handleDelete}/>
+		return <Button title="Delete" color="success" onClick={handleDelete} />
 	}
 
 	const handleDelete = () => {
@@ -79,6 +80,7 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 
 	const handleEdit = () => {
 		let newUser = {
+			role: role,
 			isAdmin: isAdmin ? "true" : "false",
 			id: user.user_id,
 		}
@@ -112,9 +114,10 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 								</SubTitle>
 							</FullCenter>
 						) : (
-							<FormControl fullWidth sx={{height:"100%"}}>
-								<FormWrapper >
-									<FullCenter>
+							<FormControl fullWidth sx={{ height: "100%" , padding:"1.5rem"}}>
+								<FormWrapper>
+									<ColumnCenter>
+										<ArtTitle>Status</ArtTitle>
 										<FormControlLabel
 											value="start"
 											control={
@@ -124,10 +127,26 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 												/>
 											}
 											label={user.user_first_name + " has Admin rights"}
-											labelPlacement="start"
+											labelPlacement="end"
 										/>
+										<ArtTitle>Role</ArtTitle>
+										<FormControl fullWidth>
+											<InputLabel id="demo-simple-select-label">
+												Role
+											</InputLabel>
+											<Select
+												labelId="demo-simple-select-label"
+												id="demo-simple-select"
+												value={role}
+												label="Role"
+												onChange={(e) => setRole(e.target.value)}
+											>
+												<MenuItem value="user">User</MenuItem>
+												<MenuItem value="cook">Cook</MenuItem>
+											</Select>
+										</FormControl>
 										{res.isError && <ArtTitle>{res.error.data}</ArtTitle>}
-									</FullCenter>
+									</ColumnCenter>
 								</FormWrapper>
 							</FormControl>
 						)}
@@ -144,8 +163,20 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 					/>
 				</DialogFooter>
 			</Dialog>
-			<Modal isOpen={isModalEdit} setIsOpen={setIsModalEdit} title="Edit User" bodyContent={<EditBody/>} footerContent={<EditFooter/>}/>
-			<Modal isOpen={isModalDelete} setIsOpen={setIsModalDelete} title="Delete User" bodyContent={<DeleteBody/>} footerContent={<DeleteFooter/>}/>
+			<Modal
+				isOpen={isModalEdit}
+				setIsOpen={setIsModalEdit}
+				title="Edit User"
+				bodyContent={<EditBody />}
+				footerContent={<EditFooter />}
+			/>
+			<Modal
+				isOpen={isModalDelete}
+				setIsOpen={setIsModalDelete}
+				title="Delete User"
+				bodyContent={<DeleteBody />}
+				footerContent={<DeleteFooter />}
+			/>
 		</Overlay>
 	) : null
 }
