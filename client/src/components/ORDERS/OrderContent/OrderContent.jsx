@@ -13,6 +13,7 @@ import Button from "../../common/Button/Button.component"
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
+import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined"
 import { Modal } from "modal-rjs"
 import { useState } from "react"
 import { useDeleteOrderMutation } from "../../../redux/services/orderApi"
@@ -29,6 +30,41 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 
 	const openDeleteModal = () => {
 		setIsOpen(true)
+	}
+
+	function printDiv() {
+		let title = document.getElementById("order-title").innerHTML
+		let time = document.getElementById("order-time").innerHTML
+		let location = document.getElementById("order-location").innerHTML
+		let clientName = document.getElementById("order-client-name").innerHTML
+		let clientPhone = document.getElementById("order-client-phone").innerHTML
+		let orderItems = document.getElementById("order-items").innerHTML
+		let a = window.open("", "", "height=800, width=800")
+		a.document.write("<html>")
+		a.document.write("<body>")
+		a.document.write("<h1>")
+		a.document.write(title)
+		a.document.write("</h1>")
+		a.document.write("<h1>")
+		a.document.write(time)
+		a.document.write("</h1>")
+		a.document.write("<h2>")
+		a.document.write(location)
+		a.document.write("</h2>")
+		a.document.write("<h2>")
+		a.document.write(clientName)
+		a.document.write("</h2>")
+		a.document.write("<h2>")
+		a.document.write(clientPhone)
+		a.document.write("</h2>")
+		a.document.write("<h2>")
+		a.document.write(orderItems)
+		a.document.write("</h2>")
+
+
+		a.document.write("</body></html>")
+		a.document.close()
+		a.print()
 	}
 
 	const ModalBody = () => {
@@ -52,9 +88,9 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 		isEdit ? (
 			<EditOrder theme={theme} order={order} setIsEdit={setIsEdit} />
 		) : (
-			<Container theme={theme}>
+			<Container theme={theme} id="order-content">
 				<SpaceHeader>
-					<Title>{order.order_title}</Title>
+					<Title id="order-title">{order.order_title}</Title>
 					<ButtonSection>
 						<Button title={<EditIcon />} color="warning" onClick={handleEdit} />
 						<Button
@@ -62,22 +98,28 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 							color="error"
 							onClick={openDeleteModal}
 						/>
+						<Button
+							title={<PrintOutlinedIcon />}
+							onClick={printDiv}
+						/>
 						<OrderStatusMenu order={order} />
 					</ButtonSection>
 				</SpaceHeader>
 				<Column>
-					<SubTitle>
+					<SubTitle id="order-time">
 						{order.order_due_date}
 						{order.order_due_time && " at " + order.order_due_time}
 					</SubTitle>
-					<SubTitle>{order.order_location}</SubTitle>
+					<SubTitle id="order-location">{order.order_location}</SubTitle>
 				</Column>
 				<VerticalCenter>
-					<ArtTitle>{order.order_client_name}</ArtTitle>
+					<ArtTitle id="order-client-name">{order.order_client_name}</ArtTitle>
 					<LocalPhoneIcon />
-					<ArtTitle>{" " + order.order_client_phone}</ArtTitle>
+					<ArtTitle id="order-client-phone">
+						{" " + order.order_client_phone}
+					</ArtTitle>
 				</VerticalCenter>
-				<ul>
+				<ul id="order-items">
 					{order.order_description &&
 						order.order_description.map((item, i) => <li key={i}>{item}</li>)}
 				</ul>
