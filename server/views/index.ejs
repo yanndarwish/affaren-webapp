@@ -13,12 +13,23 @@
 					window.location.href = "http://localhost:3000/"
 				}
 			}
+
+			const validate = () => {
+				let password = document.getElementById("password").value
+				let confirm = document.getElementById("confirm-password").value
+
+				if (password !== confirm) {
+					window.alert("Passwords don't match !")
+					return false
+				}
+				return true
+			}
 		</script>
 	</head>
 	<body>
 		<div>
 			<h1><%= email%></h1>
-			<form action="" method="POST">
+			<form action="" method="POST" onsubmit = "return(validate());">
 				<h2>Enter your new Password</h2>
 				<div class="input-wrapper">
 					<input
