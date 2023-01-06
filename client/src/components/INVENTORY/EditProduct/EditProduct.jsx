@@ -3,6 +3,7 @@ import { useState } from "react"
 import {
 	ArtTitle,
 	Column,
+	ColumnCenter,
 	ErrorMessage,
 	FullCenter,
 	Gap,
@@ -15,6 +16,7 @@ import {
 } from "../../../redux/services/productsApi"
 import { Modal } from "modal-rjs"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
 
 const EditProduct = ({
 	product,
@@ -84,39 +86,35 @@ const EditProduct = ({
 	return product ? (
 		sent && res.isSuccess ? (
 			<FullCenter>
-				<Column>
+				<ColumnCenter>
 					<FullCenter>
-						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} />
+						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
 					</FullCenter>
 					<ArtTitle>Product edited successfully</ArtTitle>
-				</Column>
+				</ColumnCenter>
 			</FullCenter>
 		) : sent && response.isSuccess ? (
 			<FullCenter>
-				<Column>
+				<ColumnCenter>
 					<FullCenter>
-						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} />
+						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
 					</FullCenter>
 					<ArtTitle>Product deleted successfully</ArtTitle>
-				</Column>
+				</ColumnCenter>
 			</FullCenter>
 		) : sent && res.isError ? (
 			<FullCenter>
-				<Column>
-					<FullCenter>
-						<ErrorMessage>Failed to edit the product</ErrorMessage>
-					</FullCenter>
-					<ArtTitle>Product deleted successfully</ArtTitle>
-				</Column>
+				<ColumnCenter>
+					<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
+					<ErrorMessage>Failed to edit the product</ErrorMessage>
+				</ColumnCenter>
 			</FullCenter>
 		) : sent && response.isError ? (
 			<FullCenter>
-				<Column>
-					<FullCenter>
-						<ErrorMessage>Failed to delete the product</ErrorMessage>
-					</FullCenter>
-					<ArtTitle>Product deleted successfully</ArtTitle>
-				</Column>
+				<ColumnCenter>
+					<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
+					<ErrorMessage>Failed to delete the product</ErrorMessage>
+				</ColumnCenter>
 			</FullCenter>
 		) : (
 			<Column>

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import {
 	Column,
+	ColumnCenter,
 	Container,
 	ErrorMessage,
 	FullCenter,
@@ -13,6 +14,7 @@ import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
 import { usePostOrderMutation } from "../../../redux/services/orderApi"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
 
 const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 	const [title, setTitle] = useState("")
@@ -68,7 +70,10 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 		<Container theme={theme}>
 			{res.isError ? (
 				<FullCenter>
-					<ErrorMessage>Failed to create Order</ErrorMessage>
+					<ColumnCenter>
+						<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
+						<ErrorMessage>Failed to create order</ErrorMessage>
+					</ColumnCenter>
 				</FullCenter>
 			) : (
 				<>

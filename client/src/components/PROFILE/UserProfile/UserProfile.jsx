@@ -2,7 +2,9 @@ import { useState } from "react"
 import {
 	ArtTitle,
 	Column,
+	ColumnCenter,
 	ErrorMessage,
+	FullCenter,
 	SpaceHeader,
 	SubTitle,
 } from "../../../assets/styles/common.styles"
@@ -19,6 +21,7 @@ import {
 import { useCheckPasswordMutation } from "../../../redux/services/loginApi"
 import { useEffect } from "react"
 import { useUpdateUserMutation } from "../../../redux/services/userApi"
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 
 const UserProfile = ({ user }) => {
 	const [isOpen, setIsOpen] = useState(false)
@@ -185,11 +188,23 @@ const UserProfile = ({ user }) => {
 									Passwords don't match
 								</FormHelperText>
 							)}
-							{response.error && <ErrorMessage>Failed to update password</ErrorMessage>}
+							{response.error && (
+								<ErrorMessage>Failed to update password</ErrorMessage>
+							)}
 						</FormControl>
 					</Column>
 				) : (
-					<SubTitle>Password Changed Successfully</SubTitle>
+					<FullCenter>
+						<ColumnCenter>
+							<FullCenter>
+								<CheckCircleOutlineIcon
+									sx={{ fontSize: "64px" }}
+									color="success"
+								/>
+							</FullCenter>
+							<ArtTitle>Paswword changed successfully</ArtTitle>
+						</ColumnCenter>
+					</FullCenter>
 				))}
 			<Button
 				title={

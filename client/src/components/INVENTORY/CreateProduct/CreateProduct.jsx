@@ -2,6 +2,7 @@ import { useState } from "react"
 import {
 	ArtTitle,
 	Column,
+	ColumnCenter,
 	ErrorMessage,
 	FullCenter,
 } from "../../../assets/styles/common.styles"
@@ -9,6 +10,7 @@ import { usePostProductMutation } from "../../../redux/services/productsApi"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
 
 const CreateProduct = ({
 	inputBarcode,
@@ -61,26 +63,29 @@ const CreateProduct = ({
 	return sent && res.isSuccess ? (
 		<Column>
 			<FullCenter>
-				<Column>
+				<ColumnCenter>
 					<FullCenter>
-						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} />
+						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
 					</FullCenter>
 					<ArtTitle>Product created successfully</ArtTitle>
-				</Column>
+				</ColumnCenter>
 			</FullCenter>
 			<FullCenter>
-				<Column>
+				<ColumnCenter>
 					{Object.keys(newProduct).map((key, i) => (
 						<h5 key={i}>
 							{key} : {newProduct[key]}
 						</h5>
 					))}
-				</Column>
+				</ColumnCenter>
 			</FullCenter>
 		</Column>
 	) : sent && res.isError ? (
 		<FullCenter>
-			<ErrorMessage>Failed to create product</ErrorMessage>
+			<ColumnCenter>
+				<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
+				<ErrorMessage>Failed to create product</ErrorMessage>
+			</ColumnCenter>
 		</FullCenter>
 	) : (
 		<Column>

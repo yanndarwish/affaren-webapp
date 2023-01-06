@@ -20,6 +20,8 @@ import {
 } from "@mui/material"
 import {
 	ArtTitle,
+	ColumnCenter,
+	ErrorMessage,
 	FullCenter,
 	SubTitle,
 } from "../../../assets/styles/common.styles"
@@ -33,6 +35,8 @@ import {
 import { useRegisterMutation } from "../../../redux/services/userApi"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import Visibility from "@mui/icons-material/Visibility"
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 
 const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 	const [showPassword, setShowPassword] = useState(false)
@@ -58,7 +62,6 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 	}
 
 	const handleCreate = () => {
-
 
 		let user = {
 			firstName: firstName,
@@ -89,7 +92,24 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 					<DialogCard theme={theme}>
 						{res.isSuccess ? (
 							<FullCenter>
-								<SubTitle>User Created Successfully</SubTitle>
+								<ColumnCenter>
+									<FullCenter>
+										<CheckCircleOutlineIcon
+											sx={{ fontSize: "64px" }}
+											color="success"
+										/>
+									</FullCenter>
+									<ArtTitle>User created successfully</ArtTitle>
+								</ColumnCenter>
+							</FullCenter>
+						) : res.isError ? (
+							<FullCenter>
+								<ColumnCenter>
+									<HighlightOffOutlinedIcon
+										sx={{ fontSize: "64px", color: "red" }}
+									/>
+									<ErrorMessage>Failed to create user</ErrorMessage>
+								</ColumnCenter>
 							</FullCenter>
 						) : (
 							<FormControl fullWidth>
