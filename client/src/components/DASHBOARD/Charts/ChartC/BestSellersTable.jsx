@@ -10,13 +10,13 @@ import {
 
 const BestSellersTable = ({ data }) => {
 	return (
-		<TableContainer component={Paper}>
-			<Table id="detail-table" sx={{ minWidth: 350  }} aria-label="simple table">
+		<TableContainer component={Paper} sx={{ maxHeight: 320 }} >
+			<Table id="detail-table" sx={{ minWidth: 350 }} aria-label="simple table">
 				<TableHead>
 					<TableRow>
 						<TableCell>Id</TableCell>
-						<TableCell >Name</TableCell>
-						<TableCell align="right" >N° of Sales</TableCell>
+						<TableCell>Name</TableCell>
+						<TableCell align="right">N° of Sales</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -29,8 +29,8 @@ const BestSellersTable = ({ data }) => {
 								<TableCell component="th" scope="row">
 									{row.product_id}
 								</TableCell>
-								<TableCell >{row.product_name}</TableCell>
-								<TableCell  align="right">{row.product_quantity}</TableCell>
+								<TableCell>{row.product_name}</TableCell>
+								<TableCell align="right">{row.product_quantity}</TableCell>
 							</TableRow>
 						))}
 				</TableBody>
