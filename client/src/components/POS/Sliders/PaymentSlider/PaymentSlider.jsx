@@ -12,6 +12,7 @@ import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import {
 	ArtTitle,
+	ColumnCenter,
 	ErrorMessage,
 	SubTitle,
 } from "../../../../assets/styles/common.styles"
@@ -34,6 +35,7 @@ import {
 } from "../../../../redux/services/salesApi"
 import { useUpdateProductsMutation } from "../../../../redux/services/productsApi"
 import { Modal } from "modal-rjs"
+import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -95,7 +97,8 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 
 		if (
 			parseFloat(leftToPay) === parseFloat(paying) ||
-			(parseFloat(leftToPay) !== 0 && parseFloat(paying) > parseFloat(leftToPay))
+			(parseFloat(leftToPay) !== 0 &&
+				parseFloat(paying) > parseFloat(leftToPay))
 		) {
 			let salePaymentMethods = {
 				...sale.paymentMethods,
@@ -125,6 +128,8 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			// display how much ot give back
 			if (leftToPay !== 0 && paying > leftToPay && value === 0) {
 				setGiveBack((paying - leftToPay).toFixed(2))
+			} else {
+				setGiveBack(0)
 			}
 			setPaying(leftToPay)
 
@@ -173,13 +178,12 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	}
 
 	const ModalBody = () => {
-		if (giveBack) {
-			return (
-				<>
-					<ArtTitle>Give Back {giveBack}€</ArtTitle>
-				</>
-			)
-		}
+		return (
+			<ColumnCenter>
+				<InfoMessage state="success" />
+				{parseFloat(giveBack) > 0 && <ArtTitle>Give Back {giveBack}€</ArtTitle>}
+			</ColumnCenter>
+		)
 	}
 
 	const ModalFooter = () => {
@@ -258,7 +262,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			<Modal
 				isOpen={modalIsOpen}
 				setIsOpen={setModalIsOpen}
-				title="Sale Confirmed"
+				title="Payment confirmed"
 				bodyContent={<ModalBody />}
 				footerContent={<ModalFooter />}
 			/>

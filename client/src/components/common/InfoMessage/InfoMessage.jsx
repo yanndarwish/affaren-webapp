@@ -13,13 +13,13 @@ const InfoMessage = ({ state, text }) => {
 			{state === "error" && (
 				<ColumnCenter>
 					<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
-					<ErrorMessage>{text}</ErrorMessage>
+					{text && <ErrorMessage>{text}</ErrorMessage>}
 				</ColumnCenter>
 			)}
 			{state === "success" && (
 				<ColumnCenter>
 					<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
-					<ArtTitle>{text}</ArtTitle>
+					{text && <ArtTitle>{text}</ArtTitle>}
 				</ColumnCenter>
 			)}
 		</FullCenter>
