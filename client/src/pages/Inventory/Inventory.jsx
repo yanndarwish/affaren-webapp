@@ -2,10 +2,9 @@ import { useSelector } from "react-redux"
 import Input from "../../components/common/Input/Input.component"
 import Button from "../../components/common/Button/Button.component"
 import {
-	ArtTitle,
-	Body,
 	Container,
 	ErrorMessage,
+	FitContainer,
 	Flex,
 	SearchSection,
 	SpaceHeader,
@@ -171,7 +170,7 @@ const Inventory = () => {
 					<Input label="Name" value={searchString} onChange={setSearchString} />
 				</Flex>
 			</SearchSection>
-			<Body theme={theme}>
+			<FitContainer theme={theme}>
 				<SpaceHeader>
 					<SubTitle>{isEditMode ? "Edit Mode" : "Products"}</SubTitle>
 
@@ -211,7 +210,7 @@ const Inventory = () => {
 						/>
 					)}
 				</div>
-			</Body>
+			</FitContainer>
 		</Container>
 	)
 }

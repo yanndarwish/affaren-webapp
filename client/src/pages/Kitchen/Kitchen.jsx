@@ -23,6 +23,7 @@ import {
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
 import { useNavigate } from "react-router-dom"
+import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 
 const Kitchen = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -37,7 +38,6 @@ const Kitchen = () => {
 		{ skip }
 	)
 	const navigate = useNavigate()
-
 
 	const redirect = () => {
 		!loggedIn && navigate("/login")
@@ -79,7 +79,7 @@ const Kitchen = () => {
 			<Flex>
 				<BarcodeInput barcode={barcode} setBarcode={setBarcode} />
 				<Button title="Search" onClick={handleSearch} />
-				<Button title="Reset" color="warning" onClick={reset} />
+				<Button title="Clear" color="warning" onClick={reset} />
 			</Flex>
 			{data === null && (
 				<Body theme={theme}>
@@ -118,9 +118,7 @@ const Kitchen = () => {
 				</Body>
 			) : !home && isError ? (
 				<Body theme={theme}>
-					<FullCenter>
-						<ErrorMessage>Failed to fetch product</ErrorMessage>
-					</FullCenter>
+					<InfoMessage state="error" text="Failed to fetch product" />
 				</Body>
 			) : (
 				!home &&
@@ -128,9 +126,9 @@ const Kitchen = () => {
 					<Body theme={theme}>
 						<FullCenter>
 							<ColumnCenter>
-								<Title>Product Stock Updated</Title>
+								<InfoMessage state="success" text="Product stock updated" />
 								<SubTitle>You took {quantity}</SubTitle>
-								<Button title="Reset" color="warning" onClick={reset} />
+								<Button title="Clear" color="warning" onClick={reset} />
 							</ColumnCenter>
 						</FullCenter>
 					</Body>

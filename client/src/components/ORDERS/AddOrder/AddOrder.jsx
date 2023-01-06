@@ -70,7 +70,7 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 	return (
 		<Container theme={theme}>
 			{res.isError ? (
-				<InfoMessage status="error" text="Failed to create order" />
+				<InfoMessage state="error" text="Failed to create order" />
 			) : (
 				<>
 					<Title>Create New Order</Title>

@@ -100,7 +100,7 @@ const EditOrder = ({ theme, order, setIsEdit }) => {
 	return (
 		<Container theme={theme}>
 			{res.isError ? (
-				<InfoMessage status="error" text="Failed to edit order" />
+				<InfoMessage state="error" text="Failed to edit order" />
 			) : (
 				<>
 					<SpaceHeader>

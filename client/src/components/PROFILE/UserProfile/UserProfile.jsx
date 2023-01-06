@@ -191,7 +191,7 @@ const UserProfile = ({ user }) => {
 						</FormControl>
 					</Column>
 				) : (
-					<InfoMessage status="success" text="Paswword changed successfully" />
+					<InfoMessage state="success" text="Paswword changed successfully" />
 				))}
 			<Button
 				title={

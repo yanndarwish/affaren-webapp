@@ -60,7 +60,7 @@ const CreateProduct = ({
 
 	return sent && res.isSuccess ? (
 		<Column>
-			<InfoMessage status="success" text="Product created successfully" />
+			<InfoMessage state="success" text="Product created successfully" />
 			<FullCenter>
 				<ColumnCenter>
 					{Object.keys(newProduct).map((key, i) => (
@@ -72,7 +72,7 @@ const CreateProduct = ({
 			</FullCenter>
 		</Column>
 	) : sent && res.isError ? (
-		<InfoMessage status="error" text="Failed to create product" />
+		<InfoMessage state="error" text="Failed to create product" />
 	) : (
 		<Column>
 			<FullCenter>

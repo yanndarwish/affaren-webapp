@@ -6,6 +6,7 @@ import {
 	ArtTitle,
 	Body,
 	Container,
+	FitContainer,
 	Flex,
 	SpaceHeader,
 	SubTitle,
@@ -66,7 +67,7 @@ const Help = () => {
 					<Button title="Search" onClick={handleSearch} />
 				</Flex>
 			</SpaceHeader>
-			<Body theme={theme} id="help-content">
+			<FitContainer theme={theme} id="help-content">
 				<div>
 					<SubTitle>Sections</SubTitle>
 				</div>
@@ -102,12 +103,7 @@ const Help = () => {
 						</Accordion>
 					))}
 				</div>
-
-				<div>
-					<div></div>
-					<div></div>
-				</div>
-			</Body>
+			</FitContainer>
 		</Container>
 	)
 }
