@@ -23,6 +23,88 @@ export const help = [
 				],
 			},
 			{
+				id: "pos-2",
+				name: "Add a product with barcode",
+				tags: ["add product", "with barcode", "barcode"],
+				content: [
+					"To add a product with barcode, you simply have to click on the barcode input to focus on it, and scan the desired product.",
+				],
+			},
+			{
+				id: "pos-2",
+				name: "Update product quantity",
+				tags: ["update product", "quantity", "cart"],
+				content: [
+					"When a product is visible in the cart, you can update it's quantity by clicking on the '+' and '-' icons, next to its quantity number.",
+				],
+			},
+			{
+				id: "pos-2",
+				name: "Delete product from cart",
+				tags: ["delete product", "delete", "remove", "cart"],
+				content: [
+					"When a product is visible in the cart, you can delete it by clicking on the trash icon that you can find on the far right of the product's line.",
+				],
+			},
+			{
+				id: "pos-2",
+				name: "Add a product without barcode",
+				tags: ["add product", "without barcode", "barcode"],
+				content: [
+					"To add a product without barcode, first, you have to click on the 'No Barcode' button.",
+					"You should now see the 'No Barcode' section.",
+					"Now, you just have to fill the inputs with the desired informations.",
+					"Finally, click on 'Add Product'.",
+					"And that's it, the product has been added to the cart!",
+				],
+			},
+			{
+				id: "pos-2",
+				name: "Add a product from a card",
+				tags: ["add product", "card", "cards"],
+				content: [
+					"To add a product from a card, you just have to click on the desired card.",
+				],
+			},
+			{
+				id: "pos-2",
+				name: "Create a card",
+				tags: ["create card", "card", "cards", "new card"],
+				content: [
+					"To create a new card, first, you need to click on the card with the plus sign on it '+'.",
+					"You should now see the 'Add Card' section.",
+					"Now, you just have to fill the inputs with the desired informations.",
+					"Finally, click on 'Add Card'.",
+					"And that's it, the card has been created and you will now be able to use it!"
+				],
+			},
+			{
+				id: "pos-2",
+				name: "Apply a discount",
+				tags: ["apply discount", "discount", "reduction"],
+				content: [
+					"To apply a discount, first, you need to click on the 'Discount' button.",
+					"You should now see the 'Discount' section.",
+					"Now, you can select the products you want to apply a discount to, or select them all by clicking the top-left box.",
+					"Then, you have to select the type of discount: it can be a percentage or plain cash.",
+					"Now, you can type the desired amount.",
+					"Finally, click on 'Apply Discount'.",
+					"And that's it, the discount has been applied to the selected products!"
+				],
+			},
+			{
+				id: "pos-2",
+				name: "Basic payment",
+				tags: ["payment"],
+				content: [
+					"To confirm the sale and proceed to payment, first, you need to click on the 'Continue to Payment' button.",
+					"You should now see the 'Payment' section.",
+					"Now, you have to select the payment method by clicking on one of the tabs: Cash, Card or Check.", 
+					"Finally, click on the 'Confirm Payment' button.",
+					"And that's it, the payment has been confirmed!"
+				],
+			},
+			{
 				id: "pos-3",
 				name: "Cart",
 				tags: [
