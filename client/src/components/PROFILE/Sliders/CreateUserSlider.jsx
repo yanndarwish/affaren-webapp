@@ -18,13 +18,7 @@ import {
 	MenuItem,
 	FormControlLabel,
 } from "@mui/material"
-import {
-	ArtTitle,
-	ColumnCenter,
-	ErrorMessage,
-	FullCenter,
-	SubTitle,
-} from "../../../assets/styles/common.styles"
+import { ArtTitle, SubTitle } from "../../../assets/styles/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
@@ -35,8 +29,7 @@ import {
 import { useRegisterMutation } from "../../../redux/services/userApi"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import Visibility from "@mui/icons-material/Visibility"
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 	const [showPassword, setShowPassword] = useState(false)
@@ -62,7 +55,6 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 	}
 
 	const handleCreate = () => {
-
 		let user = {
 			firstName: firstName,
 			lastName: lastName,
@@ -91,26 +83,9 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 					<ArtTitle>User Informations</ArtTitle>
 					<DialogCard theme={theme}>
 						{res.isSuccess ? (
-							<FullCenter>
-								<ColumnCenter>
-									<FullCenter>
-										<CheckCircleOutlineIcon
-											sx={{ fontSize: "64px" }}
-											color="success"
-										/>
-									</FullCenter>
-									<ArtTitle>User created successfully</ArtTitle>
-								</ColumnCenter>
-							</FullCenter>
+							<InfoMessage state="success" text="User created successfully" />
 						) : res.isError ? (
-							<FullCenter>
-								<ColumnCenter>
-									<HighlightOffOutlinedIcon
-										sx={{ fontSize: "64px", color: "red" }}
-									/>
-									<ErrorMessage>Failed to create user</ErrorMessage>
-								</ColumnCenter>
-							</FullCenter>
+							<InfoMessage state="error" text="Failed to create user" />
 						) : (
 							<FormControl fullWidth>
 								<FormWrapper>
@@ -198,7 +173,6 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 										}
 										label="is Admin"
 									/>
-									{res.isError && <ArtTitle>{res.error.data}</ArtTitle>}
 								</FormWrapper>
 							</FormControl>
 						)}

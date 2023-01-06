@@ -3,8 +3,6 @@ import { useState } from "react"
 import {
 	ArtTitle,
 	Column,
-	ColumnCenter,
-	ErrorMessage,
 	FullCenter,
 	Gap,
 } from "../../../assets/styles/common.styles"
@@ -15,8 +13,7 @@ import {
 	useDeleteProductMutation,
 } from "../../../redux/services/productsApi"
 import { Modal } from "modal-rjs"
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
+import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 const EditProduct = ({
 	product,
@@ -85,41 +82,16 @@ const EditProduct = ({
 
 	return product ? (
 		sent && res.isSuccess ? (
-			<FullCenter>
-				<ColumnCenter>
-					<FullCenter>
-						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
-					</FullCenter>
-					<ArtTitle>Product edited successfully</ArtTitle>
-				</ColumnCenter>
-			</FullCenter>
+			<InfoMessage state="success" text="Product edited successfully" />
 		) : sent && response.isSuccess ? (
-			<FullCenter>
-				<ColumnCenter>
-					<FullCenter>
-						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
-					</FullCenter>
-					<ArtTitle>Product deleted successfully</ArtTitle>
-				</ColumnCenter>
-			</FullCenter>
+			<InfoMessage state="success" text="Product deleted successfully" />
 		) : sent && res.isError ? (
-			<FullCenter>
-				<ColumnCenter>
-					<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
-					<ErrorMessage>Failed to edit the product</ErrorMessage>
-				</ColumnCenter>
-			</FullCenter>
+			<InfoMessage state="error" text="Failed to edit the product" />
 		) : sent && response.isError ? (
-			<FullCenter>
-				<ColumnCenter>
-					<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
-					<ErrorMessage>Failed to delete the product</ErrorMessage>
-				</ColumnCenter>
-			</FullCenter>
+			<InfoMessage state="error" text="Failed to delete the product" />
 		) : (
 			<Column>
 				<ArtTitle>Edit a Product</ArtTitle>
-
 				<Input
 					label="Name"
 					fullWidth

@@ -2,9 +2,7 @@ import { useEffect } from "react"
 import { useState } from "react"
 import {
 	Column,
-	ColumnCenter,
 	Container,
-	ErrorMessage,
 	FullCenter,
 	HorizontalCenter,
 	SearchSection,
@@ -16,7 +14,7 @@ import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
 import { useUpdateOrderMutation } from "../../../redux/services/orderApi"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
+import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 const EditOrder = ({ theme, order, setIsEdit }) => {
 	const [title, setTitle] = useState(order.order_title)
@@ -102,12 +100,7 @@ const EditOrder = ({ theme, order, setIsEdit }) => {
 	return (
 		<Container theme={theme}>
 			{res.isError ? (
-				<FullCenter>
-					<ColumnCenter>
-						<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
-						<ErrorMessage>Failed to edit order</ErrorMessage>
-					</ColumnCenter>
-				</FullCenter>
+				<InfoMessage status="error" text="Failed to edit order" />
 			) : (
 				<>
 					<SpaceHeader>

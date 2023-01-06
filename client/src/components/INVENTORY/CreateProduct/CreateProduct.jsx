@@ -3,14 +3,12 @@ import {
 	ArtTitle,
 	Column,
 	ColumnCenter,
-	ErrorMessage,
 	FullCenter,
 } from "../../../assets/styles/common.styles"
 import { usePostProductMutation } from "../../../redux/services/productsApi"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
+import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 const CreateProduct = ({
 	inputBarcode,
@@ -62,14 +60,7 @@ const CreateProduct = ({
 
 	return sent && res.isSuccess ? (
 		<Column>
-			<FullCenter>
-				<ColumnCenter>
-					<FullCenter>
-						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
-					</FullCenter>
-					<ArtTitle>Product created successfully</ArtTitle>
-				</ColumnCenter>
-			</FullCenter>
+			<InfoMessage status="success" text="Product created successfully" />
 			<FullCenter>
 				<ColumnCenter>
 					{Object.keys(newProduct).map((key, i) => (
@@ -81,12 +72,7 @@ const CreateProduct = ({
 			</FullCenter>
 		</Column>
 	) : sent && res.isError ? (
-		<FullCenter>
-			<ColumnCenter>
-				<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
-				<ErrorMessage>Failed to create product</ErrorMessage>
-			</ColumnCenter>
-		</FullCenter>
+		<InfoMessage status="error" text="Failed to create product" />
 	) : (
 		<Column>
 			<FullCenter>

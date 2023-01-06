@@ -15,6 +15,7 @@ import Input from "../../common/Input/Input.component"
 import { usePostOrderMutation } from "../../../redux/services/orderApi"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
+import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 	const [title, setTitle] = useState("")
@@ -69,12 +70,7 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 	return (
 		<Container theme={theme}>
 			{res.isError ? (
-				<FullCenter>
-					<ColumnCenter>
-						<HighlightOffOutlinedIcon sx={{ fontSize: "64px", color: "red" }} />
-						<ErrorMessage>Failed to create order</ErrorMessage>
-					</ColumnCenter>
-				</FullCenter>
+				<InfoMessage status="error" text="Failed to create order" />
 			) : (
 				<>
 					<Title>Create New Order</Title>

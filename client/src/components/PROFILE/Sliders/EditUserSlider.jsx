@@ -2,8 +2,6 @@ import React, { useRef, useState } from "react"
 import {
 	ArtTitle,
 	ColumnCenter,
-	ErrorMessage,
-	FullCenter,
 	SpaceHeader,
 	SubTitle,
 } from "../../../assets/styles/common.styles"
@@ -32,9 +30,8 @@ import {
 	usePatchUserMutation,
 } from "../../../redux/services/userApi"
 import { Modal } from "modal-rjs"
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
 import { useEffect } from "react"
+import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -121,28 +118,23 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 					</SpaceHeader>
 					<DialogCard theme={theme}>
 						{res.isSuccess || response.isSuccess ? (
-							<FullCenter>
-								<ColumnCenter>
-									<FullCenter>
-										<CheckCircleOutlineIcon
-											sx={{ fontSize: "64px" }}
-											color="success"
-										/>
-									</FullCenter>
-									<ArtTitle>
-										User {res.isSuccess ? "edited" : "deleted"} successfully
-									</ArtTitle>
-								</ColumnCenter>
-							</FullCenter>
-						) : res.isError || response.isSuccess ? (
-							<FullCenter>
-								<ColumnCenter>
-									<HighlightOffOutlinedIcon
-										sx={{ fontSize: "64px", color: "red" }}
-									/>
-									<ErrorMessage>Failed to create product</ErrorMessage>
-								</ColumnCenter>
-							</FullCenter>
+							<InfoMessage
+								state="success"
+								text={
+									res.isSuccess
+										? "User edited successfully"
+										: "User deleted sucessfully"
+								}
+							/>
+						) : res.isError || response.isError ? (
+							<InfoMessage
+								state="error"
+								text={
+									res.isSuccess
+										? "Failed to edit user"
+										: "Failed to delete user"
+								}
+							/>
 						) : (
 							<FormControl fullWidth sx={{ height: "100%", padding: "1.5rem" }}>
 								<FormWrapper>
@@ -175,10 +167,6 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 												<MenuItem value="cook">Cook</MenuItem>
 											</Select>
 										</FormControl>
-										{res.isError && <ArtTitle>{res.error.data}</ArtTitle>}
-										{response.isError && (
-											<ArtTitle>{response.error.data}</ArtTitle>
-										)}
 									</ColumnCenter>
 								</FormWrapper>
 							</FormControl>
