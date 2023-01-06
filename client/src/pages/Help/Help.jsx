@@ -4,7 +4,6 @@ import Input from "../../components/common/Input/Input.component"
 import Button from "../../components/common/Button/Button.component"
 import {
 	ArtTitle,
-	Body,
 	Container,
 	FitContainer,
 	Flex,
@@ -37,19 +36,14 @@ const Help = () => {
 	}
 
 	const handleSearch = () => {
+		let string = searchString.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")
+		let pattern = new RegExp(`${string}`, "gi")
 		const paragraphs = document.querySelectorAll("p")
 		paragraphs.forEach((p) => {
-			let index = p.innerHTML.indexOf(searchString)
-
+			let index = p.innerHTML.indexOf(string)
+			p.innerHTML = p.textContent.replace(pattern, match => `<mark>${match}</mark>`)
 			if (index >= 0) {
 				setExpanded(p.id.slice(0, 3))
-				let innerHTML =
-					p.innerHTML.substring(0, index) +
-					"<b>" +
-					p.innerHTML.substring(index, index + searchString.length) +
-					"</b>" +
-					p.innerHTML.substring(index + searchString.length)
-				p.innerHTML = innerHTML
 			}
 		})
 	}
@@ -57,7 +51,7 @@ const Help = () => {
 	useEffect(() => {
 		redirect()
 	}, [])
-	
+
 	return (
 		<Container theme={theme}>
 			<SpaceHeader>
