@@ -4,10 +4,13 @@ import {
 	Column,
 	Container,
 	FixedCenterContainter,
+	OrderTitle,
 	SpaceHeader,
 	SubTitle,
 	Title,
 	VerticalCenter,
+	Wrap,
+	WrapS,
 } from "../../../assets/styles/common.styles"
 import Button from "../../common/Button/Button.component"
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone"
@@ -89,9 +92,9 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 			<EditOrder theme={theme} order={order} setIsEdit={setIsEdit} />
 		) : (
 			<Container theme={theme} id="order-content">
-				<SpaceHeader>
+				<OrderTitle>
 					<Title id="order-title">{order.order_title}</Title>
-					<ButtonSection>
+					<WrapS>
 						<Button title={<EditIcon />} color="warning" onClick={handleEdit} />
 						<Button
 							title={<DeleteOutlinedIcon />}
@@ -103,8 +106,8 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 							onClick={printDiv}
 						/>
 						<OrderStatusMenu order={order} />
-					</ButtonSection>
-				</SpaceHeader>
+					</WrapS>
+				</OrderTitle>
 				<Column>
 					<SubTitle id="order-time">
 						{order.order_due_date}

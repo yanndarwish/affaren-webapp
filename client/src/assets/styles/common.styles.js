@@ -121,6 +121,7 @@ export const ButtonSection = styled.div`
 	gap: ${constant.GAP}px;
 `
 
+
 export const Flex = styled.div`
 	display: flex;
 `
@@ -211,6 +212,18 @@ export const Wrap = styled.div`
 	display: flex;
 	gap: ${constant.GAP}px;
 	flex-wrap: wrap;
+`
+export const WrapS = styled.div`
+	display: flex;
+	gap: ${constant.GAP /2}px;
+	flex-wrap: wrap;
+`
+
+export const OrderTitle = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: ${constant.GAP}px;
+	width: 100%;
 `
 
 export const ErrorMessage = styled.p`

@@ -77,7 +77,7 @@ export default function OrdersList({
 		<List
 			sx={{
 				width: "100%",
-				maxWidth: 360,
+				maxWidth: 280,
 				height: "100vh",
 				overflow: "auto",
 				bgcolor: "background.paper",
