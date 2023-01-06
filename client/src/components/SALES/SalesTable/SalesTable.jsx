@@ -16,10 +16,13 @@ import { useDeleteSaleMutation } from "../../../redux/services/salesApi"
 import { useGetSaleProductsQuery } from "../../../redux/services/salesApi"
 import {
 	ArtTitle,
+	ColumnCenter,
 	ErrorMessage,
-	HorizontalCenter,
+	FullCenter,
 } from "../../../assets/styles/common.styles"
 import Button from "../../common/Button/Button.component"
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
 
 export default function SalesTable({ array }) {
 	const [selected, setSelected] = useState("")
@@ -61,9 +64,14 @@ export default function SalesTable({ array }) {
 
 	const DeleteConfirmation = () => {
 		return (
-			<HorizontalCenter>
+			<FullCenter>
+				<ColumnCenter>
+					<FullCenter>
+						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
+					</FullCenter>
 				<ArtTitle>Sale {selected} has been deleted successfully!</ArtTitle>
-			</HorizontalCenter>
+				</ColumnCenter>
+			</FullCenter>
 		)
 	}
 
@@ -117,7 +125,14 @@ export default function SalesTable({ array }) {
 					res.isSuccess ? (
 						<DeleteConfirmation />
 					) : res.isError ? (
-						<ErrorMessage>Failed to delete sale</ErrorMessage>
+						<FullCenter>
+							<ColumnCenter>
+								<HighlightOffOutlinedIcon
+									sx={{ fontSize: "64px", color: "red" }}
+								/>
+								<ErrorMessage>Failed to delete sale</ErrorMessage>
+							</ColumnCenter>
+						</FullCenter>
 					) : (
 						<SalesModalBody data={array} selected={selected} details={data} />
 					)
