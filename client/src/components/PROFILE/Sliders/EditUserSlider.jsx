@@ -16,7 +16,14 @@ import {
 	Overlay,
 } from "../../POS/Sliders/Slider.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material"
+import {
+	Checkbox,
+	FormControl,
+	FormControlLabel,
+	InputLabel,
+	MenuItem,
+	Select,
+} from "@mui/material"
 import { FormWrapper } from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
 import Button from "../../common/Button/Button.component"
 import { useSelector } from "react-redux"
@@ -27,15 +34,14 @@ import {
 import { Modal } from "modal-rjs"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
+import { useEffect } from "react"
 
 const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 	const theme = useSelector((state) => state.theme.theme)
 	const [isModalEdit, setIsModalEdit] = useState(false)
 	const [isModalDelete, setIsModalDelete] = useState(false)
 	const [role, setRole] = useState("")
-	const [isAdmin, setIsAdmin] = useState(
-		user.user_is_admin === "true" ? true : false
-	)
+	const [isAdmin, setIsAdmin] = useState("")
 	const overlayRef = useRef()
 	const [patchUser, res] = usePatchUserMutation()
 	const [deleteUser, response] = useDeleteUserMutation()
@@ -89,6 +95,11 @@ const EditUserSlider = ({ isOpen, setIsOpen, user }) => {
 		patchUser(newUser)
 		setIsModalEdit(false)
 	}
+
+	useEffect(() => {
+		setIsAdmin(user?.user_is_admin === "true" ? true : false)
+		setRole(user?.user_role)
+	}, [])
 
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
