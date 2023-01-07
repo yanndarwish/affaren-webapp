@@ -23,6 +23,7 @@ import {
 import Button from "../../common/Button/Button.component"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
+import { usePostPrintMutation } from "../../../redux/services/printApi"
 
 export default function SalesTable({ array }) {
 	const [selected, setSelected] = useState("")
@@ -31,6 +32,7 @@ export default function SalesTable({ array }) {
 	const [isOpen, setIsOpen] = useState(false)
 	const [isModalDelete, setIsModalDelete] = useState(false)
 	const [deleteSale, res] = useDeleteSaleMutation()
+	const [print, response] = usePostPrintMutation()
 	const { data } = useGetSaleProductsQuery({ id: id && id }, { skip })
 
 	const handleClick = (e) => {
@@ -54,6 +56,7 @@ export default function SalesTable({ array }) {
 	}
 
 	const handleTicketPrint = () => {
+		print()
 		console.log("print ticket " + selected)
 	}
 

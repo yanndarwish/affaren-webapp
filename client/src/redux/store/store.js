@@ -6,6 +6,7 @@ import productsApi from "../services/productsApi"
 import salesApi from "../services/salesApi"
 import orderApi from "../services/orderApi"
 import cardApi from "../services/cardApi"
+import printApi from "../services/printApi"
 
 const store = configureStore({
 	reducer: rootReducer,
@@ -17,6 +18,7 @@ const store = configureStore({
 			salesApi.middleware,
 			cardApi.middleware,
 			orderApi.middleware,
+			printApi.middleware
 		),
 })
 

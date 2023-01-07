@@ -34,6 +34,7 @@ import {
 	usePostSaleMutation,
 } from "../../../../redux/services/salesApi"
 import { useUpdateProductsMutation } from "../../../../redux/services/productsApi"
+import { usePostPrintMutation } from "../../../../redux/services/printApi"
 import { Modal } from "modal-rjs"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 
@@ -78,6 +79,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const [updateProduct, res] = useUpdateProductsMutation()
 	const [postSaleProducts, resp] = usePostSaleProductsMutation()
 	const [postSale, response] = usePostSaleMutation()
+	const [print, respo] = usePostPrintMutation()
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue)
@@ -189,7 +191,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const ModalFooter = () => {
 		return (
 			<>
-				<Button title="Print Ticket" onClick={closeModals} />
+				<Button title="Print Ticket" onClick={print} />
 			</>
 		)
 	}
