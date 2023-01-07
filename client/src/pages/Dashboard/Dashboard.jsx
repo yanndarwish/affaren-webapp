@@ -109,7 +109,7 @@ const Dashboard = () => {
 					<ChartD theme={theme} />
 				) : (
 					user?.user_is_admin === "true" &&
-					res.isError (<ErrorMessage>Failed to fetch users</ErrorMessage>)
+					res.isError && <ErrorMessage>Failed to fetch users</ErrorMessage>
 				)}
 			</FitContainer>
 		</Container>
