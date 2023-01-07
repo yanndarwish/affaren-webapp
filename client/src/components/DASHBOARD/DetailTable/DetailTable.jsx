@@ -121,6 +121,7 @@ const DetailTable = ({ data, months, month, year }) => {
 					: 0
 			}
 		})
+		detail = detail.sort((a, b) => a.day - b.day)
 		dispatch(setDetailArray({ detailArray: detail }))
 	}
 
