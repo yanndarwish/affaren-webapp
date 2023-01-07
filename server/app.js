@@ -77,7 +77,6 @@ app.post("/print", async (req, res) => {
 		printer.println(`Date: ${day}/${month}/${year} ${getTime()}`)
 		printer.println(`Caissier: ${user}`)
 		printer.println("--------------------------------------")
-		printer.alignLeft()
 		printer.alignCenter()
 		printer.bold(true)
 		printer.println(id)

@@ -111,7 +111,7 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 										required
 									>
 										<MenuItem value={5.5}>Alimentation</MenuItem>
-										<MenuItem value={10}>Magazine</MenuItem>
+										<MenuItem value={2.1}>Magazine</MenuItem>
 										<MenuItem value={20}>Décoration/Alcool</MenuItem>
 									</Select>
 									<Input

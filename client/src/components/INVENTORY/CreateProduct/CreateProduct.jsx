@@ -9,6 +9,7 @@ import { usePostProductMutation } from "../../../redux/services/productsApi"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
+import { InputLabel, MenuItem, Select } from "@mui/material"
 
 const CreateProduct = ({
 	inputBarcode,
@@ -19,7 +20,7 @@ const CreateProduct = ({
 }) => {
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState("")
-	const [taxe, setTaxe] = useState("")
+	const [taxe, setTaxe] = useState(5.5)
 	const [barcode, setBarcode] = useState(
 		inputBarcode
 			? inputBarcode.endsWith("/n")
@@ -85,7 +86,19 @@ const CreateProduct = ({
 				fullWidth
 				onChange={(e) => setPrice(e)}
 			/>
-			<Input value={taxe} label="Taxe" fullWidth onChange={(e) => setTaxe(e)} />
+			<InputLabel id="demo-simple-select-label">Category</InputLabel>
+			<Select
+				labelId="demo-simple-select-label"
+				id="demo-simple-select"
+				value={taxe}
+				onChange={(e) => setTaxe(e.target.value)}
+				fullWidth
+				required
+			>
+				<MenuItem value={5.5}>Alimentation</MenuItem>
+				<MenuItem value={2.1}>Magazine</MenuItem>
+				<MenuItem value={20}>Décoration/Alcool</MenuItem>
+			</Select>
 			<Input
 				value={quantity}
 				label="Quantity in Stock"

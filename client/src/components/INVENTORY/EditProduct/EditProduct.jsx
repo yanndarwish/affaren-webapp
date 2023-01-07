@@ -1,4 +1,4 @@
-import { InputAdornment } from "@mui/material"
+import { InputAdornment, InputLabel, MenuItem, Select } from "@mui/material"
 import { useState } from "react"
 import {
 	ArtTitle,
@@ -24,7 +24,7 @@ const EditProduct = ({
 }) => {
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState("")
-	const [taxe, setTaxe] = useState("")
+	const [taxe, setTaxe] = useState(product?.product_taxe)
 	const [barcode, setBarcode] = useState("")
 	const [quantity, setQuantity] = useState("")
 	const [received, setReceived] = useState("")
@@ -80,6 +80,8 @@ const EditProduct = ({
 		)
 	}
 
+	console.log(taxe)
+
 	return product ? (
 		sent && res.isSuccess ? (
 			<InfoMessage state="success" text="Product edited successfully" />
@@ -116,18 +118,19 @@ const EditProduct = ({
 					}}
 					onChange={(e) => setPrice(e)}
 				/>
-				<Input
-					label="Taxe"
+				<InputLabel id="demo-simple-select-label">Category</InputLabel>
+				<Select
+					labelId="demo-simple-select-label"
+					id="demo-simple-select"
+					value={taxe}
+					onChange={(e) => setTaxe(e.target.value)}
 					fullWidth
-					inputAdornment={{
-						startAdornment: (
-							<InputAdornment data-id="nb-qty" position="start">
-								<p data-id="nb-qty">{product.product_taxe} %</p>
-							</InputAdornment>
-						),
-					}}
-					onChange={(e) => setTaxe(e)}
-				/>
+					required
+				>
+					<MenuItem value={5.5}>Alimentation</MenuItem>
+					<MenuItem value={2.1}>Magazine</MenuItem>
+					<MenuItem value={20}>Décoration/Alcool</MenuItem>
+				</Select>
 				<Gap>
 					<Input
 						label="Quantity in Stock"

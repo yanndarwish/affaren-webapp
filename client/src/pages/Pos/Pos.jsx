@@ -124,7 +124,7 @@ const Pos = () => {
 							: ht,
 					}
 					break
-				case 10:
+				case 2.1:
 					taxesDetails = {
 						...taxesDetails,
 						tva2: taxesDetails.tva2
