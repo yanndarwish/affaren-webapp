@@ -25,14 +25,148 @@ app.use(cors())
 // ********** PRINTER ************ //
 // ******************************* //
 app.post("/print", async (req, res) => {
+	const {
+		amount,
+		day,
+		discount,
+		id,
+		month,
+		paymentMethods,
+		products,
+		taxes,
+		user,
+		year,
+	} = req.body
 	try {
 		let printer = new ThermalPrinter({
 			type: PrinterTypes.EPSON,
 			interface: "tcp://192.168.1.71",
 		})
 
+		const getTime = () => {
+			const date = new Date()
+			const time = date.toLocaleTimeString()
+			return time
+		}
+
+		let sortedTaxe = Object.keys(taxes).sort()
+
 		printer.alignCenter()
-		printer.println("Another one !")
+		printer.println("Bienvenue chez")
+		printer.setTextSize(2, 2)
+		printer.println("AFFÄREN")
+		printer.setTextNormal()
+		printer.println("Välkommen")
+		printer.newLine()
+		printer.println("80 rue de Saussure 75017 Paris")
+		printer.println("svenskaaffarenparis@gmail.com")
+		printer.println("0142819175")
+		printer.println("Mardi au samedi de 11h à 18h30")
+		printer.println("Dimanche de 12h à 17h")
+		printer.newLine()
+		printer.println(`Date: ${day}/${month}/${year} ${getTime()}`)
+		printer.println("--------------------------------------")
+		printer.alignLeft()
+		printer.alignCenter()
+		printer.bold(true)
+		printer.println(`Sale n°${id}`)
+		printer.newLine()
+		printer.alignLeft()
+		printer.bold(false)
+		printer.tableCustom([
+			{ text: "n°", align: "LEFT", width: 0.1, bold: true },
+			{ text: "Produit", width: 0.5, bold: true },
+			{ text: "Qté", width: 0.1, bold: true },
+			{ text: "Prix", align: "RIGHT", width: 0.2, bold: true },
+		])
+		products.forEach((product, i) => {
+			printer.tableCustom([
+				{ text: `${i + 1}`, align: "LEFT", width: 0.1 },
+				{
+					text: `${
+						product.name.length > 20
+							? product.name.slice(0, 19) + "..."
+							: product.name
+					} `,
+					width: 0.5,
+				},
+				{ text: `${product.quantity}`, width: 0.1 },
+				{ text: `${product.price}`, align: "RIGHT", width: 0.2 },
+			])
+		})
+		printer.newLine()
+		printer.alignCenter()
+		printer.println("--------------------------------------")
+		printer.newLine()
+		printer.alignLeft()
+		printer.tableCustom([
+			{ text: "", align: "LEFT", width: 0.1, bold: true },
+			{
+				text: `${
+					products.length > 1
+						? products.length + " articles"
+						: products.length + " article"
+				}`,
+				width: 0.5,
+				bold: true,
+			},
+		])
+		printer.newLine()
+		printer.setTextSize(1, 1)
+		printer.tableCustom([
+			{ text: "", align: "LEFT", width: 0.1, bold: true },
+			{
+				text: `TOTAL ${amount} €`,
+				width: 0.5,
+				bold: true,
+			},
+		])
+		printer.setTextNormal()
+		printer.alignCenter()
+		printer.println("--------------------------------------")
+		printer.newLine()
+		printer.alignLeft()
+		sortedTaxe.forEach((key) => {
+			let prop
+			if (key === "total1") {
+				prop = "Total alimentation"
+			} else if (key === "total2") {
+				prop = "Total magazine"
+			} else if (key === "total3") {
+				prop = "Total décoration"
+			}
+			if (key === "ht1") {
+				prop = "HT alimentation"
+			} else if (key === "ht2") {
+				prop = "HT magazine"
+			} else if (key === "ht3") {
+				prop = "HT décoration"
+			}
+			if (key === "tva1") {
+				prop = "TVA 5.5%"
+			} else if (key === "tva2") {
+				prop = "TVA 2.1%"
+			} else if (key === "tva3") {
+				prop = "TVA 20%"
+			}
+			if (key === "totalTva") {
+				prop = "Total TVA"
+			}
+			if (key === "totalHt") {
+				prop = "Total HT"
+			}
+			printer.tableCustom([
+				{ text: "", align: "LEFT", width: 0.1 },
+				{ text: prop, width: 0.5 },
+				{ text: taxes[key], width: 0.3 },
+			])
+		})
+		printer.newLine()
+		printer.alignCenter()
+		printer.println("--------------------------------------")
+		printer.println("Merci de votre visite et à bientôt !")
+		printer.println("Hejdå !")
+
 		printer.cut()
 
 		try {

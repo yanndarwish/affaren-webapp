@@ -73,6 +73,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const [leftPaying, setLeftPaying] = useState("")
 	const [giveBack, setGiveBack] = useState(0)
 	const [modalIsOpen, setModalIsOpen] = useState(false)
+	const [actualSale, setActualSale] = useState({})
 	const sale = useSelector((state) => state.sale)
 	const user = useSelector((state) => state.user.user)
 
@@ -157,7 +158,8 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				month: month,
 				id: parseInt(confirmedSale.id),
 			})
-			// print ticket button in modal
+
+			setActualSale(confirmedSale)
 
 			// reset sale
 			dispatch(resetSale())
@@ -188,10 +190,13 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		)
 	}
 
+	const printing = () => {
+		print(actualSale)
+	}
 	const ModalFooter = () => {
 		return (
 			<>
-				<Button title="Print Ticket" onClick={print} />
+				<Button title="Print Ticket" onClick={printing} />
 			</>
 		)
 	}
