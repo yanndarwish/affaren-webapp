@@ -1,4 +1,4 @@
-import * as React from "react"
+
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import { Modal } from "modal-rjs"
-import { useState } from "react"
+import { useState, Fragment } from "react"
 import SalesTableRow from "../SalesTableRow/SalesTableRow"
 import SalesTableRowSeparator from "../SalesTableRow/SalesTableRowSeparator"
 import SalesModalBody from "../SalesModal/SalesModalBody"
@@ -17,13 +17,12 @@ import { useGetSaleProductsQuery } from "../../../redux/services/salesApi"
 import {
 	ArtTitle,
 	ColumnCenter,
-	ErrorMessage,
 	FullCenter,
 } from "../../../assets/styles/common.styles"
 import Button from "../../common/Button/Button.component"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
 import { usePostPrintMutation } from "../../../redux/services/printApi"
+import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 export default function SalesTable({ array }) {
 	const [selected, setSelected] = useState("")
@@ -41,6 +40,9 @@ export default function SalesTable({ array }) {
 		setId(id)
 		setIsOpen(true)
 		setSkip(false)
+		if (response.status === "rejected") {
+			response.reset()
+		}
 	}
 
 	const toggleDeleteModal = () => {
@@ -56,32 +58,31 @@ export default function SalesTable({ array }) {
 	}
 
 	const handleTicketPrint = () => {
-	const sale = array && array.find((sale) => sale.sale_id === parseInt(selected))
+		const sale =
+			array && array.find((sale) => sale.sale_id === parseInt(selected))
 
-	let products = []
-	data.forEach(product => {
-		let prod = {
-			name: product.product_name,
-			price: product.product_price,
-			quantity: product.product_quantity,
+		let products = []
+		data.forEach((product) => {
+			let prod = {
+				name: product.product_name,
+				price: product.product_price,
+				quantity: product.product_quantity,
+			}
+			products.push(prod)
+		})
+		const formattedSale = {
+			amount: sale.sale_amount,
+			day: sale.sale_day,
+			discount: sale.sale_discount,
+			id: sale.sale_id,
+			month: sale.sale_month,
+			paymentMethods: sale.sale_payment_methods,
+			products: products,
+			taxes: sale.sale_taxes,
+			user: sale.sale_user,
+			year: sale.sale_year,
 		}
-		products.push(prod)
-	})
-	const formattedSale = {
-		amount: sale.sale_amount,
-		day: sale.sale_day,
-		discount: sale.sale_discount,
-		id: sale.sale_id,
-		month: sale.sale_month,
-		paymentMethods: sale.sale_payment_methods,
-		products: products,
-		taxes: sale.sale_taxes,
-		user: sale.sale_user,
-		year: sale.sale_year
-	}
-	print(formattedSale)
-	console.log(formattedSale)
-		console.log("print ticket " + selected)
+		print(formattedSale)
 	}
 
 	const handleSaleDelete = () => {
@@ -91,17 +92,11 @@ export default function SalesTable({ array }) {
 
 	const DeleteConfirmation = () => {
 		return (
-			<FullCenter>
-				<ColumnCenter>
-					<FullCenter>
-						<CheckCircleOutlineIcon sx={{ fontSize: "64px" }} color="success" />
-					</FullCenter>
-				<ArtTitle>Sale {selected} has been deleted successfully!</ArtTitle>
-				</ColumnCenter>
-			</FullCenter>
+			<InfoMessage state="success" text={"Sale " + selected + " has been deleted successfully!"}/>
 		)
 	}
 
+	console.log(response)
 	return (
 		<>
 			<TableContainer component={Paper}>
@@ -121,18 +116,18 @@ export default function SalesTable({ array }) {
 						{array &&
 							array.map((sale, i) => {
 								return i === 0 ? (
-									<React.Fragment key={"separator " + i}>
+									<Fragment key={"separator " + i}>
 										<SalesTableRowSeparator sale={sale} />
 										<SalesTableRow sale={sale} onClick={handleClick} />
-									</React.Fragment>
+									</Fragment>
 								) : i > 0 &&
 								  array &&
 								  array[i].sale_day !== array[i - 1].sale_day ? (
-									<React.Fragment key={"separatore" + i}>
+									<Fragment key={"separatore" + i}>
 										<SalesTableRowSeparator sale={sale} />
 
 										<SalesTableRow sale={sale} onClick={handleClick} />
-									</React.Fragment>
+									</Fragment>
 								) : (
 									<SalesTableRow
 										sale={sale}
@@ -152,14 +147,9 @@ export default function SalesTable({ array }) {
 					res.isSuccess ? (
 						<DeleteConfirmation />
 					) : res.isError ? (
-						<FullCenter>
-							<ColumnCenter>
-								<HighlightOffOutlinedIcon
-									sx={{ fontSize: "64px", color: "red" }}
-								/>
-								<ErrorMessage>Failed to delete sale</ErrorMessage>
-							</ColumnCenter>
-						</FullCenter>
+						<InfoMessage state="error" text="Failed to delete sale" />
+					) : response.isError ? (
+						<InfoMessage state="error" text="Failed to print ticket" />
 					) : (
 						<SalesModalBody data={array} selected={selected} details={data} />
 					)

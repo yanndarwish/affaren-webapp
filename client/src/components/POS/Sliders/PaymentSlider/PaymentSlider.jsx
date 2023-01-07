@@ -14,6 +14,7 @@ import {
 	ArtTitle,
 	ColumnCenter,
 	ErrorMessage,
+	SpaceHeader,
 	SubTitle,
 } from "../../../../assets/styles/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
@@ -89,6 +90,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const closeSlider = (e) => {
 		if (overlayRef.current === e.target) {
 			setIsOpen(false)
+			if (respo.status === "rejected") {
+				respo.reset()
+			}
 		}
 	}
 
@@ -183,10 +187,16 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 
 	const ModalBody = () => {
 		return (
-			<ColumnCenter>
+			respo.isError ? (
+				<InfoMessage state="error" text="Failed to print ticket"/>
+			) :  (
+
+				<ColumnCenter>
 				<InfoMessage state="success" />
 				{parseFloat(giveBack) > 0 && <ArtTitle>Give Back {giveBack}€</ArtTitle>}
-			</ColumnCenter>
+				</ColumnCenter>
+				)
+			
 		)
 	}
 
@@ -195,9 +205,10 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	}
 	const ModalFooter = () => {
 		return (
-			<>
+			<SpaceHeader>
 				<Button title="Print Ticket" onClick={printing} />
-			</>
+				<Button title="Close" color="success" onClick={closeModals} />
+			</SpaceHeader>
 		)
 	}
 
@@ -205,6 +216,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		setModalIsOpen(false)
 		if (!res.isError && !resp.isError && !response.isError) {
 			setIsOpen(false)
+			if (respo.status === "rejected") {
+				respo.reset()
+			}
 		}
 	}
 
