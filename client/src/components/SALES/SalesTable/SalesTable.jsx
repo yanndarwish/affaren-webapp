@@ -56,7 +56,31 @@ export default function SalesTable({ array }) {
 	}
 
 	const handleTicketPrint = () => {
-		print()
+	const sale = array && array.find((sale) => sale.sale_id === parseInt(selected))
+
+	let products = []
+	data.forEach(product => {
+		let prod = {
+			name: product.product_name,
+			price: product.product_price,
+			quantity: product.product_quantity,
+		}
+		products.push(prod)
+	})
+	const formattedSale = {
+		amount: sale.sale_amount,
+		day: sale.sale_day,
+		discount: sale.sale_discount,
+		id: sale.sale_id,
+		month: sale.sale_month,
+		paymentMethods: sale.sale_payment_methods,
+		products: products,
+		taxes: sale.sale_taxes,
+		user: sale.sale_user,
+		year: sale.sale_year
+	}
+	print(formattedSale)
+	console.log(formattedSale)
 		console.log("print ticket " + selected)
 	}
 

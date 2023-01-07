@@ -50,6 +50,16 @@ app.post("/print", async (req, res) => {
 		}
 
 		let sortedTaxe = Object.keys(taxes).sort()
+		let cashDiscount = discount.filter(product => product.discountType === "cash")
+		let percentDiscount = discount.filter(product => product.discountType === "percent")
+		let cashDiscountAmount = 0
+		let percentDiscountAmount = 0
+		cashDiscount.forEach(discount => {
+			cashDiscountAmount += discount.reduction
+		})
+		percentDiscount.forEach((discount) => {
+			percentDiscountAmount += discount.reduction
+		})
 
 		printer.alignCenter()
 		printer.println("Bienvenue chez")
@@ -65,11 +75,12 @@ app.post("/print", async (req, res) => {
 		printer.println("Dimanche de 12h à 17h")
 		printer.newLine()
 		printer.println(`Date: ${day}/${month}/${year} ${getTime()}`)
+		printer.println(`Caissier: ${user}`)
 		printer.println("--------------------------------------")
 		printer.alignLeft()
 		printer.alignCenter()
 		printer.bold(true)
-		printer.println(`Sale n°${id}`)
+		printer.println(id)
 		printer.newLine()
 		printer.alignLeft()
 		printer.bold(false)
@@ -112,6 +123,26 @@ app.post("/print", async (req, res) => {
 			},
 		])
 		printer.newLine()
+		if (cashDiscount.length > 0) {
+			printer.tableCustom([
+				{ text: "", align: "LEFT", width: 0.2, bold: true },
+				{
+					text: `Réduction: ${cashDiscountAmount.toFixed(2)} €`,
+					width: 0.5,
+					bold: true,
+				},
+			])
+		}
+		if (percentDiscount.length > 0) {
+			printer.tableCustom([
+				{ text: "", align: "LEFT", width: 0.2, bold: true },
+				{
+					text: `Réduction: ${percentDiscountAmount.toFixed(2)} €`,
+					width: 0.5,
+					bold: true,
+				},
+			])
+		}
 		printer.setTextSize(1, 1)
 		printer.tableCustom([
 			{ text: "", align: "LEFT", width: 0.1, bold: true },
@@ -122,6 +153,54 @@ app.post("/print", async (req, res) => {
 			},
 		])
 		printer.setTextNormal()
+		printer.tableCustom([
+			{ text: "", align: "LEFT", width: 0.1, bold: true },
+			{
+				text: `Payé en ${
+					Object.keys(paymentMethods).length > 1
+						? Object.keys(paymentMethods)[0] === "cash"
+							? "ESPÈCES: " +
+							  paymentMethods[Object.keys(paymentMethods)[0]] +
+							  " €"
+							: Object.keys(paymentMethods)[0] === "card"
+							? "CARTE: " +
+							  paymentMethods[Object.keys(paymentMethods)[0]] +
+							  " €"
+							: "CHÈQUE: " +
+							  paymentMethods[Object.keys(paymentMethods)[0]] +
+							  " €"
+						: Object.keys(paymentMethods)[0] === "cash"
+						? "ESPÈCES"
+						: Object.keys(paymentMethods)[0] === "card"
+						? "CARTE"
+						: "CHÈQUE"
+				}`,
+				width: 0.5,
+				bold: true,
+			},
+		])
+		if (Object.keys(paymentMethods).length > 1) {
+			printer.tableCustom([
+				{ text: "", align: "LEFT", width: 0.1, bold: true },
+				{
+					text: `Payé en ${
+						Object.keys(paymentMethods)[1] === "cash"
+							? "ESPÈCES: " +
+							  paymentMethods[Object.keys(paymentMethods)[1]] +
+							  " €"
+							: Object.keys(paymentMethods)[1] === "card"
+							? "CARTE: " +
+							  paymentMethods[Object.keys(paymentMethods)[1]] +
+							  " €"
+							: "CHÈQUE: " +
+							  paymentMethods[Object.keys(paymentMethods)[1]] +
+							  " €"
+					}`,
+					width: 0.5,
+					bold: true,
+				},
+			])
+		}
 		printer.alignCenter()
 		printer.println("--------------------------------------")
 		printer.newLine()
