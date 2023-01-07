@@ -43,30 +43,32 @@ app.post("/print", async (req, res) => {
 			type: PrinterTypes.EPSON,
 			interface: "tcp://192.168.1.71",
 		})
-		
-		let isConnected = await printer.isPrinterConnected() 
-		
-		console.log(isConnected)
-		if (isConnected) {
 
+		let isConnected = await printer.isPrinterConnected()
+
+		if (isConnected) {
 			const getTime = () => {
 				const date = new Date()
 				const time = date.toLocaleTimeString()
 				return time
 			}
-	
+
 			let sortedTaxe = Object.keys(taxes).sort()
-			let cashDiscount = discount.filter(product => product.discountType === "cash")
-			let percentDiscount = discount.filter(product => product.discountType === "percent")
+			let cashDiscount = discount.filter(
+				(product) => product.discountType === "cash"
+			)
+			let percentDiscount = discount.filter(
+				(product) => product.discountType === "percent"
+			)
 			let cashDiscountAmount = 0
 			let percentDiscountAmount = 0
-			cashDiscount.forEach(discount => {
+			cashDiscount.forEach((discount) => {
 				cashDiscountAmount += discount.reduction
 			})
 			percentDiscount.forEach((discount) => {
 				percentDiscountAmount += discount.reduction
 			})
-	
+
 			printer.alignCenter()
 			printer.println("Bienvenue chez")
 			printer.setTextSize(2, 2)
@@ -250,9 +252,9 @@ app.post("/print", async (req, res) => {
 			printer.println("--------------------------------------")
 			printer.println("Merci de votre visite et à bientôt !")
 			printer.println("Hejdå !")
-	
+
 			printer.cut()
-	
+
 			try {
 				let execute = printer.execute()
 				console.error("Print done!")
@@ -267,6 +269,36 @@ app.post("/print", async (req, res) => {
 	} catch (err) {
 		console.log(err)
 		res.status(400).send("Print failed")
+	}
+})
+
+// open drawer
+app.post("/drawer", async (req, res) => {
+	try {
+		let printer = new ThermalPrinter({
+			type: PrinterTypes.EPSON,
+			interface: "tcp://192.168.1.71",
+		})
+
+		let isConnected = await printer.isPrinterConnected()
+
+		if (isConnected) {
+			printer.openCashDrawer()
+			try {
+				let execute = printer.execute()
+				console.error("Print done!")
+				res.status(200).send()
+			} catch (error) {
+				console.log("Print failed:", error)
+				res.status(400).send("Failed to open Drawer")
+			}
+		} else {
+			console.log("Drawer not connected")
+			res.status(400).send("Drawer not connected")
+		}
+	} catch (err) {
+		console.log(err)
+		res.status(400).send("Failed to open Drawer")
 	}
 })
 

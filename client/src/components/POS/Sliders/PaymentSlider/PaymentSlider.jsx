@@ -36,6 +36,7 @@ import {
 } from "../../../../redux/services/salesApi"
 import { useUpdateProductsMutation } from "../../../../redux/services/productsApi"
 import { usePostPrintMutation } from "../../../../redux/services/printApi"
+import { usePostDrawerMutation } from "../../../../redux/services/printApi"
 import { Modal } from "modal-rjs"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 
@@ -82,6 +83,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const [postSaleProducts, resp] = usePostSaleProductsMutation()
 	const [postSale, response] = usePostSaleMutation()
 	const [print, respo] = usePostPrintMutation()
+	const [postDrawer, re] = usePostDrawerMutation()
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue)
@@ -92,6 +94,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			setIsOpen(false)
 			if (respo.status === "rejected") {
 				respo.reset()
+				re.reset()
 			}
 		}
 	}
@@ -164,7 +167,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			})
 
 			setActualSale(confirmedSale)
-
+			if (Object.keys(confirmedSale.paymentMethods).includes('cash')) {
+				openDrawer()
+			}
 			// reset sale
 			dispatch(resetSale())
 			dispatch(setUser({ user: user.user_first_name }))
@@ -186,18 +191,19 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	}
 
 	const ModalBody = () => {
-		return (
-			respo.isError ? (
-				<InfoMessage state="error" text="Failed to print ticket"/>
-			) :  (
-
-				<ColumnCenter>
+		return respo.isError ? (
+			<InfoMessage state="error" text="Failed to print ticket" />
+		) : re.isError ? (
+			<InfoMessage state="error" text="Failed to open drawer" />
+		) : (
+			<ColumnCenter>
 				<InfoMessage state="success" />
 				{parseFloat(giveBack) > 0 && <ArtTitle>Give Back {giveBack}€</ArtTitle>}
-				</ColumnCenter>
-				)
-			
+			</ColumnCenter>
 		)
+	}
+	const openDrawer = () => {
+		postDrawer()
 	}
 
 	const printing = () => {
@@ -218,6 +224,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			setIsOpen(false)
 			if (respo.status === "rejected") {
 				respo.reset()
+			}
+			if (re.status === "rejected") {
+				re.reset()
 			}
 		}
 	}

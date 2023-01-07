@@ -27,9 +27,10 @@ import {
 	ErrorMessage,
 } from "../../assets/styles/common.styles"
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
+import { useGetCardsQuery } from "../../redux/services/cardApi"
+import { usePostDrawerMutation } from "../../redux/services/printApi"
 import { useEffect } from "react"
 import { setSaleAmount, setTaxes } from "../../redux/features/sale"
-import { useGetCardsQuery } from "../../redux/services/cardApi"
 import { useNavigate } from "react-router-dom"
 
 const Pos = () => {
@@ -46,6 +47,7 @@ const Pos = () => {
 
 	const { isError } = useGetCardsQuery()
 	const { error } = useGetNextSaleIdQuery()
+	const [postDrawer, res] = usePostDrawerMutation()
 
 	const redirect = () => {
 		!loggedIn && navigate("/login")
@@ -68,7 +70,6 @@ const Pos = () => {
 		}
 		setCardSection(!cardSection)
 		document.getElementById("main-barcode-input").focus()
-
 	}
 
 	const openPaymentSlider = () => {
@@ -85,6 +86,10 @@ const Pos = () => {
 
 	const openAddCardSlider = () => {
 		setAddCardSlider(true)
+	}
+
+	const openDrawer = () => {
+		postDrawer()
 	}
 
 	const updateTotalAmount = () => {
@@ -177,6 +182,9 @@ const Pos = () => {
 	useEffect(() => {
 		updateTotalAmount()
 		updateTaxes()
+		if (res.isError) {
+			res.reset()
+		}
 	}, [sale.products])
 
 	useEffect(() => {
@@ -212,10 +220,10 @@ const Pos = () => {
 					</TotalSection>
 					<ButtonSectionSpace>
 						<ButtonSection>
-							<Button title="Receipt" />
-							<Button title="Drawer" />
+							<Button title="Drawer" onClick={openDrawer} />
 							<Button title="Discount" onClick={() => openDiscountSlider()} />
 						</ButtonSection>
+						{res.isError && <ErrorMessage>Failed to open Drawer</ErrorMessage>}
 						<Box>
 							<Button
 								color="success"

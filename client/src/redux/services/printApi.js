@@ -23,13 +23,20 @@ export const printApi = createApi({
 			query: (payload) => ({
 				url: "print",
 				method: "POST",
-				body: payload
+				body: payload,
+			}),
+		}),
+		postDrawer: builder.mutation({
+			query: () => ({
+				url: "drawer",
+				method: "POST",
 			}),
 		}),
 	}),
 })
 
 export const {
-usePostPrintMutation
+usePostPrintMutation,
+usePostDrawerMutation
 } = printApi
 export default printApi
