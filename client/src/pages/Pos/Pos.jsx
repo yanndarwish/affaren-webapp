@@ -25,7 +25,6 @@ import {
 	SubTitle,
 	Title,
 	ErrorMessage,
-	Flex,
 } from "../../assets/styles/common.styles"
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 import { useEffect } from "react"

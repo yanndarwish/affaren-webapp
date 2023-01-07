@@ -11,6 +11,8 @@ const pool = require("./db")
 const path = require("path")
 const { query, urlencoded } = require("express")
 const app = express()
+const ThermalPrinter = require("node-thermal-printer").printer
+const PrinterTypes = require("node-thermal-printer").types
 
 app.set("view engine", "ejs")
 app.use(express.static(path.join(__dirname, "public")))
@@ -18,6 +20,34 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use(express.json())
 app.use(cors())
+
+// ******************************* //
+// ********** PRINTER ************ //
+// ******************************* //
+app.post("/print", async (req, res) => {
+	try {
+		let printer = new ThermalPrinter({
+			type: PrinterTypes.EPSON,
+			interface: "tcp://192.168.1.71",
+		})
+
+		printer.alignCenter()
+		printer.println("Another one !")
+		printer.cut()
+
+		try {
+			let execute = printer.execute()
+			console.error("Print done!")
+			res.status(200).send()
+		} catch (error) {
+			console.log("Print failed:", error)
+			res.status(400).send("Print failed")
+		}
+	} catch (err) {
+		console.log(err)
+		res.status(400).send("Print failed")
+	}
+})
 
 // ******************************* //
 // *********** LOGIN ************* //
