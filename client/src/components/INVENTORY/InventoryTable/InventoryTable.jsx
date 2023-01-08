@@ -10,7 +10,6 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp"
 import { useState } from "react"
 import {
 	CloseColumn,
-	Flex,
 	VerticalCenter,
 } from "../../../assets/styles/common.styles"
 import { useEffect } from "react"
@@ -57,7 +56,6 @@ export default function InventoryTable({ products, openEditor }) {
 		handleSort()
 	}, [products])
 
-	console.log(filteredProducts)
 	return (
 		<TableContainer component={Paper}>
 			<Table sx={{ minWidth: 650 }} aria-label="simple table">
