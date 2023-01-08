@@ -160,6 +160,13 @@ export const Gap = styled.div`
 	gap: ${constant.GAP * 2}px;
 `
 
+export const CloseColumn = styled.div`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height:100%
+`
+
 export const Column = styled.div`
 	display: flex;
 	flex-direction: column;
