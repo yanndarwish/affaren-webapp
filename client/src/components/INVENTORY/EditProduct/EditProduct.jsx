@@ -52,6 +52,8 @@ const EditProduct = ({
 		// reset and refocus
 		focusOnBarcode()
 		resetBarcode()
+		document.getElementById("inventory-barcode-input").focus()
+
 	}
 
 	const handleDelete = () => {
@@ -62,6 +64,8 @@ const EditProduct = ({
 		// reset and refocus
 		focusOnBarcode()
 		resetBarcode()
+		document.getElementById("inventory-barcode-input").focus()
+
 	}
 
 	const handleModal = () => {

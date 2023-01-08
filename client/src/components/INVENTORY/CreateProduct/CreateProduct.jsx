@@ -48,6 +48,7 @@ const CreateProduct = ({
 		focusOnBarcode()
 		resetInputs()
 		resetBarcode()
+		document.getElementById("inventory-barcode-input").focus()
 	}
 
 	const resetInputs = () => {
