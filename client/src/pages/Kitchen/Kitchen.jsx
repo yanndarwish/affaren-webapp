@@ -7,7 +7,6 @@ import {
 	Body,
 	ColumnCenter,
 	Container,
-	ErrorMessage,
 	Flex,
 	FullCenter,
 	SubTitle,
