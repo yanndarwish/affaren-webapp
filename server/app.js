@@ -847,7 +847,7 @@ app.delete("/orders/:id", auth, async (req, res) => {
 // ******************************* //
 
 // create a dish
-app.post("/dishes", async (req, res) => {
+app.post("/dishes", auth, async (req, res) => {
 	try {
 		const { dishName, dishIngredients, dishCategory, dishPrice } = req.body
 		const response = await pool.query(
@@ -904,14 +904,13 @@ app.get("/dishes/:id", auth, async (req, res) => {
 })
 
 // delete a dish by id
-app.delete("/dishes/:id", async (req, res) => {
+app.delete("/dishes/:id", auth, async (req, res) => {
 	try {
 		const { id } = req.params
 
-		const response = await pool.query(
-			"DELETE FROM dishes WHERE dish_id = $1",
-			[id]
-		)
+		const response = await pool.query("DELETE FROM dishes WHERE dish_id = $1", [
+			id,
+		])
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
@@ -921,7 +920,7 @@ app.delete("/dishes/:id", async (req, res) => {
 // ******************************* //
 // ********** PRINTER ************ //
 // ******************************* //
-app.post("/print", async (req, res) => {
+app.post("/print", auth, async (req, res) => {
 	const {
 		amount,
 		day,
@@ -1170,7 +1169,7 @@ app.post("/print", async (req, res) => {
 })
 
 // open drawer
-app.post("/drawer", async (req, res) => {
+app.post("/drawer", auth, async (req, res) => {
 	try {
 		let printer = new ThermalPrinter({
 			type: PrinterTypes.EPSON,
