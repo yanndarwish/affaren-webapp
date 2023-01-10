@@ -3,6 +3,8 @@ import dishApi from "../services/dishApi"
 
 const initialState = {
 	dishes: [],
+	statusFilter: "true",
+	typeFilter: "all",
 }
 
 const dishSlice = createSlice({
@@ -10,6 +12,12 @@ const dishSlice = createSlice({
 	initialState,
 	reducers: {
 		resetDishes: () => initialState,
+		setMenuStatusFilter: (state, action) => {
+			state.statusFilter = action.payload
+		},
+		setMenuTypeFilter: (state, action) => {
+			state.typeFilter = action.payload
+		}
 	},
 	extraReducers: (builder) => {
 		builder.addMatcher(
@@ -21,6 +29,6 @@ const dishSlice = createSlice({
 	},
 })
 
-export const { resetDishes } = dishSlice.actions
+export const { resetDishes, setMenuStatusFilter, setMenuTypeFilter } = dishSlice.actions
 
 export default dishSlice.reducer
