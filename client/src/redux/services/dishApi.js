@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import store from "../store/store"
 
-export const orderApi = createApi({
-	reducerPath: "orderApi",
+export const dishApi = createApi({
+	reducerPath: "dishApi",
 	baseQuery: fetchBaseQuery({
 		baseUrl: "http://localhost:4001/",
 		prepareHeaders: (headers) => {
@@ -18,51 +18,50 @@ export const orderApi = createApi({
 			return headers
 		},
 	}),
-	tagTypes: ["Orders", "Order"],
+	tagTypes: ["Dishes"],
 	endpoints: (builder) => ({
-		getOrders: builder.query({
+		getDishes: builder.query({
 			query: () => ({
-				url: "orders",
+				url: "dishes",
 			}),
-			providesTags: ["Orders"],
+			providesTags: ["Dishes"],
 		}),
-		getOrder: builder.query({
+		getDish: builder.query({
 			query: ({ id }) => ({
-				url: `orders/${id}`,
+				url: `dishes/${id}`,
 			}),
-			providesTags: ["Order"],
 		}),
-		updateOrder: builder.mutation({
+		updateDish: builder.mutation({
 			query: ({ id, payload }) => ({
-				url: `orders/${id}`,
+				url: `dishes/${id}`,
 				method: "PUT",
 				body: payload,
 			}),
-			invalidatesTags: ["Orders"],
+			invalidatesTags: ["Dishes"],
 		}),
-		deleteOrder: builder.mutation({
+		deleteDish: builder.mutation({
 			query: ({ id }) => ({
-				url: `orders/${id}`,
+				url: `dishes/${id}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: ["Orders"],
+			invalidatesTags: ["Dishes"],
 		}),
-		postOrder: builder.mutation({
+		postDish: builder.mutation({
 			query: (payload) => ({
-				url: "orders",
+				url: "dishes",
 				method: "POST",
 				body: payload,
 			}),
-			invalidatesTags: ["Orders"],
+			invalidatesTags: ["Dishes"],
 		}),
 	}),
 })
 
 export const {
-	useGetOrdersQuery,
-    useGetOrderQuery,
-    useUpdateOrderMutation,
-    useDeleteOrderMutation,
-    usePostOrderMutation
-} = orderApi
-export default orderApi
+	useDeleteDishMutation,
+    useGetDishQuery,
+    useGetDishesQuery,
+    useUpdateDishMutation,
+    usePostDishMutation
+} = dishApi
+export default dishApi

@@ -849,10 +849,10 @@ app.delete("/orders/:id", auth, async (req, res) => {
 // create a dish
 app.post("/dishes", auth, async (req, res) => {
 	try {
-		const { dishName, dishIngredients, dishCategory, dishPrice } = req.body
+		const { dishName, dishIngredients, dishCategory, dishPrice, dishActive } = req.body
 		const response = await pool.query(
-			"INSERT INTO dishes (dish_name, dish_ingredients, dish_category, dish_price) VALUES ($1, $2, $3, $4)",
-			[dishName, dishIngredients, dishCategory, dishPrice]
+			"INSERT INTO dishes (dish_name, dish_ingredients, dish_category, dish_price, dish_active) VALUES ($1, $2, $3, $4, $5)",
+			[dishName, dishIngredients, dishCategory, dishPrice, dishActive]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -865,10 +865,10 @@ app.post("/dishes", auth, async (req, res) => {
 app.put("/dishes/:id", auth, async (req, res) => {
 	try {
 		const { id } = req.params
-		const { dishName, dishIngredients, dishCategory, dishPrice } = req.body
+		const { dishName, dishIngredients, dishCategory, dishPrice, dishActive } = req.body
 		const response = await pool.query(
-			"UPDATE dishes SET dish_name = $1, dish_ingredients = $2, dish_category = $3, dish_price = $4 WHERE dish_id = $5",
-			[dishName, dishIngredients, dishCategory, dishPrice, id]
+			"UPDATE dishes SET dish_name = $1, dish_ingredients = $2, dish_category = $3, dish_price = $4, dish_active = $5 WHERE dish_id = $6",
+			[dishName, dishIngredients, dishCategory, dishPrice, dishActive, id]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
