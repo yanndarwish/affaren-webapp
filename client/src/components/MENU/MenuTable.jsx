@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Column, SubTitle } from "../../assets/styles/common.styles"
 
-const MenuTable = () => {
+const MenuTable = ({ openEdit, openDelete }) => {
 	const statusFilter = useSelector((state) => state.dishes.statusFilter)
 	const typeFilter = useSelector((state) => state.dishes.typeFilter)
 	const dishes = useSelector((state) => state.dishes.dishes)
@@ -33,7 +33,6 @@ const MenuTable = () => {
 		setFilteredMenu(array)
 	}
 
-	console.log(filteredMenu)
 	useEffect(() => {
 		filterMenu({ statusFilter, typeFilter, dishes })
 	}, [statusFilter, typeFilter, dishes])
@@ -41,7 +40,9 @@ const MenuTable = () => {
 	return (
 		<Column>
 			<Column>
-				<SubTitle>Starters</SubTitle>
+				{(typeFilter === "all" || typeFilter === "starter") && (
+					<SubTitle>Starters</SubTitle>
+				)}
 				{filteredMenu
 					?.filter((dish) => dish.dish_category === "starter")
 					.map((dish) => (
@@ -50,9 +51,13 @@ const MenuTable = () => {
 							key={dish.dish_id}
 							color="blue"
 							disabled={dish.dish_active === "false"}
+							openEdit={openEdit}
+							openDelete={openDelete}
 						/>
 					))}
-				<SubTitle>Mains</SubTitle>
+				{(typeFilter === "all" || typeFilter === "main") && (
+					<SubTitle>Mains</SubTitle>
+				)}
 				{filteredMenu
 					?.filter((dish) => dish.dish_category === "main")
 					.map((dish) => (
@@ -61,9 +66,13 @@ const MenuTable = () => {
 							key={dish.dish_id}
 							color="red"
 							disabled={dish.dish_active === "false"}
+							openEdit={openEdit}
+							openDelete={openDelete}
 						/>
 					))}
-				<SubTitle>Deserts</SubTitle>
+				{(typeFilter === "all" || typeFilter === "desert") && (
+					<SubTitle>Deserts</SubTitle>
+				)}
 				{filteredMenu
 					?.filter((dish) => dish.dish_category === "desert")
 					.map((dish) => (
@@ -72,6 +81,8 @@ const MenuTable = () => {
 							key={dish.dish_id}
 							color="green"
 							disabled={dish.dish_active === "false"}
+							openEdit={openEdit}
+							openDelete={openDelete}
 						/>
 					))}
 			</Column>

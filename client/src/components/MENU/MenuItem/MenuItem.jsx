@@ -5,8 +5,9 @@ import { Icon, IconButton } from "@mui/material"
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 
-const MenuItem = ({ data, color, disabled }) => {
-	console.log(data)
+const MenuItem = ({ data, color, disabled, openEdit, openDelete }) => {
+
+
 	return (
 		<Wrapper color={color} disabled={disabled}>
 			<Column>
@@ -25,11 +26,11 @@ const MenuItem = ({ data, color, disabled }) => {
 					<h3>€</h3>
 				</Flex>
 
-				<IconButton>
-					<EditOutlinedIcon color="primary" />
+				<IconButton data-id={data.dish_id}  onClick={openEdit}>
+					<EditOutlinedIcon color="primary" data-id={data.dish_id} />
 				</IconButton>
-				<IconButton>
-					<DeleteOutlineOutlinedIcon color="error" />
+				<IconButton data-id={data.dish_id} onClick={openDelete}>
+					<DeleteOutlineOutlinedIcon color="error" data-id={data.dish_id} />
 				</IconButton>
 			</VerticalCenter>
 		</Wrapper>
