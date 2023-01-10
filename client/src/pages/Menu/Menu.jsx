@@ -7,7 +7,7 @@ const Menu = () => {
 
   return (
 		<Container theme={theme}>
-			<Title>Kitchen</Title>
+			<Title>Menu</Title>
 		</Container>
 	)
 }

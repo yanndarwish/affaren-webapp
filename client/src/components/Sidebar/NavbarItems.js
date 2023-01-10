@@ -7,6 +7,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined"
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered"
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined"
 import SoupKitchenOutlinedIcon from "@mui/icons-material/SoupKitchenOutlined"
+import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined"
 
 export const navbarItems = [
 	{
@@ -26,31 +27,36 @@ export const navbarItems = [
 	},
 	{
 		id: 3,
+		icon: <RestaurantMenuOutlinedIcon />,
+		route: "menu",
+	},
+	{
+		id: 4,
 		icon: <PieChartOutlineOutlinedIcon />,
 		route: "dashboard",
 	},
 	{
-		id: 4,
+		id: 5,
 		icon: <Inventory2OutlinedIcon />,
 		route: "inventory",
 	},
 	{
-		id: 5,
+		id: 6,
 		icon: <SoupKitchenOutlinedIcon />,
 		route: "kitchen",
 	},
 	{
-		id: 6,
+		id: 7,
 		icon: <PersonOutlineOutlinedIcon />,
 		route: "profile",
 	},
 	{
-		id: 7,
+		id: 8,
 		icon: <HelpOutlineOutlinedIcon />,
 		route: "help",
 	},
 	{
-		id: 8,
+		id: 9,
 		icon: <LogoutOutlinedIcon />,
 		route: "logout",
 	},
@@ -64,21 +70,26 @@ export const cookNavbarItems = [
 	},
 	{
 		id: 1,
+		icon: <RestaurantMenuOutlinedIcon />,
+		route: "menu",
+	},
+	{
+		id: 2,
 		icon: <SoupKitchenOutlinedIcon />,
 		route: "kitchen",
 	},
 	{
-		id: 2,
+		id: 3,
 		icon: <PersonOutlineOutlinedIcon />,
 		route: "profile",
 	},
 	{
-		id: 3,
+		id: 4,
 		icon: <HelpOutlineOutlinedIcon />,
 		route: "help",
 	},
 	{
-		id: 4,
+		id: 5,
 		icon: <LogoutOutlinedIcon />,
 		route: "logout",
 	},

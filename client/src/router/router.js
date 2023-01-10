@@ -11,6 +11,7 @@ import Profile from "../pages/Profile/Profile"
 import Help from "../pages/Help/Help"
 import Logout from "../pages/Logout/Logout"
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword"
+import Menu from "../pages/Menu/Menu"
 
 const router = createBrowserRouter([
 	{
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
 			{
 				path: "orders",
 				element: <Orders />,
+			},
+			{
+				path: "menu",
+				element: <Menu />,
 			},
 			{
 				path: "dashboard",
