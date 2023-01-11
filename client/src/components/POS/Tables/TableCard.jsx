@@ -23,7 +23,9 @@ const TableCard = ({ theme, id, name, price, onClick }) => {
 			data-price={price}
 			onClick={onClick}
 		>
-			<CardTitle ref={titleRef}>{name}</CardTitle>
+			<CardTitle ref={titleRef} data-id={id}>
+				{name}
+			</CardTitle>
 			<Trash data-id={id} data-name={name}>
 				<DeleteOutlineIcon
 					data-id={id}
@@ -32,11 +34,7 @@ const TableCard = ({ theme, id, name, price, onClick }) => {
 					ref={trashRef}
 				/>
 			</Trash>
-			<Modal
-				isOpen={isOpen}
-				setIsOpen={setIsOpen}
-				title="Delete Card"
-			/>
+			<Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Delete Card" />
 		</StyledTableCard>
 	)
 }

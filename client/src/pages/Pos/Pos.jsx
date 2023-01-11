@@ -35,12 +35,14 @@ import { useNavigate } from "react-router-dom"
 import { TableSectionButton } from "../../components/POS/Tables/TablesSection.styles"
 import TablesSection from "../../components/POS/Tables/TablesSection"
 import TableSlider from "../../components/POS/Sliders/TableSlider/TableSlider"
+import { useGetDishesQuery } from "../../redux/services/dishApi"
 
 const Pos = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
 	const sale = useSelector((state) => state.sale)
+	const tables = useSelector((state) => state.table.tables)
 	const dispatch = useDispatch()
 	const [cardSection, setCardSection] = useState(false)
 	const [tableSection, setTableSection] = useState(false)
@@ -49,11 +51,12 @@ const Pos = () => {
 	const [discountSlider, setDiscountSlider] = useState(false)
 	const [addCardSlider, setAddCardSlider] = useState(false)
 	const [tableSlider, setTableSlider] = useState(false)
+	const [selectedTable, setSelectedTable] = useState({})
 
 	const { isError } = useGetCardsQuery()
 	const { error } = useGetNextSaleIdQuery()
 	const [postDrawer, res] = usePostDrawerMutation()
-
+	useGetDishesQuery()
 	const redirect = () => {
 		!loggedIn && navigate("/login")
 	}
@@ -113,8 +116,10 @@ const Pos = () => {
 		setAddCardSlider(true)
 	}
 
-	const openTableSlider = () => {
+	const openTableSlider = (e) => {
 		setTableSlider(true)
+		const id = e.target.dataset.id
+		setSelectedTable(tables?.filter((table) => table.table_id === id)[0])
 	}
 
 	const openDrawer = () => {
@@ -300,6 +305,7 @@ const Pos = () => {
 				setIsOpen={setAddCardSlider}
 			/>
 			<TableSlider
+				data={selectedTable}
 				theme={theme}
 				isOpen={tableSlider}
 				setIsOpen={setTableSlider}

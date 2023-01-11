@@ -34,6 +34,7 @@ const Navbar = () => {
 						width: drawerWidth,
 						boxSizing: "border-box",
 					},
+					zIndex: 2
 				}}
 				variant="permanent"
 				anchor="left"

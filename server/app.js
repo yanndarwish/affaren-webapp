@@ -937,13 +937,13 @@ app.post("/tables", auth, async (req, res) => {
 })
 
 // update a table
-app.put("/tables/:id", auth, async (req, res) => {
+app.put("/tables/:id",  async (req, res) => {
 	try {
 		const { id } = req.params
-		const { year, month, day, status, products } = req.body
+		const { table_year, table_month, table_day, table_status, table_products } = req.body
 		const response = await pool.query(
 			"UPDATE tables SET table_year = $1, table_month = $2, table_day = $3, table_status = $4, table_products = $5 WHERE table_id = $6",
-			[year, month, day, status, products, id]
+			[table_year, table_month, table_day, table_status, table_products, id]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -953,7 +953,7 @@ app.put("/tables/:id", auth, async (req, res) => {
 })
 
 // get all tables
-app.get("/tables", auth, async (req, res) => {
+app.get("/tables",  async (req, res) => {
 	try {
 		const response = await pool.query("SELECT * FROM tables")
 		res.status(200).send(response.rows)
