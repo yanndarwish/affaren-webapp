@@ -32,6 +32,9 @@ import { usePostDrawerMutation } from "../../redux/services/printApi"
 import { useEffect } from "react"
 import { setSaleAmount, setTaxes } from "../../redux/features/sale"
 import { useNavigate } from "react-router-dom"
+import { TableSectionButton } from "../../components/POS/Tables/TablesSection.styles"
+import TablesSection from "../../components/POS/Tables/TablesSection"
+import TableSlider from "../../components/POS/Sliders/TableSlider/TableSlider"
 
 const Pos = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -40,10 +43,12 @@ const Pos = () => {
 	const sale = useSelector((state) => state.sale)
 	const dispatch = useDispatch()
 	const [cardSection, setCardSection] = useState(false)
+	const [tableSection, setTableSection] = useState(false)
 	const [paymentSlider, setPaymentSlider] = useState(false)
 	const [noBarcodeSlider, setNoBarcodeSlider] = useState(false)
 	const [discountSlider, setDiscountSlider] = useState(false)
 	const [addCardSlider, setAddCardSlider] = useState(false)
+	const [tableSlider, setTableSlider] = useState(false)
 
 	const { isError } = useGetCardsQuery()
 	const { error } = useGetNextSaleIdQuery()
@@ -72,6 +77,26 @@ const Pos = () => {
 		document.getElementById("main-barcode-input").focus()
 	}
 
+	const toggleTableSection = () => {
+		const tableSectionEl = document.getElementById("table-section")
+		const tableCards = document.querySelectorAll(".table-card")
+
+		if (!tableSection) {
+			tableCards.forEach((card) => {
+				card.style.display = "none"
+			})
+			tableSectionEl.style.width = "0"
+		} else {
+			tableCards.forEach((card) => {
+				card.style.display = "flex"
+			})
+			tableSectionEl.style.width = "148px"
+		}
+		setTableSection(!tableSection)
+		document.getElementById("main-barcode-input").focus()
+	}
+
+	console.log(tableSection)
 	const openPaymentSlider = () => {
 		setPaymentSlider(true)
 	}
@@ -86,6 +111,10 @@ const Pos = () => {
 
 	const openAddCardSlider = () => {
 		setAddCardSlider(true)
+	}
+
+	const openTableSlider = () => {
+		setTableSlider(true)
 	}
 
 	const openDrawer = () => {
@@ -240,8 +269,16 @@ const Pos = () => {
 				>
 					<CropSquareOutlinedIcon color="primary" />
 				</CardSectionButton>
+				<TableSectionButton
+					onClick={toggleTableSection}
+					id="table-section-button"
+					theme={theme}
+				>
+					<CropSquareOutlinedIcon color="primary" />
+				</TableSectionButton>
 			</Container>
 			<ProductCardSection theme={theme} onClick={openAddCardSlider} />
+			<TablesSection theme={theme} onClick={openTableSlider} />
 			<PaymentSlider
 				theme={theme}
 				isOpen={paymentSlider}
@@ -261,6 +298,11 @@ const Pos = () => {
 				theme={theme}
 				isOpen={addCardSlider}
 				setIsOpen={setAddCardSlider}
+			/>
+			<TableSlider
+				theme={theme}
+				isOpen={tableSlider}
+				setIsOpen={setTableSlider}
 			/>
 		</PosContainer>
 	)
