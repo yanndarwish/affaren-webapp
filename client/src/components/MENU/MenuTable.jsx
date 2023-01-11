@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Column, SubTitle } from "../../assets/styles/common.styles"
 
-const MenuTable = ({ openEdit, openDelete }) => {
+const MenuTable = ({ openEdit, openDelete, openEditFormula }) => {
 	const statusFilter = useSelector((state) => state.dishes.statusFilter)
 	const typeFilter = useSelector((state) => state.dishes.typeFilter)
 	const dishes = useSelector((state) => state.dishes.dishes)
@@ -79,9 +79,24 @@ const MenuTable = ({ openEdit, openDelete }) => {
 						<MenuItem
 							data={dish}
 							key={dish.dish_id}
-							color="green"
+							color="yellow"
 							disabled={dish.dish_active === "false"}
 							openEdit={openEdit}
+							openDelete={openDelete}
+						/>
+					))}
+				{(typeFilter === "all" || typeFilter === "formula") && (
+					<SubTitle>Formulas</SubTitle>
+				)}
+				{filteredMenu
+					?.filter((dish) => dish.dish_category === "formula")
+					.map((dish) => (
+						<MenuItem
+							data={dish}
+							key={dish.dish_id}
+							color="green"
+							disabled={dish.dish_active === "false"}
+							openEdit={openEditFormula}
 							openDelete={openDelete}
 						/>
 					))}

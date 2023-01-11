@@ -12,6 +12,8 @@ export const Wrapper = styled.div`
 			? "rgb(206, 207, 199, 0.3)"
 			: props.color === "blue"
 			? "rgb(64, 98, 187, 0.3)"
+			: props.color === "yellow"
+			? "rgb(255, 212, 73, 0.3)"
 			: props.color === "red"
 			? "rgb(238, 66, 102, 0.3)"
 			: props.color === "green" && "rgb(153, 209, 123, 0.3)"};

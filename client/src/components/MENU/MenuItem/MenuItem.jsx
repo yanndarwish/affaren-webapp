@@ -5,7 +5,7 @@ import { Icon, IconButton } from "@mui/material"
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 
-const MenuItem = ({ data, color, disabled, openEdit, openDelete }) => {
+const MenuItem = ({ data, color, disabled, openEdit, openDelete  }) => {
 
 
 	return (

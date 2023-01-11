@@ -23,6 +23,7 @@ import CreateDishSlider from "../../components/MENU/Sliders/CreateDishSlider"
 import EditDishSlider from "../../components/MENU/Sliders/EditDishSlider"
 import { Modal } from "modal-rjs"
 import CreateFormulaSlider from "../../components/MENU/Sliders/CreateFormulaSlider"
+import EditFormulaSlider from "../../components/MENU/Sliders/EditFormulaSlider"
 
 const Menu = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -32,6 +33,7 @@ const Menu = () => {
 	const [createIsOpen, setCreateIsOpen] = useState(false)
 	const [createFormulaIsOpen, setCreateFormulaIsOpen] = useState(false)
 	const [editIsOpen, setEditIsOpen] = useState(false)
+	const [editFormulaIsOpen, setEditFormulaIsOpen] = useState(false)
 	const [selected, setSelected] = useState({})
 	const [deleteDish, res] = useDeleteDishMutation()
 
@@ -55,8 +57,16 @@ const Menu = () => {
 		const id = e.target.dataset.id
 			? e.target.dataset.id
 			: e.target.parentNode.dataset.id
-		setSelected(dishes.filter((dish) => dish.dish_id === parseInt(id))[0])
+		setSelected(dishes.filter((dish) => dish.dish_id === id)[0])
 		setEditIsOpen(!editIsOpen)
+	}
+
+	const openEditFormula = (e) => {
+		const id = e.target.dataset.id
+			? e.target.dataset.id
+			: e.target.parentNode.dataset.id
+		setSelected(dishes.filter((dish) => dish.dish_id === id)[0])
+		setEditFormulaIsOpen(!editIsOpen)
 	}
 
 	const openDelete = (e) => {
@@ -64,7 +74,7 @@ const Menu = () => {
 		const id = e.target.dataset.id
 			? e.target.dataset.id
 			: e.target.parentNode.dataset.id
-		setSelected(dishes.filter((dish) => dish.dish_id === parseInt(id))[0])
+		setSelected(dishes.filter((dish) => dish.dish_id === id)[0])
 		setDeleteIsOpen(!deleteIsOpen)
 	}
 
@@ -115,23 +125,36 @@ const Menu = () => {
 			) : (
 				<Column>
 					<MenuFilter />
-					<MenuTable openDelete={openDelete} openEdit={openEdit} />
+					<MenuTable
+						openDelete={openDelete}
+						openEdit={openEdit}
+						openEditFormula={openEditFormula}
+					/>
 				</Column>
 			)}
-				<CreateDishSlider
-					isOpen={createIsOpen}
-					setIsOpen={setCreateIsOpen}
-					theme={theme}
-				/>
-				<CreateFormulaSlider
-					isOpen={createFormulaIsOpen}
-					setIsOpen={setCreateFormulaIsOpen}
-					theme={theme}
-				/>
+			<CreateDishSlider
+				isOpen={createIsOpen}
+				setIsOpen={setCreateIsOpen}
+				theme={theme}
+			/>
+			<CreateFormulaSlider
+				isOpen={createFormulaIsOpen}
+				setIsOpen={setCreateFormulaIsOpen}
+				theme={theme}
+			/>
 			{Object.keys(selected).length > 0 && (
 				<EditDishSlider
 					isOpen={editIsOpen}
 					setIsOpen={setEditIsOpen}
+					theme={theme}
+					dish={selected}
+					setDish={setSelected}
+				/>
+			)}
+			{Object.keys(selected).length > 0 && (
+				<EditFormulaSlider
+					isOpen={editFormulaIsOpen}
+					setIsOpen={setEditFormulaIsOpen}
 					theme={theme}
 					dish={selected}
 					setDish={setSelected}
