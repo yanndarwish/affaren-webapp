@@ -918,6 +918,81 @@ app.delete("/dishes/:id", auth, async (req, res) => {
 })
 
 // ******************************* //
+// *********** Tables ************ //
+// ******************************* //
+
+// create a table
+app.post("/tables", auth, async (req, res) => {
+	try {
+		const { year, month, day, status, products } = req.body
+		const response = await pool.query(
+			"INSERT INTO tables (table_year, table_month, table_day, table_status, table_products) VALUES ($1, $2, $3, $4, $5)",
+			[year, month, day, status, products]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// update a table
+app.put("/tables/:id", auth, async (req, res) => {
+	try {
+		const { id } = req.params
+		const { year, month, day, status, products } = req.body
+		const response = await pool.query(
+			"UPDATE tables SET table_year = $1, table_month = $2, table_day = $3, table_status = $4, table_products = $5 WHERE table_id = $6",
+			[year, month, day, status, products, id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// get all tables
+app.get("/tables", auth, async (req, res) => {
+	try {
+		const response = await pool.query("SELECT * FROM tables")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// get a specific table by id
+app.get("/tables/:id", auth, async (req, res) => {
+	try {
+		const { id } = req.params
+		const response = await pool.query(
+			"SELECT * FROM tables WHERE table_id = $1",
+			[id]
+		)
+		res.status(200).send(response.rows[0])
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// delete a table by id
+app.delete("/tables/:id", auth, async (req, res) => {
+	try {
+		const { id } = req.params
+
+		const response = await pool.query("DELETE FROM tables WHERE table_id = $1", [
+			id,
+		])
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// ******************************* //
 // ********** PRINTER ************ //
 // ******************************* //
 app.post("/print", auth, async (req, res) => {

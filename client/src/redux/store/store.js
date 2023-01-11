@@ -8,6 +8,7 @@ import orderApi from "../services/orderApi"
 import cardApi from "../services/cardApi"
 import printApi from "../services/printApi"
 import dishApi from "../services/dishApi"
+import tableApi from "../services/tablesApi"
 
 const store = configureStore({
 	reducer: rootReducer,
@@ -20,7 +21,8 @@ const store = configureStore({
 			cardApi.middleware,
 			orderApi.middleware,
 			printApi.middleware,
-			dishApi.middleware
+			dishApi.middleware,
+			tableApi.middleware
 		),
 })
 
