@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit"
+import { configureStore } from "@reduxjs/toolkit"
 import rootReducer from "../reducer/reducer"
 import loginApi from "../services/loginApi"
 import userApi from "../services/userApi"
@@ -9,6 +9,7 @@ import cardApi from "../services/cardApi"
 import printApi from "../services/printApi"
 import dishApi from "../services/dishApi"
 import tableApi from "../services/tablesApi"
+import tableProductsApi from "../services/tableProductsApi"
 
 const store = configureStore({
 	reducer: rootReducer,
@@ -22,7 +23,8 @@ const store = configureStore({
 			orderApi.middleware,
 			printApi.middleware,
 			dishApi.middleware,
-			tableApi.middleware
+			tableApi.middleware,
+			tableProductsApi.middleware
 		),
 })
 

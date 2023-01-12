@@ -8,6 +8,7 @@ import cards from "../features/cards"
 import dashboard from "../features/dashboard"
 import dishes from "../features/dishes"
 import table from "../features/table"
+import tableProducts from "../features/tableProducts"
 import loginApi from "../services/loginApi"
 import productsApi from "../services/productsApi"
 import userApi from "../services/userApi"
@@ -17,6 +18,7 @@ import cardApi from "../services/cardApi"
 import printApi from "../services/printApi"
 import dishApi from "../services/dishApi"
 import tableApi from "../services/tablesApi"
+import tableProductsApi from "../services/tableProductsApi"
 
 const rootReducer = combineReducers({
 	theme,
@@ -28,6 +30,7 @@ const rootReducer = combineReducers({
 	dashboard,
 	dishes,
 	table,
+	tableProducts,
 	[loginApi.reducerPath]: loginApi.reducer,
 	[productsApi.reducerPath]: productsApi.reducer,
 	[userApi.reducerPath]: userApi.reducer,
@@ -36,7 +39,8 @@ const rootReducer = combineReducers({
 	[cardApi.reducerPath]: cardApi.reducer,
 	[printApi.reducerPath]: printApi.reducer,
 	[dishApi.reducerPath] : dishApi.reducer,
-	[tableApi.reducerPath] : tableApi.reducer
+	[tableApi.reducerPath] : tableApi.reducer,
+	[tableProductsApi.reducerPath]: tableProductsApi.reducer
 })
 
 export default rootReducer

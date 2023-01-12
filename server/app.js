@@ -849,10 +849,17 @@ app.delete("/orders/:id", auth, async (req, res) => {
 // create a dish
 app.post("/dishes", auth, async (req, res) => {
 	try {
-		const { dishName, dishIngredients, dishCategory, dishPrice, dishActive } = req.body
+		const {
+			dishName,
+			dishIngredients,
+			dishCategory,
+			dishPrice,
+			dishActive,
+			dishTaxe,
+		} = req.body
 		const response = await pool.query(
-			"INSERT INTO dishes (dish_name, dish_ingredients, dish_category, dish_price, dish_active) VALUES ($1, $2, $3, $4, $5)",
-			[dishName, dishIngredients, dishCategory, dishPrice, dishActive]
+			"INSERT INTO dishes (dish_name, dish_ingredients, dish_category, dish_price, dish_active, product_taxe) VALUES ($1, $2, $3, $4, $5, $6)",
+			[dishName, dishIngredients, dishCategory, dishPrice, dishActive, dishTaxe]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -865,10 +872,25 @@ app.post("/dishes", auth, async (req, res) => {
 app.put("/dishes/:id", auth, async (req, res) => {
 	try {
 		const { id } = req.params
-		const { dishName, dishIngredients, dishCategory, dishPrice, dishActive } = req.body
+		const {
+			dishName,
+			dishIngredients,
+			dishCategory,
+			dishPrice,
+			dishActive,
+			dishTaxe,
+		} = req.body
 		const response = await pool.query(
-			"UPDATE dishes SET dish_name = $1, dish_ingredients = $2, dish_category = $3, dish_price = $4, dish_active = $5 WHERE dish_id = $6",
-			[dishName, dishIngredients, dishCategory, dishPrice, dishActive, id]
+			"UPDATE dishes SET dish_name = $1, dish_ingredients = $2, dish_category = $3, dish_price = $4, dish_active = $5, product_taxe = $6 WHERE dish_id = $7",
+			[
+				dishName,
+				dishIngredients,
+				dishCategory,
+				dishPrice,
+				dishActive,
+				dishTaxe,
+				id,
+			]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -937,10 +959,11 @@ app.post("/tables", auth, async (req, res) => {
 })
 
 // update a table
-app.put("/tables/:id",  async (req, res) => {
+app.put("/tables/:id", async (req, res) => {
 	try {
 		const { id } = req.params
-		const { table_year, table_month, table_day, table_status, table_products } = req.body
+		const { table_year, table_month, table_day, table_status, table_products } =
+			req.body
 		const response = await pool.query(
 			"UPDATE tables SET table_year = $1, table_month = $2, table_day = $3, table_status = $4, table_products = $5 WHERE table_id = $6",
 			[table_year, table_month, table_day, table_status, table_products, id]
@@ -953,7 +976,7 @@ app.put("/tables/:id",  async (req, res) => {
 })
 
 // get all tables
-app.get("/tables",  async (req, res) => {
+app.get("/tables", async (req, res) => {
 	try {
 		const response = await pool.query("SELECT * FROM tables")
 		res.status(200).send(response.rows)
@@ -983,9 +1006,137 @@ app.delete("/tables/:id", auth, async (req, res) => {
 	try {
 		const { id } = req.params
 
-		const response = await pool.query("DELETE FROM tables WHERE table_id = $1", [
-			id,
-		])
+		const response = await pool.query(
+			"DELETE FROM tables WHERE table_id = $1",
+			[id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// ******************************* //
+// ******* TABLE PRODUCTS ******** //
+// ******************************* //
+
+// create a table_product
+app.post("/table-products", async (req, res) => {
+	try {
+		const {
+			table_id,
+			table_person,
+			dish_id,
+			dish_name,
+			dish_quantity,
+			dish_price,
+			dish_taxe,
+			table_year,
+			table_month,
+			table_day,
+		} = req.body
+		const response = await pool.query(
+			"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+			[
+				table_id,
+				table_person,
+				dish_id,
+				dish_name,
+				dish_quantity,
+				dish_price,
+				dish_taxe,
+				table_year,
+				table_month,
+				table_day,
+			]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// get all tables products
+app.get("/table-products", async (req, res) => {
+	try {
+		const response = await pool.query("SELECT * FROM table_products")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// get all tables products from specific day
+app.get("/table-products/:year/:month/:day", async (req, res) => {
+	try {
+		const { year, month, day } = req.params
+		const response = await pool.query(
+			"SELECT * FROM table_products WHERE table_year = $1 AND table_month = $2 AND table_day = $3",
+			[year, month, day]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// get all tables products from specific month
+app.get("/table-products/:year/:month", async (req, res) => {
+	try {
+		const { year, month } = req.params
+		const response = await pool.query(
+			"SELECT * FROM table_products WHERE table_year = $1 AND table_month = $2",
+			[year, month]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// get a products of a specific table
+app.get("/table-products/:id", async (req, res) => {
+	try {
+		const { id } = req.params
+		const response = await pool.query(
+			"SELECT * FROM table_products WHERE table_id = $1",
+			[id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// delete all products from table
+app.delete("/table-products/:tableId", async (req, res) => {
+	try {
+		const { tableId } = req.params
+
+		const response = await pool.query(
+			"DELETE FROM table_products WHERE table_id = $1",
+			[tableId]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// delete a table product by id
+app.delete("/table-products/:tableId/:personId/:dishId", async (req, res) => {
+	try {
+		const { tableId, personId, dishId } = req.params
+
+		const response = await pool.query(
+			"DELETE FROM table_products WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
+			[tableId, personId, dishId]
+		)
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
@@ -1272,6 +1423,5 @@ app.post("/drawer", auth, async (req, res) => {
 		res.status(400).send("Failed to open Drawer")
 	}
 })
-
 
 module.exports = app
