@@ -99,7 +99,6 @@ const Pos = () => {
 		document.getElementById("main-barcode-input").focus()
 	}
 
-	console.log(tableSection)
 	const openPaymentSlider = () => {
 		setPaymentSlider(true)
 	}
@@ -305,7 +304,7 @@ const Pos = () => {
 				setIsOpen={setAddCardSlider}
 			/>
 			<TableSlider
-				data={selectedTable}
+				dataTable={selectedTable}
 				theme={theme}
 				isOpen={tableSlider}
 				setIsOpen={setTableSlider}

@@ -24,7 +24,7 @@ const TableCard = ({ theme, id, name, price, onClick }) => {
 			onClick={onClick}
 		>
 			<CardTitle ref={titleRef} data-id={id}>
-				{name}
+				{id}
 			</CardTitle>
 			<Trash data-id={id} data-name={name}>
 				<DeleteOutlineIcon

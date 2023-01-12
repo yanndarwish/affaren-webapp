@@ -13,10 +13,12 @@ import Box from "@mui/material/Box"
 import {
 	ArtTitle,
 	CloseColumn,
+	Column,
 	ColumnCenter,
 	ErrorMessage,
 	SpaceHeader,
 	SubTitle,
+	VerticalCenter,
 } from "../../../../assets/styles/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined"
@@ -42,6 +44,15 @@ import TableMenu from "../../Tables/TableMenu"
 import table from "../../../../redux/features/table"
 import { current } from "@reduxjs/toolkit"
 import { useUpdateTableMutation } from "../../../../redux/services/tablesApi"
+import {
+	useDeleteTableProductsMutation,
+	useGetTableProductsQuery,
+	usePostTableProductMutation,
+} from "../../../../redux/services/tableProductsApi"
+import { updateTableProducts } from "../../../../redux/features/tableProducts"
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
+import AddIcon from "@mui/icons-material/Add"
+import IconButton from "@mui/material/IconButton"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -70,15 +81,23 @@ function a11yProps(index) {
 	}
 }
 
-const TableSlider = ({ theme, isOpen, setIsOpen, data }) => {
+const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const dishes = useSelector((state) =>
 		state.dishes.dishes.filter((dish) => dish.dish_active === "true")
 	)
+	const tableProducts = useSelector(
+		(state) => state.tableProducts.tableProducts
+	)
 	const overlayRef = useRef()
 	const dispatch = useDispatch()
-	const [table, setTable] = useState(data)
+	const [table, setTable] = useState(dataTable)
+	const [peopleSet, setPeopleSet] = useState([])
 	const [value, setValue] = useState(0)
+	const [skip, setSkip] = useState(true)
 	const [postUpdate, res] = useUpdateTableMutation()
+	const {data,  isSuccess} = useGetTableProductsQuery({ id: table?.table_id }, { skip })
+	const [deleteProducts, resp] = useDeleteTableProductsMutation()
+	const [postUpdateTableProducts, respo] = usePostTableProductMutation()
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue)
@@ -90,8 +109,20 @@ const TableSlider = ({ theme, isOpen, setIsOpen, data }) => {
 		}
 	}
 
+	const handleAddPerson = () => {
+		console.log("add person")
+		console.log(peopleSet)
+		console.log(peopleSet.length)
+		setPeopleSet([...peopleSet, peopleSet.length])
+		// setValue(value)
+	}
+
 	const updateTable = () => {
-		console.log("update table")
+		let products = tableProducts
+
+		deleteProducts({ id: table.table_id })
+		postUpdateTableProducts({ products: products })
+		setIsOpen(!isOpen)
 	}
 
 	const addProduct = (e) => {
@@ -100,20 +131,71 @@ const TableSlider = ({ theme, isOpen, setIsOpen, data }) => {
 			{},
 			dishes.filter((dish) => dish.dish_id === id)[0]
 		)
+		// check if dish is already in the persons array and update qty
 
-		let copyTableProducts = Object.assign([], table?.table_products)
-		let copyTableProductsSpec = Object.assign([], table?.table_products[value])
-		console.log(copyTableProductsSpec)
-		copyTableProductsSpec.push(dish)
-		copyTableProducts[value] = copyTableProductsSpec
-		console.log(copyTableProducts)
-		setTable({...table, table_products: copyTableProducts})
+		// create new dish
+		let newDish = {
+			table_id: table.table_id,
+			table_person: value,
+			dish_id: dish.dish_id,
+			dish_name: dish.dish_name,
+			dish_category: dish.dish_category,
+			dish_quantity: 1,
+			dish_price: dish.dish_price,
+			dish_taxe: dish.product_taxe,
+			table_year: table.table_year,
+			table_month: table.table_month,
+			table_day: table.table_day,
+		}
+
+		let copy = Object.assign([], tableProducts)
+		copy.push(newDish)
+		dispatch(updateTableProducts(copy))
 	}
 
-	console.log(table)
+	const handleDelete = (e) => {
+		const id = e.target.dataset.id
+			? e.target.dataset.id
+			: e.target.parentNode.dataset.id
+		const person = e.target.dataset.person
+			? e.target.dataset.person
+			: e.target.parentNode.dataset.person
+		const filteredOut = tableProducts.filter(
+			(product) =>
+				product.dish_id !== id || product.table_person !== parseInt(person)
+		)
+
+		dispatch(updateTableProducts(filteredOut))
+	}
+
+	const getPeopleNumber = () => {
+		if (tableProducts.length > 0) {
+			let peopleIds = [0]
+			setSkip(true)
+			tableProducts?.forEach((product) => {
+				peopleIds.push(product.table_person)
+			})
+			let set = new Set(peopleIds)
+			let array = Array.from(set).sort()
+			setPeopleSet(array)
+		} else {
+			setPeopleSet([0])
+		}
+	}
 	useEffect(() => {
-		setTable(data)
-	}, [data])
+		setTable(dataTable)
+	}, [dataTable])
+
+	useEffect(() => {
+		getPeopleNumber()
+	}, [tableProducts])
+
+	useEffect(() => {
+		if (table?.table_id) {
+			getPeopleNumber()
+			setSkip(false)
+		}
+	}, [table])
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
 			<Dialog id="dialog" theme={theme}>
@@ -129,9 +211,10 @@ const TableSlider = ({ theme, isOpen, setIsOpen, data }) => {
 								flexGrow: 1,
 								bgcolor: "background.paper",
 								display: "flex",
-								height: 224,
+								height: 300,
 								borderBottom: 1,
 								borderColor: "divider",
+								overflow: "scroll",
 							}}
 						>
 							<Tabs
@@ -142,24 +225,41 @@ const TableSlider = ({ theme, isOpen, setIsOpen, data }) => {
 								variant="scrollable"
 								aria-label="basic tabs example"
 							>
-								{table?.table_products?.map((person, i) => (
+								{peopleSet?.map((id, i) => (
 									<Tab
 										label={<PersonOutlineOutlinedIcon />}
 										{...a11yProps(i)}
 										key={i + "tab"}
 									/>
 								))}
-								{/* <Tab label={<CreditCardOutlinedIcon />} {...a11yProps(1)} />
-								<Tab label={<SellOutlinedIcon />} {...a11yProps(2)} /> */}
+								<Tab label={<AddIcon />} onClick={handleAddPerson} />
 							</Tabs>
-							{table?.table_products?.map((person, i) => (
+							{peopleSet?.map((id, i) => (
 								<TabPanel value={value} index={i} key={i + "panel"}>
-									{person?.map((item, i) => (
-										<CloseColumn key={i + "item"}>
-											<p>{item.dish_name}</p>
-											<p>{item.dish_price}</p>
-										</CloseColumn>
-									))}
+									<Column>
+										{tableProducts
+											?.filter(
+												(product) => product.table_person === parseInt(id)
+											)
+											.map((item, i) => (
+												<VerticalCenter key={id + "-" + i}>
+													<h3>{item.dish_name}</h3>
+													<h3>{item.dish_price} €</h3>
+													<IconButton
+														aria-label="delete"
+														color="error"
+														data-id={item.dish_id}
+														data-person={id}
+														onClick={handleDelete}
+													>
+														<DeleteOutlineIcon
+															data-id={item.dish_id}
+															data-person={id}
+														/>
+													</IconButton>
+												</VerticalCenter>
+											))}
+									</Column>
 								</TabPanel>
 							))}
 						</Box>

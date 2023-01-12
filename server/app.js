@@ -1023,34 +1023,45 @@ app.delete("/tables/:id", auth, async (req, res) => {
 // create a table_product
 app.post("/table-products", async (req, res) => {
 	try {
-		const {
-			table_id,
-			table_person,
-			dish_id,
-			dish_name,
-			dish_quantity,
-			dish_price,
-			dish_taxe,
-			table_year,
-			table_month,
-			table_day,
-		} = req.body
-		const response = await pool.query(
-			"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-			[
+		const {products} = req.body
+		let responses = []
+
+		products.forEach(async (product) => {
+			const {
 				table_id,
 				table_person,
 				dish_id,
 				dish_name,
+				dish_category,
 				dish_quantity,
 				dish_price,
 				dish_taxe,
 				table_year,
 				table_month,
 				table_day,
-			]
-		)
-		res.status(200).send(response.rows)
+			} = product
+			const response = await pool.query(
+				"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_category, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+				[
+					table_id,
+					table_person,
+					dish_id,
+					dish_name,
+					dish_category,
+					dish_quantity,
+					dish_price,
+					dish_taxe,
+					table_year,
+					table_month,
+					table_day,
+				]
+			)
+
+			responses.push(response.rows)
+		})
+		
+		
+		res.status(200).send(responses)
 	} catch (err) {
 		console.log(err)
 		res.status(400).send(err)
@@ -1122,6 +1133,7 @@ app.delete("/table-products/:tableId", async (req, res) => {
 			"DELETE FROM table_products WHERE table_id = $1",
 			[tableId]
 		)
+		console.log(response)
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
