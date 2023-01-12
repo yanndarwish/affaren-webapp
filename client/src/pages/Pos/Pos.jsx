@@ -293,16 +293,22 @@ const Pos = () => {
 				isOpen={noBarcodeSlider}
 				setIsOpen={setNoBarcodeSlider}
 			/>
-			<DiscountSlider
-				theme={theme}
-				isOpen={discountSlider}
-				setIsOpen={setDiscountSlider}
-			/>
-			<AddCardSlider
-				theme={theme}
-				isOpen={addCardSlider}
-				setIsOpen={setAddCardSlider}
-			/>
+
+			{discountSlider && (
+				<DiscountSlider
+					theme={theme}
+					isOpen={discountSlider}
+					setIsOpen={setDiscountSlider}
+				/>
+			)}
+			{addCardSlider && (
+				<AddCardSlider
+					theme={theme}
+					isOpen={addCardSlider}
+					setIsOpen={setAddCardSlider}
+				/>
+			)}
+
 			<TableSlider
 				dataTable={selectedTable}
 				theme={theme}

@@ -95,7 +95,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const [value, setValue] = useState(0)
 	const [skip, setSkip] = useState(true)
 	const [postUpdate, res] = useUpdateTableMutation()
-	const {data,  isSuccess} = useGetTableProductsQuery({ id: table?.table_id }, { skip })
+	useGetTableProductsQuery({ id: table?.table_id }, { skip })
 	const [deleteProducts, resp] = useDeleteTableProductsMutation()
 	const [postUpdateTableProducts, respo] = usePostTableProductMutation()
 
@@ -169,6 +169,11 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	}
 
 	const getPeopleNumber = () => {
+
+		console.log("get people number")
+		console.log(peopleSet)
+		console.log(value)
+		console.log(tableProducts)
 		if (tableProducts.length > 0) {
 			let peopleIds = [0]
 			setSkip(true)
