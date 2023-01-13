@@ -51,9 +51,6 @@ export const tableProductsApi = createApi({
 				url: `table-products/${id}`,
 				method: "DELETE",
 			}),
-			// invalidatesTags: [
-			// 	"TableProducts", "TablesProducts", "DayTableProducts", "MonthTableProducts",
-			// ],
 		}),
 
 		deleteProductTable: builder.mutation({

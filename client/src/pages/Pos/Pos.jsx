@@ -121,6 +121,7 @@ const Pos = () => {
 		setSelectedTable(tables?.filter((table) => table.table_id === id)[0])
 	}
 
+	console.log(sale)
 	const openDrawer = () => {
 		postDrawer()
 	}

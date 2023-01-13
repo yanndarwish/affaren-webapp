@@ -12,47 +12,24 @@ import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import {
 	ArtTitle,
-	CloseColumn,
 	Column,
-	ColumnCenter,
-	ErrorMessage,
-	SpaceHeader,
 	SubTitle,
 	VerticalCenter,
 } from "../../../../assets/styles/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined"
 import Button from "../../../common/Button/Button.component"
-import NumPad from "../../../common/NumPad/NumPad"
-import { useSelector, useDispatch } from "react-redux"
-import {
-	setSalePaymentMethods,
-	setSaleDate,
-	resetSale,
-	setUser,
-} from "../../../../redux/features/sale"
-import {
-	usePostSaleProductsMutation,
-	usePostSaleMutation,
-} from "../../../../redux/services/salesApi"
-import { useUpdateProductsMutation } from "../../../../redux/services/productsApi"
-import { usePostPrintMutation } from "../../../../redux/services/printApi"
-import { usePostDrawerMutation } from "../../../../redux/services/printApi"
-import { Modal } from "modal-rjs"
-import InfoMessage from "../../../common/InfoMessage/InfoMessage"
+import { useDispatch, useSelector } from "react-redux"
 import TableMenu from "../../Tables/TableMenu"
-import table from "../../../../redux/features/table"
-import { current } from "@reduxjs/toolkit"
-import { useUpdateTableMutation } from "../../../../redux/services/tablesApi"
 import {
-	useDeleteTableProductsMutation,
+	useDeleteProductTableMutation,
 	useGetTableProductsQuery,
 	usePostTableProductMutation,
 } from "../../../../redux/services/tableProductsApi"
-import { updateTableProducts } from "../../../../redux/features/tableProducts"
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
 import AddIcon from "@mui/icons-material/Add"
 import IconButton from "@mui/material/IconButton"
+import { addProduct, updateProducts } from "../../../../redux/features/sale"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -82,21 +59,20 @@ function a11yProps(index) {
 }
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
+	const dispatch = useDispatch()
+	const products = useSelector((state) => state.sale.products)
 	const dishes = useSelector((state) =>
 		state.dishes.dishes.filter((dish) => dish.dish_active === "true")
 	)
-	const tableProducts = useSelector(
-		(state) => state.tableProducts.tableProducts
-	)
 	const overlayRef = useRef()
-	const dispatch = useDispatch()
-	const [table, setTable] = useState(dataTable)
 	const [peopleSet, setPeopleSet] = useState([])
 	const [value, setValue] = useState(0)
 	const [skip, setSkip] = useState(true)
-	const [postUpdate, res] = useUpdateTableMutation()
-	useGetTableProductsQuery({ id: table?.table_id }, { skip })
-	const [deleteProducts, resp] = useDeleteTableProductsMutation()
+	const { data } = useGetTableProductsQuery(
+		{ id: dataTable?.table_id },
+		{ skip }
+	)
+	const [deleteProduct, res] = useDeleteProductTableMutation()
 	const [postUpdateTableProducts, respo] = usePostTableProductMutation()
 
 	const handleChange = (event, newValue) => {
@@ -106,36 +82,28 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const closeSlider = (e) => {
 		if (overlayRef.current === e.target) {
 			setIsOpen(false)
+			setValue(0)
 		}
 	}
 
+	const close = () => {
+		setIsOpen(false)
+		setValue(0)
+	}
+
 	const handleAddPerson = () => {
-		console.log("add person")
-		console.log(peopleSet)
-		console.log(peopleSet.length)
 		setPeopleSet([...peopleSet, peopleSet.length])
-		// setValue(value)
 	}
 
-	const updateTable = () => {
-		let products = tableProducts
-
-		deleteProducts({ id: table.table_id })
-		postUpdateTableProducts({ products: products })
-		setIsOpen(!isOpen)
-	}
-
-	const addProduct = (e) => {
+	const addProductToPerson = (e) => {
 		const id = e.target.dataset.id
 		let dish = Object.assign(
 			{},
 			dishes.filter((dish) => dish.dish_id === id)[0]
 		)
-		// check if dish is already in the persons array and update qty
-
 		// create new dish
 		let newDish = {
-			table_id: table.table_id,
+			table_id: dataTable.table_id,
 			table_person: value,
 			dish_id: dish.dish_id,
 			dish_name: dish.dish_name,
@@ -143,14 +111,15 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			dish_quantity: 1,
 			dish_price: dish.dish_price,
 			dish_taxe: dish.product_taxe,
-			table_year: table.table_year,
-			table_month: table.table_month,
-			table_day: table.table_day,
+			table_year: dataTable.table_year,
+			table_month: dataTable.table_month,
+			table_day: dataTable.table_day,
 		}
 
-		let copy = Object.assign([], tableProducts)
+		let copy = Object.assign([], data)
 		copy.push(newDish)
-		dispatch(updateTableProducts(copy))
+		// deleteProducts({ id: dataTable.table_id })
+		postUpdateTableProducts({ products: [newDish] })
 	}
 
 	const handleDelete = (e) => {
@@ -160,24 +129,19 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		const person = e.target.dataset.person
 			? e.target.dataset.person
 			: e.target.parentNode.dataset.person
-		const filteredOut = tableProducts.filter(
-			(product) =>
-				product.dish_id !== id || product.table_person !== parseInt(person)
-		)
 
-		dispatch(updateTableProducts(filteredOut))
+		deleteProduct({
+			tableId: dataTable.table_id,
+			personId: parseInt(person),
+			dishId: id,
+		})
+		// dispatch(updateTableProducts(filteredOut))
 	}
 
 	const getPeopleNumber = () => {
-
-		console.log("get people number")
-		console.log(peopleSet)
-		console.log(value)
-		console.log(tableProducts)
-		if (tableProducts.length > 0) {
+		if (data?.length > 0) {
 			let peopleIds = [0]
-			setSkip(true)
-			tableProducts?.forEach((product) => {
+			data?.forEach((product) => {
 				peopleIds.push(product.table_person)
 			})
 			let set = new Set(peopleIds)
@@ -187,26 +151,64 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			setPeopleSet([0])
 		}
 	}
+
+	const handlePayment = () => {
+		console.log(data)
+		let array = []
+		data?.forEach((dish) => {
+			let found = array.find((product) => product.id === dish.dish_id)
+
+			if (!found) {
+				let product = {
+					id: dish.dish_id,
+					name: dish.dish_name,
+					price: dish.dish_price,
+					taxe: dish.dish_taxe,
+					quantity: dish.dish_quantity,
+				}
+				array.push(product)
+				dispatch(addProduct({ products: product }))
+			} else {
+				found = {
+					...found,
+					quantity: found.quantity + 1,
+					price: (dish.dish_price * (found.quantity + 1)).toFixed(2),
+				}
+
+				const updated = array.map((product) => {
+					if (product.id === found.id) {
+						console.log(found)
+						let index = array.findIndex((obj) => obj.id === found.id)
+						array[index] = found
+						return found
+					} else {
+						console.log(product)
+						return product
+					}
+				})
+				console.log(updated)
+
+				dispatch(updateProducts({ products: updated }))
+			}
+		})
+	}
+
 	useEffect(() => {
-		setTable(dataTable)
+		if (dataTable?.table_id) {
+			setSkip(false)
+		}
 	}, [dataTable])
 
 	useEffect(() => {
 		getPeopleNumber()
-	}, [tableProducts])
+	}, [data])
 
-	useEffect(() => {
-		if (table?.table_id) {
-			getPeopleNumber()
-			setSkip(false)
-		}
-	}, [table])
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
 			<Dialog id="dialog" theme={theme}>
 				<DialogHeader>
-					<SubTitle>Table {table?.table_id}</SubTitle>
-					<CloseOutlinedIcon onClick={() => setIsOpen(false)} />
+					<SubTitle>Table {dataTable?.table_id}</SubTitle>
+					<CloseOutlinedIcon onClick={() => close()} />
 				</DialogHeader>
 				<DialogBody>
 					<ArtTitle>Detail</ArtTitle>
@@ -242,7 +244,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 							{peopleSet?.map((id, i) => (
 								<TabPanel value={value} index={i} key={i + "panel"}>
 									<Column>
-										{tableProducts
+										{data
 											?.filter(
 												(product) => product.table_person === parseInt(id)
 											)
@@ -271,14 +273,18 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 					</DialogCard>
 				</DialogBody>
 				<DialogFooter>
-					<Button title="Apply" color="success" onClick={updateTable} />
+					<Button
+						title="Go to Payment"
+						color="success"
+						onClick={handlePayment}
+					/>
 				</DialogFooter>
 			</Dialog>
 			<TableMenu
 				isOpen={isOpen}
 				setIsOpen={setIsOpen}
 				theme={theme}
-				onClick={addProduct}
+				onClick={addProductToPerson}
 			/>
 		</Overlay>
 	) : null

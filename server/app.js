@@ -946,10 +946,10 @@ app.delete("/dishes/:id", auth, async (req, res) => {
 // create a table
 app.post("/tables", auth, async (req, res) => {
 	try {
-		const { year, month, day, status, products } = req.body
+		const { year, month, day, status } = req.body
 		const response = await pool.query(
-			"INSERT INTO tables (table_year, table_month, table_day, table_status, table_products) VALUES ($1, $2, $3, $4, $5)",
-			[year, month, day, status, products]
+			"INSERT INTO tables (table_year, table_month, table_day, table_status) VALUES ($1, $2, $3, $4)",
+			[year, month, day, status]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -1023,7 +1023,7 @@ app.delete("/tables/:id", auth, async (req, res) => {
 // create a table_product
 app.post("/table-products", async (req, res) => {
 	try {
-		const {products} = req.body
+		const { products } = req.body
 		let responses = []
 
 		products.forEach(async (product) => {
@@ -1059,8 +1059,7 @@ app.post("/table-products", async (req, res) => {
 
 			responses.push(response.rows)
 		})
-		
-		
+
 		res.status(200).send(responses)
 	} catch (err) {
 		console.log(err)
