@@ -31,10 +31,24 @@ export const tableApi = createApi({
 				url: `tables/${id}`,
 			}),
 		}),
+		getActiveTables: builder.query({
+			query: () => ({
+				url: "tables/active",
+			}),
+			providesTags: ["Tables"],
+		}),
 		updateTable: builder.mutation({
 			query: ({ id, payload }) => ({
 				url: `tables/${id}`,
 				method: "PUT",
+				body: payload,
+			}),
+			invalidatesTags: ["Tables"],
+		}),
+		updateTableStatus: builder.mutation({
+			query: ({ id, payload }) => ({
+				url: `tables/${id}`,
+				method: "PATCH",
 				body: payload,
 			}),
 			invalidatesTags: ["Tables"],
@@ -61,7 +75,9 @@ export const {
 	useDeleteTableMutation,
     useGetTableQuery,
     useGetTablesQuery,
+	useGetActiveTablesQuery,
     usePostTableMutation,
-    useUpdateTableMutation
+    useUpdateTableMutation,
+	useUpdateTableStatusMutation
 } = tableApi
 export default tableApi

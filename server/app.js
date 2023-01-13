@@ -975,10 +975,37 @@ app.put("/tables/:id", async (req, res) => {
 	}
 })
 
+// update a table status
+app.patch("/tables/:id", async (req, res) => {
+	try {
+		const { id } = req.params
+		const { table_status, sale_id } = req.body
+		const response = await pool.query(
+			"UPDATE tables SET table_status = $1, sale_id = $2 WHERE table_id = $3",
+			[table_status, sale_id, id]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
 // get all tables
 app.get("/tables", async (req, res) => {
 	try {
 		const response = await pool.query("SELECT * FROM tables")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// get all active tables
+app.get("/tables/active", async (req, res) => {
+	try {
+		const response = await pool.query("SELECT * FROM tables WHERE table_status = 'active'")
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)

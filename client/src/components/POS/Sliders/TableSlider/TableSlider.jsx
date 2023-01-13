@@ -29,7 +29,11 @@ import {
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
 import AddIcon from "@mui/icons-material/Add"
 import IconButton from "@mui/material/IconButton"
-import { addProduct, updateProducts } from "../../../../redux/features/sale"
+import {
+	addProduct,
+	updateProducts,
+	setSaleTable,
+} from "../../../../redux/features/sale"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -60,7 +64,6 @@ function a11yProps(index) {
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const dispatch = useDispatch()
-	const products = useSelector((state) => state.sale.products)
 	const dishes = useSelector((state) =>
 		state.dishes.dishes.filter((dish) => dish.dish_active === "true")
 	)
@@ -103,7 +106,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		)
 		// create new dish
 		let newDish = {
-			table_id: dataTable.table_id,
+			table_id: dataTable?.table_id,
 			table_person: value,
 			dish_id: dish.dish_id,
 			dish_name: dish.dish_name,
@@ -191,6 +194,9 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				dispatch(updateProducts({ products: updated }))
 			}
 		})
+		dispatch(setSaleTable({ table: dataTable.table_id }))
+		setIsOpen(false)
+		setValue(0)
 	}
 
 	useEffect(() => {

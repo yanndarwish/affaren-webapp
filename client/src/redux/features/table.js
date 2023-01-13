@@ -3,6 +3,7 @@ import tableApi from "../services/tablesApi"
 
 const initialState = {
 	tables: [],
+	activeTables: []
 }
 
 const tableSlice = createSlice({
@@ -16,6 +17,12 @@ const tableSlice = createSlice({
 			tableApi.endpoints.getTables.matchFulfilled,
 			(state, action) => {
 				state.tables = action.payload
+			}
+		)
+		.addMatcher(
+			tableApi.endpoints.getActiveTables.matchFulfilled,
+			(state, action) => {
+				state.activeTables = action.payload
 			}
 		)
 	},

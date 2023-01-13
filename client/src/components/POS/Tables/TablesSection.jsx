@@ -1,13 +1,13 @@
 import { StyledTablesSection } from "./TablesSection.styles"
 import { useSelector } from "react-redux"
-import { useGetTablesQuery, usePostTableMutation } from "../../../redux/services/tablesApi"
+import { useGetActiveTablesQuery, usePostTableMutation } from "../../../redux/services/tablesApi"
 import TableCard from "./TableCard"
 import TableSlider from "../Sliders/TableSlider/TableSlider"
 import AddTableCard from "./AddTableCard/AddTableCard"
 
 const TablesSection = ({ theme, onClick }) => {
-    useGetTablesQuery()
-	const tables = useSelector((state) => state.table.tables)
+    useGetActiveTablesQuery()
+	const activeTables = useSelector((state) => state.table.activeTables)
 	const [postTable, res] = usePostTableMutation()
 
 	const handleAddTable = () => {
@@ -29,8 +29,8 @@ const TablesSection = ({ theme, onClick }) => {
 	return (
 		<StyledTablesSection theme={theme} id="table-section">
 			{/* dynamically create boxes based on cards */}
-			{tables &&
-				tables.map((card, i) => (
+			{activeTables &&
+				activeTables.map((card, i) => (
 					<TableCard
 						key={card.table_id}
 						theme={theme}

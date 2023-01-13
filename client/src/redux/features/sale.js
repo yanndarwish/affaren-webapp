@@ -11,6 +11,7 @@ const initialState = {
 	taxes: {},
 	discount: [],
 	user: "",
+	table:""
 }
 
 const saleSlice = createSlice({
@@ -23,6 +24,9 @@ const saleSlice = createSlice({
 		},
 		setSaleDate: (state, action) => {
 			state.date = action.payload.date
+		},
+		setSaleTable: (state, action) => {
+			state.table = action.payload.table
 		},
 		addProduct: (state, action) => {
 			state.products.push(action.payload.products)
@@ -68,6 +72,7 @@ export const {
 	setSale,
 	setSaleId,
 	setSaleDate,
+	setSaleTable,
 	addProduct,
 	updateProducts,
 	setSaleAmount,

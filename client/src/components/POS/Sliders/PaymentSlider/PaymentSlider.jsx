@@ -39,6 +39,7 @@ import { usePostPrintMutation } from "../../../../redux/services/printApi"
 import { usePostDrawerMutation } from "../../../../redux/services/printApi"
 import { Modal } from "modal-rjs"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
+import { useUpdateTableStatusMutation } from "../../../../redux/services/tablesApi"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -78,7 +79,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const [actualSale, setActualSale] = useState({})
 	const sale = useSelector((state) => state.sale)
 	const user = useSelector((state) => state.user.user)
+	const tableId = useSelector((state) => state.sale.table)
 
+	const [updateTable, respon] = useUpdateTableStatusMutation()
 	const [updateProduct, res] = useUpdateProductsMutation()
 	const [postSaleProducts, resp] = usePostSaleProductsMutation()
 	const [postSale, response] = usePostSaleMutation()
@@ -166,8 +169,13 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				id: parseInt(confirmedSale.id),
 			})
 
+			updateTable({
+				id: tableId,
+				payload: { table_status: "paid", sale_id: parseInt(confirmedSale.id) },
+			})
+
 			setActualSale(confirmedSale)
-			if (Object.keys(confirmedSale.paymentMethods).includes('cash')) {
+			if (Object.keys(confirmedSale.paymentMethods).includes("cash")) {
 				openDrawer()
 			}
 			// reset sale

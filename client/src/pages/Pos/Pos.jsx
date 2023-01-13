@@ -42,7 +42,7 @@ const Pos = () => {
 	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
 	const sale = useSelector((state) => state.sale)
-	const tables = useSelector((state) => state.table.tables)
+	const activeTables = useSelector((state) => state.table.activeTables)
 	const dispatch = useDispatch()
 	const [cardSection, setCardSection] = useState(false)
 	const [tableSection, setTableSection] = useState(false)
@@ -118,10 +118,10 @@ const Pos = () => {
 	const openTableSlider = (e) => {
 		setTableSlider(true)
 		const id = e.target.dataset.id
-		setSelectedTable(tables?.filter((table) => table.table_id === id)[0])
+		setSelectedTable(activeTables?.filter((table) => table.table_id === id)[0])
 	}
 
-	console.log(sale)
+	console.log(selectedTable)
 	const openDrawer = () => {
 		postDrawer()
 	}
