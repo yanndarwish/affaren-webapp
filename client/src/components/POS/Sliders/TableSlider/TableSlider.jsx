@@ -24,6 +24,7 @@ import TableMenu from "../../Tables/TableMenu"
 import {
 	useDeleteProductTableMutation,
 	useGetTableProductsQuery,
+	usePatchProductTableMutation,
 	usePostTableProductMutation,
 } from "../../../../redux/services/tableProductsApi"
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
@@ -64,19 +65,26 @@ function a11yProps(index) {
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const dispatch = useDispatch()
-	const dishes = useSelector((state) =>
-		state.dishes.dishes.filter((dish) => dish.dish_active === "true")
-	)
 	const overlayRef = useRef()
 	const [peopleSet, setPeopleSet] = useState([])
 	const [value, setValue] = useState(0)
 	const [skip, setSkip] = useState(true)
+	const [deleteProduct, res] = useDeleteProductTableMutation()
+	const [postUpdateTableProducts, respo] = usePostTableProductMutation()
+	const [patchProduct, response] = usePatchProductTableMutation()
+	const dishes = useSelector((state) =>
+		state.dishes.dishes.filter((dish) => dish.dish_active === "true")
+	)
+	const formulas = useSelector((state) =>
+		state.dishes.dishes.filter(
+			(dish) => dish.dish_active === "true" && dish.dish_category === "formula"
+		)
+	)
+
 	const { data } = useGetTableProductsQuery(
 		{ id: dataTable?.table_id },
 		{ skip }
 	)
-	const [deleteProduct, res] = useDeleteProductTableMutation()
-	const [postUpdateTableProducts, respo] = usePostTableProductMutation()
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue)
@@ -138,7 +146,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			personId: parseInt(person),
 			dishId: id,
 		})
-		// dispatch(updateTableProducts(filteredOut))
 	}
 
 	const getPeopleNumber = () => {
@@ -155,9 +162,105 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		}
 	}
 
+	const checkForFomulas = () => {
+		// check for present formulas
+		peopleSet.forEach((person) => {
+			let correspondance = 0
+			let mainMatch = {}
+			let concernedMeals = []
+			let personFormulas = data?.filter(
+				(item) =>
+					item.table_person === person && item.dish_category === "formula"
+			)
+			formulas.forEach((formula) => {
+				let formulaTypes = Object.assign([], formula.dish_ingredients)
+				let typesObj = []
+				let types = []
+				let personMeals = data.filter((item) => item.table_person === person)
+				personMeals.forEach((meal) => {
+					if (
+						meal.dish_cateogry !== "beverage" &&
+						meal.dish_cateogry !== "formula"
+					) {
+						typesObj.push({ id: meal.dish_id, type: meal.dish_category })
+						types.push(meal.dish_category)
+					}
+				})
+				let matches = 0
+				formulaTypes.forEach((type, i) => {
+					let typesMatches = []
+					if (types.includes(type) && !typesMatches.includes(type)) {
+						matches = matches + 1
+						typesMatches.push(type)
+						let index = types.indexOf(type)
+						let alreadyExists = false
+						concernedMeals.forEach((meal) => {
+							if (meal.id === typesObj[index].id) {
+								alreadyExists = true
+							}
+						})
+						if (!alreadyExists) {
+							concernedMeals.push(typesObj[index])
+						}
+					}
+				})
+
+				if (matches === formulaTypes.length) {
+					if (matches > correspondance) {
+						correspondance = matches
+						mainMatch = formula
+					}
+				}
+			})
+
+			let personFormulasIds = []
+			personFormulas.forEach((formula) => {
+				personFormulasIds.push(formula.dish_id)
+			})
+			// remove old formula
+			if (personFormulasIds.length > 1) {
+				deleteProduct({
+					tableId: dataTable.table_id,
+					personId: person,
+					dishId: personFormulas[0]?.dish_id,
+				})
+			}
+			if (
+				Object.keys(mainMatch).length > 0 &&
+				!personFormulasIds.includes(mainMatch.dish_id)
+			) {
+				// patch dish_price where table_id = $ and table_person = $
+				concernedMeals.forEach((meal) => {
+					patchProduct({
+						tableId: dataTable.table_id,
+						personId: person,
+						dishId: meal.id,
+					})
+				})
+
+				// add formula to table person
+				let newFormula = {
+					table_id: dataTable?.table_id,
+					table_person: value,
+					dish_id: mainMatch.dish_id,
+					dish_name: mainMatch.dish_name,
+					dish_category: mainMatch.dish_category,
+					dish_quantity: 1,
+					dish_price: mainMatch.dish_price,
+					dish_taxe: mainMatch.product_taxe,
+					table_year: dataTable.table_year,
+					table_month: dataTable.table_month,
+					table_day: dataTable.table_day,
+				}
+
+				postUpdateTableProducts({ products: [newFormula] })
+			}
+		})
+	}
+
 	const handlePayment = () => {
-		console.log(data)
 		let array = []
+
 		data?.forEach((dish) => {
 			let found = array.find((product) => product.id === dish.dish_id)
 
@@ -207,6 +310,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	useEffect(() => {
 		getPeopleNumber()
+		checkForFomulas()
 	}, [data])
 
 	return isOpen ? (

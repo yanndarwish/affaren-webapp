@@ -19,7 +19,10 @@ export const tableProductsApi = createApi({
 		},
 	}),
 	tagTypes: [
-		"TableProducts", "TablesProducts", "DayTableProducts", "MonthTableProducts",
+		"TableProducts",
+		"TablesProducts",
+		"DayTableProducts",
+		"MonthTableProducts",
 	],
 	endpoints: (builder) => ({
 		getTablesProducts: builder.query({
@@ -46,6 +49,18 @@ export const tableProductsApi = createApi({
 			}),
 			providesTags: ["TableProducts"],
 		}),
+		patchProductTable: builder.mutation({
+			query: ({ tableId, personId, dishId }) => ({
+				url: `table-products/${tableId}/${personId}/${dishId}`,
+				method: "PATCH",
+			}),
+			invalidatesTags: [
+				"TableProducts",
+				"TablesProducts",
+				"DayTableProducts",
+				"MonthTableProducts",
+			],
+		}),
 		deleteTableProducts: builder.mutation({
 			query: ({ id }) => ({
 				url: `table-products/${id}`,
@@ -59,7 +74,10 @@ export const tableProductsApi = createApi({
 				method: "DELETE",
 			}),
 			invalidatesTags: [
-				"TableProducts", "TablesProducts", "DayTableProducts", "MonthTableProducts",
+				"TableProducts",
+				"TablesProducts",
+				"DayTableProducts",
+				"MonthTableProducts",
 			],
 		}),
 		postTableProduct: builder.mutation({
@@ -69,7 +87,10 @@ export const tableProductsApi = createApi({
 				body: payload,
 			}),
 			invalidatesTags: [
-				"TableProducts", "TablesProducts", "DayTableProducts", "MonthTableProducts",
+				"TableProducts",
+				"TablesProducts",
+				"DayTableProducts",
+				"MonthTableProducts",
 			],
 		}),
 	}),
@@ -78,10 +99,11 @@ export const tableProductsApi = createApi({
 export const {
 	useDeleteProductTableMutation,
 	useDeleteTableProductsMutation,
+	usePatchProductTableMutation,
 	useGetDayTableProductsQuery,
 	useGetMonthTableProductsQuery,
 	useGetTableProductsQuery,
 	useGetTablesProductsQuery,
-	usePostTableProductMutation
+	usePostTableProductMutation,
 } = tableProductsApi
 export default tableProductsApi

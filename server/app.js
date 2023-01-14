@@ -1005,7 +1005,9 @@ app.get("/tables", async (req, res) => {
 // get all active tables
 app.get("/tables/active", async (req, res) => {
 	try {
-		const response = await pool.query("SELECT * FROM tables WHERE table_status = 'active'")
+		const response = await pool.query(
+			"SELECT * FROM tables WHERE table_status = 'active'"
+		)
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
@@ -1088,6 +1090,23 @@ app.post("/table-products", async (req, res) => {
 		})
 
 		res.status(200).send(responses)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// patch a table_product
+app.patch("/table-products/:tableId/:personId/:dishId", async (req, res) => {
+	try {
+		const { tableId, personId, dishId } = req.params
+
+		const response = await pool.query(
+			"UPDATE table_products SET dish_price = 0 WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
+			[tableId, personId, dishId]
+		)
+
+		res.status(200).send(response)
 	} catch (err) {
 		console.log(err)
 		res.status(400).send(err)
