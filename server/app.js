@@ -855,11 +855,10 @@ app.post("/dishes", auth, async (req, res) => {
 			dishCategory,
 			dishPrice,
 			dishActive,
-			dishTaxe,
 		} = req.body
 		const response = await pool.query(
-			"INSERT INTO dishes (dish_name, dish_ingredients, dish_category, dish_price, dish_active, product_taxe) VALUES ($1, $2, $3, $4, $5, $6)",
-			[dishName, dishIngredients, dishCategory, dishPrice, dishActive, dishTaxe]
+			"INSERT INTO dishes (dish_name, dish_ingredients, dish_category, dish_price, dish_active, product_taxe) VALUES ($1, $2, $3, $4, $5, 5.5)",
+			[dishName, dishIngredients, dishCategory, dishPrice, dishActive]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {

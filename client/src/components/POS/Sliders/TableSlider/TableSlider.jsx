@@ -164,98 +164,103 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	const checkForFomulas = () => {
 		// check for present formulas
-		peopleSet.forEach((person) => {
-			let correspondance = 0
-			let mainMatch = {}
-			let concernedMeals = []
-			let personFormulas = data?.filter(
-				(item) =>
-					item.table_person === person && item.dish_category === "formula"
-			)
-			formulas.forEach((formula) => {
-				let formulaTypes = Object.assign([], formula.dish_ingredients)
-				let typesObj = []
-				let types = []
-				let personMeals = data.filter((item) => item.table_person === person)
-				personMeals.forEach((meal) => {
-					if (
-						meal.dish_cateogry !== "beverage" &&
-						meal.dish_cateogry !== "formula"
-					) {
-						typesObj.push({ id: meal.dish_id, type: meal.dish_category })
-						types.push(meal.dish_category)
-					}
-				})
-				let matches = 0
-				formulaTypes.forEach((type, i) => {
-					let typesMatches = []
-					if (types.includes(type) && !typesMatches.includes(type)) {
-						matches = matches + 1
-						typesMatches.push(type)
-						let index = types.indexOf(type)
-						let alreadyExists = false
-						concernedMeals.forEach((meal) => {
-							if (meal.id === typesObj[index].id) {
-								alreadyExists = true
-							}
-						})
-						if (!alreadyExists) {
-							concernedMeals.push(typesObj[index])
+		console.log(value)
+		let correspondance = 0
+		let mainMatch = {}
+		let concernedMeals = []
+		let personFormulas = data?.filter(
+			(item) => item.table_person === value && item.dish_category === "formula"
+		)
+		// find matches between person's meals and active formulas
+		formulas.forEach((formula) => {
+			let formulaTypes = Object.assign([], formula.dish_ingredients)
+			let typesObj = []
+			let types = []
+			let personMeals = data.filter((item) => item.table_person === value)
+			personMeals.forEach((meal) => {
+				if (
+					meal.dish_cateogry !== "beverage" &&
+					meal.dish_cateogry !== "formula"
+				) {
+					typesObj.push({ id: meal.dish_id, type: meal.dish_category })
+					types.push(meal.dish_category)
+				}
+			})
+			let matches = 0
+			formulaTypes.forEach((type, i) => {
+				let typesMatches = []
+				if (types.includes(type) && !typesMatches.includes(type)) {
+					matches = matches + 1
+					typesMatches.push(type)
+					let index = types.indexOf(type)
+					let alreadyExists = false
+					concernedMeals.forEach((meal) => {
+						if (meal.id === typesObj[index].id) {
+							alreadyExists = true
 						}
-					}
-				})
-
-				if (matches === formulaTypes.length) {
-					if (matches > correspondance) {
-						correspondance = matches
-						mainMatch = formula
-					}
-				}
-			})
-
-			let personFormulasIds = []
-			personFormulas.forEach((formula) => {
-				personFormulasIds.push(formula.dish_id)
-			})
-			// remove old formula
-			if (personFormulasIds.length > 1) {
-				deleteProduct({
-					tableId: dataTable.table_id,
-					personId: person,
-					dishId: personFormulas[0]?.dish_id,
-				})
-			}
-			if (
-				Object.keys(mainMatch).length > 0 &&
-				!personFormulasIds.includes(mainMatch.dish_id)
-			) {
-				// patch dish_price where table_id = $ and table_person = $
-				concernedMeals.forEach((meal) => {
-					patchProduct({
-						tableId: dataTable.table_id,
-						personId: person,
-						dishId: meal.id,
 					})
-				})
-
-				// add formula to table person
-				let newFormula = {
-					table_id: dataTable?.table_id,
-					table_person: value,
-					dish_id: mainMatch.dish_id,
-					dish_name: mainMatch.dish_name,
-					dish_category: mainMatch.dish_category,
-					dish_quantity: 1,
-					dish_price: mainMatch.dish_price,
-					dish_taxe: mainMatch.product_taxe,
-					table_year: dataTable.table_year,
-					table_month: dataTable.table_month,
-					table_day: dataTable.table_day,
+					if (!alreadyExists) {
+						concernedMeals.push(typesObj[index])
+					}
 				}
+			})
 
-				postUpdateTableProducts({ products: [newFormula] })
+			if (matches === formulaTypes.length) {
+				if (matches > correspondance) {
+					correspondance = matches
+					mainMatch = formula
+				}
 			}
 		})
+
+		let personFormulasIds = []
+		personFormulas?.forEach((formula) => {
+			personFormulasIds.push(formula.dish_id)
+		})
+		console.log(mainMatch)
+		// remove old formula
+		let oldId = personFormulasIds.filter((id) => id !== mainMatch.dish_id)[0]
+		if (personFormulasIds.length > 1) {
+			deleteProduct({
+				tableId: dataTable.table_id,
+				personId: value,
+				dishId: oldId,
+			})
+			personFormulasIds = personFormulasIds.filter(
+				(id) => id === mainMatch.dish_id
+			)
+		} else if (
+			Object.keys(mainMatch).length > 0 &&
+			!personFormulasIds.includes(mainMatch.dish_id)
+		) {
+			// patch dish_price where table_id = $ and table_person = $
+			concernedMeals.forEach((meal) => {
+				patchProduct({
+					tableId: dataTable.table_id,
+					personId: value,
+					dishId: meal.id,
+				})
+			})
+
+			console.log(mainMatch)
+			// add formula to table person
+			let newFormula = {
+				table_id: dataTable?.table_id,
+				table_person: value,
+				dish_id: mainMatch.dish_id,
+				dish_name: mainMatch.dish_name,
+				dish_category: mainMatch.dish_category,
+				dish_quantity: 1,
+				dish_price: mainMatch.dish_price,
+				dish_taxe: mainMatch.product_taxe,
+				table_year: dataTable.table_year,
+				table_month: dataTable.table_month,
+				table_day: dataTable.table_day,
+			}
+
+			console.log(newFormula)
+			postUpdateTableProducts({ products: [newFormula] })
+		}
 	}
 
 	const handlePayment = () => {
