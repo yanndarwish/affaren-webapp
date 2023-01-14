@@ -164,7 +164,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	const checkForFomulas = () => {
 		// check for present formulas
-		console.log(value)
 		let correspondance = 0
 		let mainMatch = {}
 		let concernedMeals = []
@@ -176,8 +175,8 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			let formulaTypes = Object.assign([], formula.dish_ingredients)
 			let typesObj = []
 			let types = []
-			let personMeals = data.filter((item) => item.table_person === value)
-			personMeals.forEach((meal) => {
+			let personMeals = data?.filter((item) => item.table_person === value)
+			personMeals?.forEach((meal) => {
 				if (
 					meal.dish_cateogry !== "beverage" &&
 					meal.dish_cateogry !== "formula"
@@ -187,7 +186,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				}
 			})
 			let matches = 0
-			formulaTypes.forEach((type, i) => {
+			formulaTypes?.forEach((type, i) => {
 				let typesMatches = []
 				if (types.includes(type) && !typesMatches.includes(type)) {
 					matches = matches + 1
@@ -217,9 +216,8 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		personFormulas?.forEach((formula) => {
 			personFormulasIds.push(formula.dish_id)
 		})
-		console.log(mainMatch)
 		// remove old formula
-		let oldId = personFormulasIds.filter((id) => id !== mainMatch.dish_id)[0]
+		let oldId = personFormulasIds?.filter((id) => id !== mainMatch.dish_id)[0]
 		if (personFormulasIds.length > 1) {
 			deleteProduct({
 				tableId: dataTable.table_id,
@@ -242,7 +240,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				})
 			})
 
-			console.log(mainMatch)
 			// add formula to table person
 			let newFormula = {
 				table_id: dataTable?.table_id,
@@ -258,7 +255,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				table_day: dataTable.table_day,
 			}
 
-			console.log(newFormula)
 			postUpdateTableProducts({ products: [newFormula] })
 		}
 	}
@@ -288,16 +284,13 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 				const updated = array.map((product) => {
 					if (product.id === found.id) {
-						console.log(found)
 						let index = array.findIndex((obj) => obj.id === found.id)
 						array[index] = found
 						return found
 					} else {
-						console.log(product)
 						return product
 					}
 				})
-				console.log(updated)
 
 				dispatch(updateProducts({ products: updated }))
 			}
