@@ -8,6 +8,7 @@ import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered"
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined"
 import SoupKitchenOutlinedIcon from "@mui/icons-material/SoupKitchenOutlined"
 import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined"
+import LunchDiningIcon from "@mui/icons-material/LunchDining"
 
 export const navbarItems = [
 	{
@@ -46,6 +47,11 @@ export const navbarItems = [
 		route: "kitchen",
 	},
 	{
+		id: 10,
+		icon: <LunchDiningIcon />,
+		route: "lunch",
+	},
+	{
 		id: 7,
 		icon: <PersonOutlineOutlinedIcon />,
 		route: "profile",
@@ -67,6 +73,11 @@ export const cookNavbarItems = [
 		id: 0,
 		icon: <LibraryBooksOutlinedIcon />,
 		route: "orders",
+	},
+	{
+		id: 6,
+		icon: <LunchDiningIcon />,
+		route: "lunch",
 	},
 	{
 		id: 1,

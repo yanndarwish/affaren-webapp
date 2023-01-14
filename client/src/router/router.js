@@ -12,6 +12,7 @@ import Help from "../pages/Help/Help"
 import Logout from "../pages/Logout/Logout"
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword"
 import Menu from "../pages/Menu/Menu"
+import Lunch from "../pages/Lunch/Lunch"
 
 const router = createBrowserRouter([
 	{
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
 			{
 				path: "profile",
 				element: <Profile />,
+			},
+			{
+				path: "lunch",
+				element: <Lunch />,
 			},
 			{
 				path: "help",

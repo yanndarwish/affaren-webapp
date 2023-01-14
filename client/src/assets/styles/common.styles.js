@@ -88,6 +88,21 @@ export const FitContainer = styled.div`
 			: light.COLOR_BG_SECONDARY};
 `
 
+export const AsideContainer = styled.main`
+	position: relative;
+	display: flex;
+	flex-direction: column;
+
+	padding: ${constant.PADDING_L}px;
+	height: 100%;
+	width: 35%;
+	overflow: scroll;
+	gap: ${constant.GAP * 2}px;
+	color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
+	background-color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
+`
 export const Header = styled.header`
 	display: flex;
 	align-items: flex-start;
