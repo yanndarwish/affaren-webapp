@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { ip } from "../ip"
 
 export const loginApi = createApi({
 	reducerPath: "loginApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "http://192.168.1.41:4001/",
+		baseUrl: `http://${ip}:4001/`,
 	}),
 	tagTypes: ["Sales"],
 	endpoints: (builder) => ({

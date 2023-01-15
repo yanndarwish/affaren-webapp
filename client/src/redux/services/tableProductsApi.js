@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import store from "../store/store"
+import { ip } from "../ip"
 
 export const tableProductsApi = createApi({
 	reducerPath: "tableProductsApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "http://localhost:4001/",
+		baseUrl: `http://${ip}:4001/`,
 		prepareHeaders: (headers) => {
 			const token = store.getState().login?.token
 			const role =
