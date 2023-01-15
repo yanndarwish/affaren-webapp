@@ -1,16 +1,22 @@
-import React from 'react'
-import { AsideContainer, Body, ColumnCenter, FullCenter, SubTitle } from '../../assets/styles/common.styles'
+import {
+	AsideContainer,
+	Body,
+	Column,
+	SubTitle,
+} from "../../assets/styles/common.styles"
+import LunchTableDetail from "./LunchTableDetail"
 
-const LunchAside = ({theme, ids}) => {
-    
+const LunchAside = ({ theme, ids }) => {
 
-  return (
+	return (
 		<AsideContainer theme={theme}>
 			<SubTitle>Tables</SubTitle>
 			<Body theme={theme}>
-				<FullCenter>
-					<ColumnCenter></ColumnCenter>
-				</FullCenter>
+				<Column>
+					{ids.map((id) => (
+						<LunchTableDetail key={"detail-" + id} id={id} />
+					))}
+				</Column>
 			</Body>
 		</AsideContainer>
 	)

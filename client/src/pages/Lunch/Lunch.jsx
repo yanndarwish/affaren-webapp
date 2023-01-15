@@ -19,24 +19,25 @@ import LunchMain from "../../components/LUNCH/LunchMain"
 import LunchAside from "../../components/LUNCH/LunchAside"
 import { useGetActiveTablesQuery } from "../../redux/services/tablesApi"
 import { tablePaginationUnstyledClasses } from "@mui/base"
+import { Snackbar } from "@mui/material"
+import Button from "../../components/common/Button/Button.component"
 
 const Lunch = () => {
+	const tableProducts = useSelector(
+		(state) => state.tableProducts.tableProducts
+	)
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const theme = useSelector((state) => state.theme.theme)
-    const [tableIds, setTableIds] = useState([])
-    const { data } = useGetActiveTablesQuery()
+	const [tableIds, setTableIds] = useState([])
+	const { data } = useGetActiveTablesQuery()
 
-    console.log(data)
-
-    const getActiveTablesIds = (data) => {
-        let ids = []
-        data?.forEach(table => {
-            ids.push(table.table_id)
-        })
-        setTableIds(ids)
-    }
-
-    console.log(tableIds)
+	const getActiveTablesIds = (data) => {
+		let ids = []
+		data?.forEach((table) => {
+			ids.push(table.table_id)
+		})
+		setTableIds(ids)
+	}
 
 	const navigate = useNavigate()
 
@@ -44,11 +45,11 @@ const Lunch = () => {
 		!loggedIn && navigate("/login")
 	}
 
-    useEffect(() => {
-        if (data?.length > 0) {
-            getActiveTablesIds(data)
-        }
-    }, [data])
+	useEffect(() => {
+		if (data?.length > 0) {
+			getActiveTablesIds(data)
+		}
+	}, [data])
 	useEffect(() => {
 		redirect()
 	}, [])
@@ -57,6 +58,7 @@ const Lunch = () => {
 		<FullFlex>
 			<LunchMain theme={theme} ids={tableIds} />
 			<LunchAside theme={theme} ids={tableIds} />
+			
 		</FullFlex>
 	)
 }

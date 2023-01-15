@@ -16,6 +16,9 @@ const tableProductsSlice = createSlice({
 		updateTableProducts: (state, action) => {
 			state.tableProducts = action.payload
 		},
+		addTableProducts: (state, action) => {
+			state.tableProducts.push(action.payload) 
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -37,15 +40,9 @@ const tableProductsSlice = createSlice({
 					state.allTablesProducts = action.payload
 				}
 			)
-			.addMatcher(
-				tableProductsApi.endpoints.getTableProducts.matchFulfilled,
-				(state, action) => {
-					state.tableProducts = action.payload
-				}
-			)
 	},
 })
 
-export const { resetTablesProducts, updateTableProducts } = tableProductsSlice.actions
+export const { resetTablesProducts, updateTableProducts, addTableProducts } = tableProductsSlice.actions
 
 export default tableProductsSlice.reducer

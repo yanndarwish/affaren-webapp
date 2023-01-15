@@ -1067,9 +1067,10 @@ app.post("/table-products", async (req, res) => {
 				table_year,
 				table_month,
 				table_day,
+				dish_status
 			} = product
 			const response = await pool.query(
-				"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_category, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+				"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_category, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day, dish_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
 				[
 					table_id,
 					table_person,
@@ -1082,6 +1083,7 @@ app.post("/table-products", async (req, res) => {
 					table_year,
 					table_month,
 					table_day,
+					dish_status,
 				]
 			)
 
@@ -1095,13 +1097,30 @@ app.post("/table-products", async (req, res) => {
 	}
 })
 
-// patch a table_product
+// patch a table_product price
 app.patch("/table-products/:tableId/:personId/:dishId", async (req, res) => {
 	try {
 		const { tableId, personId, dishId } = req.params
 
 		const response = await pool.query(
 			"UPDATE table_products SET dish_price = 0 WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
+			[tableId, personId, dishId]
+		)
+
+		res.status(200).send(response)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// patch a table_product status
+app.patch("/table-products/status/:tableId/:personId/:dishId", async (req, res) => {
+	try {
+		const { tableId, personId, dishId } = req.params
+
+		const response = await pool.query(
+			"UPDATE table_products SET dish_status = 'done' WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
 			[tableId, personId, dishId]
 		)
 

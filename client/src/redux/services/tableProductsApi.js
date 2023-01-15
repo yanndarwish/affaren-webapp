@@ -61,6 +61,18 @@ export const tableProductsApi = createApi({
 				"MonthTableProducts",
 			],
 		}),
+		patchProductTableStatus: builder.mutation({
+			query: ({ tableId, personId, dishId }) => ({
+				url: `table-products/status/${tableId}/${personId}/${dishId}`,
+				method: "PATCH",
+			}),
+			invalidatesTags: [
+				"TableProducts",
+				"TablesProducts",
+				"DayTableProducts",
+				"MonthTableProducts",
+			],
+		}),
 		deleteTableProducts: builder.mutation({
 			query: ({ id }) => ({
 				url: `table-products/${id}`,
@@ -100,6 +112,7 @@ export const {
 	useDeleteProductTableMutation,
 	useDeleteTableProductsMutation,
 	usePatchProductTableMutation,
+	usePatchProductTableStatusMutation,
 	useGetDayTableProductsQuery,
 	useGetMonthTableProductsQuery,
 	useGetTableProductsQuery,

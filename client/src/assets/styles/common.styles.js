@@ -118,6 +118,7 @@ export const SpaceHeader = styled.header`
 export const SpaceHeaderCenter = styled.header`
 	display: flex;
 	justify-content: space-between;
+	width:100%;
 	align-items: center;
 `
 
@@ -222,6 +223,11 @@ export const FullCenter = styled.div`
 	gap: 1rem;
 	justify-content: center;
 	align-items: center;
+`
+export const PrimaryText = styled.p`
+	font-size: ${constant.FONT_BODY}px;
+	font-weight: 500;
+	color: rgb(${light.COLOR_TEXT_RGB});
 `
 
 export const SecondaryText = styled.p`

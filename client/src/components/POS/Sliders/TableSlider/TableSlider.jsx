@@ -13,6 +13,7 @@ import Box from "@mui/material/Box"
 import {
 	ArtTitle,
 	Column,
+	SpaceHeaderCenter,
 	SubTitle,
 	VerticalCenter,
 } from "../../../../assets/styles/common.styles"
@@ -125,6 +126,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			table_year: dataTable.table_year,
 			table_month: dataTable.table_month,
 			table_day: dataTable.table_day,
+			dish_status: "todo",
 		}
 
 		let copy = Object.assign([], data)
@@ -252,7 +254,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				dish_taxe: mainMatch.product_taxe,
 				table_year: dataTable.table_year,
 				table_month: dataTable.table_month,
-				table_day: dataTable.table_day,
+				table_day: dataTable.table_day
 			}
 
 			postUpdateTableProducts({ products: [newFormula] })
@@ -260,6 +262,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	}
 
 	const handlePayment = () => {
+		dispatch(updateProducts({ products: [] }))
 		let array = []
 
 		data?.forEach((dish) => {
@@ -357,7 +360,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 												(product) => product.table_person === parseInt(id)
 											)
 											.map((item, i) => (
-												<VerticalCenter key={id + "-" + i}>
+												<SpaceHeaderCenter key={id + "-" + i}>
 													<h3>{item.dish_name}</h3>
 													<h3>{item.dish_price} €</h3>
 													<IconButton
@@ -372,7 +375,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 															data-person={id}
 														/>
 													</IconButton>
-												</VerticalCenter>
+												</SpaceHeaderCenter>
 											))}
 									</Column>
 								</TabPanel>
