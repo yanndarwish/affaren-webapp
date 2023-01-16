@@ -48,6 +48,12 @@ export const Container = styled.main`
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 	background-color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
+
+	@media (max-width: 768px) {
+		padding: ${constant.PADDING_M}px;
+		padding-block: ${constant.PADDING_M * 3}px;
+		gap: ${constant.GAP}px;
+	}
 `
 
 export const CenterContainer = styled.div`
@@ -55,7 +61,7 @@ export const CenterContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	height:100%;
+	height: 100%;
 	color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 	background-color: ${(props) =>
@@ -88,6 +94,14 @@ export const FitContainer = styled.div`
 			: light.COLOR_BG_SECONDARY};
 `
 
+export const Grid = styled.div`
+	display: flex;
+	height:100%;
+	@media (max-width: 768px) {
+		flex-direction: column;
+	}
+`
+
 export const AsideContainer = styled.main`
 	position: relative;
 	display: flex;
@@ -115,10 +129,22 @@ export const SpaceHeader = styled.header`
 	align-items: flex-start;
 `
 
+export const AppBar = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 72px;
+	width: 100px;
+	z-index:4;
+`
+
 export const SpaceHeaderCenter = styled.header`
 	display: flex;
 	justify-content: space-between;
-	width:100%;
+	width: 100%;
 	align-items: center;
 `
 
@@ -136,7 +162,6 @@ export const ButtonSection = styled.div`
 	display: flex;
 	gap: ${constant.GAP}px;
 `
-
 
 export const Flex = styled.div`
 	display: flex;
@@ -180,7 +205,7 @@ export const CloseColumn = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height:100%
+	height: 100%;
 `
 
 export const Column = styled.div`
@@ -243,7 +268,7 @@ export const Wrap = styled.div`
 `
 export const WrapS = styled.div`
 	display: flex;
-	gap: ${constant.GAP /2}px;
+	gap: ${constant.GAP / 2}px;
 	flex-wrap: wrap;
 `
 
@@ -255,5 +280,5 @@ export const OrderTitle = styled.div`
 `
 
 export const ErrorMessage = styled.p`
-		color: ${constant.CLR_DANGER};
+	color: ${constant.CLR_DANGER};
 `

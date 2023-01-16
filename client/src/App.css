@@ -13,6 +13,7 @@ html, body, #root {
 
 .overlay {
 	position:fixed;
+	z-index: 100;
 }
 
 .modal {
@@ -22,4 +23,10 @@ html, body, #root {
 
 mark {
 	background-color: #ffdd4b;
+}
+
+thead,
+thead > *,
+th {
+	z-index:1 !important;
 }
