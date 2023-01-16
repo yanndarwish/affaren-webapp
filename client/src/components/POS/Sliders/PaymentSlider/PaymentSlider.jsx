@@ -16,7 +16,7 @@ import {
 	ErrorMessage,
 	SpaceHeader,
 	SubTitle,
-} from "../../../../assets/styles/common.styles"
+} from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import EuroSymbolOutlinedIcon from "@mui/icons-material/EuroSymbolOutlined"
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined"

@@ -1,8 +1,5 @@
 import { useRef, useState } from "react"
-import {
-	ArtTitle,
-	SubTitle,
-} from "../../../assets/styles/common.styles"
+import { ArtTitle, SubTitle } from "../../../assets/common/common.styles"
 import {
 	Dialog,
 	DialogBody,
@@ -71,7 +68,7 @@ const EditDishSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 			dishPrice: parseFloat(price),
 			dishActive: active ? "true" : "false",
 		}
-		updateDish({payload: newDish, id: selectedDish.dish_id})
+		updateDish({ payload: newDish, id: selectedDish.dish_id })
 	}
 
 	useEffect(() => {
@@ -147,11 +144,7 @@ const EditDishSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 					</DialogCard>
 				</DialogBody>
 				<DialogFooter>
-					<Button
-						title="Edit"
-						color="success"
-						onClick={handleEditDish}
-					/>
+					<Button title="Edit" color="success" onClick={handleEditDish} />
 				</DialogFooter>
 			</Dialog>
 		</Overlay>

@@ -9,7 +9,7 @@ import {
 	SpaceHeader,
 	SubTitle,
 	Title,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
 import { useUpdateOrderMutation } from "../../../redux/services/orderApi"

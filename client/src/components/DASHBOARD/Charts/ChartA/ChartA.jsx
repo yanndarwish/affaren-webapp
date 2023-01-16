@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Body, SubTitle } from "../../../../assets/styles/common.styles"
+import { Body, SubTitle } from "../../../../assets/common/common.styles"
 import { setDayArray } from "../../../../redux/features/dashboard"
 import RadialChart from "./RadialChart"
 
-const ChartA = ({theme}) => {
-    const dashboard = useSelector((state) => state.dashboard)
+const ChartA = ({ theme }) => {
+	const dashboard = useSelector((state) => state.dashboard)
 	const dispatch = useDispatch()
-    const [targetArray, setTargetArray] = useState()
-	
+	const [targetArray, setTargetArray] = useState()
 
 	const getDay = (dateString) => {
 		return dateString && dateString.split("-")[2]
@@ -25,8 +24,6 @@ const ChartA = ({theme}) => {
 	const storeDayArrayInState = (data) => {
 		dispatch(setDayArray({ dayArray: data }))
 	}
-
-	
 
 	useEffect(() => {
 		getTargetArray(dashboard.fullArray)

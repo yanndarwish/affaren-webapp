@@ -3,7 +3,7 @@ import {
 	ArtTitle,
 	FullCenter,
 	SubTitle,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import {
 	Dialog,
 	DialogBody,
@@ -72,8 +72,8 @@ const EditFormulaSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 			dishPrice: parseFloat(price),
 			dishActive: active ? "true" : "false",
 		}
-		updateDish({payload: newDish, id: selectedDish.dish_id})
-		console.log({payload: newDish, id: selectedDish.dish_id})
+		updateDish({ payload: newDish, id: selectedDish.dish_id })
+		console.log({ payload: newDish, id: selectedDish.dish_id })
 	}
 
 	const ItemInput = ({ id, value }) => {

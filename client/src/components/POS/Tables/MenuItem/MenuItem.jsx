@@ -1,4 +1,8 @@
-import { Column, Flex, VerticalCenter } from "../../../../assets/styles/common.styles"
+import {
+	Column,
+	Flex,
+	VerticalCenter,
+} from "../../../../assets/common/common.styles"
 import { Name, Price, Wrapper } from "./MenuItem.styles"
 
 const MenuItem = ({ data, color, onClick }) => {

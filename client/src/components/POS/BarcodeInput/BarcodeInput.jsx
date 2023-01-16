@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useGetProductQuery } from "../../../redux/services/productsApi"
 import { addProduct, updateProducts } from "../../../redux/features/sale"
 import { useDispatch, useSelector } from "react-redux"
-import { Flex } from "../../../assets/styles/common.styles"
+import { Flex } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 
 const BarcodeInput = () => {
@@ -13,7 +13,7 @@ const BarcodeInput = () => {
 	const [skip, setSkip] = useState(true)
 	const [barcode, setBarcode] = useState("")
 	const { data } = useGetProductQuery(
-		{ barcode: barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode},
+		{ barcode: barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode },
 		{ skip }
 	)
 
@@ -74,8 +74,13 @@ const BarcodeInput = () => {
 
 	return (
 		<Flex>
-			<Input id="main-barcode-input" label="Barcode" value={barcode} onChange={setBarcode} />
-			<Button title="Search" onClick={handleSearch}/>
+			<Input
+				id="main-barcode-input"
+				label="Barcode"
+				value={barcode}
+				onChange={setBarcode}
+			/>
+			<Button title="Search" onClick={handleSearch} />
 		</Flex>
 	)
 }

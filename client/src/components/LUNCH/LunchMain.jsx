@@ -5,7 +5,7 @@ import {
 	Body,
 	Title,
 	Column,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import { updateTableProducts } from "../../redux/features/tableProducts"
 import LunchItem from "./LunchItem"
 
@@ -61,7 +61,7 @@ const LunchMain = ({ theme, ids }) => {
 	useEffect(() => {
 		dispatch(updateTableProducts([]))
 	}, [])
-	
+
 	return (
 		<Container theme={theme}>
 			<Title>Lunch Orders</Title>

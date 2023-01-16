@@ -1,10 +1,10 @@
 import styled from "styled-components"
-import { constant } from "../../../assets/styles/common.styles"
+import { constant } from "../../../assets/common/common.styles"
 
 export const Display = styled.div`
 	display: flex;
 	justify-content: flex-end;
-    align-items:center;
+	align-items: center;
 `
 
 export const CorrectBtn = styled.div`
@@ -12,7 +12,7 @@ export const CorrectBtn = styled.div`
 	justify-content: center;
 	align-items: center;
 	padding: ${constant.PADDING_M}px;
-    padding-right: ${constant.PADDING_L}px;
+	padding-right: ${constant.PADDING_L}px;
 `
 
 export const Keypad = styled.div`

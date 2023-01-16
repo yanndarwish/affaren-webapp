@@ -11,7 +11,7 @@ import {
 	FullFlex,
 	SubTitle,
 	Title,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 
 import { useNavigate } from "react-router-dom"
 import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
@@ -58,7 +58,6 @@ const Lunch = () => {
 		<FullFlex>
 			<LunchMain theme={theme} ids={tableIds} />
 			<LunchAside theme={theme} ids={tableIds} />
-			
 		</FullFlex>
 	)
 }

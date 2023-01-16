@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom"
-import { Grid } from "../../assets/styles/common.styles"
+import { Grid } from "../../assets/common/common.styles"
 import Navbar from "../Sidebar/Navbar"
-
 
 const Root = () => {
 	return (

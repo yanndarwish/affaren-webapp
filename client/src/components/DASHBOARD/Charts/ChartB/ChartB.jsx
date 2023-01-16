@@ -6,7 +6,7 @@ import {
 	Body,
 	SpaceHeader,
 	SubTitle,
-} from "../../../../assets/styles/common.styles"
+} from "../../../../assets/common/common.styles"
 import DetailTable from "../../DetailTable/DetailTable"
 
 const ChartB = ({ theme, months, month, year }) => {
@@ -24,7 +24,14 @@ const ChartB = ({ theme, months, month, year }) => {
 				<Button title="Details" onClick={handleDetailClick} />
 			</SpaceHeader>
 			<AreaChart data={dashboard.fullArray} theme={theme} />
-			{isDetail && <DetailTable data={dashboard.fullArray} months={months} month={parseInt(month)} year={year}/>}
+			{isDetail && (
+				<DetailTable
+					data={dashboard.fullArray}
+					months={months}
+					month={parseInt(month)}
+					year={year}
+				/>
+			)}
 		</Body>
 	)
 }

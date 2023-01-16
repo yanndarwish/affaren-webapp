@@ -11,7 +11,7 @@ import { useState } from "react"
 import {
 	CloseColumn,
 	VerticalCenter,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import { useEffect } from "react"
 
 export default function InventoryTable({ products, openEditor }) {

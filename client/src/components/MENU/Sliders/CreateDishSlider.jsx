@@ -3,7 +3,7 @@ import {
 	ArtTitle,
 	ErrorMessage,
 	SubTitle,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import {
 	Dialog,
 	DialogBody,
@@ -40,7 +40,7 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 	const closeSlider = (e) => {
 		if (overlayRef.current === e.target) {
 			setIsOpen(false)
-            res.reset()
+			res.reset()
 		}
 	}
 

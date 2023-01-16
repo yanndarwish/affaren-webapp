@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { Column, SubTitle } from "../../../assets/styles/common.styles"
+import { Column, SubTitle } from "../../../assets/common/common.styles"
 import MenuFilter from "./MenuFilter/MenuFilter"
 import MenuItem from "./MenuItem/MenuItem"
 import { Container } from "./TableMenu.styles"

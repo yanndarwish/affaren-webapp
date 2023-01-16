@@ -1,6 +1,6 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material"
 import { useState } from "react"
-import { ArtTitle, Column } from "../../../assets/styles/common.styles"
+import { ArtTitle, Column } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import EditUserSlider from "../Sliders/EditUserSlider"
 

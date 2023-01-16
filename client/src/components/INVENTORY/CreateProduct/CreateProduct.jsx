@@ -4,7 +4,7 @@ import {
 	Column,
 	ColumnCenter,
 	FullCenter,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import { usePostProductMutation } from "../../../redux/services/productsApi"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"

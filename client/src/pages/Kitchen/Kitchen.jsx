@@ -12,7 +12,7 @@ import {
 	SubTitle,
 	Title,
 	VerticalCenter,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import Button from "../../components/common/Button/Button.component"
 import BarcodeInput from "../../components/INVENTORY/BarcodeInput/BarcodeInput"
 import {

@@ -8,7 +8,7 @@ import {
 	ColumnSpace,
 	ErrorMessage,
 	SubTitle,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import { Container } from "../Card.styles"
 
 const LoginCard = ({ theme }) => {
@@ -24,7 +24,7 @@ const LoginCard = ({ theme }) => {
 		}
 		await getAuth(payload)
 	}
-	
+
 	const redirect = () => {
 		if (res.status === "fulfilled") {
 			navigate("/profile")
@@ -39,25 +39,27 @@ const LoginCard = ({ theme }) => {
 		<Container theme={theme}>
 			<ColumnSpace>
 				<SubTitle theme={theme}>Login</SubTitle>
-				{res.isError && <ErrorMessage>Email or Password incorrect</ErrorMessage>}
+				{res.isError && (
+					<ErrorMessage>Email or Password incorrect</ErrorMessage>
+				)}
 				<Column>
-				<Input
-					label="Email"
-					value={email}
-					theme={theme}
-					onChange={setEmail}
-					fullWidth
+					<Input
+						label="Email"
+						value={email}
+						theme={theme}
+						onChange={setEmail}
+						fullWidth
 					/>
-				<Input
-					fullWidth
-					label="Password"
-					value={password}
-					theme={theme}
-					onChange={setPassword}
-					type="password"
+					<Input
+						fullWidth
+						label="Password"
+						value={password}
+						theme={theme}
+						onChange={setPassword}
+						type="password"
 					/>
 					<Link to="/forgot-password">Forgot you password ?</Link>
-					</Column>
+				</Column>
 				<Button title="Login" color="success" onClick={handleLogin} />
 			</ColumnSpace>
 		</Container>

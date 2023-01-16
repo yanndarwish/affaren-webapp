@@ -1,13 +1,16 @@
-import { Column, Flex, Gap, VerticalCenter } from "../../../assets/styles/common.styles"
+import {
+	Column,
+	Flex,
+	Gap,
+	VerticalCenter,
+} from "../../../assets/common/common.styles"
 import { Name, Price, Wrapper } from "./MenuItem.styles"
 import { Icon, IconButton } from "@mui/material"
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 
-const MenuItem = ({ data, color, disabled, openEdit, openDelete  }) => {
-
-
+const MenuItem = ({ data, color, disabled, openEdit, openDelete }) => {
 	return (
 		<Wrapper color={color} disabled={disabled}>
 			<Column>
@@ -26,7 +29,7 @@ const MenuItem = ({ data, color, disabled, openEdit, openDelete  }) => {
 					<h3>€</h3>
 				</Flex>
 
-				<IconButton data-id={data.dish_id}  onClick={openEdit}>
+				<IconButton data-id={data.dish_id} onClick={openEdit}>
 					<EditOutlinedIcon color="primary" data-id={data.dish_id} />
 				</IconButton>
 				<IconButton data-id={data.dish_id} onClick={openDelete}>

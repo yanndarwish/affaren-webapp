@@ -1,17 +1,17 @@
 import styled from "styled-components"
-import dark from "../../../assets/styles/dark.theme.styles"
-import { constant } from "../../../assets/styles/common.styles"
-import light from "../../../assets/styles/light.theme.styles"
+import dark from "../../../assets/common/dark.theme.styles"
+import { constant } from "../../../assets/common/common.styles"
+import light from "../../../assets/common/light.theme.styles"
 
 export const Container = styled.div`
 	position: fixed;
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 	padding: ${constant.PADDING_M}px;
 	width: 50%;
 	height: 100%;
-    z-index:100;
-    overflow:scroll;
+	z-index: 100;
+	overflow: scroll;
 	color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 	background-color: ${(props) =>

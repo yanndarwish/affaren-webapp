@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ArtTitle } from "../../../assets/styles/common.styles"
+import { ArtTitle } from "../../../assets/common/common.styles"
 import { CorrectBtn, Display, Keypad, Num, NumRow } from "./NumPad.styles"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 
@@ -9,7 +9,8 @@ const NumPad = ({ display, size, target, unit, value, setValue }) => {
 		if (target) {
 			document.getElementById(target).value += e.target.dataset.value
 		} else {
-			let totalString = value === 0 ? e.target.dataset.value : value + e.target.dataset.value
+			let totalString =
+				value === 0 ? e.target.dataset.value : value + e.target.dataset.value
 			setValue(totalString)
 		}
 	}

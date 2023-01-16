@@ -10,7 +10,7 @@ import {
 	SpaceHeader,
 	SubTitle,
 	Title,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import InventoryTable from "../../components/INVENTORY/InventoryTable/InventoryTable"
 import { useState } from "react"
 import { useGetProductsQuery } from "../../redux/services/productsApi"

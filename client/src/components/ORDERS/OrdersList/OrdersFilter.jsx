@@ -10,7 +10,7 @@ import {
 	Column,
 	ColumnCenter,
 	VerticalCenter,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import {
 	setStatusFilter,
 	setLocationFilter,

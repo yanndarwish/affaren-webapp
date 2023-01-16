@@ -5,7 +5,7 @@ import {
 	Column,
 	FullCenter,
 	Gap,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
 import {
@@ -53,7 +53,6 @@ const EditProduct = ({
 		focusOnBarcode()
 		resetBarcode()
 		document.getElementById("inventory-barcode-input").focus()
-
 	}
 
 	const handleDelete = () => {
@@ -65,7 +64,6 @@ const EditProduct = ({
 		focusOnBarcode()
 		resetBarcode()
 		document.getElementById("inventory-barcode-input").focus()
-
 	}
 
 	const handleModal = () => {

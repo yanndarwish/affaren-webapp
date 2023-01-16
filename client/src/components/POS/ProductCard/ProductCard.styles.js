@@ -1,10 +1,10 @@
 import styled from "styled-components"
-import dark from "../../../assets/styles/dark.theme.styles"
-import { constant } from "../../../assets/styles/common.styles"
-import light from "../../../assets/styles/light.theme.styles"
+import dark from "../../../assets/common/dark.theme.styles"
+import { constant } from "../../../assets/common/common.styles"
+import light from "../../../assets/common/light.theme.styles"
 
 export const StyledProductCard = styled.div`
-position:relative;
+	position: relative;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -23,7 +23,7 @@ export const CardTitle = styled.p`
 `
 
 export const Trash = styled.div`
-	position:absolute;
-	top:0;
-	right:0;
+	position: absolute;
+	top: 0;
+	right: 0;
 `

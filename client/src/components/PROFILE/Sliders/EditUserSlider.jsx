@@ -4,7 +4,7 @@ import {
 	ColumnCenter,
 	SpaceHeader,
 	SubTitle,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import {
 	Dialog,
 	DialogBody,

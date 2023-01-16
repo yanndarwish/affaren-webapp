@@ -5,7 +5,7 @@ import {
 	PrimaryText,
 	SecondaryText,
 	SpaceHeaderCenter,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import { useGetTableProductsQuery } from "../../redux/services/tableProductsApi"
 import {
 	addTableProducts,
@@ -70,7 +70,7 @@ const LunchTableDetail = ({ id }) => {
 			dispatch(
 				updateTableProducts(array.filter((item) => item.dish_status === "todo"))
 			)
-		} 
+		}
 	}
 
 	const handleClick = (e) => {

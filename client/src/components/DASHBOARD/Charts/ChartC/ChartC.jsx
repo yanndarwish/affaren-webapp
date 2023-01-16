@@ -1,7 +1,11 @@
 import { useState } from "react"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { Body, ErrorMessage, SubTitle } from "../../../../assets/styles/common.styles"
+import {
+	Body,
+	ErrorMessage,
+	SubTitle,
+} from "../../../../assets/common/common.styles"
 import { useGetSalesProductsQuery } from "../../../../redux/services/salesApi"
 import BestSellersTable from "./BestSellersTable"
 

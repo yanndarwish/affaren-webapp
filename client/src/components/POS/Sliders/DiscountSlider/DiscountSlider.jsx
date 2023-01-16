@@ -23,7 +23,7 @@ import {
 	DialogHeader,
 	Overlay,
 } from "../Slider.styles"
-import { SubTitle } from "../../../../assets/styles/common.styles"
+import { SubTitle } from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
 import NumPad from "../../../common/NumPad/NumPad"
@@ -144,8 +144,11 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 				<DialogBody>
 					{/* <ArtTitle>Product List</ArtTitle> */}
 					<DialogCard theme={theme}>
-						<TableContainer component={Paper} sx={{ height:"100%" }}>
-							<Table sx={{ minWidth: 650, height:"100%" }} aria-label="simple table">
+						<TableContainer component={Paper} sx={{ height: "100%" }}>
+							<Table
+								sx={{ minWidth: 650, height: "100%" }}
+								aria-label="simple table"
+							>
 								<TableHead>
 									<TableRow>
 										<TableCell padding="checkbox">
@@ -229,7 +232,6 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 						</FormControl>
 						<NumPad
 							display
-
 							unit={discountType === "percent" ? "%" : "€"}
 							value={discountAmount}
 							setValue={setDiscountAmount}

@@ -11,7 +11,7 @@ import {
 	VerticalCenter,
 	Wrap,
 	WrapS,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone"
 import EditIcon from "@mui/icons-material/Edit"
@@ -64,7 +64,6 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 		a.document.write(orderItems)
 		a.document.write("</h2>")
 
-
 		a.document.write("</body></html>")
 		a.document.close()
 		a.print()
@@ -101,10 +100,7 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 							color="error"
 							onClick={openDeleteModal}
 						/>
-						<Button
-							title={<PrintOutlinedIcon />}
-							onClick={printDiv}
-						/>
+						<Button title={<PrintOutlinedIcon />} onClick={printDiv} />
 						<OrderStatusMenu order={order} />
 					</WrapS>
 				</OrderTitle>

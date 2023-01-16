@@ -18,7 +18,7 @@ import {
 	MenuItem,
 	FormControlLabel,
 } from "@mui/material"
-import { ArtTitle, SubTitle } from "../../../assets/styles/common.styles"
+import { ArtTitle, SubTitle } from "../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"

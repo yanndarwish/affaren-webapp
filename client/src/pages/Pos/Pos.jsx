@@ -25,7 +25,7 @@ import {
 	SubTitle,
 	Title,
 	ErrorMessage,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 import { useGetCardsQuery } from "../../redux/services/cardApi"
 import { usePostDrawerMutation } from "../../redux/services/printApi"

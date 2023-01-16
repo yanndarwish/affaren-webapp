@@ -1,4 +1,4 @@
-import { ErrorMessage, FullFlex } from "../../assets/styles/common.styles"
+import { ErrorMessage, FullFlex } from "../../assets/common/common.styles"
 import OrdersList from "../../components/ORDERS/OrdersList/OrdersList"
 import { useGetOrdersQuery } from "../../redux/services/orderApi"
 import { useState } from "react"

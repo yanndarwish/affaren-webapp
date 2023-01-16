@@ -6,7 +6,7 @@ import {
 	SecondaryText,
 	SpaceHeader,
 	VerticalCenter,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import EuroSymbolOutlinedIcon from "@mui/icons-material/EuroSymbolOutlined"
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined"
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined"

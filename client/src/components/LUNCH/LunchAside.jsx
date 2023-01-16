@@ -3,11 +3,10 @@ import {
 	Body,
 	Column,
 	SubTitle,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import LunchTableDetail from "./LunchTableDetail"
 
 const LunchAside = ({ theme, ids }) => {
-
 	return (
 		<AsideContainer theme={theme}>
 			<SubTitle>Tables</SubTitle>

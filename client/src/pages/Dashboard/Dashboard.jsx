@@ -9,7 +9,7 @@ import {
 	SpaceHeader,
 	SubTitle,
 	Title,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import DateInput from "../../components/DASHBOARD/DateInput/DateInput"
 import ChartB from "../../components/DASHBOARD/Charts/ChartB/ChartB"
 import ChartA from "../../components/DASHBOARD/Charts/ChartA/ChartA"

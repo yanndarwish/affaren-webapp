@@ -4,7 +4,7 @@ import {
 	ErrorMessage,
 	HorizontalCenter,
 	SubTitle,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import {
 	Dialog,
 	DialogBody,
@@ -49,7 +49,7 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 		let cat = []
 		const categories = document.querySelectorAll(".formula-category")
 
-		categories.forEach(el => {
+		categories.forEach((el) => {
 			cat.push(el.querySelector("input").value)
 		})
 		const newDish = {

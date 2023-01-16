@@ -16,7 +16,7 @@ import {
 	SpaceHeaderCenter,
 	SubTitle,
 	VerticalCenter,
-} from "../../../../assets/styles/common.styles"
+} from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined"
 import Button from "../../../common/Button/Button.component"
@@ -254,7 +254,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				dish_taxe: mainMatch.product_taxe,
 				table_year: dataTable.table_year,
 				table_month: dataTable.table_month,
-				table_day: dataTable.table_day
+				table_day: dataTable.table_day,
 			}
 
 			postUpdateTableProducts({ products: [newFormula] })

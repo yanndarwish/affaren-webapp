@@ -4,7 +4,7 @@ import {
 	ErrorMessage,
 	SpaceHeader,
 	SubTitle,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
 import Visibility from "@mui/icons-material/Visibility"

@@ -6,7 +6,7 @@ import {
 	Header,
 	SubTitle,
 	Title,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import {
 	useGetUserQuery,
 	useGetUsersMutation,
@@ -30,7 +30,9 @@ const Profile = () => {
 	}
 
 	useEffect(() => {
-		Object.keys(user).length && user?.user_is_admin === "true" && getUsers({ user: user })
+		Object.keys(user).length &&
+			user?.user_is_admin === "true" &&
+			getUsers({ user: user })
 	}, [user])
 
 	useEffect(() => {

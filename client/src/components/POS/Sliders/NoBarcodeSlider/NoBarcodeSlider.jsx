@@ -14,7 +14,7 @@ import {
 	MenuItem,
 	InputAdornment,
 } from "@mui/material"
-import { ArtTitle, SubTitle } from "../../../../assets/styles/common.styles"
+import { ArtTitle, SubTitle } from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
 import Input from "../../../common/Input/Input.component"
@@ -89,13 +89,13 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 		const quantity = document.getElementById("nb-qty").value
 		const price = document.getElementById("nb-price").value
 
-		let obj = {...product}
+		let obj = { ...product }
 		obj["quantity"] = parseInt(quantity)
 		obj["price"] = parseFloat(price * quantity).toFixed(2)
 		obj["id"] = `nb-${products.length + 1}`
-		
+
 		setProduct(obj)
-		dispatch(addProduct({products: obj}))
+		dispatch(addProduct({ products: obj }))
 		setIsOpen(false)
 	}
 
@@ -130,10 +130,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 									onClick={handleInputClick}
 									inputAdornment={{
 										startAdornment: (
-											<InputAdornment
-												data-id="nb-qty"
-												position="start"
-											>
+											<InputAdornment data-id="nb-qty" position="start">
 												<p data-id="nb-qty">Quantity</p>
 											</InputAdornment>
 										),
@@ -155,10 +152,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 									onClick={handleInputClick}
 									inputAdornment={{
 										startAdornment: (
-											<InputAdornment
-												data-id="nb-price"
-												position="start"
-											>
+											<InputAdornment data-id="nb-price" position="start">
 												<p data-id="nb-price">Price</p>
 											</InputAdornment>
 										),

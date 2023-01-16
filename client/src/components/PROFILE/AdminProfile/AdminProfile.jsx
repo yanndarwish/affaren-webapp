@@ -1,9 +1,8 @@
-import { SubTitle, Wrap } from "../../../assets/styles/common.styles"
+import { SubTitle, Wrap } from "../../../assets/common/common.styles"
 import AddUserCard from "../AddUserCard/AddUserCard"
 import UserCard from "../AdminCard/UserCard"
 
 const AdminProfile = ({ users }) => {
-
 	return (
 		<>
 			<SubTitle>Users</SubTitle>

@@ -1,6 +1,6 @@
 import { Menu, MenuItem, Button } from "@mui/material"
 import { useEffect, useState } from "react"
-import { ErrorMessage } from "../../../assets/styles/common.styles"
+import { ErrorMessage } from "../../../assets/common/common.styles"
 import { useUpdateOrderMutation } from "../../../redux/services/orderApi"
 
 const OrderStatusMenu = ({ order }) => {

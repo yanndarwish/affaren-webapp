@@ -6,7 +6,7 @@ import {
 	Header,
 	SubTitle,
 	Title,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import { useGetSalesQuery } from "../../redux/services/salesApi"
 import SalesTable from "../../components/SALES/SalesTable/SalesTable"
 import { useNavigate } from "react-router-dom"

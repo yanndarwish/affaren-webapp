@@ -3,7 +3,7 @@ import {
 	ColumnCenter,
 	ErrorMessage,
 	FullCenter,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
 

@@ -5,7 +5,7 @@ import OrdersFilter from "./OrdersFilter"
 import OrdersAddButton from "./OrdersAddButton"
 import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
-import { FullCenter, SubTitle } from "../../../assets/styles/common.styles"
+import { FullCenter, SubTitle } from "../../../assets/common/common.styles"
 
 export default function OrdersList({
 	orders,

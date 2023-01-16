@@ -9,7 +9,7 @@ import {
 	Gap,
 	SpaceHeader,
 	Title,
-} from "../../assets/styles/common.styles"
+} from "../../assets/common/common.styles"
 import Button from "../../components/common/Button/Button.component"
 import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 import MenuFilter from "../../components/MENU/MenuFilter"

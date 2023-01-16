@@ -4,7 +4,7 @@ import {
 	ColumnCenter,
 	ColumnSpace,
 	SubTitle,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
 import { useForgotPasswordMutation } from "../../../redux/services/loginApi"

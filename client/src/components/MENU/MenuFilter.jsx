@@ -1,7 +1,7 @@
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { ArtTitle, Column } from "../../assets/styles/common.styles"
+import { ArtTitle, Column } from "../../assets/common/common.styles"
 import { useDispatch } from "react-redux"
 import {
 	setMenuStatusFilter,
@@ -51,7 +51,11 @@ const MenuFilter = () => {
 				/>
 				<FormControlLabel value="main" control={<Radio />} label="Mains" />
 				<FormControlLabel value="desert" control={<Radio />} label="Deserts" />
-				<FormControlLabel value="formula" control={<Radio />} label="Formulas" />
+				<FormControlLabel
+					value="formula"
+					control={<Radio />}
+					label="Formulas"
+				/>
 			</RadioGroup>
 		</Column>
 	)

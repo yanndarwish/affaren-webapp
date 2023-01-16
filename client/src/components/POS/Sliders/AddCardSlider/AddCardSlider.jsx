@@ -6,7 +6,11 @@ import {
 	DialogHeader,
 	Overlay,
 } from "../Slider.styles"
-import { ArtTitle, ErrorMessage, SubTitle } from "../../../../assets/styles/common.styles"
+import {
+	ArtTitle,
+	ErrorMessage,
+	SubTitle,
+} from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
 import NumPad from "../../../common/NumPad/NumPad"
@@ -152,7 +156,9 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 						</FormControl>
 						<NumPad target={focusedInput} />
 					</DialogCard>
-						{res.isError && <ErrorMessage>Failed to create new card</ErrorMessage>}
+					{res.isError && (
+						<ErrorMessage>Failed to create new card</ErrorMessage>
+					)}
 				</DialogBody>
 				<DialogFooter>
 					<Button

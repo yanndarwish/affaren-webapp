@@ -1,5 +1,5 @@
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
-import { ArtTitle, Column } from "../../../../assets/styles/common.styles"
+import { ArtTitle, Column } from "../../../../assets/common/common.styles"
 
 const MenuFilter = ({ filter, setFilter }) => {
 	const handleTypeFilter = (e) => {

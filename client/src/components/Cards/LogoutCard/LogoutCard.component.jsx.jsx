@@ -7,7 +7,7 @@ import {
 	ColumnSpace,
 	SpaceHeader,
 	SubTitle,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import { Container, Text } from "../Card.styles"
 import { useEffect } from "react"
 import { resetSale } from "../../../redux/features/sale"

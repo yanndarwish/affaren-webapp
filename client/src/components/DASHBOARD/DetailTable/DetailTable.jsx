@@ -9,7 +9,7 @@ import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { setDetailArray } from "../../../redux/features/dashboard"
 import * as XLSX from "xlsx/xlsx.mjs"
-import { SpaceHeader, SubTitle } from "../../../assets/styles/common.styles"
+import { SpaceHeader, SubTitle } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 
 const DetailTable = ({ data, months, month, year }) => {
@@ -131,8 +131,8 @@ const DetailTable = ({ data, months, month, year }) => {
 	return (
 		<>
 			<SpaceHeader>
-				<SubTitle>{months[month -1]}'s Details</SubTitle>
-                <Button title="Export" onClick={exportToExcel}/> 
+				<SubTitle>{months[month - 1]}'s Details</SubTitle>
+				<Button title="Export" onClick={exportToExcel} />
 			</SpaceHeader>
 			<TableContainer component={Paper}>
 				<Table

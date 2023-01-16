@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@mui/material"
-import { ArtTitle } from "../../../assets/styles/common.styles"
+import { ArtTitle } from "../../../assets/common/common.styles"
 import AddIcon from "@mui/icons-material/Add"
 import { Box } from "@mui/system"
 import { useState } from "react"

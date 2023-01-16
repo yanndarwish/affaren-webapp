@@ -1,4 +1,3 @@
-
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
@@ -18,7 +17,7 @@ import {
 	ArtTitle,
 	ColumnCenter,
 	FullCenter,
-} from "../../../assets/styles/common.styles"
+} from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import { usePostPrintMutation } from "../../../redux/services/printApi"
@@ -92,7 +91,10 @@ export default function SalesTable({ array }) {
 
 	const DeleteConfirmation = () => {
 		return (
-			<InfoMessage state="success" text={"Sale " + selected + " has been deleted successfully!"}/>
+			<InfoMessage
+				state="success"
+				text={"Sale " + selected + " has been deleted successfully!"}
+			/>
 		)
 	}
 

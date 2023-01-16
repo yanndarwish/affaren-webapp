@@ -12,7 +12,7 @@ import { toggleTheme } from "../../redux/features/theme"
 import { useNavigate } from "react-router-dom"
 import { navbarItems, cookNavbarItems } from "./NavbarItems"
 import { IconButton } from "@mui/material"
-import { AppBar } from "../../assets/styles/common.styles"
+import { AppBar } from "../../assets/common/common.styles"
 
 const Navbar = () => {
 	const theme = useSelector((state) => state.theme.theme)
