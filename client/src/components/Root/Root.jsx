@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom"
 import { Grid } from "../../assets/common/common.styles"
-import Navbar from "../Sidebar/Navbar"
+import Sidebar from "../Sidebar/Sidebar"
 
 const Root = () => {
 	return (
 		<Grid>
 			{/* <Sidebar /> */}
-			<Navbar />
+			<Sidebar />
 			<Outlet />
 		</Grid>
 	)

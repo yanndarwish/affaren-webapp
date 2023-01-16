@@ -10,7 +10,7 @@ import SoupKitchenOutlinedIcon from "@mui/icons-material/SoupKitchenOutlined"
 import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined"
 import LunchDiningIcon from "@mui/icons-material/LunchDining"
 
-export const navbarItems = [
+export const sidebarItems = [
 	{
 		id: 0,
 		icon: <HomeOutlinedIcon />,
@@ -68,7 +68,7 @@ export const navbarItems = [
 	},
 ]
 
-export const cookNavbarItems = [
+export const cookSidebarItems = [
 	{
 		id: 0,
 		icon: <LibraryBooksOutlinedIcon />,

@@ -10,11 +10,11 @@ import MenuIcon from "@mui/icons-material/Menu"
 import { useSelector, useDispatch } from "react-redux"
 import { toggleTheme } from "../../redux/features/theme"
 import { useNavigate } from "react-router-dom"
-import { navbarItems, cookNavbarItems } from "./NavbarItems"
+import { sidebarItems, cookSidebarItems } from "./SidebarItems"
 import { IconButton } from "@mui/material"
 import { AppBar } from "../../assets/common/common.styles"
 
-const Navbar = () => {
+const Sidebar = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const user = useSelector((state) => state.user.user)
@@ -97,7 +97,7 @@ const Navbar = () => {
 					<Divider />
 					<List>
 						{user?.user_role === "cook"
-							? cookNavbarItems.map((item) => (
+							? cookSidebarItems.map((item) => (
 									<ListItem key={item.id} disablePadding>
 										<ListItemButton
 											sx={{
@@ -111,7 +111,7 @@ const Navbar = () => {
 										</ListItemButton>
 									</ListItem>
 							  ))
-							: navbarItems.map((item) => (
+							: sidebarItems.map((item) => (
 									<ListItem key={item.id} disablePadding>
 										<ListItemButton
 											sx={{
@@ -161,7 +161,7 @@ const Navbar = () => {
 				<Divider />
 				<List>
 					{user?.user_role === "cook"
-						? cookNavbarItems.map((item) => (
+						? cookSidebarItems.map((item) => (
 								<ListItem key={item.id} disablePadding>
 									<ListItemButton
 										sx={{
@@ -175,7 +175,7 @@ const Navbar = () => {
 									</ListItemButton>
 								</ListItem>
 						  ))
-						: navbarItems.map((item) => (
+						: sidebarItems.map((item) => (
 								<ListItem key={item.id} disablePadding>
 									<ListItemButton
 										sx={{
@@ -195,4 +195,4 @@ const Navbar = () => {
 	)
 }
 
-export default Navbar
+export default Sidebar
