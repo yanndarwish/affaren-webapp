@@ -1,5 +1,5 @@
 import React from "react"
-import { Flex, SubTitle } from "../../assets/common/common.styles"
+import { Flex, SubTitle } from "../../../assets/common/common.styles"
 
 const LunchItem = ({ data }) => {
 	return (

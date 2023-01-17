@@ -1,7 +1,7 @@
-import MenuItem from "../common/MenuItem/MenuItem"
+import MenuItem from "../../common/MenuItem/MenuItem"
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { Column, SubTitle } from "../../assets/common/common.styles"
+import { Column, SubTitle } from "../../../assets/common/common.styles"
 
 const MenuTable = ({ openEdit, openDelete, openEditFormula }) => {
 	const statusFilter = useSelector((state) => state.dishes.statusFilter)

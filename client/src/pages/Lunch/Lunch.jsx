@@ -6,8 +6,8 @@ import {
 } from "../../assets/common/common.styles"
 
 import { useNavigate } from "react-router-dom"
-import LunchMain from "../../components/LUNCH/LunchMain"
-import LunchAside from "../../components/LUNCH/LunchAside"
+import LunchMain from "../../components/LUNCH/LunchMain/LunchMain"
+import LunchAside from "../../components/LUNCH/LunchAside/LunchAside"
 import { useGetActiveTablesQuery } from "../../redux/services/tablesApi"
 
 const Lunch = () => {

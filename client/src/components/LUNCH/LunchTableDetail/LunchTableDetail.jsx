@@ -5,17 +5,19 @@ import {
 	PrimaryText,
 	SecondaryText,
 	SpaceHeaderCenter,
-} from "../../assets/common/common.styles"
-import { useGetTableProductsQuery } from "../../redux/services/tableProductsApi"
+} from "../../../assets/common/common.styles"
+import {
+	useGetTableProductsQuery,
+	usePatchProductTableStatusMutation,
+} from "../../../redux/services/tableProductsApi"
 import {
 	addTableProducts,
 	updateTableProducts,
-} from "../../redux/features/tableProducts"
+} from "../../../redux/features/tableProducts"
 import { useDispatch, useSelector } from "react-redux"
 import { IconButton } from "@mui/material"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
-import { usePatchProductTableStatusMutation } from "../../redux/services/tableProductsApi"
 
 const LunchTableDetail = ({ id }) => {
 	const tableProducts = useSelector(

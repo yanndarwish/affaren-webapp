@@ -3,8 +3,8 @@ import {
 	Body,
 	Column,
 	SubTitle,
-} from "../../assets/common/common.styles"
-import LunchTableDetail from "./LunchTableDetail"
+} from "../../../assets/common/common.styles"
+import LunchTableDetail from "../LunchTableDetail/LunchTableDetail"
 
 const LunchAside = ({ theme, ids }) => {
 	return (

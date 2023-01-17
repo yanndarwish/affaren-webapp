@@ -4,10 +4,9 @@ import {
 	Container,
 	Body,
 	Title,
-	Column,
-} from "../../assets/common/common.styles"
-import { updateTableProducts } from "../../redux/features/tableProducts"
-import LunchItem from "./LunchItem"
+	Column, } from "../../../assets/common/common.styles"
+import { updateTableProducts } from "../../../redux/features/tableProducts"
+import LunchItem from "../LunchItem/LunchItem"
 
 const LunchMain = ({ theme, ids }) => {
 	const dispatch = useDispatch()

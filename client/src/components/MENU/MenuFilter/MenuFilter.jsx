@@ -1,12 +1,12 @@
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { ArtTitle, Column } from "../../assets/common/common.styles"
+import { ArtTitle, Column } from "../../../assets/common/common.styles"
 import { useDispatch } from "react-redux"
 import {
 	setMenuStatusFilter,
 	setMenuTypeFilter,
-} from "../../redux/features/dishes"
+} from "../../../redux/features/dishes"
 
 const MenuFilter = () => {
 	const statusFilter = useSelector((state) => state.dishes.statusFilter)
