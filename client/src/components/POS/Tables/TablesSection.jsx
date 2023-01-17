@@ -1,14 +1,20 @@
-import { StyledTablesSection } from "./TablesSection.styles"
 import { useSelector } from "react-redux"
-import { useGetActiveTablesQuery, usePostTableMutation } from "../../../redux/services/tablesApi"
-import TableCard from "./TableCard"
-import TableSlider from "../Sliders/TableSlider/TableSlider"
-import AddTableCard from "./AddTableCard/AddTableCard"
+import {
+	useGetActiveTablesQuery,
+	usePostTableMutation,
+} from "../../../redux/services/tablesApi"
+import { Backdrop, SpeedDial, SpeedDialAction } from "@mui/material"
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined"
+import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined"
+import { useState } from "react"
 
 const TablesSection = ({ theme, onClick }) => {
-    useGetActiveTablesQuery()
+	useGetActiveTablesQuery()
 	const activeTables = useSelector((state) => state.table.activeTables)
 	const [postTable, res] = usePostTableMutation()
+	const [open, setOpen] = useState(false)
+	const handleOpen = () => setOpen(true)
+	const handleClose = () => setOpen(false)
 
 	const handleAddTable = () => {
 		const timestamp = new Date()
@@ -19,29 +25,40 @@ const TablesSection = ({ theme, onClick }) => {
 
 		const table = {
 			year: year,
-			month: month, 
+			month: month,
 			day: day,
-			status: "active"
+			status: "active",
 		}
 		postTable(table)
-		console.log("add table")
 	}
 	return (
-		<StyledTablesSection theme={theme} id="table-section">
-			{/* dynamically create boxes based on cards */}
-			{activeTables &&
-				activeTables.map((card, i) => (
-					<TableCard
-						key={card.table_id}
-						theme={theme}
-						id={card.table_id}
-						name={"Table "+ (i + 1)}
-						price={card.table_price}
-                        onClick={onClick}
-					/>
-				))}
-				<AddTableCard onClick={handleAddTable}/>
-		</StyledTablesSection>
+		<>
+			<Backdrop open={open} sx={{zIndex: 2}}/>
+			<SpeedDial
+				ariaLabel="SpeedDial basic example"
+				sx={{ position: "absolute", bottom: 16, right: 16 }}
+				icon={<TableRestaurantOutlinedIcon />}
+				onClose={handleClose}
+				onOpen={handleOpen}
+			>
+				{activeTables &&
+					activeTables.map((card) => (
+						<SpeedDialAction
+							key={card.table_id}
+							icon={<TableRestaurantOutlinedIcon />}
+							data-id={card.table_id}
+							onClick={onClick}
+							tooltipTitle={card.table_id}
+							tooltipOpen
+						/>
+					))}
+				<SpeedDialAction
+					icon={<AddOutlinedIcon />}
+					onClick={handleAddTable}
+					tooltipTitle="Add Table"
+				/>
+			</SpeedDial>
+		</>
 	)
 }
 

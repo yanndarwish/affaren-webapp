@@ -32,7 +32,6 @@ import { usePostDrawerMutation } from "../../redux/services/printApi"
 import { useEffect } from "react"
 import { setSaleAmount, setTaxes } from "../../redux/features/sale"
 import { useNavigate } from "react-router-dom"
-import { TableSectionButton } from "../../components/POS/Tables/TablesSection.styles"
 import TablesSection from "../../components/POS/Tables/TablesSection"
 import TableSlider from "../../components/POS/Sliders/TableSlider/TableSlider"
 import { useGetDishesQuery } from "../../redux/services/dishApi"
@@ -80,25 +79,6 @@ const Pos = () => {
 		document.getElementById("main-barcode-input").focus()
 	}
 
-	const toggleTableSection = () => {
-		const tableSectionEl = document.getElementById("table-section")
-		const tableCards = document.querySelectorAll(".table-card")
-
-		if (!tableSection) {
-			tableCards.forEach((card) => {
-				card.style.display = "none"
-			})
-			tableSectionEl.style.width = "0"
-		} else {
-			tableCards.forEach((card) => {
-				card.style.display = "flex"
-			})
-			tableSectionEl.style.width = "148px"
-		}
-		setTableSection(!tableSection)
-		document.getElementById("main-barcode-input").focus()
-	}
-
 	const openPaymentSlider = () => {
 		setPaymentSlider(true)
 	}
@@ -118,6 +98,12 @@ const Pos = () => {
 	const openTableSlider = (e) => {
 		setTableSlider(true)
 		const id = e.target.dataset.id
+			? e.target.dataset.id
+			: e.target.parentNode.dataset.id
+			? e.target.parentNode.dataset.id
+			: e.target.parentNode.parentNode.dataset.id
+			? e.target.parentNode.parentNode.dataset.id
+			: e.target.parentNode.parentNode.parentNode.dataset.id
 		setSelectedTable(activeTables?.filter((table) => table.table_id === id)[0])
 	}
 
@@ -274,13 +260,6 @@ const Pos = () => {
 				>
 					<CropSquareOutlinedIcon color="primary" />
 				</CardSectionButton>
-				<TableSectionButton
-					onClick={toggleTableSection}
-					id="table-section-button"
-					theme={theme}
-				>
-					<CropSquareOutlinedIcon color="primary" />
-				</TableSectionButton>
 			</Container>
 			<ProductCardSection theme={theme} onClick={openAddCardSlider} />
 			<TablesSection theme={theme} onClick={openTableSlider} />
