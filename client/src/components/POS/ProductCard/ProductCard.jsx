@@ -1,8 +1,4 @@
-import {
-	CardTitle,
-	StyledProductCard,
-	Trash,
-} from "./ProductCard.styles"
+import { CardTitle, StyledProductCard, Trash } from "./ProductCard.styles"
 import { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { addProduct, updateProducts } from "../../../redux/features/sale"
@@ -64,7 +60,7 @@ const ProductCard = ({ id, name, price, taxe, theme }) => {
 				dispatch(updateProducts({ products: updated }))
 			}
 		}
-		document.getElementById("main-barcode-input").focus()
+		document.getElementById("barcode-input").focus()
 	}
 
 	const openModal = (e) => {

@@ -15,7 +15,7 @@ import InventoryTable from "../../components/INVENTORY/InventoryTable/InventoryT
 import { useState } from "react"
 import { useGetProductsQuery } from "../../redux/services/productsApi"
 import { useEffect } from "react"
-import BarcodeInput from "../../components/INVENTORY/BarcodeInput/BarcodeInput"
+import BarcodeInput from "../../components/common/BarcodeInput/BarcodeInput"
 import EditProduct from "../../components/INVENTORY/EditProduct/EditProduct"
 import CreateProduct from "../../components/INVENTORY/CreateProduct/CreateProduct"
 import { useNavigate } from "react-router-dom"
@@ -79,7 +79,7 @@ const Inventory = () => {
 
 	// focus automatically on barcode input
 	const focusOnBarcode = () => {
-		const input = document.getElementById("inventory-barcode-input")
+		const input = document.getElementById("barcode-input")
 		input.focus()
 	}
 

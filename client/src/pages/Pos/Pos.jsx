@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux"
 import ProductCardSection from "../../components/POS/ProductCardSection/ProductCardSection"
-import BarcodeInput from "../../components/POS/BarcodeInput/BarcodeInput"
+import BarcodeInput from "../../components/POS/BarcodeSection/BarcodeSection"
 import Button from "../../components/common/Button/Button.component"
 import Cart from "../../components/POS/Cart/Cart"
 import { Box } from "@mui/material"
@@ -76,7 +76,7 @@ const Pos = () => {
 			cardSectionEl.style.width = "148px"
 		}
 		setCardSection(!cardSection)
-		document.getElementById("main-barcode-input").focus()
+		document.getElementById("barcode-input").focus()
 	}
 
 	const openPaymentSlider = () => {
@@ -208,7 +208,7 @@ const Pos = () => {
 	}, [sale.products])
 
 	useEffect(() => {
-		document.getElementById("main-barcode-input").focus()
+		document.getElementById("barcode-input").focus()
 	}, [paymentSlider, noBarcodeSlider, discountSlider, addCardSlider])
 
 	useEffect(() => {

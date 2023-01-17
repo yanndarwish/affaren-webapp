@@ -14,7 +14,7 @@ import {
 	VerticalCenter,
 } from "../../assets/common/common.styles"
 import Button from "../../components/common/Button/Button.component"
-import BarcodeInput from "../../components/INVENTORY/BarcodeInput/BarcodeInput"
+import BarcodeInput from "../../components/common/BarcodeInput/BarcodeInput"
 import {
 	useGetProductQuery,
 	useUpdateProductsMutation,
@@ -61,7 +61,7 @@ const Kitchen = () => {
 		setBarcode("")
 		setHome(true)
 		setQuantity(0)
-		document.getElementById("inventory-barcode-input").focus()
+		document.getElementById("barcode-input").focus()
 	}
 
 	useEffect(() => {

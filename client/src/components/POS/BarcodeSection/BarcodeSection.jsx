@@ -5,8 +5,9 @@ import { addProduct, updateProducts } from "../../../redux/features/sale"
 import { useDispatch, useSelector } from "react-redux"
 import { Flex } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
+import BarcodeInput from "../../common/BarcodeInput/BarcodeInput"
 
-const BarcodeInput = () => {
+const BarcodeSection = () => {
 	const products = useSelector((state) => state.sale.products)
 
 	const dispatch = useDispatch()
@@ -61,7 +62,7 @@ const BarcodeInput = () => {
 
 	const handleSearch = () => {
 		setSkip(false)
-		document.getElementById("main-barcode-input").focus()
+		document.getElementById("barcode-input").focus()
 	}
 
 	useEffect(() => {
@@ -74,15 +75,11 @@ const BarcodeInput = () => {
 
 	return (
 		<Flex>
-			<Input
-				id="main-barcode-input"
-				label="Barcode"
-				value={barcode}
-				onChange={setBarcode}
-			/>
+			<BarcodeInput barcode={barcode} setBarcode={setBarcode} />
+
 			<Button title="Search" onClick={handleSearch} />
 		</Flex>
 	)
 }
 
-export default BarcodeInput
+export default BarcodeSection

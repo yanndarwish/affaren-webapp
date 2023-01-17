@@ -41,7 +41,7 @@ const Cart = () => {
 			})
 			dispatch(updateProducts({ products: updated }))
 		}
-		document.getElementById("main-barcode-input").focus()
+		document.getElementById("barcode-input").focus()
 	}
 
 	const removeProduct = ({ e, id }) => {
@@ -56,7 +56,7 @@ const Cart = () => {
 		)
 
 		dispatch(updateProducts({ products: updatedProducts }))
-		document.getElementById("main-barcode-input").focus()
+		document.getElementById("barcode-input").focus()
 	}
 
 	return (
