@@ -5,7 +5,6 @@ import {
 	ArtTitle,
 	Column,
 	Container,
-	Flex,
 	Gap,
 	SpaceHeader,
 	Title,
@@ -18,7 +17,6 @@ import {
 	useDeleteDishMutation,
 	useGetDishesQuery,
 } from "../../redux/services/dishApi"
-import AddIcon from "@mui/icons-material/Add"
 import CreateDishSlider from "../../components/MENU/Sliders/CreateDishSlider"
 import EditDishSlider from "../../components/MENU/Sliders/EditDishSlider"
 import { Modal } from "modal-rjs"
