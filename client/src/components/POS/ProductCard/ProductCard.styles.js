@@ -12,10 +12,12 @@ export const StyledProductCard = styled.div`
 	padding: ${constant.PADDING_M}px;
 	width: 100px;
 	height: 100px;
+	border-radius: ${constant.BORDER_RADIUS_M}px;
+	box-shadow: 3px 3px 5px rgb(0, 0, 0, 0.3);
 	color: ${(props) =>
-		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
+		props.theme === "dark" ? light.COLOR_TEXT : dark.COLOR_TEXT};
 	background-color: ${(props) =>
-		props.theme === "dark" ? dark.COLOR_BG_TERTIARY : dark.COLOR_BG_TERTIARY};
+		props.theme === "dark" ? "#90CAF9" : "#1876D2"};
 `
 
 export const CardTitle = styled.p`
@@ -24,6 +26,13 @@ export const CardTitle = styled.p`
 
 export const Trash = styled.div`
 	position: absolute;
-	top: 0;
-	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: ${constant.PADDING_XS}px;
+	color: ${dark.COLOR_TEXT};
+	background: ${constant.CLR_DANGER};
+	border-radius: 50%;
+	top: -${constant.PADDING_XS}px;
+	right: -${constant.PADDING_XS}px;
 `

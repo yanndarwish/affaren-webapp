@@ -21,7 +21,7 @@ const ProductCardSection = ({ theme, onClick }) => {
 						taxe={card.card_taxe}
 					/>
 				))}
-			<AddProductCard onClick={onClick} />
+			<AddProductCard onClick={onClick} theme={theme} />
 		</StyledProductCardSection>
 	)
 }
