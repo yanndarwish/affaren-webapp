@@ -9,7 +9,7 @@ export const Overlay = styled.div`
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 2;
+	z-index: 4;
 	background-color: ${(props) =>
 		props.theme === "dark"
 			? `rgb(${dark.COLOR_TEXT_RGB}, 0.5)`

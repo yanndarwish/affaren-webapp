@@ -11,7 +11,10 @@ import {
 	TotalSection,
 } from "./Pos.styles"
 import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
-import { CardSectionButton } from "../../components/POS/ProductCardSection/ProductCardSection.styles"
+import {
+	CardSectionButton,
+	CardSectionIcon,
+} from "../../components/POS/ProductCardSection/ProductCardSection.styles"
 import { useState } from "react"
 import PaymentSlider from "../../components/POS/Sliders/PaymentSlider/PaymentSlider"
 import NoBarcodeSlider from "../../components/POS/Sliders/NoBarcodeSlider/NoBarcodeSlider"
@@ -35,6 +38,7 @@ import { useNavigate } from "react-router-dom"
 import TablesSection from "../../components/POS/Tables/TablesSection"
 import TableSlider from "../../components/POS/Sliders/TableSlider/TableSlider"
 import { useGetDishesQuery } from "../../redux/services/dishApi"
+import { useRef } from "react"
 
 const Pos = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -43,6 +47,9 @@ const Pos = () => {
 	const sale = useSelector((state) => state.sale)
 	const activeTables = useSelector((state) => state.table.activeTables)
 	const dispatch = useDispatch()
+	const cardSectionRef = useRef()
+	const cardSectionButtonRef = useRef()
+	const cardSectionButtonIconRef = useRef()
 	const [cardSection, setCardSection] = useState(false)
 	const [tableSection, setTableSection] = useState(false)
 	const [paymentSlider, setPaymentSlider] = useState(false)
@@ -62,9 +69,10 @@ const Pos = () => {
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
+		console.log(cardSection)
 		const productCards = document.querySelectorAll(".product-card")
 
-		if (!cardSection) {
+		if (cardSection) {
 			productCards.forEach((card) => {
 				card.style.display = "none"
 			})
@@ -77,6 +85,24 @@ const Pos = () => {
 		}
 		setCardSection(!cardSection)
 		document.getElementById("barcode-input").focus()
+	}
+
+	const closeProductSection = (e) => {
+		const cardSectionEl = document.getElementById("card-section")
+		const productCards = document.querySelectorAll(".product-card")
+		if (
+			cardSectionRef.current !== e.target &&
+			cardSectionButtonRef.current !== e.target &&
+			cardSectionButtonIconRef.current !== e.target
+		) {
+			if (cardSection) {
+				setCardSection(false)
+				productCards.forEach((card) => {
+					card.style.display = "none"
+				})
+				cardSectionEl.style.width = "0"
+			}
+		}
 	}
 
 	const openPaymentSlider = () => {
@@ -107,7 +133,6 @@ const Pos = () => {
 		setSelectedTable(activeTables?.filter((table) => table.table_id === id)[0])
 	}
 
-	console.log(selectedTable)
 	const openDrawer = () => {
 		postDrawer()
 	}
@@ -217,7 +242,7 @@ const Pos = () => {
 
 	return (
 		<PosContainer>
-			<Container theme={theme}>
+			<Container theme={theme} onClick={closeProductSection}>
 				<SpaceHeader xs={12}>
 					<Title>Sale N°{sale.id ? sale.id : 1}</Title>
 					{error && <ErrorMessage>Failed to fetch next sale ID</ErrorMessage>}
@@ -257,11 +282,17 @@ const Pos = () => {
 					onClick={toggleCardSection}
 					id="card-section-button"
 					theme={theme}
+					ref={cardSectionButtonRef}
+					display={cardSection.toString()}
 				>
-					<CropSquareOutlinedIcon color="primary" />
+					<CardSectionIcon ref={cardSectionButtonIconRef} theme={theme} />
 				</CardSectionButton>
 			</Container>
-			<ProductCardSection theme={theme} onClick={openAddCardSlider} />
+			<ProductCardSection
+				theme={theme}
+				onClick={openAddCardSlider}
+				reference={cardSectionRef}
+			/>
 			<TablesSection theme={theme} onClick={openTableSlider} />
 			<PaymentSlider
 				theme={theme}

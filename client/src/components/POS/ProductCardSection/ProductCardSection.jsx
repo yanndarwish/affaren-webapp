@@ -3,12 +3,12 @@ import ProductCard from "../ProductCard/ProductCard"
 import { StyledProductCardSection } from "./ProductCardSection.styles"
 import { useSelector } from "react-redux"
 
-const ProductCardSection = ({ theme, onClick }) => {
+const ProductCardSection = ({ theme, onClick, reference }) => {
 	const cards = useSelector((state) => state.cards.cards)
 
 
 	return (
-		<StyledProductCardSection theme={theme} id="card-section">
+		<StyledProductCardSection theme={theme} id="card-section" ref={reference}>
 			{/* dynamically create boxes based on cards */}
 			{cards &&
 				cards.map((card) => (

@@ -10,9 +10,10 @@ export const StyledProductCardSection = styled.div`
 	flex-direction: column;
 	gap: ${constant.PADDING_M}px;
 	padding-block: ${constant.PADDING_M}px;
-	width: ${constant.PADDING_L + 100}px;
+	width: 0px;
 	height: 100vh;
 	overflow-y: scroll;
+	z-index: 4;
 	border-left: 1px solid
 		${(props) =>
 			props.theme === "dark"
@@ -27,17 +28,26 @@ export const StyledProductCardSection = styled.div`
 `
 
 export const CardSectionButton = styled.button`
-	display: flex;
-	padding: ${constant.GAP / 2}px;
+	display: ${(props) =>
+		props.display === 'true' ? "none" : "flex"};
+	padding: ${constant.GAP / 1.4}px;
 	position: absolute;
-	top: ${constant.GAP * 2}px;
-	right: 0px;
+	top: ${constant.GAP * 6}px;
+	right: 48px;
 	border: none;
-	border-radius: 3px;
+	border-radius: 50%;
 	color: ${(props) =>
-		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
+		props.theme === "dark" ? light.COLOR_TEXT : dark.COLOR_TEXT};
+
 	background-color: ${(props) =>
+		props.theme === "dark" ? "#90CAF9" : "#1876D2"};
+`
+
+export const CardSectionIcon = styled.div`
+	padding: ${constant.GAP / 3}px;
+	border-radius: 3px;
+	border: ${(props) =>
 		props.theme === "dark"
-			? dark.COLOR_BG_SECONDARY
-			: light.COLOR_BG_SECONDARY};
+			? "2px solid " + light.COLOR_TEXT
+			: "2px solid " + dark.COLOR_TEXT};
 `

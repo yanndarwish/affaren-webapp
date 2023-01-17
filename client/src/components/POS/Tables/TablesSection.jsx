@@ -36,10 +36,11 @@ const TablesSection = ({ theme, onClick }) => {
 			<Backdrop open={open} sx={{zIndex: 2}}/>
 			<SpeedDial
 				ariaLabel="SpeedDial basic example"
-				sx={{ position: "absolute", bottom: 16, right: 16 }}
+				sx={{ position: "absolute", top: 48, right: 48, zIndex:3 }}
 				icon={<TableRestaurantOutlinedIcon />}
 				onClose={handleClose}
 				onOpen={handleOpen}
+				direction="down"
 			>
 				{activeTables &&
 					activeTables.map((card) => (
