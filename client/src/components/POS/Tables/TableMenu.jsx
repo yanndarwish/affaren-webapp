@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Column, SubTitle } from "../../../assets/common/common.styles"
 import MenuFilter from "./MenuFilter/MenuFilter"
-import MenuItem from "./MenuItem/MenuItem"
+import MenuItem from "../../common/MenuItem/MenuItem"
 import { Container } from "./TableMenu.styles"
 
 const TableMenu = ({ isOpen, theme, onClick }) => {
