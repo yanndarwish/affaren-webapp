@@ -6,7 +6,8 @@ import {
 import { Backdrop, SpeedDial, SpeedDialAction } from "@mui/material"
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined"
 import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined"
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { WebSocketContext } from "../../../utils/context/webSocket"
 
 const TablesSection = ({ theme, onClick }) => {
 	useGetActiveTablesQuery()
@@ -15,6 +16,7 @@ const TablesSection = ({ theme, onClick }) => {
 	const [open, setOpen] = useState(false)
 	const handleOpen = () => setOpen(true)
 	const handleClose = () => setOpen(false)
+	const ws = useContext(WebSocketContext)
 
 	const handleAddTable = () => {
 		const timestamp = new Date()
@@ -31,12 +33,14 @@ const TablesSection = ({ theme, onClick }) => {
 		}
 		postTable(table)
 	}
+
+	ws?.sendMessage('haya')
 	return (
 		<>
-			<Backdrop open={open} sx={{zIndex: 2}}/>
+			<Backdrop open={open} sx={{ zIndex: 2 }} />
 			<SpeedDial
 				ariaLabel="SpeedDial basic example"
-				sx={{ position: "absolute", top: 48, right: 48, zIndex:3 }}
+				sx={{ position: "absolute", top: 48, right: 48, zIndex: 3 }}
 				icon={<TableRestaurantOutlinedIcon />}
 				onClose={handleClose}
 				onOpen={handleOpen}

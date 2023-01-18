@@ -1,6 +1,7 @@
 import { RouterProvider } from "react-router-dom"
 import router from "./router/router"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import WebSocketProvider, { WebSocketContext } from "./utils/context/webSocket"
 import { useSelector } from "react-redux"
 import "./App.css"
 
@@ -9,13 +10,15 @@ function App() {
 
 	const actualTheme = createTheme({
 		palette: {
-			mode:theme,
+			mode: theme,
 		},
 	})
 
 	return (
 		<ThemeProvider theme={actualTheme}>
-			<RouterProvider router={router} />
+			<WebSocketProvider>
+				<RouterProvider router={router} />
+			</WebSocketProvider>
 		</ThemeProvider>
 	)
 }
