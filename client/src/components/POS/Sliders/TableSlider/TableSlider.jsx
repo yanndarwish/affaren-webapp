@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, useContext } from "react"
 import {
 	Dialog,
 	DialogBody,
@@ -36,6 +36,7 @@ import {
 	updateProducts,
 	setSaleTable,
 } from "../../../../redux/features/sale"
+import { WebSocketContext } from "../../../../utils/context/webSocket"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -65,6 +66,8 @@ function a11yProps(index) {
 }
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
+	const ws = useContext(WebSocketContext)
+
 	const dispatch = useDispatch()
 	const overlayRef = useRef()
 	const [peopleSet, setPeopleSet] = useState([])
@@ -133,6 +136,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		copy.push(newDish)
 		// deleteProducts({ id: dataTable.table_id })
 		postUpdateTableProducts({ products: [newDish] })
+		ws?.sendMessage("TableProducts")
 	}
 
 	const handleDelete = (e) => {
@@ -148,6 +152,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			personId: parseInt(person),
 			dishId: id,
 		})
+		ws?.sendMessage("TableProducts")
 	}
 
 	const getPeopleNumber = () => {

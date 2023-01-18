@@ -6,8 +6,7 @@ import {
 import { Backdrop, SpeedDial, SpeedDialAction } from "@mui/material"
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined"
 import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined"
-import { useState, useContext } from "react"
-import { WebSocketContext } from "../../../utils/context/webSocket"
+import { useState } from "react"
 
 const TablesSection = ({ theme, onClick }) => {
 	useGetActiveTablesQuery()
@@ -16,7 +15,6 @@ const TablesSection = ({ theme, onClick }) => {
 	const [open, setOpen] = useState(false)
 	const handleOpen = () => setOpen(true)
 	const handleClose = () => setOpen(false)
-	const ws = useContext(WebSocketContext)
 
 	const handleAddTable = () => {
 		const timestamp = new Date()
@@ -34,7 +32,7 @@ const TablesSection = ({ theme, onClick }) => {
 		postTable(table)
 	}
 
-	ws?.sendMessage('haya')
+	
 	return (
 		<>
 			<Backdrop open={open} sx={{ zIndex: 2 }} />

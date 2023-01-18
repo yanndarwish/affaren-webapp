@@ -5,7 +5,9 @@ const initialState = {
     dayTablesProducts: [],
     monthTablesProducts: [],
     allTablesProducts: [],
+	activeTablesProducts: [],
 	tableProducts: [],
+	updateOrder: false
 }
 
 const tableProductsSlice = createSlice({
@@ -19,6 +21,9 @@ const tableProductsSlice = createSlice({
 		addTableProducts: (state, action) => {
 			state.tableProducts.push(action.payload) 
 		},
+		setUpdateOrder: (state, action) => {
+			state.updateOrder = action.payload.order
+		}
 	},
 	extraReducers: (builder) => {
 		builder
@@ -40,9 +45,16 @@ const tableProductsSlice = createSlice({
 					state.allTablesProducts = action.payload
 				}
 			)
+			.addMatcher(
+				tableProductsApi.endpoints.getActiveTablesProducts.matchFulfilled,
+				(state, action) => {
+					console.log('updating')
+					state.activeTablesProducts = action.payload
+				}
+			)
 	},
 })
 
-export const { resetTablesProducts, updateTableProducts, addTableProducts } = tableProductsSlice.actions
+export const { resetTablesProducts, updateTableProducts, addTableProducts, setUpdateOrder } = tableProductsSlice.actions
 
 export default tableProductsSlice.reducer

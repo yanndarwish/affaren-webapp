@@ -1,21 +1,25 @@
-import { createContext } from "react"
+import { createContext, useState } from "react"
 import { ip } from "../../redux/ip"
 import { useSelector } from "react-redux"
+import { useGetActiveTablesProductsQuery } from "../../redux/services/tableProductsApi"
+import { useDispatch } from "react-redux"
+import { setUpdateOrder } from "../../redux/features/tableProducts"
+
 const WebSocketContext = createContext(null)
 
 export { WebSocketContext }
 
 const WebSocketProvider = ({ children }) => {
+	const dispatch = useDispatch()
 	const loggedIn = useSelector((state) => state.login.loggedIn)
+	// const [skip, setSkip] = useState(true)
+	let skip = true
 
 	let socket
 	let ws
 
 	const sendMessage = (message) => {
-		const payload = {
-			data: message,
-		}
-		socket.send(JSON.stringify(payload))
+		socket.send(message)
 	}
 
 	if (!socket) {
@@ -25,12 +29,21 @@ const WebSocketProvider = ({ children }) => {
 				socket.send("connexion")
 			}
 
+			socket.onmessage = (message) => {
+				console.log(message.data)
+				if (message.data === "TableProducts") {
+					console.log("get products")
+					dispatch(setUpdateOrder({order: true}))
+				}
+			}
+
 			ws = {
 				socket: socket,
-                sendMessage
+				sendMessage,
 			}
 		}
 	}
+	useGetActiveTablesProductsQuery({}, { skip })
 
 	return (
 		<WebSocketContext.Provider value={ws}>{children}</WebSocketContext.Provider>

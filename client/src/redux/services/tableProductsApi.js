@@ -32,6 +32,12 @@ export const tableProductsApi = createApi({
 			}),
 			providesTags: ["TablesProducts"],
 		}),
+		getActiveTablesProducts: builder.query({
+			query: () => ({
+				url: "table-products/active",
+			}),
+			// providesTags: ["TablesProducts"],
+		}),
 		getDayTableProducts: builder.query({
 			query: ({ year, month, day }) => ({
 				url: `table-products/${year}/${month}/${day}`,
@@ -65,6 +71,18 @@ export const tableProductsApi = createApi({
 		patchProductTableStatus: builder.mutation({
 			query: ({ tableId, personId, dishId }) => ({
 				url: `table-products/status/${tableId}/${personId}/${dishId}`,
+				method: "PATCH",
+			}),
+			invalidatesTags: [
+				"TableProducts",
+				"TablesProducts",
+				"DayTableProducts",
+				"MonthTableProducts",
+			],
+		}),
+		patchTableProductsStatus: builder.mutation({
+			query: ({ tableId }) => ({
+				url: `table-products/table/status/${tableId}`,
 				method: "PATCH",
 			}),
 			invalidatesTags: [
@@ -113,9 +131,11 @@ export const {
 	useDeleteProductTableMutation,
 	useDeleteTableProductsMutation,
 	usePatchProductTableMutation,
+	usePatchTableProductsStatusMutation,
 	usePatchProductTableStatusMutation,
 	useGetDayTableProductsQuery,
 	useGetMonthTableProductsQuery,
+	useGetActiveTablesProductsQuery,
 	useGetTableProductsQuery,
 	useGetTablesProductsQuery,
 	usePostTableProductMutation,

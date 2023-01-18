@@ -34,6 +34,7 @@ import {
 	usePostSaleProductsMutation,
 	usePostSaleMutation,
 } from "../../../../redux/services/salesApi"
+import { usePatchTableProductsStatusMutation } from "../../../../redux/services/tableProductsApi"
 import { useUpdateProductsMutation } from "../../../../redux/services/productsApi"
 import { usePostPrintMutation } from "../../../../redux/services/printApi"
 import { usePostDrawerMutation } from "../../../../redux/services/printApi"
@@ -81,6 +82,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const user = useSelector((state) => state.user.user)
 	const tableId = useSelector((state) => state.sale.table)
 
+	const [updateProducts, respons] = usePatchTableProductsStatusMutation()
 	const [updateTable, respon] = useUpdateTableStatusMutation()
 	const [updateProduct, res] = useUpdateProductsMutation()
 	const [postSaleProducts, resp] = usePostSaleProductsMutation()
@@ -173,6 +175,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				id: tableId,
 				payload: { table_status: "paid", sale_id: parseInt(confirmedSale.id) },
 			})
+			updateProducts({tableId: tableId})
 
 			setActualSale(confirmedSale)
 			if (Object.keys(confirmedSale.paymentMethods).includes("cash")) {

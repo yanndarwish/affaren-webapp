@@ -1070,7 +1070,7 @@ app.post("/table-products", async (req, res) => {
 				dish_status
 			} = product
 			const response = await pool.query(
-				"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_category, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day, dish_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+				"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_category, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day, dish_status, table_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'active')",
 				[
 					table_id,
 					table_person,
@@ -1083,7 +1083,7 @@ app.post("/table-products", async (req, res) => {
 					table_year,
 					table_month,
 					table_day,
-					dish_status,
+					dish_status
 				]
 			)
 
@@ -1131,10 +1131,38 @@ app.patch("/table-products/status/:tableId/:personId/:dishId", async (req, res) 
 	}
 })
 
+// patch a table_product status
+app.patch("/table-products/table/status/:tableId", async (req, res) => {
+	try {
+		const { tableId } = req.params
+
+		const response = await pool.query(
+			"UPDATE table_products SET table_status = 'paid' WHERE table_id = $1",
+			[tableId]
+		)
+
+		res.status(200).send(response)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
 // get all tables products
 app.get("/table-products", async (req, res) => {
 	try {
 		const response = await pool.query("SELECT * FROM table_products")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+		res.status(400).send(err)
+	}
+})
+
+// get all tables products
+app.get("/table-products/active", async (req, res) => {
+	try {
+		const response = await pool.query("SELECT * FROM table_products WHERE table_status = 'active'")
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)

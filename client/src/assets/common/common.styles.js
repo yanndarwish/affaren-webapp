@@ -96,7 +96,7 @@ export const FitContainer = styled.div`
 
 export const Grid = styled.div`
 	display: flex;
-	height:100%;
+	height: 100%;
 	@media (max-width: 768px) {
 		flex-direction: column;
 	}
@@ -138,7 +138,7 @@ export const AppBar = styled.div`
 	align-items: center;
 	height: 72px;
 	width: 100px;
-	z-index:4;
+	z-index: 4;
 `
 
 export const SpaceHeaderCenter = styled.header`
@@ -168,6 +168,7 @@ export const Flex = styled.div`
 `
 
 export const FullFlex = styled.div`
+	position: relative;
 	display: flex;
 	flex: 1;
 	color: ${(props) =>
@@ -281,4 +282,18 @@ export const OrderTitle = styled.div`
 
 export const ErrorMessage = styled.p`
 	color: ${constant.CLR_DANGER};
+`
+
+export const Notification = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: ${constant.CLR_DANGER};
+	height: 50px;
+	width: 50px;
+	z-index:100;
+	border-radius: 50%;
 `

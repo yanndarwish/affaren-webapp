@@ -6,35 +6,61 @@ const server = http.createServer(app)
 const { API_PORT } = process.env
 const port = process.env.PORT || API_PORT
 
-const socket = new WebSocket.Server({ server })
+function heartbeat() {
+	this.isAlive = true
+}
 
-socket.on("connection", (ws) => {
-	// ws.isAlive = true
+const wss = new WebSocket.Server({ server })
 
-	// ws.on("pong", () => {
-	// 	ws.isAlive = true
-	// })
+wss.on("connection", function connection(ws) {
+	ws.isAlive = true
+	ws.on("pong", heartbeat)
+
 	ws.on("message", (message) => {
 		console.log(`received ${message}`)
 
-		socket.clients.forEach((client) => {
+		wss.clients.forEach((client) => {
 			if (client != ws) {
-				client.send(`Hello, broadcast message -> ${message}`)
+				client.send(`${message}`)
 			}
 		})
 	})
 
-    // setInterval(() => {
-	// 		socket.clients.forEach((client) => {
-	// 			if (!client.isAlive) return client.terminate()
-
-	// 			client.isAlive = false
-	// 			client.ping(null, false, true)
-	// 		})
-	// 	}, 10000)
-
-	ws.send(`Hello, you just connected to WS`)
+		ws.send(`Hello, you just connected to WS`)
 })
+
+const interval = setInterval(function ping() {
+	wss.clients.forEach(function each(ws) {
+		if (ws.isAlive === false) return ws.terminate()
+
+		ws.isAlive = false
+		ws.ping()
+	})
+}, 10000)
+
+wss.on("close", function close() {
+	clearInterval(interval)
+})
+
+// wss.on("connection", (ws) => {
+// 	ws.isAlive = true
+
+// 	ws.on("pong", () => {
+// 		console.log("pong received")
+// 		ws.isAlive = true
+// 	})
+// 	ws.on("message", (message) => {
+// 		console.log(`received ${message}`)
+
+// 		wss.clients.forEach((client) => {
+// 			if (client != ws) {
+// 				client.send(`Hello, broadcast message -> ${message}`)
+// 			}
+// 		})
+// 	})
+
+// 	ws.send(`Hello, you just connected to WS`)
+// })
 
 server.listen(port, () => {
 	console.log(`Server running on port ${port}`)
