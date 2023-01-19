@@ -112,6 +112,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	const addProductToPerson = (e) => {
 		const id = e.target.dataset.id
+		console.log(id)
 		let dish = Object.assign(
 			{},
 			dishes.filter((dish) => dish.dish_id === id)[0]
@@ -136,7 +137,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		copy.push(newDish)
 		// deleteProducts({ id: dataTable.table_id })
 		postUpdateTableProducts({ products: [newDish] })
-		ws?.sendMessage("TableProducts")
+		// ws?.sendMessage("TableProducts")
 	}
 
 	const handleDelete = (e) => {
@@ -152,7 +153,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			personId: parseInt(person),
 			dishId: id,
 		})
-		ws?.sendMessage("TableProducts")
+		// ws?.sendMessage("TableProducts")
 	}
 
 	const getPeopleNumber = () => {
@@ -264,6 +265,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 			postUpdateTableProducts({ products: [newFormula] })
 		}
+		ws?.sendMessage("TableProducts")
 	}
 
 	const handlePayment = () => {

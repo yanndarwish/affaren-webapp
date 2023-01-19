@@ -104,14 +104,15 @@ const LunchTableDetail = ({ id }) => {
 			<ArtTitle>{id}</ArtTitle>
 			{data
 				?.filter((product) => product.dish_category !== "formula")
-				.map((product) =>
+				.map((product, i) =>
 					product.dish_status === "done" ? (
 						<SpaceHeaderCenter
 							key={
 								"detail" +
 								product.table_id +
 								product.table_person +
-								product.dish_id
+								product.dish_id +
+								i
 							}
 						>
 							<SecondaryText>
@@ -125,7 +126,8 @@ const LunchTableDetail = ({ id }) => {
 								"detail" +
 								product.table_id +
 								product.table_person +
-								product.dish_id
+								product.dish_id +
+								i
 							}
 						>
 							<PrimaryText>

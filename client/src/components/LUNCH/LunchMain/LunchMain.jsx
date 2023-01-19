@@ -23,7 +23,6 @@ const LunchMain = ({ theme, ids }) => {
 			?.filter((dish) => dish.dish_status === "todo")
 			.forEach((dish) => {
 				let found = array.find((product) => product.dish_id === dish.dish_id)
-				console.log(dish)
 				if (!found) {
 					let product = {
 						dish_id: dish.dish_id,

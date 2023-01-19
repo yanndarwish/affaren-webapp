@@ -48,8 +48,14 @@ const tableProductsSlice = createSlice({
 			.addMatcher(
 				tableProductsApi.endpoints.getActiveTablesProducts.matchFulfilled,
 				(state, action) => {
-					console.log('updating')
+					console.log("updating")
 					state.activeTablesProducts = action.payload
+				}
+			)
+			.addMatcher(
+				tableProductsApi.endpoints.getActiveTablesProducts.matchPending,
+				(state, action) => {
+					console.log("fetching")
 				}
 			)
 	},

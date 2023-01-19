@@ -1,7 +1,6 @@
 import { createContext, useState } from "react"
 import { ip } from "../../redux/ip"
 import { useSelector } from "react-redux"
-import { useGetActiveTablesProductsQuery } from "../../redux/services/tableProductsApi"
 import { useDispatch } from "react-redux"
 import { setUpdateOrder } from "../../redux/features/tableProducts"
 
@@ -12,8 +11,6 @@ export { WebSocketContext }
 const WebSocketProvider = ({ children }) => {
 	const dispatch = useDispatch()
 	const loggedIn = useSelector((state) => state.login.loggedIn)
-	// const [skip, setSkip] = useState(true)
-	let skip = true
 
 	let socket
 	let ws
@@ -43,7 +40,6 @@ const WebSocketProvider = ({ children }) => {
 			}
 		}
 	}
-	useGetActiveTablesProductsQuery({}, { skip })
 
 	return (
 		<WebSocketContext.Provider value={ws}>{children}</WebSocketContext.Provider>

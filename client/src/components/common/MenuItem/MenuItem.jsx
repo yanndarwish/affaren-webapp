@@ -23,7 +23,9 @@ const MenuItem = ({ data, color, disabled, openEdit, openDelete, onClick }) => {
 				</Flex>
 				<Flex data-id={data.dish_id}>
 					{data.dish_ingredients.map((ing, i) => (
-						<span key={ing + i}>{i === 0 ? ing : ", " + ing}</span>
+						<span key={ing + i} data-id={data.dish_id}>
+							{i === 0 ? ing : ", " + ing}
+						</span>
 					))}
 				</Flex>
 			</Column>

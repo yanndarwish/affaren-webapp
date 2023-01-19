@@ -32,11 +32,11 @@ export const tableProductsApi = createApi({
 			}),
 			providesTags: ["TablesProducts"],
 		}),
-		getActiveTablesProducts: builder.query({
+		getActiveTablesProducts: builder.mutation({
 			query: () => ({
 				url: "table-products/active",
+				method:"GET"
 			}),
-			// providesTags: ["TablesProducts"],
 		}),
 		getDayTableProducts: builder.query({
 			query: ({ year, month, day }) => ({
@@ -105,6 +105,7 @@ export const tableProductsApi = createApi({
 				method: "DELETE",
 			}),
 			invalidatesTags: [
+				"ActiveTablesProducts",
 				"TableProducts",
 				"TablesProducts",
 				"DayTableProducts",
@@ -118,6 +119,7 @@ export const tableProductsApi = createApi({
 				body: payload,
 			}),
 			invalidatesTags: [
+				"ActiveTablesProducts",
 				"TableProducts",
 				"TablesProducts",
 				"DayTableProducts",
@@ -135,7 +137,7 @@ export const {
 	usePatchProductTableStatusMutation,
 	useGetDayTableProductsQuery,
 	useGetMonthTableProductsQuery,
-	useGetActiveTablesProductsQuery,
+	useGetActiveTablesProductsMutation,
 	useGetTableProductsQuery,
 	useGetTablesProductsQuery,
 	usePostTableProductMutation,
