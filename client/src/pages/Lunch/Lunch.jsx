@@ -19,6 +19,7 @@ const Lunch = () => {
 	const activeDishes = useSelector(
 		(state) => state.tableProducts.activeTablesProducts
 	)
+	const [todoDishes, setTodoDishes] = useState([])
 	const [notif, setNotif] = useState(0)
 	const [getActiveDishes, res] = useGetActiveTablesProductsMutation()
 
@@ -29,7 +30,7 @@ const Lunch = () => {
 				(product) =>
 					product.dish_status !== "done" && product.dish_category !== "formula"
 			)
-			console.log(todo)
+			setTodoDishes(todo)
 			setNotif(todo.length)
 			var mp3_url =
 				"https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3"
@@ -43,8 +44,8 @@ const Lunch = () => {
 	}
 
 	useEffect(() => {
-		getActiveDishes()
 		if (updateProducts) {
+			getActiveDishes()
 			dispatch(setUpdateOrder({ order: false }))
 		}
 	}, [updateProducts])
@@ -58,17 +59,14 @@ const Lunch = () => {
 		redirect()
 	}, [])
 
-	console.log(updateProducts)
 	return (
 		<FullFlex>
 			<Notification>{notif}</Notification>
-			{/* <LunchMain theme={theme} ids={tableIds} />
+			<LunchMain theme={theme} dishes={todoDishes} />
 			<LunchAside
 				theme={theme}
-				ids={tableIds}
-				setNotif={setNotif}
-				notif={notif}
-			/> */}
+				dishes={todoDishes}
+			/>
 		</FullFlex>
 	)
 }
