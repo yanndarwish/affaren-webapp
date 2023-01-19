@@ -28,7 +28,7 @@ const Lunch = () => {
 			let copy = Object.assign([], activeDishes)
 			const todo = copy?.filter(
 				(product) =>
-					product.dish_status !== "done" && product.dish_category !== "formula"
+					 product.dish_category !== "formula"
 			)
 			setTodoDishes(todo)
 			setNotif(todo.length)
@@ -62,7 +62,7 @@ const Lunch = () => {
 	return (
 		<FullFlex>
 			<Notification>{notif}</Notification>
-			<LunchMain theme={theme} dishes={todoDishes} />
+			<LunchMain theme={theme} dishes={todoDishes} setNotif={setNotif}/>
 			<LunchAside
 				theme={theme}
 				dishes={todoDishes}

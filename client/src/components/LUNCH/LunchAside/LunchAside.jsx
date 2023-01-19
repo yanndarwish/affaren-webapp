@@ -1,4 +1,3 @@
-import { formatMuiErrorMessage } from "@mui/utils"
 import { useEffect, useState } from "react"
 import {
 	AsideContainer,
@@ -10,20 +9,23 @@ import LunchTableDetail from "../LunchTableDetail/LunchTableDetail"
 
 const LunchAside = ({ theme, dishes }) => {
 	const [formatted, setFormatted] = useState([])
-	
+
 	const format = () => {
-		console.log(dishes)
-		let final =  {}
-
-		dishes?.forEach(dish => {
+		let final = {}
+		let formattedArray = []
+		dishes?.forEach((dish) => {
 			// check if final contains the table id
-			console.log(Object.keys(final).includes(dish.table_id))
 			if (!Object.keys(final).includes(dish.table_id)) {
-
+				let array = [dish]
+				final[dish.table_id] = array
+			} else {
+				final[dish.table_id].push(dish)
 			}
-
 		})
-		
+		Object.keys(final).forEach(id => {
+			formattedArray.push(final[id])
+		})
+		setFormatted(formattedArray)
 	}
 	useEffect(() => {
 		format()
@@ -33,9 +35,9 @@ const LunchAside = ({ theme, dishes }) => {
 			<SubTitle>Tables</SubTitle>
 			<Body theme={theme}>
 				<Column>
-					{/* {ids.map((id) => (
-						<LunchTableDetail key={"detail-" + id} id={id} />
-					))} */}
+					{formatted.map((table) => (
+						<LunchTableDetail key={table[0].table_id} table={table} />
+					))}
 				</Column>
 			</Body>
 		</AsideContainer>

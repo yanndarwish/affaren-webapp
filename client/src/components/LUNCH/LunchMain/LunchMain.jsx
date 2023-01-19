@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
 import {
 	Container,
 	Body,
@@ -8,13 +7,13 @@ import {
 } from "../../../assets/common/common.styles"
 import LunchItem from "../LunchItem/LunchItem"
 
-const LunchMain = ({ theme, dishes }) => {
+const LunchMain = ({ theme, dishes, setNotif }) => {
 	const [formatted, setFormatted] = useState([])
 
 	const formatProducts = () => {
 		let array = []
 
-		dishes?.forEach((dish) => {
+		dishes?.filter(item => item.dish_status === 'todo').forEach((dish) => {
 			let found = array.find((product) => product.dish_id === dish.dish_id)
 			if (!found) {
 				let product = {
@@ -41,6 +40,7 @@ const LunchMain = ({ theme, dishes }) => {
 			}
 		})
 		setFormatted(array.sort((a, b) => b.dish_quantity - a.dish_quantity))
+		setNotif(array.length)
 	}
 
 	useEffect(() => {
