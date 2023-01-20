@@ -10,6 +10,7 @@ import AreaChart from "./AreaChart"
 const ChartE = ({ theme, months, month, year }) => {
 	const [skip, setSkip] = useState(true)
 	const [lunchArray, setLunchArray] = useState([])
+	const [monthTotal, setMonthTotal] = useState("0")
 
 	const { data, isError } = useGetSalesProductsQuery(
 		{ month: month, year: year },
@@ -20,6 +21,15 @@ const ChartE = ({ theme, months, month, year }) => {
 		if (month && year) {
 			setSkip(false)
 		}
+	}
+
+	const getLunchTotalRevenue =() => {
+		let total = '0'
+		console.log(lunchArray)
+		lunchArray?.forEach(item => {
+			total = (parseFloat(item.product_price) + parseFloat(total)).toFixed(2)
+		})
+		setMonthTotal(total)
 	}
 
 	const filterArray = () => {
@@ -35,11 +45,15 @@ const ChartE = ({ theme, months, month, year }) => {
 		filterArray()
 	}, [data])
 
+	useEffect(() => {
+		getLunchTotalRevenue()
+	}, [lunchArray])
+
 
 	return (
 		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
 			<SpaceHeader>
-				<SubTitle>{months[month - 1]}'s Lunches Revenue</SubTitle>
+				<SubTitle>{months[month - 1]}'s Lunches Revenue : {monthTotal}€</SubTitle>
 			</SpaceHeader>
 			{isError && (
 				<InfoMessage state="error" text="Failed to fetch lunch data" />
