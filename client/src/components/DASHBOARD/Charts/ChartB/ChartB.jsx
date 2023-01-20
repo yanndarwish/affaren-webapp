@@ -8,19 +8,33 @@ import {
 	SubTitle,
 } from "../../../../assets/common/common.styles"
 import DetailTable from "../../DetailTable/DetailTable"
+import { useEffect } from "react"
 
 const ChartB = ({ theme, months, month, year }) => {
 	const [isDetail, setIsDetail] = useState(false)
+	const [monthTotal, setMonthTotal] = useState("0")
 	const dashboard = useSelector((state) => state.dashboard)
 
 	const handleDetailClick = () => {
 		setIsDetail(!isDetail)
 	}
 
+	const getMonthTotal = () => {
+		let total = "0"
+		dashboard?.fullArray?.forEach(sale => {
+			total = (parseFloat(sale.sale_amount) + parseFloat(total)).toFixed(2)
+		})
+		setMonthTotal(total)
+	}
+
+	useEffect(() => {
+		getMonthTotal()
+	}, [dashboard.fullArray])
+
 	return (
 		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
 			<SpaceHeader>
-				<SubTitle>{months[month - 1]}</SubTitle>
+				<SubTitle>{months[month - 1]}'s Revenue : {monthTotal}€</SubTitle>
 				<Button title="Details" onClick={handleDetailClick} />
 			</SpaceHeader>
 			<AreaChart data={dashboard.fullArray} theme={theme} />

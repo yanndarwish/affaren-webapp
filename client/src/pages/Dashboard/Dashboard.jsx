@@ -18,6 +18,8 @@ import { useGetMonthSalesQuery } from "../../redux/services/salesApi"
 import { setFullArray } from "../../redux/features/dashboard"
 import ChartD from "../../components/DASHBOARD/Charts/ChartD/ChartD"
 import { useNavigate } from "react-router-dom"
+import ChartE from "../../components/DASHBOARD/Charts/ChartE/ChartE"
+import ChartF from "../../components/DASHBOARD/Charts/ChartF/ChartF"
 
 const Dashboard = () => {
 	const dispatch = useDispatch()
@@ -104,13 +106,15 @@ const Dashboard = () => {
 				<SubTitle>Charts</SubTitle>
 				<ChartA theme={theme} />
 				<ChartB theme={theme} months={months} month={month} year={year} />
-				<ChartC theme={theme} />
+				<ChartC theme={theme} months={months} month={month} year={year} />
 				{user?.user_is_admin === "true" && !res.isError ? (
 					<ChartD theme={theme} />
 				) : (
 					user?.user_is_admin === "true" &&
 					res.isError && <ErrorMessage>Failed to fetch users</ErrorMessage>
 				)}
+				<ChartE theme={theme} months={months} month={month} year={year} />
+				<ChartF theme={theme} months={months} month={month} year={year} />
 			</FitContainer>
 		</Container>
 	)

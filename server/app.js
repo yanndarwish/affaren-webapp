@@ -624,16 +624,14 @@ app.post("/sales/:id/products", auth, async (req, res) => {
 	try {
 		const saleId = req.params.id
 
-		const products = req.body.products
-		const year = req.body.year
-		const month = req.body.month
+		const {products, year, month, day } = req.body
 		let responses = []
 
 		products.forEach(async (product) => {
 			const { name, quantity, price, taxe, id } = product
 			const response = await pool.query(
-				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe, sale_year, sale_month ) VALUEs ($1, $2, $3, $4, $5, $6, $7, $8)",
-				[saleId, id, name, quantity, price, taxe, year, month]
+				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe, sale_year, sale_month, sale_day ) VALUEs ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+				[saleId, id, name, quantity, price, taxe, year, month, day]
 			)
 
 			responses.push(response.rows)
@@ -1114,7 +1112,7 @@ app.patch("/table-products/:tableId/:personId/:dishId", async (req, res) => {
 	}
 })
 
-// patch a table_product status
+// patch a product status
 app.patch("/table-products/status/:tableId/:personId/:dishId", async (req, res) => {
 	try {
 		const { tableId, personId, dishId } = req.params
@@ -1131,11 +1129,12 @@ app.patch("/table-products/status/:tableId/:personId/:dishId", async (req, res) 
 	}
 })
 
-// patch a table_product status
-app.patch("/table-products/table/status/:tableId", async (req, res) => {
+// patch a table status
+app.patch("/table-products/table-status/:tableId", async (req, res) => {
 	try {
 		const { tableId } = req.params
-
+		console.log("here")
+		console.log(tableId)
 		const response = await pool.query(
 			"UPDATE table_products SET table_status = 'paid' WHERE table_id = $1",
 			[tableId]
@@ -1185,12 +1184,12 @@ app.get("/table-products/:year/:month/:day", async (req, res) => {
 	}
 })
 
-// get all tables products from specific month
+// get all paid tables products from specific month
 app.get("/table-products/:year/:month", async (req, res) => {
 	try {
 		const { year, month } = req.params
 		const response = await pool.query(
-			"SELECT * FROM table_products WHERE table_year = $1 AND table_month = $2",
+			"SELECT * FROM table_products WHERE table_year = $1 AND table_month = $2 AND table_status = 'paid'",
 			[year, month]
 		)
 		res.status(200).send(response.rows)

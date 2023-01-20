@@ -75,10 +75,10 @@ export const salesApi = createApi({
 		}),
 		// sales_products
 		postSaleProducts: builder.mutation({
-			query: ({ id, products, year, month }) => ({
+			query: ({ id, products, year, month, day }) => ({
 				url: `sales/${id}/products`,
 				method: "POST",
-				body: { products, year, month },
+				body: { products, year, month, day },
 			}),
 		}),
 		getSaleProducts: builder.query({

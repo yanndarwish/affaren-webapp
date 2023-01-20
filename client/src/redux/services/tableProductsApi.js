@@ -82,7 +82,7 @@ export const tableProductsApi = createApi({
 		}),
 		patchTableProductsStatus: builder.mutation({
 			query: ({ tableId }) => ({
-				url: `table-products/table/status/${tableId}`,
+				url: `table-products/table-status/${tableId}`,
 				method: "PATCH",
 			}),
 			invalidatesTags: [

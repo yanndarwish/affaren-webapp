@@ -1,16 +1,13 @@
-import { useState } from "react"
-import { useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useState, useEffect } from "react"
 import {
 	Body,
 	ErrorMessage,
 	SubTitle,
 } from "../../../../assets/common/common.styles"
 import { useGetSalesProductsQuery } from "../../../../redux/services/salesApi"
-import BestSellersTable from "./BestSellersTable"
+import BestSellersTable from "../ChartC/BestSellersTable"
 
-const ChartC = ({ theme, months, month, year }) => {
-	const dashboard = useSelector((state) => state.dashboard)
+const ChartF = ({ theme, months, month, year }) => {
 	const [skip, setSkip] = useState(true)
 	const [sortedData, setSortedData] = useState([])
 	const { data, isError } = useGetSalesProductsQuery(
@@ -24,19 +21,11 @@ const ChartC = ({ theme, months, month, year }) => {
 		}
 	}
 
-	const getMonth = (dateString) => {
-		return dateString && dateString.split("-")[1]
-	}
-
-	const getYear = (dateString) => {
-		return dateString && dateString.split("-")[0]
-	}
-
 	const formatBestSellers = (data) => {
 		let products = []
 		let formatted = []
 		data &&
-			data.forEach((product) => {
+			data.filter(item => item.product_id.includes('M')).forEach((product) => {
 				if (!products.includes(product.product_id)) {
 					products.push(product.product_id)
 					formatted.push(product)
@@ -76,11 +65,11 @@ const ChartC = ({ theme, months, month, year }) => {
 
 	return (
 		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
-			<SubTitle>{months[month - 1]}'s Best Sellers</SubTitle>
+			<SubTitle>{months[month - 1]}'s Lunch Best Sellers</SubTitle>
 			{isError && <ErrorMessage>Failed to fetch Data</ErrorMessage>}
 			<BestSellersTable data={sortedData} />
 		</Body>
 	)
 }
 
-export default ChartC
+export default ChartF

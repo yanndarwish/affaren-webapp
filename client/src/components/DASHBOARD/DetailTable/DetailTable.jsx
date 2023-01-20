@@ -34,7 +34,7 @@ const DetailTable = ({ data, months, month, year }) => {
 						? parseFloat(item.sale_taxes.total1)
 						: 0,
 					magazine: item.sale_taxes.total2
-						? parseFloat(item.sale_taxes.total2)
+						? parseFloat(item.sale_taxes["total2"])
 						: 0,
 					decoAlcool: item.sale_taxes.total3
 						? parseFloat(item.sale_taxes.total3)
@@ -74,49 +74,51 @@ const DetailTable = ({ data, months, month, year }) => {
 				}
 				detail.push(day)
 			} else {
-				detail[detail.length - 1].alimentation += item.sale_taxes.total1
+				let index = detail.findIndex((det) => det.day === item.sale_day)
+
+				detail[index].alimentation += item.sale_taxes.total1
 					? parseFloat(item.sale_taxes.total1)
 					: 0
-				detail[detail.length - 1].magazine += item.sale_taxes.total2
-					? parseFloat(item.sale_taxes.total2)
+				detail[index].magazine += item.sale_taxes.total2
+					? parseFloat(item.sale_taxes["total2"])
 					: 0
-				detail[detail.length - 1].decoAlcool += item.sale_taxes.total3
+				detail[index].decoAlcool += item.sale_taxes.total3
 					? parseFloat(item.sale_taxes.total3)
 					: 0
-				detail[detail.length - 1].htAlimentation += item.sale_taxes.ht1
+				detail[index].htAlimentation += item.sale_taxes.ht1
 					? parseFloat(item.sale_taxes.ht1)
 					: 0
-				detail[detail.length - 1].htMagazine += item.sale_taxes.ht2
+				detail[index].htMagazine += item.sale_taxes.ht2
 					? parseFloat(item.sale_taxes.ht2)
 					: 0
-				detail[detail.length - 1].htDecoAlcool += item.sale_taxes.ht3
+				detail[index].htDecoAlcool += item.sale_taxes.ht3
 					? parseFloat(item.sale_taxes.ht3)
 					: 0
-				detail[detail.length - 1].tvaAlimentation += item.sale_taxes.tva1
+				detail[index].tvaAlimentation += item.sale_taxes.tva1
 					? parseFloat(item.sale_taxes.tva1)
 					: 0
-				detail[detail.length - 1].tvaMagazine += item.sale_taxes.tva2
+				detail[index].tvaMagazine += item.sale_taxes.tva2
 					? parseFloat(item.sale_taxes.tva2)
 					: 0
-				detail[detail.length - 1].tvaDecoAlcool += item.sale_taxes.tva3
+				detail[index].tvaDecoAlcool += item.sale_taxes.tva3
 					? parseFloat(item.sale_taxes.tva3)
 					: 0
-				detail[detail.length - 1].totalHt += item.sale_taxes.totalHt
+				detail[index].totalHt += item.sale_taxes.totalHt
 					? parseFloat(item.sale_taxes.totalHt)
 					: 0
-				detail[detail.length - 1].totalTva += item.sale_taxes.totalTva
+				detail[index].totalTva += item.sale_taxes.totalTva
 					? parseFloat(item.sale_taxes.totalTva)
 					: 0
-				detail[detail.length - 1].cash += item.sale_payment_methods.cash
+				detail[index].cash += item.sale_payment_methods.cash
 					? parseFloat(item.sale_payment_methods.cash)
 					: 0
-				detail[detail.length - 1].carte += item.sale_payment_methods.card
+				detail[index].carte += item.sale_payment_methods.card
 					? parseFloat(item.sale_payment_methods.card)
 					: 0
-				detail[detail.length - 1].cheque += item.sale_payment_methods.check
+				detail[index].cheque += item.sale_payment_methods.check
 					? parseFloat(item.sale_payment_methods.check)
 					: 0
-				detail[detail.length - 1].total += item.sale_amount
+				detail[index].total += item.sale_amount
 					? parseFloat(item.sale_amount)
 					: 0
 			}

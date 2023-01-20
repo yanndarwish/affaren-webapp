@@ -40,7 +40,6 @@ const RadialChart = ({ data, theme }) => {
 		},
 	}
 
-	console.log(data)
 	const prepareData = (data) => {
 		let alim = 0
 		let maga = 0
@@ -56,7 +55,6 @@ const RadialChart = ({ data, theme }) => {
 				deco = (parseFloat(deco) + parseFloat(sale.sale_taxes.total3)).toFixed(2)
 			}
 		})
-		console.log(parseFloat(alim) + parseFloat(deco))
 		setSeries([parseFloat(alim), parseFloat(maga), parseFloat(deco)])
 	}
 

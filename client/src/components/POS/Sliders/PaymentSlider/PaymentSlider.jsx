@@ -168,6 +168,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				products: sale.products,
 				year: year,
 				month: month,
+				day: day,
 				id: parseInt(confirmedSale.id),
 			})
 
