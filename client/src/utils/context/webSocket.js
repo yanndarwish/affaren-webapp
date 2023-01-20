@@ -24,13 +24,26 @@ const WebSocketProvider = ({ children }) => {
 			socket = new WebSocket(`ws://${ip}:4001`)
 			socket.onopen = () => {
 				socket.send("connexion")
+				var t = setInterval(function () {
+					if (socket.readyState !== 1) {
+						clearInterval(t)
+						return
+					}
+					socket.send("ping")
+				}, 55000)
+			}
+
+			if (socket.readyState === 3) {
+				console.log('close')
+				socket.terminate()
+				socket = new WebSocket(`ws://${ip}:4001`)
 			}
 
 			socket.onmessage = (message) => {
 				console.log(message.data)
 				if (message.data === "TableProducts") {
 					console.log("get products")
-					dispatch(setUpdateOrder({order: true}))
+					dispatch(setUpdateOrder({ order: true }))
 				}
 			}
 

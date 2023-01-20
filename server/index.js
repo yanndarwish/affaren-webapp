@@ -7,6 +7,7 @@ const { API_PORT } = process.env
 const port = process.env.PORT || API_PORT
 
 function heartbeat() {
+	console.log('pong')
 	this.isAlive = true
 }
 
@@ -36,7 +37,7 @@ const interval = setInterval(function ping() {
 		ws.isAlive = false
 		ws.ping()
 	})
-}, 10000)
+}, 55000)
 
 wss.on("close", function close() {
 	clearInterval(interval)
