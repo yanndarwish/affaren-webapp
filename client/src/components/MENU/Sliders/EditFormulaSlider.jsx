@@ -7,7 +7,6 @@ import {
 import {
 	Dialog,
 	DialogBody,
-	DialogCard,
 	DialogFooter,
 	DialogHeader,
 	Overlay,
@@ -21,7 +20,10 @@ import {
 	MenuItem,
 	Select,
 } from "@mui/material"
-import { FormWrapper } from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
+import {
+	FormWrapper,
+	DialogCard,
+} from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import { useUpdateDishMutation } from "../../../redux/services/dishApi"
@@ -43,8 +45,14 @@ const EditFormulaSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 		if (overlayRef.current === e.target) {
 			setIsOpen(false)
 			res.reset()
-			setDish([])
+			setDish({})
 		}
+	}
+
+	const close = () => {
+		setIsOpen(false)
+		res.reset()
+		setDish({})
 	}
 
 	const initialize = (dish) => {
@@ -73,7 +81,7 @@ const EditFormulaSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 			dishActive: active ? "true" : "false",
 		}
 		updateDish({ payload: newDish, id: selectedDish.dish_id })
-		console.log({ payload: newDish, id: selectedDish.dish_id })
+		setDish({})
 	}
 
 	const ItemInput = ({ id, value }) => {
@@ -129,7 +137,7 @@ const EditFormulaSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 			<Dialog id="dialog" theme={theme}>
 				<DialogHeader>
 					<SubTitle>Edit Formula</SubTitle>
-					<CloseOutlinedIcon onClick={() => setIsOpen(false)} />
+					<CloseOutlinedIcon onClick={() => close()} />
 				</DialogHeader>
 				<DialogBody>
 					<ArtTitle>Edit Formula Informations</ArtTitle>

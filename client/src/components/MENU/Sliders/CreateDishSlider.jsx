@@ -1,13 +1,8 @@
 import { useRef, useState } from "react"
-import {
-	ArtTitle,
-	ErrorMessage,
-	SubTitle,
-} from "../../../assets/common/common.styles"
+import { ArtTitle, SubTitle } from "../../../assets/common/common.styles"
 import {
 	Dialog,
 	DialogBody,
-	DialogCard,
 	DialogFooter,
 	DialogHeader,
 	Overlay,
@@ -22,7 +17,10 @@ import {
 	MenuItem,
 	Select,
 } from "@mui/material"
-import { FormWrapper } from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
+import {
+	FormWrapper,
+	DialogCard,
+} from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
 import { FormFlex } from "../../POS/Sliders/AddCardSlider/AddCardSlider.styles"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
@@ -80,48 +78,42 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 								text="New dish created successfully"
 							/>
 						) : (
-							<FormControl fullWidth>
-								<FormWrapper>
-									<Input
-										label="Name"
-										value={name}
-										onChange={(e) => setName(e)}
-									/>
-									<Input label="Ingredients" id="dish-ingredients" />
-									<FormControl fullWidth>
-										<InputLabel id="demo-simple-select-label">
-											Category
-										</InputLabel>
-										<Select
-											labelId="demo-simple-select-label"
-											id="menu-category"
-											value={category}
-											label="Category"
-											onChange={(e) => setCategory(e.target.value)}
-											fullWidth
-											required
-										>
-											<MenuItem value={"starter"}>Starter</MenuItem>
-											<MenuItem value={"main"}>Main</MenuItem>
-											<MenuItem value={"desert"}>Desert</MenuItem>
-										</Select>
-									</FormControl>
-									<Input
-										label="Price"
-										value={price}
-										onChange={(e) => setPrice(e)}
-									/>
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={active}
-												onChange={() => setActive(!active)}
-											/>
-										}
-										label="Active"
-									/>
-								</FormWrapper>
-							</FormControl>
+							<FormWrapper>
+								<Input label="Name" value={name} onChange={(e) => setName(e)} />
+								<Input label="Ingredients" id="dish-ingredients" />
+								<FormControl >
+									<InputLabel id="demo-simple-select-label">
+										Category
+									</InputLabel>
+									<Select
+										labelId="demo-simple-select-label"
+										id="menu-category"
+										value={category}
+										label="Category"
+										onChange={(e) => setCategory(e.target.value)}
+										fullWidth
+										required
+									>
+										<MenuItem value={"starter"}>Starter</MenuItem>
+										<MenuItem value={"main"}>Main</MenuItem>
+										<MenuItem value={"desert"}>Desert</MenuItem>
+									</Select>
+								</FormControl>
+								<Input
+									label="Price"
+									value={price}
+									onChange={(e) => setPrice(e)}
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox
+											checked={active}
+											onChange={() => setActive(!active)}
+										/>
+									}
+									label="Active"
+								/>
+							</FormWrapper>
 						)}
 					</DialogCard>
 				</DialogBody>

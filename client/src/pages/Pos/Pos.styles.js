@@ -1,10 +1,15 @@
 import styled from "styled-components"
-
+import dark from "../../assets/common/dark.theme.styles"
+import light from "../../assets/common/light.theme.styles"
 export const PosContainer = styled.div`
 	display: flex;
 	flex: 1;
 	height: 100vh;
 	overflow: hidden;
+	color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
+	background-color: ${(props) =>
+		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
 `
 
 export const ButtonSection = styled.div`

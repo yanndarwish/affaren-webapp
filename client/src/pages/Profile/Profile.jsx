@@ -4,7 +4,6 @@ import {
 	Container,
 	ErrorMessage,
 	Header,
-	SubTitle,
 	Title,
 } from "../../assets/common/common.styles"
 import {
@@ -50,11 +49,7 @@ const Profile = () => {
 				<UserProfile user={user} />
 			</Body>
 			{res.isError && <ErrorMessage>Failed to get users</ErrorMessage>}
-			{user?.user_is_admin === "true" && (
-				<Body theme={theme}>
-					<AdminProfile users={users} />
-				</Body>
-			)}
+			{user?.user_is_admin === "true" && <AdminProfile users={users} theme={theme} />}
 		</Container>
 	)
 }

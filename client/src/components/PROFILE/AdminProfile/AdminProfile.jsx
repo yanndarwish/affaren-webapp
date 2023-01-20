@@ -1,10 +1,10 @@
-import { SubTitle, Wrap } from "../../../assets/common/common.styles"
+import { Body, SubTitle, Wrap } from "../../../assets/common/common.styles"
 import AddUserCard from "../AddUserCard/AddUserCard"
 import UserCard from "../AdminCard/UserCard"
 
-const AdminProfile = ({ users }) => {
+const AdminProfile = ({ users, theme }) => {
 	return (
-		<>
+		<Body theme={theme}>
 			<SubTitle>Users</SubTitle>
 			<Wrap>
 				<AddUserCard />
@@ -12,7 +12,7 @@ const AdminProfile = ({ users }) => {
 					<UserCard key={i} user={user} />
 				))}
 			</Wrap>
-		</>
+		</Body>
 	)
 }
 

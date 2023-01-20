@@ -3,7 +3,6 @@ import { ArtTitle, SubTitle } from "../../../assets/common/common.styles"
 import {
 	Dialog,
 	DialogBody,
-	DialogCard,
 	DialogFooter,
 	DialogHeader,
 	Overlay,
@@ -17,7 +16,10 @@ import {
 	MenuItem,
 	Select,
 } from "@mui/material"
-import { FormWrapper } from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
+import {
+	FormWrapper,
+	DialogCard,
+} from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import { useUpdateDishMutation } from "../../../redux/services/dishApi"
@@ -38,8 +40,14 @@ const EditDishSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 		if (overlayRef.current === e.target) {
 			setIsOpen(false)
 			res.reset()
-			setDish([])
+			setDish({})
 		}
+	}
+
+	const close = () => {
+		setIsOpen(false)
+		res.reset()
+		setDish({})
 	}
 
 	const initialize = (dish) => {
@@ -69,6 +77,8 @@ const EditDishSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 			dishActive: active ? "true" : "false",
 		}
 		updateDish({ payload: newDish, id: selectedDish.dish_id })
+		setDish({})
+
 	}
 
 	useEffect(() => {
@@ -80,7 +90,7 @@ const EditDishSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 			<Dialog id="dialog" theme={theme}>
 				<DialogHeader>
 					<SubTitle>Edit Dish</SubTitle>
-					<CloseOutlinedIcon onClick={() => setIsOpen(false)} />
+					<CloseOutlinedIcon onClick={() => close()} />
 				</DialogHeader>
 				<DialogBody>
 					<ArtTitle>Edit Dish Informations</ArtTitle>

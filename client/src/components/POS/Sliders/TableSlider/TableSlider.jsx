@@ -6,6 +6,7 @@ import {
 	DialogFooter,
 	DialogHeader,
 	Overlay,
+	Wrapper,
 } from "../Slider.styles"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
@@ -323,87 +324,89 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
-			<Dialog id="dialog" theme={theme}>
-				<DialogHeader>
-					<SubTitle>Table {dataTable?.table_id}</SubTitle>
-					<CloseOutlinedIcon onClick={() => close()} />
-				</DialogHeader>
-				<DialogBody>
-					<ArtTitle>Detail</ArtTitle>
-					<DialogCard theme={theme}>
-						<Box
-							sx={{
-								flexGrow: 1,
-								bgcolor: "background.paper",
-								display: "flex",
-								height: 300,
-								borderBottom: 1,
-								borderColor: "divider",
-								overflow: "scroll",
-							}}
-						>
-							<Tabs
-								id="tabs"
-								orientation="vertical"
-								value={value}
-								onChange={handleChange}
-								variant="scrollable"
-								aria-label="basic tabs example"
+			<Wrapper>
+				<Dialog id="dialog" theme={theme}>
+					<DialogHeader>
+						<SubTitle>Table {dataTable?.table_id}</SubTitle>
+						<CloseOutlinedIcon onClick={() => close()} />
+					</DialogHeader>
+					<DialogBody>
+						<ArtTitle>Detail</ArtTitle>
+						<DialogCard theme={theme}>
+							<Box
+								sx={{
+									flexGrow: 1,
+									bgcolor: "background.paper",
+									display: "flex",
+									height: 300,
+									borderBottom: 1,
+									borderColor: "divider",
+									overflow: "scroll",
+								}}
 							>
+								<Tabs
+									id="tabs"
+									orientation="vertical"
+									value={value}
+									onChange={handleChange}
+									variant="scrollable"
+									aria-label="basic tabs example"
+								>
+									{peopleSet?.map((id, i) => (
+										<Tab
+											label={<PersonOutlineOutlinedIcon />}
+											{...a11yProps(i)}
+											key={i + "tab"}
+										/>
+									))}
+									<Tab label={<AddIcon />} onClick={handleAddPerson} />
+								</Tabs>
 								{peopleSet?.map((id, i) => (
-									<Tab
-										label={<PersonOutlineOutlinedIcon />}
-										{...a11yProps(i)}
-										key={i + "tab"}
-									/>
-								))}
-								<Tab label={<AddIcon />} onClick={handleAddPerson} />
-							</Tabs>
-							{peopleSet?.map((id, i) => (
-								<TabPanel value={value} index={i} key={i + "panel"}>
-									<Column>
-										{data
-											?.filter(
-												(product) => product.table_person === parseInt(id)
-											)
-											.map((item, i) => (
-												<SpaceHeaderCenter key={id + "-" + i}>
-													<h3>{item.dish_name}</h3>
-													<h3>{item.dish_price} €</h3>
-													<IconButton
-														aria-label="delete"
-														color="error"
-														data-id={item.dish_id}
-														data-person={id}
-														onClick={handleDelete}
-													>
-														<DeleteOutlineIcon
+									<TabPanel value={value} index={i} key={i + "panel"}>
+										<Column>
+											{data
+												?.filter(
+													(product) => product.table_person === parseInt(id)
+												)
+												.map((item, i) => (
+													<SpaceHeaderCenter key={id + "-" + i}>
+														<h3>{item.dish_name}</h3>
+														<h3>{item.dish_price} €</h3>
+														<IconButton
+															aria-label="delete"
+															color="error"
 															data-id={item.dish_id}
 															data-person={id}
-														/>
-													</IconButton>
-												</SpaceHeaderCenter>
-											))}
-									</Column>
-								</TabPanel>
-							))}
-						</Box>
-					</DialogCard>
-				</DialogBody>
-				<DialogFooter>
-					<Button
-						title="Go to Payment"
-						color="success"
-						onClick={handlePayment}
-					/>
-				</DialogFooter>
-			</Dialog>
-			<TableMenu
-				isOpen={isOpen}
-				setIsOpen={setIsOpen}
-				theme={theme}
-				onClick={addProductToPerson}
-			/>
+															onClick={handleDelete}
+														>
+															<DeleteOutlineIcon
+																data-id={item.dish_id}
+																data-person={id}
+															/>
+														</IconButton>
+													</SpaceHeaderCenter>
+												))}
+										</Column>
+									</TabPanel>
+								))}
+							</Box>
+						</DialogCard>
+					</DialogBody>
+					<DialogFooter>
+						<Button
+							title="Go to Payment"
+							color="success"
+							onClick={handlePayment}
+						/>
+					</DialogFooter>
+				</Dialog>
+				<TableMenu
+					isOpen={isOpen}
+					setIsOpen={setIsOpen}
+					theme={theme}
+					onClick={addProductToPerson}
+				/>
+			</Wrapper>
 		</Overlay>
 	) : null
 }

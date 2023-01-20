@@ -82,8 +82,6 @@ const EditProduct = ({
 		)
 	}
 
-	console.log(taxe)
-
 	return product ? (
 		sent && res.isSuccess ? (
 			<InfoMessage state="success" text="Product edited successfully" />

@@ -10,6 +10,7 @@ export const Overlay = styled.div`
 	right: 0;
 	bottom: 0;
 	z-index: 4;
+	overflow:scroll;
 	background-color: ${(props) =>
 		props.theme === "dark"
 			? `rgb(${dark.COLOR_TEXT_RGB}, 0.5)`
@@ -32,6 +33,12 @@ export const Dialog = styled.div`
 	background-color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
 	transition: 0.2s;
+	@media (max-width: 830px) {
+		position: relative;
+		left: 0;
+		width: 100%;
+		height:100%;
+	}
 `
 
 export const DialogHeader = styled.div`
@@ -59,4 +66,13 @@ export const DialogCard = styled.div`
 export const DialogFooter = styled.div`
 	display: flex;
 	justify-content: center;
+`
+
+export const Wrapper = styled.div`
+	@media (max-width: 830px) {
+		display:flex;
+		flex-direction:column;
+		overflow:scroll;
+		height:fit-content;
+	}
 `

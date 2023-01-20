@@ -1,6 +1,5 @@
 import {
 	ArtTitle,
-	ButtonSection,
 	Column,
 	Container,
 	FixedCenterContainter,
@@ -9,7 +8,6 @@ import {
 	SubTitle,
 	Title,
 	VerticalCenter,
-	Wrap,
 	WrapS,
 } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"

@@ -239,7 +239,7 @@ const Pos = () => {
 	}, [])
 
 	return (
-		<PosContainer>
+		<PosContainer theme={theme}>
 			<StyledPos>
 				<Container theme={theme} onClick={closeProductSection}>
 					<SpaceHeader xs={12}>

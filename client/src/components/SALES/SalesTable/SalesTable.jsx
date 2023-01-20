@@ -98,7 +98,6 @@ export default function SalesTable({ array }) {
 		)
 	}
 
-	console.log(response)
 	return (
 		<>
 			<TableContainer component={Paper}>

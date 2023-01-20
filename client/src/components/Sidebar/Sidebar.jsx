@@ -26,6 +26,11 @@ const Sidebar = () => {
 		setDrawerIsOpen(!drawerIsOpen)
 	}
 
+	const handleNavClick = (route) => {
+		navigate(route)
+		setDrawerIsOpen(!drawerIsOpen)
+	}
+
 	const drawerWidth = 100
 
 	const handleTheme = () => {
@@ -101,7 +106,7 @@ const Sidebar = () => {
 													justifyContent: "center",
 													px: 2.5,
 												}}
-												onClick={() => navigate(item.route)}
+												onClick={() => handleNavClick(item.route)}
 											>
 												{item.icon}
 											</ListItemButton>
@@ -115,7 +120,7 @@ const Sidebar = () => {
 													justifyContent: "center",
 													px: 2.5,
 												}}
-												onClick={() => navigate(item.route)}
+												onClick={() => handleNavClick(item.route)}
 											>
 												{item.icon}
 											</ListItemButton>

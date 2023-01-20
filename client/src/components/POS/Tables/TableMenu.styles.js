@@ -16,6 +16,10 @@ export const Container = styled.div`
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 	background-color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_BG_TERTIARY : light.COLOR_BG_TERTIARY};
+	@media (max-width: 830px) {
+		position: relative;
+		width:100%;
+	}
 `
 
 export const CardTitle = styled.p`

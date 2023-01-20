@@ -3,7 +3,7 @@ import {
 	Flex,
 	VerticalCenter,
 } from "../../../assets/common/common.styles"
-import { Name, Price, Wrapper } from "./MenuItem.styles"
+import { Name, Price, Text, Wrapper } from "./MenuItem.styles"
 import { IconButton } from "@mui/material"
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
@@ -21,13 +21,13 @@ const MenuItem = ({ data, color, disabled, openEdit, openDelete, onClick }) => {
 				<Flex data-id={data.dish_id}>
 					<Name data-id={data.dish_id}>{data.dish_name}</Name>
 				</Flex>
-				<Flex data-id={data.dish_id}>
+				<Text data-id={data.dish_id}>
 					{data.dish_ingredients.map((ing, i) => (
 						<span key={ing + i} data-id={data.dish_id}>
 							{i === 0 ? ing : ", " + ing}
 						</span>
 					))}
-				</Flex>
+				</Text>
 			</Column>
 			<VerticalCenter data-id={data.dish_id}>
 				<Flex data-id={data.dish_id}>

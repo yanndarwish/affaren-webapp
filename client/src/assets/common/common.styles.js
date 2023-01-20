@@ -138,6 +138,13 @@ export const SpaceHeader = styled.header`
 	}
 `
 
+export const FixedSpaceHeader = styled.header`
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: flex-start;
+`
+
 export const AppBar = styled.div`
 	position: absolute;
 	top: 0;
@@ -160,6 +167,9 @@ export const SpaceHeaderCenter = styled.header`
 export const Title = styled.h1`
 	font-size: ${constant.FONT_PAGE_TITLE}px;
 	font-weight: bold;
+	@media (max-width: 768px) {
+		text-align: center;
+	}
 `
 
 export const SearchSection = styled.div`
@@ -191,7 +201,7 @@ export const FullFlex = styled.div`
 export const Body = styled.div`
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	height: max(100%, fit-content);
 	gap: 1rem;
 	padding: ${constant.PADDING_M}px;
 	box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.3);

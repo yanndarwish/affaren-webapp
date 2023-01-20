@@ -5,6 +5,7 @@ import {
 	ArtTitle,
 	Column,
 	Container,
+	FixedSpaceHeader,
 	Gap,
 	SpaceHeader,
 	Title,
@@ -94,14 +95,14 @@ const Menu = () => {
 
 	const ModalFooter = () => {
 		return (
-			<SpaceHeader>
+			<FixedSpaceHeader>
 				<Button
 					title="Cancel"
 					color="error"
 					onClick={() => setDeleteIsOpen(!deleteIsOpen)}
 				/>
 				<Button title="Delete" color="success" onClick={handleDelete} />
-			</SpaceHeader>
+			</FixedSpaceHeader>
 		)
 	}
 

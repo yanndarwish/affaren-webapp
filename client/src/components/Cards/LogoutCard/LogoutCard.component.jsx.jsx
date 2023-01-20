@@ -5,7 +5,7 @@ import Button from "../../common/Button/Button.component"
 import { useNavigate } from "react-router-dom"
 import {
 	ColumnSpace,
-	SpaceHeader,
+	FixedSpaceHeader,
 	SubTitle,
 } from "../../../assets/common/common.styles"
 import { Container, Text } from "../Card.styles"
@@ -48,14 +48,14 @@ const LogoutDialog = ({ theme }) => {
 			<ColumnSpace>
 				<SubTitle>Logout</SubTitle>
 				<Text>Are you sure you want to logout ?</Text>
-				<SpaceHeader>
+				<FixedSpaceHeader>
 					<Button title="Cancel" color="error" onClick={handleCancel}></Button>
 					<Button
 						title="Logout"
 						color="success"
 						onClick={handleLogout}
 					></Button>
-				</SpaceHeader>
+				</FixedSpaceHeader>
 			</ColumnSpace>
 		</Container>
 	)

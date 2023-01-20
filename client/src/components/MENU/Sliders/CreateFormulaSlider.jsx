@@ -1,14 +1,12 @@
 import { useRef, useState } from "react"
 import {
 	ArtTitle,
-	ErrorMessage,
 	HorizontalCenter,
 	SubTitle,
 } from "../../../assets/common/common.styles"
 import {
 	Dialog,
 	DialogBody,
-	DialogCard,
 	DialogFooter,
 	DialogHeader,
 	Overlay,
@@ -18,13 +16,14 @@ import {
 	Checkbox,
 	FormControl,
 	FormControlLabel,
-	FormGroup,
 	InputLabel,
 	MenuItem,
 	Select,
 } from "@mui/material"
-import { FormWrapper } from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
-import { FormFlex } from "../../POS/Sliders/AddCardSlider/AddCardSlider.styles"
+import {
+	FormWrapper,
+	DialogCard,
+} from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import { usePostDishMutation } from "../../../redux/services/dishApi"

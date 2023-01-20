@@ -4,10 +4,8 @@ import { useEffect, useState } from "react"
 import {
 	Container,
 	ErrorMessage,
-	FitContainer,
 	Flex,
 	SpaceHeader,
-	SubTitle,
 	Title,
 } from "../../assets/common/common.styles"
 import DateInput from "../../components/DASHBOARD/DateInput/DateInput"
@@ -102,8 +100,6 @@ const Dashboard = () => {
 					<DateInput />
 				</Flex>
 			</SpaceHeader>
-			<FitContainer theme={theme}>
-				<SubTitle>Charts</SubTitle>
 				<ChartA theme={theme} />
 				<ChartB theme={theme} months={months} month={month} year={year} />
 				<ChartC theme={theme} months={months} month={month} year={year} />
@@ -115,7 +111,6 @@ const Dashboard = () => {
 				)}
 				<ChartE theme={theme} months={months} month={month} year={year} />
 				<ChartF theme={theme} months={months} month={month} year={year} />
-			</FitContainer>
 		</Container>
 	)
 }

@@ -17,6 +17,11 @@ export const Wrapper = styled.div`
 			: props.color === "red"
 			? "rgb(238, 66, 102, 0.3)"
 			: props.color === "green" && "rgb(153, 209, 123, 0.3)"};
+
+	@media (max-width: 830px) {
+		display: flex;
+		flex-direction: column;
+	}
 `
 
 export const Name = styled.h2`
@@ -25,4 +30,10 @@ export const Name = styled.h2`
 
 export const Price = styled.h3`
 	width: 5ch;
+`
+
+export const Text = styled.p`
+	@media (max-width: 830px) {
+		margin-bottom: 24px;
+	}
 `
