@@ -8,9 +8,9 @@ import {
 	ButtonSection,
 	ButtonSectionSpace,
 	PosContainer,
+	StyledPos,
 	TotalSection,
 } from "./Pos.styles"
-import CropSquareOutlinedIcon from "@mui/icons-material/CropSquareOutlined"
 import {
 	CardSectionButton,
 	CardSectionIcon,
@@ -51,7 +51,6 @@ const Pos = () => {
 	const cardSectionButtonRef = useRef()
 	const cardSectionButtonIconRef = useRef()
 	const [cardSection, setCardSection] = useState(false)
-	const [tableSection, setTableSection] = useState(false)
 	const [paymentSlider, setPaymentSlider] = useState(false)
 	const [noBarcodeSlider, setNoBarcodeSlider] = useState(false)
 	const [discountSlider, setDiscountSlider] = useState(false)
@@ -69,7 +68,6 @@ const Pos = () => {
 
 	const toggleCardSection = () => {
 		const cardSectionEl = document.getElementById("card-section")
-		console.log(cardSection)
 		const productCards = document.querySelectorAll(".product-card")
 
 		if (cardSection) {
@@ -242,84 +240,88 @@ const Pos = () => {
 
 	return (
 		<PosContainer>
-			<Container theme={theme} onClick={closeProductSection}>
-				<SpaceHeader xs={12}>
-					<Title>Sale N°{sale.id ? sale.id : 1}</Title>
-					{error && <ErrorMessage>Failed to fetch next sale ID</ErrorMessage>}
-					{isError && <ErrorMessage>Failed to fetch cards</ErrorMessage>}
-				</SpaceHeader>
-				<SearchSection>
-					<BarcodeInput />
-					<Button title="No Barcode" onClick={() => opentNoBarcodeSlider()} />
-				</SearchSection>
-				<Body theme={theme}>
-					<Box>
-						<SubTitle>Panier</SubTitle>
-					</Box>
-					<Box sx={{ height: "100%" }}>
-						<Cart />
-					</Box>
-					<TotalSection display="flex" justifyContent="flex-end">
-						<SubTitle>Total</SubTitle>
-						<SubTitle>{sale.amount}€</SubTitle>
-					</TotalSection>
-					<ButtonSectionSpace>
-						<ButtonSection>
-							<Button title="Drawer" onClick={openDrawer} />
-							<Button title="Discount" onClick={() => openDiscountSlider()} />
-						</ButtonSection>
-						{res.isError && <ErrorMessage>Failed to open Drawer</ErrorMessage>}
+			<StyledPos>
+				<Container theme={theme} onClick={closeProductSection}>
+					<SpaceHeader xs={12}>
+						<Title>Sale N°{sale.id ? sale.id : 1}</Title>
+						{error && <ErrorMessage>Failed to fetch next sale ID</ErrorMessage>}
+						{isError && <ErrorMessage>Failed to fetch cards</ErrorMessage>}
+					</SpaceHeader>
+					<SearchSection>
+						<BarcodeInput />
+						<Button title="No Barcode" onClick={() => opentNoBarcodeSlider()} />
+					</SearchSection>
+					<Body theme={theme}>
 						<Box>
-							<Button
-								color="success"
-								title="Continue to Payment"
-								onClick={() => openPaymentSlider()}
-							/>
+							<SubTitle>Panier</SubTitle>
 						</Box>
-					</ButtonSectionSpace>
-				</Body>
-				<CardSectionButton
-					onClick={toggleCardSection}
-					id="card-section-button"
+						<Box sx={{ height: "100%" }}>
+							<Cart />
+						</Box>
+						<TotalSection display="flex" justifyContent="flex-end">
+							<SubTitle>Total</SubTitle>
+							<SubTitle>{sale.amount}€</SubTitle>
+						</TotalSection>
+						<ButtonSectionSpace>
+							<ButtonSection>
+								<Button title="Drawer" onClick={openDrawer} />
+								<Button title="Discount" onClick={() => openDiscountSlider()} />
+							</ButtonSection>
+							{res.isError && (
+								<ErrorMessage>Failed to open Drawer</ErrorMessage>
+							)}
+							<Box>
+								<Button
+									color="success"
+									title="Continue to Payment"
+									onClick={() => openPaymentSlider()}
+								/>
+							</Box>
+						</ButtonSectionSpace>
+					</Body>
+					<CardSectionButton
+						onClick={toggleCardSection}
+						id="card-section-button"
+						theme={theme}
+						ref={cardSectionButtonRef}
+						display={cardSection.toString()}
+					>
+						<CardSectionIcon ref={cardSectionButtonIconRef} theme={theme} />
+					</CardSectionButton>
+				</Container>
+				<ProductCardSection
 					theme={theme}
-					ref={cardSectionButtonRef}
-					display={cardSection.toString()}
-				>
-					<CardSectionIcon ref={cardSectionButtonIconRef} theme={theme} />
-				</CardSectionButton>
-			</Container>
-			<ProductCardSection
-				theme={theme}
-				onClick={openAddCardSlider}
-				reference={cardSectionRef}
-			/>
+					onClick={openAddCardSlider}
+					reference={cardSectionRef}
+				/>
+
+				<PaymentSlider
+					theme={theme}
+					isOpen={paymentSlider}
+					setIsOpen={setPaymentSlider}
+				/>
+				<NoBarcodeSlider
+					theme={theme}
+					isOpen={noBarcodeSlider}
+					setIsOpen={setNoBarcodeSlider}
+				/>
+
+				{discountSlider && (
+					<DiscountSlider
+						theme={theme}
+						isOpen={discountSlider}
+						setIsOpen={setDiscountSlider}
+					/>
+				)}
+				{addCardSlider && (
+					<AddCardSlider
+						theme={theme}
+						isOpen={addCardSlider}
+						setIsOpen={setAddCardSlider}
+					/>
+				)}
+			</StyledPos>
 			<TablesSection theme={theme} onClick={openTableSlider} />
-			<PaymentSlider
-				theme={theme}
-				isOpen={paymentSlider}
-				setIsOpen={setPaymentSlider}
-			/>
-			<NoBarcodeSlider
-				theme={theme}
-				isOpen={noBarcodeSlider}
-				setIsOpen={setNoBarcodeSlider}
-			/>
-
-			{discountSlider && (
-				<DiscountSlider
-					theme={theme}
-					isOpen={discountSlider}
-					setIsOpen={setDiscountSlider}
-				/>
-			)}
-			{addCardSlider && (
-				<AddCardSlider
-					theme={theme}
-					isOpen={addCardSlider}
-					setIsOpen={setAddCardSlider}
-				/>
-			)}
-
 			<TableSlider
 				dataTable={selectedTable}
 				theme={theme}

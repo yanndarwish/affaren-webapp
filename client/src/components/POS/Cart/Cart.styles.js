@@ -6,5 +6,4 @@ export const Wrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 	gap: ${constant.GAP}px;
-	// background:blue;
 `

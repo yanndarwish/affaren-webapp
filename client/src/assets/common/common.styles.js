@@ -102,6 +102,11 @@ export const Grid = styled.div`
 	}
 `
 
+export const Navbar = styled.div`
+	display: ${(props) =>
+		props.drawerIsOpen === true ? "block" : "none"};
+`
+
 export const AsideContainer = styled.main`
 	position: relative;
 	display: flex;
@@ -127,6 +132,10 @@ export const SpaceHeader = styled.header`
 	width: 100%;
 	justify-content: space-between;
 	align-items: flex-start;
+	@media (max-width: 768px) {
+		flex-direction: column;
+		gap: ${constant.GAP}px;
+	}
 `
 
 export const AppBar = styled.div`
@@ -156,6 +165,10 @@ export const Title = styled.h1`
 export const SearchSection = styled.div`
 	display: flex;
 	gap: ${constant.GAP * 2}px;
+	@media (max-width: 768px) {
+		flex-direction: column;
+		gap: ${constant.GAP}px;
+	}
 `
 
 export const ButtonSection = styled.div`

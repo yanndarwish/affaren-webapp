@@ -12,7 +12,7 @@ import { toggleTheme } from "../../redux/features/theme"
 import { useNavigate } from "react-router-dom"
 import { sidebarItems, cookSidebarItems } from "./SidebarItems"
 import { IconButton } from "@mui/material"
-import { AppBar } from "../../assets/common/common.styles"
+import { AppBar, Navbar } from "../../assets/common/common.styles"
 
 const Sidebar = () => {
 	const theme = useSelector((state) => state.theme.theme)
@@ -20,7 +20,6 @@ const Sidebar = () => {
 	const user = useSelector((state) => state.user.user)
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	const [mobile, setMobile] = useState(false)
 	const [drawerIsOpen, setDrawerIsOpen] = useState(false)
 
 	const handleDrawerToggle = () => {
@@ -33,13 +32,9 @@ const Sidebar = () => {
 		dispatch(toggleTheme())
 	}
 
-	useEffect(() => {
-		setMobile(window.innerWidth < 769)
-	}, [window.innerWidth])
 
 	return (
 		loggedIn &&
-		(mobile ? (
 			<>
 				{!drawerIsOpen && (
 					<AppBar>
@@ -48,150 +43,88 @@ const Sidebar = () => {
 						</IconButton>
 					</AppBar>
 				)}
-				<Drawer
-					sx={{
-						display: drawerIsOpen ? "block" : "none",
-						width: drawerWidth,
-						flexShrink: 0,
-						"& .MuiDrawer-paper": {
-							width: drawerWidth,
-							boxSizing: "border-box",
-						},
-						zIndex: 2,
-					}}
-					variant="permanent"
-					anchor="left"
-				>
-					<ListItem disablePadding>
-						<ListItemButton
-							sx={{
-								minHeight: 72,
-								justifyContent: "center",
-								px: 2.5,
-							}}
-							onClick={handleDrawerToggle}
-						>
-							<IconButton onClick={handleDrawerToggle}>
-								<MenuIcon />
-							</IconButton>
-						</ListItemButton>
-					</ListItem>
-					<Divider />
-
-					<ListItem disablePadding>
-						<ListItemButton
-							sx={{
-								minHeight: 72,
-								justifyContent: "center",
-								px: 2.5,
-							}}
-							onClick={handleTheme}
-						>
-							{theme === "dark" ? (
-								<DarkModeOutlinedIcon />
-							) : (
-								<LightModeOutlinedIcon />
-							)}
-						</ListItemButton>
-					</ListItem>
-					<Divider />
-					<List>
-						{user?.user_role === "cook"
-							? cookSidebarItems.map((item) => (
-									<ListItem key={item.id} disablePadding>
-										<ListItemButton
-											sx={{
-												minHeight: 72,
-												justifyContent: "center",
-												px: 2.5,
-											}}
-											onClick={() => navigate(item.route)}
-										>
-											{item.icon}
-										</ListItemButton>
-									</ListItem>
-							  ))
-							: sidebarItems.map((item) => (
-									<ListItem key={item.id} disablePadding>
-										<ListItemButton
-											sx={{
-												minHeight: 72,
-												justifyContent: "center",
-												px: 2.5,
-											}}
-											onClick={() => navigate(item.route)}
-										>
-											{item.icon}
-										</ListItemButton>
-									</ListItem>
-							  ))}
-					</List>
-				</Drawer>
-			</>
-		) : (
-			<Drawer
-				sx={{
-					width: drawerWidth,
-					flexShrink: 0,
-					"& .MuiDrawer-paper": {
-						width: drawerWidth,
-						boxSizing: "border-box",
-					},
-					zIndex: 2,
-				}}
-				variant="permanent"
-				anchor="left"
-			>
-				<ListItem disablePadding>
-					<ListItemButton
+				<Navbar drawerIsOpen={drawerIsOpen}>
+					<Drawer
 						sx={{
-							minHeight: 72,
-							justifyContent: "center",
-							px: 2.5,
+							display: drawerIsOpen ? "block" : "none",
+							width: drawerWidth,
+							flexShrink: 0,
+							"& .MuiDrawer-paper": {
+								width: drawerWidth,
+								boxSizing: "border-box",
+							},
+							zIndex: 2,
 						}}
-						onClick={handleTheme}
+						variant="permanent"
+						anchor="left"
 					>
-						{theme === "dark" ? (
-							<DarkModeOutlinedIcon />
-						) : (
-							<LightModeOutlinedIcon />
-						)}
-					</ListItemButton>
-				</ListItem>
-				<Divider />
-				<List>
-					{user?.user_role === "cook"
-						? cookSidebarItems.map((item) => (
-								<ListItem key={item.id} disablePadding>
-									<ListItemButton
-										sx={{
-											minHeight: 72,
-											justifyContent: "center",
-											px: 2.5,
-										}}
-										onClick={() => navigate(item.route)}
-									>
-										{item.icon}
-									</ListItemButton>
-								</ListItem>
-						  ))
-						: sidebarItems.map((item) => (
-								<ListItem key={item.id} disablePadding>
-									<ListItemButton
-										sx={{
-											minHeight: 72,
-											justifyContent: "center",
-											px: 2.5,
-										}}
-										onClick={() => navigate(item.route)}
-									>
-										{item.icon}
-									</ListItemButton>
-								</ListItem>
-						  ))}
-				</List>
-			</Drawer>
-		))
+						<ListItem disablePadding>
+							<ListItemButton
+								sx={{
+									minHeight: 72,
+									justifyContent: "center",
+									px: 2.5,
+								}}
+								onClick={handleDrawerToggle}
+							>
+								<IconButton onClick={handleDrawerToggle}>
+									<MenuIcon />
+								</IconButton>
+							</ListItemButton>
+						</ListItem>
+						<Divider />
+
+						<ListItem disablePadding>
+							<ListItemButton
+								sx={{
+									minHeight: 72,
+									justifyContent: "center",
+									px: 2.5,
+								}}
+								onClick={handleTheme}
+							>
+								{theme === "dark" ? (
+									<DarkModeOutlinedIcon />
+								) : (
+									<LightModeOutlinedIcon />
+								)}
+							</ListItemButton>
+						</ListItem>
+						<Divider />
+						<List>
+							{user?.user_role === "cook"
+								? cookSidebarItems.map((item) => (
+										<ListItem key={item.id} disablePadding>
+											<ListItemButton
+												sx={{
+													minHeight: 72,
+													justifyContent: "center",
+													px: 2.5,
+												}}
+												onClick={() => navigate(item.route)}
+											>
+												{item.icon}
+											</ListItemButton>
+										</ListItem>
+								  ))
+								: sidebarItems.map((item) => (
+										<ListItem key={item.id} disablePadding>
+											<ListItemButton
+												sx={{
+													minHeight: 72,
+													justifyContent: "center",
+													px: 2.5,
+												}}
+												onClick={() => navigate(item.route)}
+											>
+												{item.icon}
+											</ListItemButton>
+										</ListItem>
+								  ))}
+						</List>
+					</Drawer>
+				</Navbar>
+			</>
 	)
 }
 

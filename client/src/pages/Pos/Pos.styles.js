@@ -23,3 +23,13 @@ export const TotalSection = styled.div`
     justify-content: flex-end;
     gap:2rem;
 `
+
+export const StyledPos = styled.div`
+	display: flex;
+	flex: 1;
+	height: 100vh;
+	overflow: hidden;
+	@media (max-width: 768px) {
+		display: none;
+	}
+`
