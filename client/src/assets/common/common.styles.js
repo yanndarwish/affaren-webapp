@@ -299,6 +299,7 @@ export const Notification = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	color: ${dark.COLOR_TEXT};
 	background: ${constant.CLR_DANGER};
 	height: 50px;
 	width: 50px;
