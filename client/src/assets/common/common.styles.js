@@ -103,25 +103,9 @@ export const Grid = styled.div`
 `
 
 export const Navbar = styled.div`
-	display: ${(props) =>
-		props.drawerIsOpen === true ? "block" : "none"};
+	display: ${(props) => (props.drawerIsOpen === true ? "block" : "none")};
 `
 
-export const AsideContainer = styled.main`
-	position: relative;
-	display: flex;
-	flex-direction: column;
-
-	padding: ${constant.PADDING_L}px;
-	height: 100%;
-	width: 35%;
-	overflow: scroll;
-	gap: ${constant.GAP * 2}px;
-	color: ${(props) =>
-		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
-	background-color: ${(props) =>
-		props.theme === "dark" ? dark.COLOR_BG_PRIMARY : light.COLOR_BG_PRIMARY};
-`
 export const Header = styled.header`
 	display: flex;
 	align-items: flex-start;
@@ -199,6 +183,7 @@ export const FullFlex = styled.div`
 `
 
 export const Body = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	height: max(100%, fit-content);
@@ -309,14 +294,14 @@ export const ErrorMessage = styled.p`
 
 export const Notification = styled.div`
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: -25px;
+	right: -25px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background: ${constant.CLR_DANGER};
 	height: 50px;
 	width: 50px;
-	z-index:100;
+	z-index: 0;
 	border-radius: 50%;
 `

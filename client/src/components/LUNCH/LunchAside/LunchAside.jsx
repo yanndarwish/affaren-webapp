@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import {
-	AsideContainer,
 	Body,
 	Column,
 	SubTitle,
 } from "../../../assets/common/common.styles"
+import { AsideContainer } from "./LunchAside.styles"
 import LunchTableDetail from "../LunchTableDetail/LunchTableDetail"
 
 const LunchAside = ({ theme, dishes }) => {
