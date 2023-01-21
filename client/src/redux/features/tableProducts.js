@@ -53,9 +53,9 @@ const tableProductsSlice = createSlice({
 				}
 			)
 			.addMatcher(
-				tableProductsApi.endpoints.getActiveTablesProducts.matchPending,
+				tableProductsApi.endpoints.getTableProducts.matchFulfilled,
 				(state, action) => {
-					console.log("fetching")
+					state.tableProducts = action.payload
 				}
 			)
 	},

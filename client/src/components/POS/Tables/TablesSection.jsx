@@ -6,7 +6,7 @@ import {
 import { Backdrop, SpeedDial, SpeedDialAction } from "@mui/material"
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined"
 import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { BigScreen, SmallScreen } from "./TableSection.styles"
 import { CardTitle, StyledProductCard } from "../ProductCard/ProductCard.styles"
 import AddIcon from "@mui/icons-material/Add"
@@ -18,8 +18,6 @@ const TablesSection = ({ theme, onClick }) => {
 	const [open, setOpen] = useState(false)
 	const handleOpen = () => setOpen(true)
 	const handleClose = () => setOpen(false)
-	const cardRef = useRef()
-	const titleRef = useRef()
 
 	const handleAddTable = () => {
 		const timestamp = new Date()
@@ -37,7 +35,6 @@ const TablesSection = ({ theme, onClick }) => {
 		postTable(table)
 	}
 
-	console.log(activeTables)
 	return (
 		<>
 			<SmallScreen>

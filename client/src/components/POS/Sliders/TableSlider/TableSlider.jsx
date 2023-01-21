@@ -16,7 +16,6 @@ import {
 	Column,
 	SpaceHeaderCenter,
 	SubTitle,
-	VerticalCenter,
 } from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined"
@@ -25,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux"
 import TableMenu from "../../Tables/TableMenu"
 import {
 	useDeleteProductTableMutation,
-	useGetTableProductsQuery,
+	useGetTableProductsMutation,
 	usePatchProductTableMutation,
 	usePostTableProductMutation,
 } from "../../../../redux/services/tableProductsApi"
@@ -37,7 +36,12 @@ import {
 	updateProducts,
 	setSaleTable,
 } from "../../../../redux/features/sale"
+import {
+	setUpdateOrder,
+	updateTableProducts,
+} from "../../../../redux/features/tableProducts"
 import { WebSocketContext } from "../../../../utils/context/webSocket"
+import { tableRowClasses, toolbarClasses } from "@mui/material"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -68,15 +72,20 @@ function a11yProps(index) {
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const ws = useContext(WebSocketContext)
+	const updateOrder = useSelector((state) => state.tableProducts.updateOrder)
 
 	const dispatch = useDispatch()
 	const overlayRef = useRef()
 	const [peopleSet, setPeopleSet] = useState([])
 	const [value, setValue] = useState(0)
-	const [skip, setSkip] = useState(true)
+	const [table, setTable] = useState([])
 	const [deleteProduct, res] = useDeleteProductTableMutation()
 	const [postUpdateTableProducts, respo] = usePostTableProductMutation()
 	const [patchProduct, response] = usePatchProductTableMutation()
+	const [getProducts, re] = useGetTableProductsMutation()
+	const tableProducts = useSelector(
+		(state) => state.tableProducts.tableProducts
+	)
 	const dishes = useSelector((state) =>
 		state.dishes.dishes.filter((dish) => dish.dish_active === "true")
 	)
@@ -84,11 +93,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		state.dishes.dishes.filter(
 			(dish) => dish.dish_active === "true" && dish.dish_category === "formula"
 		)
-	)
-
-	const { data } = useGetTableProductsQuery(
-		{ id: dataTable?.table_id },
-		{ skip }
 	)
 
 	const handleChange = (event, newValue) => {
@@ -111,34 +115,47 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		setPeopleSet([...peopleSet, peopleSet.length])
 	}
 
-	const addProductToPerson = (e) => {
-		const id = e.target.dataset.id
-		console.log(id)
-		let dish = Object.assign(
-			{},
-			dishes.filter((dish) => dish.dish_id === id)[0]
-		)
-		// create new dish
-		let newDish = {
-			table_id: dataTable?.table_id,
-			table_person: value,
-			dish_id: dish.dish_id,
-			dish_name: dish.dish_name,
-			dish_category: dish.dish_category,
-			dish_quantity: 1,
-			dish_price: dish.dish_price,
-			dish_taxe: dish.product_taxe,
-			table_year: dataTable.table_year,
-			table_month: dataTable.table_month,
-			table_day: dataTable.table_day,
-			dish_status: "todo",
+	const addProductToPerson = ({ e, formula }) => {
+		let newDish
+		if (formula) {
+			newDish = {
+				table_id: dataTable?.table_id,
+				table_person: value,
+				dish_id: formula.dish_id,
+				dish_name: formula.dish_name,
+				dish_category: formula.dish_category,
+				dish_quantity: 1,
+				dish_price: formula.dish_price,
+				dish_taxe: formula.product_taxe,
+				table_year: dataTable.table_year,
+				table_month: dataTable.table_month,
+				table_day: dataTable.table_day,
+			}
+		} else {
+			const id = e.target.dataset.id
+			let dish = Object.assign(
+				{},
+				dishes.filter((dish) => dish.dish_id === id)[0]
+			)
+			// create new dish
+			newDish = {
+				table_id: dataTable?.table_id,
+				table_person: value,
+				dish_id: dish.dish_id,
+				dish_name: dish.dish_name,
+				dish_category: dish.dish_category,
+				dish_quantity: 1,
+				dish_price: dish.dish_price,
+				dish_taxe: dish.product_taxe,
+				table_year: dataTable.table_year,
+				table_month: dataTable.table_month,
+				table_day: dataTable.table_day,
+				dish_status: "todo",
+			}
 		}
-
-		let copy = Object.assign([], data)
-		copy.push(newDish)
 		// deleteProducts({ id: dataTable.table_id })
 		postUpdateTableProducts({ products: [newDish] })
-		// ws?.sendMessage("TableProducts")
+		ws?.sendMessage("TableProducts")
 	}
 
 	const handleDelete = (e) => {
@@ -154,13 +171,13 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			personId: parseInt(person),
 			dishId: id,
 		})
-		// ws?.sendMessage("TableProducts")
+		ws?.sendMessage("TableProducts")
 	}
 
 	const getPeopleNumber = () => {
-		if (data?.length > 0) {
+		if (tableProducts?.length > 0) {
 			let peopleIds = [0]
-			data?.forEach((product) => {
+			tableProducts?.forEach((product) => {
 				peopleIds.push(product.table_person)
 			})
 			let set = new Set(peopleIds)
@@ -171,109 +188,119 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		}
 	}
 
-	const checkForFomulas = () => {
-		// check for present formulas
-		let correspondance = 0
-		let mainMatch = {}
-		let concernedMeals = []
-		let personFormulas = data?.filter(
-			(item) => item.table_person === value && item.dish_category === "formula"
+	const hasOtherFormulas = (tableProducts) => {
+		let formulas = tableProducts?.filter(
+			(item) => item.dish_category === "formula"
 		)
-		// find matches between person's meals and active formulas
-		formulas.forEach((formula) => {
-			let formulaTypes = Object.assign([], formula.dish_ingredients)
-			let typesObj = []
-			let types = []
-			let personMeals = data?.filter((item) => item.table_person === value)
-			personMeals?.forEach((meal) => {
-				if (
-					meal.dish_cateogry !== "beverage" &&
-					meal.dish_cateogry !== "formula"
-				) {
-					typesObj.push({ id: meal.dish_id, type: meal.dish_category })
-					types.push(meal.dish_category)
-				}
-			})
-			let matches = 0
-			formulaTypes?.forEach((type, i) => {
-				let typesMatches = []
-				if (types.includes(type) && !typesMatches.includes(type)) {
-					matches = matches + 1
-					typesMatches.push(type)
-					let index = types.indexOf(type)
-					let alreadyExists = false
-					concernedMeals.forEach((meal) => {
-						if (meal.id === typesObj[index].id) {
-							alreadyExists = true
-						}
-					})
-					if (!alreadyExists) {
-						concernedMeals.push(typesObj[index])
-					}
-				}
-			})
+		return formulas.length > 0
+	}
 
-			if (matches === formulaTypes.length) {
-				if (matches > correspondance) {
-					correspondance = matches
-					mainMatch = formula
-				}
-			}
-		})
+	const findPersonMeals = (tableProducts, value) => {
+		return tableProducts?.filter((item) => item.table_person === value)
+	}
 
-		let personFormulasIds = []
-		personFormulas?.forEach((formula) => {
-			personFormulasIds.push(formula.dish_id)
-		})
-		// remove old formula
-		let oldId = personFormulasIds?.filter((id) => id !== mainMatch.dish_id)[0]
-		if (personFormulasIds.length > 1) {
-			deleteProduct({
-				tableId: dataTable.table_id,
-				personId: value,
-				dishId: oldId,
-			})
-			personFormulasIds = personFormulasIds.filter(
-				(id) => id === mainMatch.dish_id
-			)
-		} else if (
-			Object.keys(mainMatch).length > 0 &&
-			!personFormulasIds.includes(mainMatch.dish_id)
-		) {
-			// patch dish_price where table_id = $ and table_person = $
-			concernedMeals.forEach((meal) => {
-				patchProduct({
-					tableId: dataTable.table_id,
-					personId: value,
-					dishId: meal.id,
-				})
-			})
-
-			// add formula to table person
-			let newFormula = {
-				table_id: dataTable?.table_id,
-				table_person: value,
-				dish_id: mainMatch.dish_id,
-				dish_name: mainMatch.dish_name,
-				dish_category: mainMatch.dish_category,
-				dish_quantity: 1,
-				dish_price: mainMatch.dish_price,
-				dish_taxe: mainMatch.product_taxe,
-				table_year: dataTable.table_year,
-				table_month: dataTable.table_month,
-				table_day: dataTable.table_day,
-			}
-
-			postUpdateTableProducts({ products: [newFormula] })
+	const getMealCat = (meal) => {
+		if (meal.dish_category !== "beverage" && meal.dish_category !== "formula") {
+			return meal.dish_category
 		}
+	}
+
+	const formulaAlreadyExists = (meals, formula) => {
+		let similarFormula = meals?.filter(
+			(item) => item.dish_id === formula.dish_id
+		)
+		return similarFormula.length > 0
+	}
+
+	const findFormula = (meals, formulas) => {
+		let match = 0
+		let formulaMatch
+		let mealsCat = JSON.stringify(meals.sort())
+		// loop through all active formulas to find matches with person's meals category
+		formulas.forEach((formula) => {
+			let catMatch = 0
+			let formulaCategories = Object.assign([], formula.dish_ingredients)
+			let formulaCat = JSON.stringify(formulaCategories.sort())
+			meals.forEach((cat) => {
+				if (formulaCategories.includes(cat)) {
+					catMatch = catMatch + 1
+				}
+			})
+
+			if (
+				catMatch === formulaCategories.length &&
+				catMatch > match &&
+				formulaCat === mealsCat
+			) {
+				match = catMatch
+				formulaMatch = formula
+			}
+		})
+		return formulaMatch
+	}
+
+	const deleteOldFormula = (formula) => {
+		deleteProduct({
+			tableId: formula.table_id,
+			personId: formula.table_person,
+			dishId: formula.dish_id,
+		})
 		ws?.sendMessage("TableProducts")
+	}
+
+	const patchProductPrice = (meal) => {
+		patchProduct({
+			tableId: meal.table_id,
+			personId: meal.table_person,
+			dishId: meal.dish_id,
+		})
+	}
+
+	const checkForFomulas = () => {
+		let allMeals = findPersonMeals(tableProducts, value) //including formulas and drinks
+		let meals = allMeals.filter(
+			(item) =>
+				item.dish_category !== "beverage" && item.dish_category !== "formula"
+		)
+		// get categories of meals (excluding formulas and drinks)
+		let dishesCat = []
+		allMeals
+			?.filter(
+				(item) =>
+					item.dish_category !== "beverage" && item.dish_category !== "formula"
+			)
+			.forEach((meal) => {
+				dishesCat.push(getMealCat(meal))
+			})
+		// find matching formulas based on categories
+		let foundFormula = findFormula(dishesCat, formulas)
+
+		if (foundFormula) {
+			if (formulaAlreadyExists(allMeals, foundFormula)) {
+				return
+			} else {
+				let prevFormulas = allMeals?.filter(
+					(item) => item.dish_category === "formula"
+				)
+				// even if has no other formula, update prices of dishes...
+				meals.forEach((meal) => {
+					patchProductPrice(meal)
+				})
+				// delete old formulas
+				prevFormulas.forEach((prevFormula) => {
+					deleteOldFormula(prevFormula)
+				})
+				// ... and create new formula
+				addProductToPerson({ formula: foundFormula })
+			}
+		}
 	}
 
 	const handlePayment = () => {
 		dispatch(updateProducts({ products: [] }))
 		let array = []
 
-		data?.forEach((dish) => {
+		tableProducts?.forEach((dish) => {
 			let found = array.find((product) => product.id === dish.dish_id)
 
 			if (!found) {
@@ -313,14 +340,23 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	useEffect(() => {
 		if (dataTable?.table_id) {
-			setSkip(false)
+			getProducts({ id: dataTable?.table_id })
 		}
 	}, [dataTable])
 
 	useEffect(() => {
-		getPeopleNumber()
-		checkForFomulas()
-	}, [data])
+		if (tableProducts.length > 0) {
+			getPeopleNumber()
+			checkForFomulas()
+		}
+	}, [tableProducts])
+
+	useEffect(() => {
+		if (updateOrder) {
+			getProducts({ id: dataTable?.table_id })
+			dispatch(setUpdateOrder({ order: false }))
+		}
+	}, [updateOrder])
 
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
@@ -364,7 +400,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 								{peopleSet?.map((id, i) => (
 									<TabPanel value={value} index={i} key={i + "panel"}>
 										<Column>
-											{data
+											{tableProducts
 												?.filter(
 													(product) => product.table_person === parseInt(id)
 												)
@@ -404,7 +440,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
 					theme={theme}
-					onClick={addProductToPerson}
+					onClick={(e) => addProductToPerson({e})}
 				/>
 			</Wrapper>
 		</Overlay>

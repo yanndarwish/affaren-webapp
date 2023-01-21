@@ -322,12 +322,14 @@ const Pos = () => {
 				)}
 			</StyledPos>
 			<TablesSection theme={theme} onClick={openTableSlider} />
-			<TableSlider
-				dataTable={selectedTable}
-				theme={theme}
-				isOpen={tableSlider}
-				setIsOpen={setTableSlider}
-			/>
+			{tableSlider && (
+				<TableSlider
+					dataTable={selectedTable}
+					theme={theme}
+					isOpen={tableSlider}
+					setIsOpen={setTableSlider}
+				/>
+			)}
 		</PosContainer>
 	)
 }

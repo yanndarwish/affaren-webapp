@@ -50,7 +50,7 @@ export const tableProductsApi = createApi({
 			}),
 			providesTags: ["MonthTableProducts"],
 		}),
-		getTableProducts: builder.query({
+		getTableProducts: builder.mutation({
 			query: ({ id }) => ({
 				url: `table-products/${id}`,
 			}),
@@ -138,7 +138,7 @@ export const {
 	useGetDayTableProductsQuery,
 	useGetMonthTableProductsQuery,
 	useGetActiveTablesProductsMutation,
-	useGetTableProductsQuery,
+	useGetTableProductsMutation,
 	useGetTablesProductsQuery,
 	usePostTableProductMutation,
 } = tableProductsApi
