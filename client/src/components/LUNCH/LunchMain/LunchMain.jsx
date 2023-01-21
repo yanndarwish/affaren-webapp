@@ -13,7 +13,7 @@ const LunchMain = ({ theme, dishes, notif, setNotif }) => {
 
 	const formatProducts = () => {
 		let array = []
-
+		let qty = 0
 		dishes
 			?.filter((item) => item.dish_status === "todo")
 			.forEach((dish) => {
@@ -24,6 +24,7 @@ const LunchMain = ({ theme, dishes, notif, setNotif }) => {
 						dish_name: dish.dish_name,
 						dish_quantity: dish.dish_quantity,
 					}
+					
 					array.push(product)
 				} else {
 					found = {
@@ -43,9 +44,10 @@ const LunchMain = ({ theme, dishes, notif, setNotif }) => {
 						}
 					})
 				}
+				qty += dish.dish_quantity
 			})
 		setFormatted(array.sort((a, b) => b.dish_quantity - a.dish_quantity))
-		setNotif(array.length)
+		setNotif(qty)
 	}
 
 	useEffect(() => {
