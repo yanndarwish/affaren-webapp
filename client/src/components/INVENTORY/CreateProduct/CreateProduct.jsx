@@ -10,6 +10,7 @@ import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
 import { InputLabel, MenuItem, Select } from "@mui/material"
+import { useEffect } from "react"
 
 const CreateProduct = ({
 	inputBarcode,
@@ -59,6 +60,16 @@ const CreateProduct = ({
 		setQuantity("")
 		setAlert("")
 	}
+
+	useEffect(() => {
+		setBarcode(
+			inputBarcode
+				? inputBarcode.endsWith("/n")
+					? inputBarcode.slice(0, -2)
+					: inputBarcode
+				: ""
+		)
+	}, [inputBarcode])
 
 	return sent && res.isSuccess ? (
 		<Column>

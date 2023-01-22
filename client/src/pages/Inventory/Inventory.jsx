@@ -40,10 +40,6 @@ const Inventory = () => {
 		!loggedIn && navigate("/login")
 	}
 
-	const handleExport = () => {
-		console.log("export")
-	}
-
 	const toggleEditMode = () => {
 		setIsEditMode(!isEditMode)
 	}
@@ -63,7 +59,7 @@ const Inventory = () => {
 			// else, look for string matches
 		} else {
 			let array = data?.filter((item) =>
-				item.product_name.toLowerCase().includes(searchString)
+				item.product_name.toLowerCase().includes(searchString.toLowerCase())
 			)
 			setFilteredProducts(array)
 		}
@@ -123,6 +119,7 @@ const Inventory = () => {
 		setEditingProduct({})
 		setBarcodeSearch(false)
 		filterProducts({ data: data })
+		focusOnBarcode()
 	}
 
 	useEffect(() => {
