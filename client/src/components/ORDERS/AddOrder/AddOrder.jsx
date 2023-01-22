@@ -1,10 +1,7 @@
 import { useState } from "react"
 import {
 	Column,
-	ColumnCenter,
 	Container,
-	ErrorMessage,
-	FullCenter,
 	HorizontalCenter,
 	SearchSection,
 	SubTitle,
@@ -14,7 +11,6 @@ import Button from "../../common/Button/Button.component"
 import Input from "../../common/Input/Input.component"
 import { usePostOrderMutation } from "../../../redux/services/orderApi"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 const AddOrder = ({ theme, setAdd, setNewOrder }) => {

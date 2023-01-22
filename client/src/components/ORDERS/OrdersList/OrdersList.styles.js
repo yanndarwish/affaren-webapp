@@ -1,7 +1,4 @@
 import styled from "styled-components"
-import { constant } from "../../../assets/common/common.styles"
-import dark from "../../../assets/common/dark.theme.styles"
-import light from "../../../assets/common/light.theme.styles"
 
 export const Wrapper = styled.div`
 	width: 100%;
@@ -16,11 +13,10 @@ export const Wrapper = styled.div`
 
 export const OrderButton = styled.div`
 	position: absolute;
-	display: none;
+	display: block;
 	top: 16px;
 	left: 82px;
+	z-index: 10;
 	@media (max-width: 830px) {
-		z-index: 10;
-		display: block;
 	}
 `

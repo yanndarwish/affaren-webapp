@@ -47,6 +47,7 @@ const EditOrder = ({ theme, order, setIsEdit }) => {
 			description: newDescription,
 			dueDate: dueDate,
 			dueTime: dueTime,
+			status: 'todo',
 			clientName: clientName,
 			clientPhone: clientPhone,
 			orderLocation: orderLocation,

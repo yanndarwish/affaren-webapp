@@ -7,7 +7,6 @@ import { useSelector } from "react-redux"
 import AddOrder from "../../components/ORDERS/AddOrder/AddOrder"
 import OrderContent from "../../components/ORDERS/OrderContent/OrderContent"
 import { useNavigate } from "react-router-dom"
-import { IconButton } from "@mui/material"
 
 const Orders = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -61,7 +60,11 @@ const Orders = () => {
 			/>
 			{isError && <ErrorMessage>Failed to fetch orders</ErrorMessage>}
 			{add ? (
-				<AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder} />
+				<AddOrder
+					theme={theme}
+					setAdd={setAdd}
+					setNewOrder={setNewOrder}
+				/>
 			) : (
 				<OrderContent
 					theme={theme}
