@@ -7,8 +7,13 @@ import { useSelector } from "react-redux"
 import AddOrder from "../../components/ORDERS/AddOrder/AddOrder"
 import OrderContent from "../../components/ORDERS/OrderContent/OrderContent"
 import { useNavigate } from "react-router-dom"
+import { OrderButton } from "../../components/ORDERS/OrdersList/OrdersList.styles"
+import { IconButton } from "@mui/material"
+import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined"
 
 const Orders = () => {
+	const [listIsOpen, setListIsOpen] = useState(true)
+	const isMobile = window.innerWidth <= 820 ? true : false
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
@@ -37,6 +42,17 @@ const Orders = () => {
 		setNewOrder(false)
 	}
 
+	const toggleList = () => {
+		if (listIsOpen) {
+			document.getElementById("order-sidebar").style.display = "none"
+		} else {
+			console.log("open")
+			document.getElementById("order-sidebar").style.display = "block"
+		}
+		setListIsOpen(!listIsOpen)
+	}
+
+	console.log(window.innerWidth)
 	useEffect(() => {
 		getTargetOrder(selectedOrderId)
 	}, [selectedOrderId])
@@ -51,20 +67,36 @@ const Orders = () => {
 
 	return (
 		<FullFlex theme={theme}>
+			<OrderButton onClick={() => toggleList()}>
+				<IconButton>
+					<LibraryBooksOutlinedIcon />
+				</IconButton>
+			</OrderButton>
 			<OrdersList
 				orders={data && data}
 				selected={selectedOrderId}
 				setSelected={setSelectedOrderId}
 				setAdd={setAdd}
 				setIsEdit={setIsEdit}
+				toggleList={isMobile && toggleList}
 			/>
 			{isError && <ErrorMessage>Failed to fetch orders</ErrorMessage>}
-			{add ? (
-				<AddOrder
-					theme={theme}
-					setAdd={setAdd}
-					setNewOrder={setNewOrder}
-				/>
+			{isMobile ? (
+				add && !listIsOpen ? (
+					<AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder} />
+				) : (
+					!listIsOpen && (
+						<OrderContent
+							theme={theme}
+							order={selectedOrder && selectedOrder}
+							setSelected={setSelectedOrderId}
+							isEdit={isEdit}
+							setIsEdit={setIsEdit}
+						/>
+					)
+				)
+			) : add ? (
+				<AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder} />
 			) : (
 				<OrderContent
 					theme={theme}

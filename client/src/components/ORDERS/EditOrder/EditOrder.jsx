@@ -3,6 +3,7 @@ import { useState } from "react"
 import {
 	Column,
 	Container,
+	FixedSpaceHeader,
 	FullCenter,
 	HorizontalCenter,
 	SearchSection,
@@ -104,10 +105,10 @@ const EditOrder = ({ theme, order, setIsEdit }) => {
 				<InfoMessage state="error" text="Failed to edit order" />
 			) : (
 				<>
-					<SpaceHeader>
+					<FixedSpaceHeader>
 						<Title>Edit Order</Title>
 						<Button title="Cancel" color="warning" onClick={cancelEdit} />
-					</SpaceHeader>
+					</FixedSpaceHeader>
 					<Column>
 						<Column>
 							<SubTitle>Who</SubTitle>

@@ -18,7 +18,7 @@ import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined"
 import { Modal } from "modal-rjs"
 import { useState } from "react"
 import { useDeleteOrderMutation } from "../../../redux/services/orderApi"
-import EditOrder from "./EditOrder"
+import EditOrder from "../EditOrder/EditOrder"
 import OrderStatusMenu from "./OrderStatusMenu"
 
 const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {

@@ -13,10 +13,11 @@ export const Wrapper = styled.div`
 
 export const OrderButton = styled.div`
 	position: absolute;
-	display: block;
+	display: none;
 	top: 16px;
 	left: 82px;
-	z-index: 10;
 	@media (max-width: 830px) {
+		z-index: 10;
+		display: block;
 	}
 `

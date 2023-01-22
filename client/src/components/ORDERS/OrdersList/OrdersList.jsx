@@ -6,9 +6,7 @@ import OrdersAddButton from "./OrdersAddButton"
 import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { FullCenter, SubTitle } from "../../../assets/common/common.styles"
-import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined"
-import { IconButton } from "@mui/material"
-import { OrderButton, Wrapper } from "./OrdersList.styles"
+import { Wrapper } from "./OrdersList.styles"
 
 export default function OrdersList({
 	orders,
@@ -16,8 +14,8 @@ export default function OrdersList({
 	setSelected,
 	setAdd,
 	setIsEdit,
+	toggleList
 }) {
-	const [listIsOpen, setListIsOpen] = useState(true)
 	const [filteredOrders, setFilteredOrders] = useState([])
 	const statusFilter = useSelector((state) => state.orders.statusFilter)
 	const locationFilter = useSelector((state) => state.orders.locationFilter)
@@ -74,74 +72,54 @@ export default function OrdersList({
 		return sorted
 	}
 
-	const toggleList = () => {
-		if (listIsOpen) {
-			console.log("closing")
-			setListIsOpen(false)
-		} else {
-			setListIsOpen(true)
-
-			setSelected(undefined)
-			setAdd(false)
-			setIsEdit(false)
-		}
-	}
-
 	useEffect(() => {
 		filterOrders({ statusFilter, locationFilter, orders })
 	}, [statusFilter, locationFilter, orders])
 	return (
 		<>
-			<OrderButton onClick={() => toggleList()}>
-				<IconButton>
-					<LibraryBooksOutlinedIcon />
-				</IconButton>
-			</OrderButton>
-			{listIsOpen && (
-				<Wrapper>
-					<List
-						sx={{
-							width: "100%",
-							height: "100vh",
-							overflow: "auto",
-							bgcolor: "background.paper",
-						}}
-					>
-						<OrdersAddButton
-							selected={selected}
-							setSelected={setSelected}
-							setAdd={setAdd}
-							setListIsOpen={setListIsOpen}
-						/>
-						<Divider component="li" />
-						<OrdersFilter
-							selected={selected}
-							setSelected={setSelected}
-							setAdd={setAdd}
-						/>
-						<Divider component="li" />
+			<Wrapper id='order-sidebar'>
+				<List
+					sx={{
+						width: "100%",
+						height: "100vh",
+						overflow: "auto",
+						bgcolor: "background.paper",
+					}}
+				>
+					<OrdersAddButton
+						selected={selected}
+						setSelected={setSelected}
+						setAdd={setAdd}
+						toggleList={toggleList && toggleList}
+					/>
+					<Divider component="li" />
+					<OrdersFilter
+						selected={selected}
+						setSelected={setSelected}
+						setAdd={setAdd}
+					/>
+					<Divider component="li" />
 
-						{!filteredOrders ? (
-							<FullCenter>
-								<SubTitle>No Orders</SubTitle>
-							</FullCenter>
-						) : (
-							filteredOrders &&
-							filteredOrders.map((order) => (
-								<OrdersListItem
-									key={order.order_id}
-									order={order}
-									selected={selected}
-									setSelected={setSelected}
-									setAdd={setAdd}
-									setIsEdit={setIsEdit}
-									setListIsOpen={setListIsOpen}
-								/>
-							))
-						)}
-					</List>
-				</Wrapper>
-			)}
+					{!filteredOrders ? (
+						<FullCenter>
+							<SubTitle>No Orders</SubTitle>
+						</FullCenter>
+					) : (
+						filteredOrders &&
+						filteredOrders.map((order) => (
+							<OrdersListItem
+								key={order.order_id}
+								order={order}
+								selected={selected}
+								setSelected={setSelected}
+								setAdd={setAdd}
+								setIsEdit={setIsEdit}
+								toggleList={toggleList && toggleList}
+							/>
+						))
+					)}
+				</List>
+			</Wrapper>
 		</>
 	)
 }
