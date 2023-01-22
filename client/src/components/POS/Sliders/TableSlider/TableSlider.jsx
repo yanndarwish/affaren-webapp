@@ -240,6 +240,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	}
 
 	const deleteOldFormula = (formula) => {
+		
 		deleteProduct({
 			tableId: formula.table_id,
 			personId: formula.table_person,
@@ -282,13 +283,14 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				let prevFormulas = allMeals?.filter(
 					(item) => item.dish_category === "formula"
 				)
-				// even if has no other formula, update prices of dishes...
-				meals.forEach((meal) => {
-					patchProductPrice(meal)
-				})
 				// delete old formulas
 				prevFormulas.forEach((prevFormula) => {
 					deleteOldFormula(prevFormula)
+				})
+				// even if has no other formula, update prices of dishes...
+				console.log(meals)
+				meals.forEach((meal) => {
+					patchProductPrice(meal)
 				})
 				// ... and create new formula
 				addProductToPerson({ formula: foundFormula })

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux"
 import ProductCardSection from "../../components/POS/ProductCardSection/ProductCardSection"
-import BarcodeInput from "../../components/POS/BarcodeSection/BarcodeSection"
+import BarcodeSection from "../../components/POS/BarcodeSection/BarcodeSection"
 import Button from "../../components/common/Button/Button.component"
 import Cart from "../../components/POS/Cart/Cart"
 import { Box } from "@mui/material"
@@ -39,6 +39,7 @@ import TablesSection from "../../components/POS/Tables/TablesSection"
 import TableSlider from "../../components/POS/Sliders/TableSlider/TableSlider"
 import { useGetDishesQuery } from "../../redux/services/dishApi"
 import { useRef } from "react"
+import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 
 const Pos = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -57,6 +58,7 @@ const Pos = () => {
 	const [addCardSlider, setAddCardSlider] = useState(false)
 	const [tableSlider, setTableSlider] = useState(false)
 	const [selectedTable, setSelectedTable] = useState({})
+	const [notFound, setNotFound] = useState(false)
 
 	const { isError } = useGetCardsQuery()
 	const { error } = useGetNextSaleIdQuery()
@@ -248,9 +250,10 @@ const Pos = () => {
 						{isError && <ErrorMessage>Failed to fetch cards</ErrorMessage>}
 					</SpaceHeader>
 					<SearchSection>
-						<BarcodeInput />
+						<BarcodeSection setNotFound={setNotFound} />
 						<Button title="No Barcode" onClick={() => opentNoBarcodeSlider()} />
 					</SearchSection>
+					{notFound && <InfoMessage state="error" text="Product not found" />}
 					<Body theme={theme}>
 						<Box>
 							<SubTitle>Panier</SubTitle>

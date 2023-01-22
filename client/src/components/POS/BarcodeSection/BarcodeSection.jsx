@@ -7,7 +7,7 @@ import { Flex } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import BarcodeInput from "../../common/BarcodeInput/BarcodeInput"
 
-const BarcodeSection = () => {
+const BarcodeSection = ({setNotFound}) => {
 	const products = useSelector((state) => state.sale.products)
 
 	const dispatch = useDispatch()
@@ -21,6 +21,8 @@ const BarcodeSection = () => {
 	// add data (product) to cart
 	const addToCart = (data) => {
 		if (data !== undefined && data !== null) {
+			setNotFound(false)
+			console.log('if')
 			let found = products.find((product) => product.id === data.product_id)
 
 			if (!found) {
@@ -49,6 +51,8 @@ const BarcodeSection = () => {
 
 				dispatch(updateProducts({ products: updated }))
 			}
+		} else if (data === null){
+			setNotFound(true)
 		}
 		setBarcode("")
 		setSkip(true)
