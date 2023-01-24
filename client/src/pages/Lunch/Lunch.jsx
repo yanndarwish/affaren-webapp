@@ -8,7 +8,7 @@ import LunchMain from "../../components/LUNCH/LunchMain/LunchMain"
 import LunchAside from "../../components/LUNCH/LunchAside/LunchAside"
 import { useGetActiveTablesProductsMutation } from "../../redux/services/tableProductsApi"
 import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined"
-import { setUpdateOrder } from "../../redux/features/tableProducts"
+import { setTargetTable, setUpdateLunch } from "../../redux/features/tableProducts"
 import Button from "../../components/common/Button/Button.component"
 import { ButtonWrapper } from "../../components/LUNCH/LunchAside/LunchAside.styles"
 
@@ -17,10 +17,11 @@ const Lunch = () => {
 	const dispatch = useDispatch()
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const theme = useSelector((state) => state.theme.theme)
-	const updateProducts = useSelector((state) => state.tableProducts.updateOrder)
+	const updateLunch = useSelector((state) => state.tableProducts.updateLunch)
 	const activeDishes = useSelector(
 		(state) => state.tableProducts.activeTablesProducts
 	)
+	const targetTable = useSelector((state) => state.tableProducts.targetTable)
 	const [isSideOpen, setIsSideOpen] = useState(true)
 	const [todoDishes, setTodoDishes] = useState([])
 	const [notif, setNotif] = useState(0)
@@ -31,18 +32,28 @@ const Lunch = () => {
 	}
 
 	const getDishesToDo = () => {
-		if (activeDishes?.length > 0) {
+		let todo
+		if (!targetTable) {
 			let copy = Object.assign([], activeDishes)
-			const todo = copy?.filter(
-				(product) => product.dish_category !== "formula"
-			)
+			todo = copy?.filter((product) => product.dish_category !== "formula")
 			setTodoDishes(todo)
-			setNotif(todo.length)
-			var mp3_url =
-				"https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3"
+		} else {
+			const totalTodos = Object.assign([], todoDishes)
+			let todos = totalTodos.filter((item) => item.table_id !== targetTable)
 
-			new Audio(mp3_url).play()
+			let copy = Object.assign([], activeDishes)
+			todo = copy?.filter((product) => product.dish_category !== "formula")
+			setTodoDishes(todo.concat(todos))
 		}
+		setNotif(todo.length)
+		var mp3_url =
+			"https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3"
+
+		new Audio(mp3_url).play()
+
+		res.reset()
+		dispatch(setUpdateLunch({ update: false }))
+		dispatch(setTargetTable(""))
 	}
 
 	const redirect = () => {
@@ -50,11 +61,13 @@ const Lunch = () => {
 	}
 
 	useEffect(() => {
-		if (updateProducts) {
-			getActiveDishes()
-			dispatch(setUpdateOrder({ order: false }))
+		const fetch = async () => {
+			await getActiveDishes()
 		}
-	}, [updateProducts])
+		if (updateLunch) {
+			fetch()
+		}
+	}, [updateLunch])
 
 	useEffect(() => {
 		getDishesToDo()
@@ -67,10 +80,15 @@ const Lunch = () => {
 
 	return (
 		<FullFlex>
-			<ButtonWrapper >
-				<Button title={<TableRestaurantOutlinedIcon />} onClick={toggleSide}/>
+			<ButtonWrapper>
+				<Button title={<TableRestaurantOutlinedIcon />} onClick={toggleSide} />
 			</ButtonWrapper>
-			<LunchMain theme={theme} dishes={todoDishes} notif={notif} setNotif={setNotif} />
+			<LunchMain
+				theme={theme}
+				dishes={todoDishes}
+				notif={notif}
+				setNotif={setNotif}
+			/>
 			{isSideOpen && <LunchAside theme={theme} dishes={todoDishes} />}
 		</FullFlex>
 	)

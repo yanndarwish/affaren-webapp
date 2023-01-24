@@ -20,6 +20,7 @@ export const tableProductsApi = createApi({
 		},
 	}),
 	tagTypes: [
+		"ActiveTablesProducts",
 		"TableProducts",
 		"TablesProducts",
 		"DayTableProducts",
@@ -35,8 +36,9 @@ export const tableProductsApi = createApi({
 		getActiveTablesProducts: builder.mutation({
 			query: () => ({
 				url: "table-products/active",
-				method:"GET"
+				method: "GET",
 			}),
+			providesTags: ["ActiveTablesProducts"],
 		}),
 		getDayTableProducts: builder.query({
 			query: ({ year, month, day }) => ({
@@ -62,6 +64,7 @@ export const tableProductsApi = createApi({
 				method: "PATCH",
 			}),
 			invalidatesTags: [
+				"ActiveTablesProducts",
 				"TableProducts",
 				"TablesProducts",
 				"DayTableProducts",
@@ -74,6 +77,7 @@ export const tableProductsApi = createApi({
 				method: "PATCH",
 			}),
 			invalidatesTags: [
+				"ActiveTablesProducts",
 				"TableProducts",
 				"TablesProducts",
 				"DayTableProducts",
@@ -86,6 +90,7 @@ export const tableProductsApi = createApi({
 				method: "PATCH",
 			}),
 			invalidatesTags: [
+				"ActiveTablesProducts",
 				"TableProducts",
 				"TablesProducts",
 				"DayTableProducts",

@@ -46,13 +46,11 @@ const Orders = () => {
 		if (listIsOpen) {
 			document.getElementById("order-sidebar").style.display = "none"
 		} else {
-			console.log("open")
 			document.getElementById("order-sidebar").style.display = "block"
 		}
 		setListIsOpen(!listIsOpen)
 	}
 
-	console.log(window.innerWidth)
 	useEffect(() => {
 		getTargetOrder(selectedOrderId)
 	}, [selectedOrderId])

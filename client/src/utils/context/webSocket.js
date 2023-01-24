@@ -2,50 +2,69 @@ import { createContext, useState } from "react"
 import { ip } from "../../redux/ip"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
-import { setUpdateOrder } from "../../redux/features/tableProducts"
+import { setTargetTable, setUpdateLunch, updateActiveTablesProducts } from "../../redux/features/tableProducts"
 
 const WebSocketContext = createContext(null)
 
 export { WebSocketContext }
 
 const WebSocketProvider = ({ children }) => {
-	const dispatch = useDispatch()
 	const loggedIn = useSelector((state) => state.login.loggedIn)
-
-	let socket
+	const dispatch = useDispatch()
 	let ws
+	if (loggedIn) {
 
-	const sendMessage = (message) => {
-		socket.send(message)
-	}
+		let socket
 
-	if (!socket) {
-		if (loggedIn) {
+		const sendMessage = (message) => {
+			socket.send(JSON.stringify(message))
+		}
+
+		if (!socket) {
 			socket = new WebSocket(`ws://${ip}:4001`)
-			socket.onopen = () => {
-				socket.send("connexion")
-				var t = setInterval(function () {
-					if (socket.readyState !== 1) {
-						clearInterval(t)
-						return
-					}
-					socket.send("ping")
-				}, 55000)
-			}
 
-			if (socket.readyState === 3) {
-				console.log('close')
-				socket.terminate()
-				socket = new WebSocket(`ws://${ip}:4001`)
-			}
+			socket.addEventListener("open", (e) => {
+				socket.send(
+					JSON.stringify({
+						type: "connexion",
+					})
+				)
+			})
 
-			socket.onmessage = (message) => {
-				console.log(message.data)
-				if (message.data === "TableProducts") {
-					console.log("get products")
-					dispatch(setUpdateOrder({ order: true }))
+			socket.addEventListener("message", (message) => {
+				let data = JSON.parse(message.data)
+				console.log(data)
+				if (data.type === "lunch") {
+					dispatch(setTargetTable(data.table))
+					dispatch(updateActiveTablesProducts(data.products))
+					// dispatch(setUpdateOrder({ order: false }))
 				}
-			}
+			})
+			// socket.onopen = () => {
+			// 	socket.send("connexion")
+			// 	var t = setInterval(function () {
+			// 		if (socket.readyState !== 1) {
+			// 			clearInterval(t)
+			// 			return
+			// 		}
+			// 		socket.send("ping" )
+			// 	}, 55000)
+			// }
+
+			// if (socket.readyState === 3) {
+			// 	console.log('close')
+			// 	socket.terminate()
+			// 	socket = new WebSocket(`ws://${ip}:4001`)
+			// }
+
+			// socket.onmessage = (message) => {
+			// 	console.log(message)
+			// 	if (message.data === "TableProducts") {
+			// 		console.log(JSON.parse(message?.data))
+			// 		console.log("get products")
+			// 		dispatch(setUpdateOrder({ order: true }))
+			// 	}
+			// }
 
 			ws = {
 				socket: socket,
@@ -53,7 +72,6 @@ const WebSocketProvider = ({ children }) => {
 			}
 		}
 	}
-
 	return (
 		<WebSocketContext.Provider value={ws}>{children}</WebSocketContext.Provider>
 	)

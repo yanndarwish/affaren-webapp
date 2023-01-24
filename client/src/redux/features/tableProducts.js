@@ -6,8 +6,9 @@ const initialState = {
     monthTablesProducts: [],
     allTablesProducts: [],
 	activeTablesProducts: [],
+	targetTable: "",
 	tableProducts: [],
-	updateOrder: false
+	updateLunch: false
 }
 
 const tableProductsSlice = createSlice({
@@ -19,11 +20,17 @@ const tableProductsSlice = createSlice({
 			state.tableProducts = action.payload
 		},
 		addTableProducts: (state, action) => {
-			state.tableProducts.push(action.payload) 
+			state.tableProducts.push(action.payload)
 		},
-		setUpdateOrder: (state, action) => {
-			state.updateOrder = action.payload.order
-		}
+		setUpdateLunch: (state, action) => {
+			state.updateLunch = action.payload.update
+		},
+		setTargetTable: (state, action) => {
+			state.targetTable = action.payload
+		},
+		updateActiveTablesProducts: (state, action) => {
+			state.activeTablesProducts = action.payload
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -48,7 +55,6 @@ const tableProductsSlice = createSlice({
 			.addMatcher(
 				tableProductsApi.endpoints.getActiveTablesProducts.matchFulfilled,
 				(state, action) => {
-					console.log("updating")
 					state.activeTablesProducts = action.payload
 				}
 			)
@@ -61,6 +67,6 @@ const tableProductsSlice = createSlice({
 	},
 })
 
-export const { resetTablesProducts, updateTableProducts, addTableProducts, setUpdateOrder } = tableProductsSlice.actions
+export const { resetTablesProducts, updateTableProducts, addTableProducts, setUpdateLunch, setTargetTable, updateActiveTablesProducts } = tableProductsSlice.actions
 
 export default tableProductsSlice.reducer

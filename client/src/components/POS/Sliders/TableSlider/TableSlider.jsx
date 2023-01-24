@@ -36,12 +36,9 @@ import {
 	updateProducts,
 	setSaleTable,
 } from "../../../../redux/features/sale"
-import {
-	setUpdateOrder,
-	updateTableProducts,
-} from "../../../../redux/features/tableProducts"
+import { setUpdateLunch } from "../../../../redux/features/tableProducts"
+import { useGetActiveTablesProductsMutation } from "../../../../redux/services/tableProductsApi"
 import { WebSocketContext } from "../../../../utils/context/webSocket"
-import { tableRowClasses, toolbarClasses } from "@mui/material"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -72,7 +69,7 @@ function a11yProps(index) {
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const ws = useContext(WebSocketContext)
-	const updateOrder = useSelector((state) => state.tableProducts.updateOrder)
+	const updateLunch = useSelector((state) => state.tableProducts.updateLunch)
 
 	const dispatch = useDispatch()
 	const overlayRef = useRef()
@@ -82,12 +79,13 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const [deleteProduct, res] = useDeleteProductTableMutation()
 	const [postUpdateTableProducts, respo] = usePostTableProductMutation()
 	const [patchProduct, response] = usePatchProductTableMutation()
-	const [getProducts, re] = useGetTableProductsMutation()
-	const tableProducts = useSelector(
-		(state) => state.tableProducts.tableProducts
-	)
+	const [getActiveDishes, r] = useGetActiveTablesProductsMutation()
+
 	const dishes = useSelector((state) =>
 		state.dishes.dishes.filter((dish) => dish.dish_active === "true")
+	)
+	const activeDishes = useSelector(
+		(state) => state.tableProducts.activeTablesProducts
 	)
 	const formulas = useSelector((state) =>
 		state.dishes.dishes.filter(
@@ -153,31 +151,53 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				dish_status: "todo",
 			}
 		}
-		// deleteProducts({ id: dataTable.table_id })
+		let copy = Object.assign([], table)
+		copy.push(newDish)
+
 		postUpdateTableProducts({ products: [newDish] })
-		ws?.sendMessage("TableProducts")
+		setTable((current) => [...current, newDish])
+		ws?.sendMessage({
+			type: "lunch",
+			table: dataTable?.table_id,
+			action: "add",
+			products: copy,
+		})
 	}
 
 	const handleDelete = (e) => {
 		const id = e.target.dataset.id
 			? e.target.dataset.id
 			: e.target.parentNode.dataset.id
-		const person = e.target.dataset.person
+		let person = e.target.dataset.person
 			? e.target.dataset.person
 			: e.target.parentNode.dataset.person
+		person = parseInt(person)
 
 		deleteProduct({
 			tableId: dataTable.table_id,
-			personId: parseInt(person),
+			personId: person,
 			dishId: id,
 		})
-		ws?.sendMessage("TableProducts")
+		let copy = Object.assign([], table)
+		copy = copy.filter(
+			(item) =>
+				item.dish_id !== id || item.table_person !== person
+		)
+
+		setTable(copy)
+
+		ws?.sendMessage({
+			type: "lunch",
+			action: "remove",
+			table: dataTable?.table_id,
+			products: copy
+		})
 	}
 
 	const getPeopleNumber = () => {
-		if (tableProducts?.length > 0) {
+		if (table?.length > 0) {
 			let peopleIds = [0]
-			tableProducts?.forEach((product) => {
+			table?.forEach((product) => {
 				peopleIds.push(product.table_person)
 			})
 			let set = new Set(peopleIds)
@@ -188,15 +208,8 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		}
 	}
 
-	const hasOtherFormulas = (tableProducts) => {
-		let formulas = tableProducts?.filter(
-			(item) => item.dish_category === "formula"
-		)
-		return formulas.length > 0
-	}
-
-	const findPersonMeals = (tableProducts, value) => {
-		return tableProducts?.filter((item) => item.table_person === value)
+	const findPersonMeals = (table, value) => {
+		return table?.filter((item) => item.table_person === value)
 	}
 
 	const getMealCat = (meal) => {
@@ -240,13 +253,11 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	}
 
 	const deleteOldFormula = (formula) => {
-		
 		deleteProduct({
 			tableId: formula.table_id,
 			personId: formula.table_person,
 			dishId: formula.dish_id,
 		})
-		ws?.sendMessage("TableProducts")
 	}
 
 	const patchProductPrice = (meal) => {
@@ -257,13 +268,13 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		})
 	}
 
-	const checkForFomulas = () => {
-		let allMeals = findPersonMeals(tableProducts, value) //including formulas and drinks
-		let meals = allMeals.filter(
+	const checkForFormulas = () => {
+		let allMeals = findPersonMeals(table, value)
+		let meals = allMeals?.filter(
 			(item) =>
 				item.dish_category !== "beverage" && item.dish_category !== "formula"
 		)
-		// get categories of meals (excluding formulas and drinks)
+
 		let dishesCat = []
 		allMeals
 			?.filter(
@@ -273,26 +284,34 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			.forEach((meal) => {
 				dishesCat.push(getMealCat(meal))
 			})
-		// find matching formulas based on categories
+
 		let foundFormula = findFormula(dishesCat, formulas)
 
 		if (foundFormula) {
+			let prevFormulas = allMeals?.filter(
+				(item) => item.dish_category === "formula"
+			)
+			let copyMeals = Object.assign([], meals)
+			copyMeals.forEach((meal) => {
+				patchProductPrice(meal)
+			})
 			if (formulaAlreadyExists(allMeals, foundFormula)) {
 				return
 			} else {
-				let prevFormulas = allMeals?.filter(
-					(item) => item.dish_category === "formula"
-				)
-				// delete old formulas
-				prevFormulas.forEach((prevFormula) => {
+			copyMeals = copyMeals.map(meal => {
+				let update = {...meal, dish_price: 0}
+				return update
+			})
+			
+			let copyTable = Object.assign([], table)
+			copyTable = copyTable.filter(item => item.table_person !== value)
+
+			setTable(copyMeals.concat(copyTable))
+			
+				prevFormulas?.forEach((prevFormula) => {
 					deleteOldFormula(prevFormula)
 				})
-				// even if has no other formula, update prices of dishes...
-				console.log(meals)
-				meals.forEach((meal) => {
-					patchProductPrice(meal)
-				})
-				// ... and create new formula
+
 				addProductToPerson({ formula: foundFormula })
 			}
 		}
@@ -302,7 +321,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		dispatch(updateProducts({ products: [] }))
 		let array = []
 
-		tableProducts?.forEach((dish) => {
+		table?.forEach((dish) => {
 			let found = array.find((product) => product.id === dish.dish_id)
 
 			if (!found) {
@@ -339,26 +358,22 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		setIsOpen(false)
 		setValue(0)
 	}
+	useEffect(() => {
+		getActiveDishes()
+	}, [])
 
 	useEffect(() => {
 		if (dataTable?.table_id) {
-			getProducts({ id: dataTable?.table_id })
+			setTable(
+				activeDishes?.filter((item) => item.table_id === dataTable?.table_id)
+			)
 		}
-	}, [dataTable])
+	}, [activeDishes])
 
 	useEffect(() => {
-		if (tableProducts.length > 0) {
-			getPeopleNumber()
-			checkForFomulas()
-		}
-	}, [tableProducts])
-
-	useEffect(() => {
-		if (updateOrder) {
-			getProducts({ id: dataTable?.table_id })
-			dispatch(setUpdateOrder({ order: false }))
-		}
-	}, [updateOrder])
+		getPeopleNumber()
+		checkForFormulas()
+	}, [table])
 
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
@@ -402,7 +417,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 								{peopleSet?.map((id, i) => (
 									<TabPanel value={value} index={i} key={i + "panel"}>
 										<Column>
-											{tableProducts
+											{table
 												?.filter(
 													(product) => product.table_person === parseInt(id)
 												)
@@ -442,7 +457,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
 					theme={theme}
-					onClick={(e) => addProductToPerson({e})}
+					onClick={(e) => addProductToPerson({ e })}
 				/>
 			</Wrapper>
 		</Overlay>
