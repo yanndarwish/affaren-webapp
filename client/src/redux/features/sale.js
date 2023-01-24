@@ -46,6 +46,9 @@ const saleSlice = createSlice({
 		setDiscount: (state, action) => {
 			state.discount.push(action.payload.discount)
 		},
+		resetDiscount: (state, action) => {
+			state.discount = action.payload.discount
+		},
 		setUser: (state, action) => {
 			state.user = action.payload.user
 		},
@@ -79,6 +82,7 @@ export const {
 	setSalePaymentMethods,
 	setTaxes,
 	setDiscount,
+	resetDiscount,
 	setUser,
 } = saleSlice.actions
 
