@@ -8,7 +8,9 @@ import LunchMain from "../../components/LUNCH/LunchMain/LunchMain"
 import LunchAside from "../../components/LUNCH/LunchAside/LunchAside"
 import { useGetActiveTablesProductsMutation } from "../../redux/services/tableProductsApi"
 import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined"
-import { setTargetTable, setUpdateLunch } from "../../redux/features/tableProducts"
+import {
+	setTargetTable,
+} from "../../redux/features/tableProducts"
 import Button from "../../components/common/Button/Button.component"
 import { ButtonWrapper } from "../../components/LUNCH/LunchAside/LunchAside.styles"
 
@@ -17,11 +19,11 @@ const Lunch = () => {
 	const dispatch = useDispatch()
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const theme = useSelector((state) => state.theme.theme)
-	const updateLunch = useSelector((state) => state.tableProducts.updateLunch)
+	const [done, setDone] = useState(false)
 	const activeDishes = useSelector(
 		(state) => state.tableProducts.activeTablesProducts
 	)
-	const targetTable = useSelector((state) => state.tableProducts.targetTable)
+ 	const targetTable = useSelector((state) => state.tableProducts.targetTable)
 	const [isSideOpen, setIsSideOpen] = useState(true)
 	const [todoDishes, setTodoDishes] = useState([])
 	const [notif, setNotif] = useState(0)
@@ -32,27 +34,28 @@ const Lunch = () => {
 	}
 
 	const getDishesToDo = () => {
-		console.log(activeDishes)
 		let todo = []
-		console.log(targetTable)
-		if (!targetTable && activeDishes.length > 0) {
-			let copy = Object.assign([], activeDishes)
-			todo = copy?.filter((product) => product.dish_category !== "formula")
+		let copy = Object.assign([], activeDishes)
+		todo = copy?.filter((product) => product.dish_category !== "formula")
+		if (!done && activeDishes.length > 0) {
 			setTodoDishes(todo)
+			setDone(true)
+		}
+		if (!targetTable && activeDishes.length > 0) {
+			// console.log("if")
+			// console.log(todo)
+			// setTodoDishes(todo)
+			// setDone(true)
 		} else {
-			console.log("else")
 			const totalTodos = Object.assign([], todoDishes)
 			let todos = totalTodos.filter((item) => item.table_id !== targetTable)
 
-			console.log(todos)
-			let copy = Object.assign([], activeDishes)
-			todo = copy?.filter((product) => product.dish_category !== "formula")
-			setTodoDishes(todo.concat(todos))
-			console.log(todo)
-			console.log(todo.concat(todos))
+			todo.forEach((dish) => {
+				todos.push(dish)
+			})
+			setTodoDishes(todos)
 		}
 		setNotif(todo.length)
-		dispatch(setUpdateLunch({ update: false }))
 		var mp3_url =
 			"https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3"
 
@@ -67,15 +70,7 @@ const Lunch = () => {
 	}
 
 	useEffect(() => {
-		const fetch = async () => {
-			await getActiveDishes()
-		}
-		if (updateLunch) {
-			fetch()
-		}
-	}, [updateLunch])
-
-	useEffect(() => {
+		console.log('heya')
 		getDishesToDo()
 	}, [activeDishes])
 

@@ -29,6 +29,8 @@ wss.on("connection", (ws) => {
 						message: `Client n°${wss.clients.size} just connected`,
 					}
 					client.send(JSON.stringify(message))
+				} else if (dataObject.type === "order") {
+					client.send(myData)
 				} else {
 					if (client !== ws) {
 						client.send(myData)

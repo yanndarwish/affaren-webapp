@@ -17,6 +17,9 @@ const orderSlice = createSlice({
 		setStatusFilter: (state, action) => {
 			state.statusFilter = action.payload
 		},
+		addOrder: (state, action) => {
+			state.orders.push(action.payload)
+		},
 		setLocationFilter: (state, action) => {
 			state.locationFilter = action.payload
 		},
@@ -41,7 +44,7 @@ const orderSlice = createSlice({
 	},
 })
 
-export const { resetOrders, setStatusFilter, setLocationFilter, setUpdate } =
+export const { resetOrders, setStatusFilter, addOrder, setLocationFilter, setUpdate } =
 	orderSlice.actions
 
 export default orderSlice.reducer

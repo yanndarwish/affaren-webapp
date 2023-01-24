@@ -13,11 +13,12 @@ import { usePostOrderMutation } from "../../../redux/services/orderApi"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
 import { WebSocketContext } from "../../../utils/context/webSocket"
+import { addOrder } from "../../../redux/features/orders"
+import { useDispatch } from "react-redux"
 
 const AddOrder = ({ theme, setAdd, setNewOrder }) => {
-
+	const dispatch = useDispatch()
 	const ws = useContext(WebSocketContext)
-
 	const [title, setTitle] = useState("")
 	const [inputList, setInputList] = useState([])
 	const [dueDate, setDueDate] = useState("")
@@ -50,6 +51,7 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 		ws?.sendMessage({
 			type: "order",
 			action: "add",
+			order: newOrder
 		})
 	}
 
