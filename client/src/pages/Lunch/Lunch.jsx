@@ -32,27 +32,33 @@ const Lunch = () => {
 	}
 
 	const getDishesToDo = () => {
-		let todo
-		if (!targetTable) {
+		console.log(activeDishes)
+		let todo = []
+		console.log(targetTable)
+		if (!targetTable && activeDishes.length > 0) {
 			let copy = Object.assign([], activeDishes)
 			todo = copy?.filter((product) => product.dish_category !== "formula")
 			setTodoDishes(todo)
 		} else {
+			console.log("else")
 			const totalTodos = Object.assign([], todoDishes)
 			let todos = totalTodos.filter((item) => item.table_id !== targetTable)
 
+			console.log(todos)
 			let copy = Object.assign([], activeDishes)
 			todo = copy?.filter((product) => product.dish_category !== "formula")
 			setTodoDishes(todo.concat(todos))
+			console.log(todo)
+			console.log(todo.concat(todos))
 		}
 		setNotif(todo.length)
+		dispatch(setUpdateLunch({ update: false }))
 		var mp3_url =
 			"https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3"
 
 		new Audio(mp3_url).play()
 
 		res.reset()
-		dispatch(setUpdateLunch({ update: false }))
 		dispatch(setTargetTable(""))
 	}
 
