@@ -1,6 +1,6 @@
 import { ErrorMessage, FullFlex } from "../../assets/common/common.styles"
 import OrdersList from "../../components/ORDERS/OrdersList/OrdersList"
-import { useGetOrdersQuery } from "../../redux/services/orderApi"
+import { useGetOrdersMutation } from "../../redux/services/orderApi"
 import { useState } from "react"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -17,15 +17,18 @@ const Orders = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
+	const orders = useSelector((state) => state.orders.orders)
+	const ordersUpdate = useSelector((state) => state.orders.ordersUpdate)
 	const [selectedOrderId, setSelectedOrderId] = useState("")
 	const [selectedOrder, setSelectedOrder] = useState({})
 	const [isEdit, setIsEdit] = useState(false)
 	const [add, setAdd] = useState(false)
 	const [newOrder, setNewOrder] = useState(false)
-	const { data, isError } = useGetOrdersQuery()
+	const [getOrders, res] = useGetOrdersMutation()
 
+	console.log(orders)
 	const getTargetOrder = (orderId) => {
-		const found = data?.find((order) => order.order_id === parseInt(orderId))
+		const found = orders?.find((order) => order.order_id === parseInt(orderId))
 		setSelectedOrder(found)
 	}
 
@@ -35,7 +38,7 @@ const Orders = () => {
 
 	const focusNewOrder = () => {
 		if (newOrder) {
-			let sorted = [...data]
+			let sorted = [...orders]
 			sorted = sorted.sort((a, b) => a.order_id - b.order_id)
 			setSelectedOrder(sorted && sorted[sorted.length - 1])
 		}
@@ -57,10 +60,15 @@ const Orders = () => {
 
 	useEffect(() => {
 		focusNewOrder()
-	}, [data])
+	}, [orders])
+
+	useEffect(() => {
+		getOrders()
+	}, [ordersUpdate])
 
 	useEffect(() => {
 		redirect()
+		getOrders()
 	}, [])
 
 	return (
@@ -71,14 +79,14 @@ const Orders = () => {
 				</IconButton>
 			</OrderButton>
 			<OrdersList
-				orders={data && data}
+				orders={orders && orders}
 				selected={selectedOrderId}
 				setSelected={setSelectedOrderId}
 				setAdd={setAdd}
 				setIsEdit={setIsEdit}
 				toggleList={isMobile && toggleList}
 			/>
-			{isError && <ErrorMessage>Failed to fetch orders</ErrorMessage>}
+			{res.isError && <ErrorMessage>Failed to fetch orders</ErrorMessage>}
 			{isMobile ? (
 				add && !listIsOpen ? (
 					<AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder} />

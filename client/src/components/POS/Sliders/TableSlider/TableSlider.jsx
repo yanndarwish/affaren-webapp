@@ -36,7 +36,6 @@ import {
 	updateProducts,
 	setSaleTable,
 } from "../../../../redux/features/sale"
-import { setUpdateLunch } from "../../../../redux/features/tableProducts"
 import { useGetActiveTablesProductsMutation } from "../../../../redux/services/tableProductsApi"
 import { WebSocketContext } from "../../../../utils/context/webSocket"
 
@@ -69,8 +68,6 @@ function a11yProps(index) {
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const ws = useContext(WebSocketContext)
-	const updateLunch = useSelector((state) => state.tableProducts.updateLunch)
-
 	const dispatch = useDispatch()
 	const overlayRef = useRef()
 	const [peopleSet, setPeopleSet] = useState([])

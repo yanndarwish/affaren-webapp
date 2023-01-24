@@ -4,8 +4,9 @@ import orderApi from "../services/orderApi"
 const initialState = {
 	orders: [],
 	order: [],
+	ordersUpdate: 0,
 	statusFilter: "all",
-	locationFilter: "all"
+	locationFilter: "all",
 }
 
 const orderSlice = createSlice({
@@ -18,6 +19,9 @@ const orderSlice = createSlice({
 		},
 		setLocationFilter: (state, action) => {
 			state.locationFilter = action.payload
+		},
+		setUpdate: (state, action) => {
+			state.ordersUpdate += 1
 		},
 	},
 	extraReducers: (builder) => {
@@ -37,6 +41,7 @@ const orderSlice = createSlice({
 	},
 })
 
-export const { resetOrders, setStatusFilter, setLocationFilter } = orderSlice.actions
+export const { resetOrders, setStatusFilter, setLocationFilter, setUpdate } =
+	orderSlice.actions
 
 export default orderSlice.reducer

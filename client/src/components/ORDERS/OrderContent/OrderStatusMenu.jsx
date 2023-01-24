@@ -1,9 +1,12 @@
 import { Menu, MenuItem, Button } from "@mui/material"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { ErrorMessage } from "../../../assets/common/common.styles"
 import { useUpdateOrderMutation } from "../../../redux/services/orderApi"
+import { WebSocketContext } from "../../../utils/context/webSocket"
 
 const OrderStatusMenu = ({ order }) => {
+	const ws = useContext(WebSocketContext)
+
 	const [anchorEl, setAnchorEl] = useState(null)
 	const [status, setStatus] = useState("")
 	const allStatus = ["todo", "pending", "done", "picked-up"]
@@ -31,6 +34,10 @@ const OrderStatusMenu = ({ order }) => {
 		setStatus(status)
 		updateOrder({ payload: newOrder, id: order.order_id })
 		setAnchorEl(null)
+		ws?.sendMessage({
+			type: "order",
+			action: "status update",
+		})
 	}
 
 	useEffect(() => {

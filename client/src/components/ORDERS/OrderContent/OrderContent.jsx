@@ -16,12 +16,15 @@ import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined"
 import { Modal } from "modal-rjs"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useDeleteOrderMutation } from "../../../redux/services/orderApi"
 import EditOrder from "../EditOrder/EditOrder"
 import OrderStatusMenu from "./OrderStatusMenu"
+import { WebSocketContext } from "../../../utils/context/webSocket"
 
 const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
+	const ws = useContext(WebSocketContext)
+
 	const [isOpen, setIsOpen] = useState(false)
 	const [deleteOrder] = useDeleteOrderMutation()
 
@@ -76,6 +79,11 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 			deleteOrder({ id: order.order_id })
 			setIsOpen(false)
 			setSelected("")
+			ws?.sendMessage({
+				type: "order",
+				action: "delete",
+			})
+
 		}
 		return (
 			<SpaceHeader>

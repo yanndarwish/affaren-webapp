@@ -1,8 +1,9 @@
-import { createContext, useState } from "react"
+import { createContext } from "react"
 import { ip } from "../../redux/ip"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
-import { setTargetTable, setUpdateLunch, updateActiveTablesProducts } from "../../redux/features/tableProducts"
+import { setTargetTable, updateActiveTablesProducts } from "../../redux/features/tableProducts"
+import { setUpdate } from "../../redux/features/orders"
 
 const WebSocketContext = createContext(null)
 
@@ -37,7 +38,10 @@ const WebSocketProvider = ({ children }) => {
 				if (data.type === "lunch") {
 					dispatch(setTargetTable(data.table))
 					dispatch(updateActiveTablesProducts(data.products))
-					// dispatch(setUpdateOrder({ order: false }))
+				}
+
+				if (data.type === "order") {
+					dispatch(setUpdate())
 				}
 			})
 			// socket.onopen = () => {

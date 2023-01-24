@@ -21,7 +21,7 @@ export const orderApi = createApi({
 	}),
 	tagTypes: ["Orders", "Order"],
 	endpoints: (builder) => ({
-		getOrders: builder.query({
+		getOrders: builder.mutation({
 			query: () => ({
 				url: "orders",
 			}),
@@ -60,7 +60,7 @@ export const orderApi = createApi({
 })
 
 export const {
-	useGetOrdersQuery,
+	useGetOrdersMutation,
     useGetOrderQuery,
     useUpdateOrderMutation,
     useDeleteOrderMutation,
