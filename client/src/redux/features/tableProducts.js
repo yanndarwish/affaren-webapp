@@ -8,6 +8,7 @@ const initialState = {
 	activeTablesProducts: [],
 	targetTable: "",
 	tableProducts: [],
+	lunchUpdate: 0, 
 	updateLunch: false
 }
 
@@ -24,6 +25,9 @@ const tableProductsSlice = createSlice({
 		},
 		setUpdateLunch: (state, action) => {
 			state.updateLunch = action.payload.update
+		},
+		setLunchUpdate: (state, action) => {
+			state.lunchUpdate += 1
 		},
 		setTargetTable: (state, action) => {
 			state.targetTable = action.payload
@@ -67,6 +71,6 @@ const tableProductsSlice = createSlice({
 	},
 })
 
-export const { resetTablesProducts, updateTableProducts, addTableProducts, setUpdateLunch, setTargetTable, updateActiveTablesProducts } = tableProductsSlice.actions
+export const { resetTablesProducts, updateTableProducts, addTableProducts, setUpdateLunch, setLunchUpdate, setTargetTable, updateActiveTablesProducts } = tableProductsSlice.actions
 
 export default tableProductsSlice.reducer

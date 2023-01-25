@@ -29,12 +29,14 @@ wss.on("connection", (ws) => {
 						message: `Client n°${wss.clients.size} just connected`,
 					}
 					client.send(JSON.stringify(message))
-				} else if (dataObject.type === "order") {
+				} 
+				// else if (dataObject.type === "lunch") {
+				// 	if (ws !== clientSender) {
+				// 		client.send(myData)
+				// 	}
+				// } 
+				else {
 					client.send(myData)
-				} else {
-					if (client !== ws) {
-						client.send(myData)
-					}
 				}
 			})
 		} catch (e) {

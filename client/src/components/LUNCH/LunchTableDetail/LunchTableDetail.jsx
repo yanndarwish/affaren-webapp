@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useContext, useEffect } from "react"
 import {
 	ArtTitle,
 	Column,
@@ -14,8 +14,11 @@ import { useDispatch } from "react-redux"
 import { IconButton } from "@mui/material"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
+import { WebSocketContext } from "../../../utils/context/webSocket"
 
 const LunchTableDetail = ({ table }) => {
+	const ws = useContext(WebSocketContext)
+
 	const [getActiveDishes, response] = useGetActiveTablesProductsMutation()
 	const [updateStatus, res] = usePatchProductTableStatusMutation()
 
@@ -32,6 +35,11 @@ const LunchTableDetail = ({ table }) => {
 			? e.target.dataset.dish
 			: e.target.parentNode.dataset.dish
 		updateStatus({ tableId: tableId, personId: personId, dishId: dishId })
+		ws?.sendMessage({
+			type: "lunch",
+			table: tableId,
+			action: "status",
+		})
 	}
 
 	useEffect(() => {

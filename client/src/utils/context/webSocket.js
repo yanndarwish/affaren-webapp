@@ -2,7 +2,9 @@ import { createContext } from "react"
 import { ip } from "../../redux/ip"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
-import { setTargetTable, updateActiveTablesProducts } from "../../redux/features/tableProducts"
+import {
+	setLunchUpdate,
+} from "../../redux/features/tableProducts"
 import { setUpdate } from "../../redux/features/orders"
 
 const WebSocketContext = createContext(null)
@@ -14,7 +16,6 @@ const WebSocketProvider = ({ children }) => {
 	const dispatch = useDispatch()
 	let ws
 	if (loggedIn) {
-
 		let socket
 
 		const sendMessage = (message) => {
@@ -34,41 +35,13 @@ const WebSocketProvider = ({ children }) => {
 
 			socket.addEventListener("message", (message) => {
 				let data = JSON.parse(message.data)
-				console.log(data)
 				if (data.type === "lunch") {
-					dispatch(setTargetTable(data.table))
-					dispatch(updateActiveTablesProducts(data.products))
+					dispatch(setLunchUpdate())
 				}
-
 				if (data.type === "order") {
 					dispatch(setUpdate())
 				}
 			})
-			// socket.onopen = () => {
-			// 	socket.send("connexion")
-			// 	var t = setInterval(function () {
-			// 		if (socket.readyState !== 1) {
-			// 			clearInterval(t)
-			// 			return
-			// 		}
-			// 		socket.send("ping" )
-			// 	}, 55000)
-			// }
-
-			// if (socket.readyState === 3) {
-			// 	console.log('close')
-			// 	socket.terminate()
-			// 	socket = new WebSocket(`ws://${ip}:4001`)
-			// }
-
-			// socket.onmessage = (message) => {
-			// 	console.log(message)
-			// 	if (message.data === "TableProducts") {
-			// 		console.log(JSON.parse(message?.data))
-			// 		console.log("get products")
-			// 		dispatch(setUpdateOrder({ order: true }))
-			// 	}
-			// }
 
 			ws = {
 				socket: socket,

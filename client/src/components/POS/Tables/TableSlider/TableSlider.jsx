@@ -1,4 +1,6 @@
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import { useRef, useState, useEffect, useContext } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import {
 	Dialog,
 	DialogBody,
@@ -7,64 +9,21 @@ import {
 	DialogHeader,
 	Overlay,
 	Wrapper,
-} from "../Slider.styles"
-import Tabs from "@mui/material/Tabs"
-import Tab from "@mui/material/Tab"
-import Box from "@mui/material/Box"
+} from "../../Sliders/Slider.styles"
 import {
 	ArtTitle,
-	Column,
-	SpaceHeaderCenter,
 	SubTitle,
 } from "../../../../assets/common/common.styles"
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined"
-import Button from "../../../common/Button/Button.component"
-import { useDispatch, useSelector } from "react-redux"
-import TableMenu from "../../Tables/TableMenu"
+import TableMenu from "../TableMenu"
 import {
 	useDeleteProductTableMutation,
-	useGetTableProductsMutation,
 	usePatchProductTableMutation,
 	usePostTableProductMutation,
+	useGetActiveTablesProductsMutation,
 } from "../../../../redux/services/tableProductsApi"
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
-import AddIcon from "@mui/icons-material/Add"
-import IconButton from "@mui/material/IconButton"
-import {
-	addProduct,
-	updateProducts,
-	setSaleTable,
-} from "../../../../redux/features/sale"
-import { useGetActiveTablesProductsMutation } from "../../../../redux/services/tableProductsApi"
 import { WebSocketContext } from "../../../../utils/context/webSocket"
-
-function TabPanel(props) {
-	const { children, value, index, ...other } = props
-
-	return (
-		<div
-			role="tabpanel"
-			hidden={value !== index}
-			id={`simple-tabpanel-${index}`}
-			aria-labelledby={`simple-tab-${index}`}
-			{...other}
-		>
-			{value === index && (
-				<Box sx={{ p: 3 }}>
-					<Box>{children}</Box>
-				</Box>
-			)}
-		</div>
-	)
-}
-
-function a11yProps(index) {
-	return {
-		id: `simple-tab-${index}`,
-		"aria-controls": `simple-tabpanel-${index}`,
-	}
-}
+import TablePayment from "../TablePayment/TablePayment"
+import TableProducts from "../TableProducts/TableProducts"
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const ws = useContext(WebSocketContext)
@@ -77,7 +36,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const [postUpdateTableProducts, respo] = usePostTableProductMutation()
 	const [patchProduct, response] = usePatchProductTableMutation()
 	const [getActiveDishes, r] = useGetActiveTablesProductsMutation()
-
+	const lunchUpdate = useSelector((state) => state.tableProducts.lunchUpdate)
 	const dishes = useSelector((state) =>
 		state.dishes.dishes.filter((dish) => dish.dish_active === "true")
 	)
@@ -148,16 +107,16 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				dish_status: "todo",
 			}
 		}
-		let copy = Object.assign([], table)
+		let copy = Object.assign([], activeDishes)
 		copy.push(newDish)
 
 		postUpdateTableProducts({ products: [newDish] })
-		setTable((current) => [...current, newDish])
+		// setTable((current) => [...current, newDish])
 		ws?.sendMessage({
 			type: "lunch",
-			table: dataTable?.table_id,
+			// table: dataTable?.table_id,
 			action: "add",
-			products: copy,
+			// products: copy,
 		})
 	}
 
@@ -175,19 +134,28 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			personId: person,
 			dishId: id,
 		})
-		let copy = Object.assign([], table)
-		copy = copy.filter(
-			(item) =>
-				item.dish_id !== id || item.table_person !== person
+		let copyTable = Object.assign([], table)
+		copyTable = copyTable.filter(
+			(item) => item.dish_id !== id || item.table_person !== person
 		)
 
-		setTable(copy)
+		let copy = Object.assign([], activeDishes)
+		console.log(activeDishes)
+		copy = copy.filter(
+			(item) =>
+				item.table_id !== dataTable.table_id &&
+				item.table_person !== person &&
+				item.dish_id !== id
+		)
+
+		console.log(copy)
+		// setTable(copyTable)
 
 		ws?.sendMessage({
 			type: "lunch",
 			action: "remove",
-			table: dataTable?.table_id,
-			products: copy
+			// table: dataTable?.table_id,
+			// products: copy,
 		})
 	}
 
@@ -272,6 +240,12 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				item.dish_category !== "beverage" && item.dish_category !== "formula"
 		)
 
+		let prevFormulas = allMeals?.filter(
+			(item) => item.dish_category === "formula"
+		)
+		prevFormulas?.forEach((prevFormula) => {
+			deleteOldFormula(prevFormula)
+		})
 		let dishesCat = []
 		allMeals
 			?.filter(
@@ -285,9 +259,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		let foundFormula = findFormula(dishesCat, formulas)
 
 		if (foundFormula) {
-			let prevFormulas = allMeals?.filter(
-				(item) => item.dish_category === "formula"
-			)
 			let copyMeals = Object.assign([], meals)
 			copyMeals.forEach((meal) => {
 				patchProductPrice(meal)
@@ -295,72 +266,33 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			if (formulaAlreadyExists(allMeals, foundFormula)) {
 				return
 			} else {
-			copyMeals = copyMeals.map(meal => {
-				let update = {...meal, dish_price: 0}
-				return update
-			})
-			
-			let copyTable = Object.assign([], table)
-			copyTable = copyTable.filter(item => item.table_person !== value)
-
-			setTable(copyMeals.concat(copyTable))
-			
-				prevFormulas?.forEach((prevFormula) => {
-					deleteOldFormula(prevFormula)
+				copyMeals = copyMeals.map((meal) => {
+					let update = { ...meal, dish_price: 0 }
+					return update
 				})
+
+				// let copyTable = Object.assign([], table)
+				// copyTable = copyTable.filter((item) => item.table_person !== value)
+
+				// setTable(copyMeals.concat(copyTable))
+
+				// prevFormulas?.forEach((prevFormula) => {
+				// 	deleteOldFormula(prevFormula)
+				// })
 
 				addProductToPerson({ formula: foundFormula })
 			}
 		}
 	}
 
-	const handlePayment = () => {
-		dispatch(updateProducts({ products: [] }))
-		let array = []
-
-		table?.forEach((dish) => {
-			let found = array.find((product) => product.id === dish.dish_id)
-
-			if (!found) {
-				let product = {
-					id: dish.dish_id,
-					name: dish.dish_name,
-					price: dish.dish_price,
-					taxe: dish.dish_taxe,
-					quantity: dish.dish_quantity,
-				}
-				array.push(product)
-				dispatch(addProduct({ products: product }))
-			} else {
-				found = {
-					...found,
-					quantity: found.quantity + 1,
-					price: (dish.dish_price * (found.quantity + 1)).toFixed(2),
-				}
-
-				const updated = array.map((product) => {
-					if (product.id === found.id) {
-						let index = array.findIndex((obj) => obj.id === found.id)
-						array[index] = found
-						return found
-					} else {
-						return product
-					}
-				})
-
-				dispatch(updateProducts({ products: updated }))
-			}
-		})
-		dispatch(setSaleTable({ table: dataTable.table_id }))
-		setIsOpen(false)
-		setValue(0)
-	}
 	useEffect(() => {
+		console.log("lunch update")
 		getActiveDishes()
-	}, [])
+	}, [lunchUpdate])
 
 	useEffect(() => {
 		if (dataTable?.table_id) {
+			console.log('updating table')
 			setTable(
 				activeDishes?.filter((item) => item.table_id === dataTable?.table_id)
 			)
@@ -383,71 +315,11 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 					<DialogBody>
 						<ArtTitle>Detail</ArtTitle>
 						<DialogCard theme={theme}>
-							<Box
-								sx={{
-									flexGrow: 1,
-									bgcolor: "background.paper",
-									display: "flex",
-									height: 300,
-									borderBottom: 1,
-									borderColor: "divider",
-									overflow: "scroll",
-								}}
-							>
-								<Tabs
-									id="tabs"
-									orientation="vertical"
-									value={value}
-									onChange={handleChange}
-									variant="scrollable"
-									aria-label="basic tabs example"
-								>
-									{peopleSet?.map((id, i) => (
-										<Tab
-											label={<PersonOutlineOutlinedIcon />}
-											{...a11yProps(i)}
-											key={i + "tab"}
-										/>
-									))}
-									<Tab label={<AddIcon />} onClick={handleAddPerson} />
-								</Tabs>
-								{peopleSet?.map((id, i) => (
-									<TabPanel value={value} index={i} key={i + "panel"}>
-										<Column>
-											{table
-												?.filter(
-													(product) => product.table_person === parseInt(id)
-												)
-												.map((item, i) => (
-													<SpaceHeaderCenter key={id + "-" + i}>
-														<h3>{item.dish_name}</h3>
-														<h3>{item.dish_price} €</h3>
-														<IconButton
-															aria-label="delete"
-															color="error"
-															data-id={item.dish_id}
-															data-person={id}
-															onClick={handleDelete}
-														>
-															<DeleteOutlineIcon
-																data-id={item.dish_id}
-																data-person={id}
-															/>
-														</IconButton>
-													</SpaceHeaderCenter>
-												))}
-										</Column>
-									</TabPanel>
-								))}
-							</Box>
+							<TableProducts table={table} value={value} peopleSet={peopleSet} handleChange={handleChange} handleDelete={handleDelete} handleAddPerson={handleAddPerson}/>
 						</DialogCard>
 					</DialogBody>
 					<DialogFooter>
-						<Button
-							title="Go to Payment"
-							color="success"
-							onClick={handlePayment}
-						/>
+						<TablePayment table={table} setIsOpen={setIsOpen} setValue={setValue}/>
 					</DialogFooter>
 				</Dialog>
 				<TableMenu
