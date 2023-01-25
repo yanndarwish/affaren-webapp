@@ -12,7 +12,6 @@ import {
 	Checkbox,
 	FormControl,
 	FormControlLabel,
-	FormGroup,
 	InputLabel,
 	MenuItem,
 	Select,
@@ -21,7 +20,6 @@ import {
 	FormWrapper,
 	DialogCard,
 } from "../../POS/Sliders/NoBarcodeSlider/NoBarcodeSlider.styles"
-import { FormFlex } from "../../POS/Sliders/AddCardSlider/AddCardSlider.styles"
 import Input from "../../common/Input/Input.component"
 import Button from "../../common/Button/Button.component"
 import { usePostDishMutation } from "../../../redux/services/dishApi"
@@ -59,7 +57,18 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 			dishActive: active ? "true" : "false",
 		}
 		postDish(newDish)
+		resetInputs()
 	}
+
+	const resetInputs = () => {
+		setName("")
+		setCategory("starter")
+		setPrice("")
+		setActive(true)
+		const ingredients = document.getElementById("dish-ingredients")
+		ingredients.value = ""
+	}
+
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
 			<Dialog id="dialog" theme={theme}>
@@ -81,7 +90,7 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 							<FormWrapper>
 								<Input label="Name" value={name} onChange={(e) => setName(e)} />
 								<Input label="Ingredients" id="dish-ingredients" />
-								<FormControl >
+								<FormControl>
 									<InputLabel id="demo-simple-select-label">
 										Category
 									</InputLabel>
