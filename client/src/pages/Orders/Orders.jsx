@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom"
 import { OrderButton } from "../../components/ORDERS/OrdersList/OrdersList.styles"
 import { IconButton } from "@mui/material"
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined"
-import orders from "../../redux/features/orders"
 
 const Orders = () => {
 	const [listIsOpen, setListIsOpen] = useState(true)
@@ -27,7 +26,6 @@ const Orders = () => {
 	const [newOrder, setNewOrder] = useState(false)
 	const [getOrders, res] = useGetOrdersMutation()
 
-	console.log(orders)
 	const getTargetOrder = (orderId) => {
 		const found = orders?.find((order) => order.order_id === parseInt(orderId))
 		setSelectedOrder(found)
@@ -108,6 +106,7 @@ const Orders = () => {
 				<OrderContent
 					theme={theme}
 					order={selectedOrder && selectedOrder}
+					setSelectedOrder={setSelectedOrder}
 					setSelected={setSelectedOrderId}
 					isEdit={isEdit}
 					setIsEdit={setIsEdit}

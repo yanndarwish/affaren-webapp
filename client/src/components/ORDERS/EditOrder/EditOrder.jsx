@@ -17,7 +17,7 @@ import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
 import { WebSocketContext } from "../../../utils/context/webSocket"
 
-const EditOrder = ({ theme, order, setIsEdit }) => {
+const EditOrder = ({ theme, order, setIsEdit, setSelectedOrder }) => {
 	const ws = useContext(WebSocketContext)
 
 	const [title, setTitle] = useState(order.order_title)
@@ -50,17 +50,34 @@ const EditOrder = ({ theme, order, setIsEdit }) => {
 			description: newDescription,
 			dueDate: dueDate,
 			dueTime: dueTime,
-			status: 'todo',
+			status: "todo",
 			clientName: clientName,
 			clientPhone: clientPhone,
 			orderLocation: orderLocation,
 		}
+		// update order in db
 		updateOrder({ id: order.order_id, payload: newOrder })
+		// close edit mode
 		setIsEdit(false)
+		// update order in websocket to update other devices live
 		ws?.sendMessage({
 			type: "order",
 			action: "edit",
 		})
+
+		// focus and display the edited order
+		const myOrder = {
+			order_id: order.order_id,
+			order_title: title,
+			order_description: newDescription,
+			order_status: order.order_status,
+			order_client_name: clientName,
+			order_client_phone: clientPhone,
+			order_due_date: dueDate,
+			order_due_time: dueTime,
+			order_location: orderLocation,
+		}
+		setSelectedOrder(myOrder)
 	}
 
 	const cancelEdit = () => {

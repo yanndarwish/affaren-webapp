@@ -22,7 +22,14 @@ import EditOrder from "../EditOrder/EditOrder"
 import OrderStatusMenu from "./OrderStatusMenu"
 import { WebSocketContext } from "../../../utils/context/webSocket"
 
-const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
+const OrderContent = ({
+	order,
+	theme,
+	setSelected,
+	isEdit,
+	setIsEdit,
+	setSelectedOrder,
+}) => {
 	const ws = useContext(WebSocketContext)
 
 	const [isOpen, setIsOpen] = useState(false)
@@ -83,7 +90,6 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 				type: "order",
 				action: "delete",
 			})
-
 		}
 		return (
 			<SpaceHeader>
@@ -94,7 +100,12 @@ const OrderContent = ({ order, theme, setSelected, isEdit, setIsEdit }) => {
 
 	return order ? (
 		isEdit ? (
-			<EditOrder theme={theme} order={order} setIsEdit={setIsEdit} />
+			<EditOrder
+				theme={theme}
+				order={order}
+				setIsEdit={setIsEdit}
+				setSelectedOrder={setSelectedOrder}
+			/>
 		) : (
 			<Container theme={theme} id="order-content">
 				<OrderTitle>

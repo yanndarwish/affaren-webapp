@@ -81,6 +81,7 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 		}
 		postCard(newProduct)
 		res.isUninitialized === false && res.isSuccess && setIsOpen(false)
+		setIsOpen(false)
 	}
 
 	const closeSlider = (e) => {
