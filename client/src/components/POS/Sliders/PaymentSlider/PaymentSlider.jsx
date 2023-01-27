@@ -174,9 +174,8 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 
 			updateTable({
 				id: tableId,
-				payload: { table_status: "paid", sale_id: parseInt(confirmedSale.id) },
+				payload: { sale_id: parseInt(confirmedSale.id) },
 			})
-			updateProducts({tableId: tableId})
 
 			setActualSale(confirmedSale)
 			if (Object.keys(confirmedSale.paymentMethods).includes("cash")) {
@@ -215,7 +214,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		)
 	}
 	const openDrawer = () => {
-		postDrawer()
+		// postDrawer()
 	}
 
 	const printing = () => {

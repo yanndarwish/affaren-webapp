@@ -25,6 +25,7 @@ import { WebSocketContext } from "../../../../utils/context/webSocket"
 import TablePayment from "../TablePayment/TablePayment"
 import TableProducts from "../TableProducts/TableProducts"
 import DeleteTable from "../DeleteTable/DeleteTable"
+import TablePaid from "../TablePaid/TablePaid"
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const ws = useContext(WebSocketContext)
@@ -301,10 +302,12 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 						<TablePayment
 							table={table}
 							setIsOpen={setIsOpen}
+							value={value}
 							setValue={setValue}
-						/>
+							/>
 					</DialogFooter>
-				</Dialog>
+				<TablePaid setIsOpen={setIsOpen} tableId={dataTable?.table_id} />
+							</Dialog>
 				<TableMenu
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
