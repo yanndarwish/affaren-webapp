@@ -210,6 +210,11 @@ export const Gap = styled.div`
 	gap: ${constant.GAP * 2}px;
 `
 
+export const GapS = styled.div`
+	display: flex;
+	gap: ${constant.GAP}px;
+`
+
 export const CloseColumn = styled.div`
 	display: flex;
 	flex-direction: column;

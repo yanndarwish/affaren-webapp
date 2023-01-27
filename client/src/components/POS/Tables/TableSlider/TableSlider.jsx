@@ -106,7 +106,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				table_year: dataTable.table_year,
 				table_month: dataTable.table_month,
 				table_day: dataTable.table_day,
-				dish_status: "todo",
+				dish_status: "waiting",
 				table_number: dataTable.table_number,
 			}
 		}

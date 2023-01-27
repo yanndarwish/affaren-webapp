@@ -6,9 +6,11 @@ import {
 	SecondaryText,
 	SpaceHeaderCenter,
 } from "../../../assets/common/common.styles"
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined"
+
 import {
 	useGetActiveTablesProductsMutation,
-	usePatchProductTableStatusMutation
+	usePatchProductTableStatusMutation,
 } from "../../../redux/services/tableProductsApi"
 import { IconButton } from "@mui/material"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
@@ -33,7 +35,20 @@ const LunchTableDetail = ({ table }) => {
 		const dishId = e.target.dataset.dish
 			? e.target.dataset.dish
 			: e.target.parentNode.dataset.dish
-		updateStatus({ tableId: tableId, personId: personId, dishId: dishId })
+
+		const target = table.find(
+			(item) =>
+				item.table_person === parseInt(personId) && item.dish_id === dishId
+		)
+
+		const status = target.dish_status
+		console.log(status)
+		updateStatus({
+			tableId: tableId,
+			personId: personId,
+			dishId: dishId,
+			status: status === "todo" ? "done" : "todo",
+		})
 		ws?.sendMessage({
 			type: "lunch",
 			table: tableId,
@@ -44,7 +59,6 @@ const LunchTableDetail = ({ table }) => {
 	useEffect(() => {
 		getActiveDishes()
 	}, [res.isSuccess])
-
 
 	console.log(table)
 	return (
@@ -66,7 +80,27 @@ const LunchTableDetail = ({ table }) => {
 							<SecondaryText>
 								{product.dish_quantity} {product.dish_name}
 							</SecondaryText>
-							<CheckCircleOutlineIcon color="success" />
+							<IconButton
+								color="success"
+								data-table={product.table_id}
+								data-person={product.table_person}
+								data-dish={product.dish_id}
+								onClick={handleClick}
+							>
+								<CheckCircleOutlineIcon
+									data-table={product.table_id}
+									data-person={product.table_person}
+									data-dish={product.dish_id}
+								/>
+							</IconButton>
+						</SpaceHeaderCenter>
+					) : product.dish_status === "waiting" ? (
+						<SpaceHeaderCenter>
+							<SecondaryText>
+								{product.dish_quantity} {product.dish_name}
+							</SecondaryText>
+
+							<AccessTimeOutlinedIcon color="disabled"/>
 						</SpaceHeaderCenter>
 					) : (
 						<SpaceHeaderCenter
