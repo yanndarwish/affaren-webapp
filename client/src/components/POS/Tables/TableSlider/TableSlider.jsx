@@ -10,10 +10,7 @@ import {
 	Overlay,
 	Wrapper,
 } from "../../Sliders/Slider.styles"
-import {
-	ArtTitle,
-	SubTitle,
-} from "../../../../assets/common/common.styles"
+import { ArtTitle, SubTitle } from "../../../../assets/common/common.styles"
 import TableMenu from "../TableMenu"
 import {
 	useDeleteProductTableMutation,
@@ -86,7 +83,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				table_year: dataTable.table_year,
 				table_month: dataTable.table_month,
 				table_day: dataTable.table_day,
-				table_number: dataTable.table_number
+				table_number: dataTable.table_number,
 			}
 		} else {
 			const id = e.target.dataset.id
@@ -150,6 +147,11 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			let set = new Set(peopleIds)
 			let array = Array.from(set).sort()
 			setPeopleSet(array)
+			if (value > 0) {
+				if (table.filter((item) => item.table_person === value).length === 0) {
+					setValue(0)
+				}
+			}
 		} else {
 			setPeopleSet([0])
 		}
@@ -200,6 +202,8 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	}
 
 	const deleteOldFormula = (formula) => {
+		console.log("deleting")
+		console.log(formula)
 		deleteProduct({
 			tableId: formula.table_id,
 			personId: formula.table_person,
@@ -222,12 +226,8 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				item.dish_category !== "beverage" && item.dish_category !== "formula"
 		)
 
-		let prevFormulas = allMeals?.filter(
-			(item) => item.dish_category === "formula"
-		)
-		prevFormulas?.forEach((prevFormula) => {
-			deleteOldFormula(prevFormula)
-		})
+		console.log(allMeals)
+
 		let dishesCat = []
 		allMeals
 			?.filter(
@@ -241,6 +241,12 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		let foundFormula = findFormula(dishesCat, formulas)
 
 		if (foundFormula) {
+			let prevFormulas = allMeals?.filter(
+				(item) => item.dish_category === "formula"
+			)
+			prevFormulas?.forEach((prevFormula) => {
+				deleteOldFormula(prevFormula)
+			})
 			let copyMeals = Object.assign([], meals)
 			copyMeals.forEach((meal) => {
 				patchProductPrice(meal)
@@ -265,15 +271,25 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	useEffect(() => {
 		if (dataTable?.table_id) {
 			setTable(
-				activeDishes?.filter((item) => item.table_id === dataTable?.table_id)
+				activeDishes
+					?.filter((item) => item.table_id === dataTable?.table_id)
+					.sort((a, b) => a.dish_category - b.dish_category)
 			)
 		}
 	}, [activeDishes])
 
 	useEffect(() => {
 		getPeopleNumber()
-		checkForFormulas()
+		setTimeout(() => {
+			checkForFormulas()
+		}, "100")
 	}, [table])
+
+	useEffect(() => {
+		setTimeout(() => {
+			checkForFormulas()
+		}, "100")
+	}, [value])
 
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
@@ -304,10 +320,10 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 							setIsOpen={setIsOpen}
 							value={value}
 							setValue={setValue}
-							/>
+						/>
 					</DialogFooter>
-				<TablePaid setIsOpen={setIsOpen} tableId={dataTable?.table_id} />
-							</Dialog>
+					<TablePaid setIsOpen={setIsOpen} tableId={dataTable?.table_id} />
+				</Dialog>
 				<TableMenu
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}

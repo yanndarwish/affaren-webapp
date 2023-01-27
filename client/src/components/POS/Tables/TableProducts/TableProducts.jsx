@@ -14,9 +14,7 @@ import {
 } from "../../../../assets/common/common.styles"
 import { useContext } from "react"
 import { WebSocketContext } from "../../../../utils/context/webSocket"
-import {
-	usePatchProductTableStatusMutation,
-} from "../../../../redux/services/tableProductsApi"
+import { usePatchProductTableStatusMutation } from "../../../../redux/services/tableProductsApi"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -56,8 +54,6 @@ const TableProducts = ({
 	const ws = useContext(WebSocketContext)
 	const [updateStatus, res] = usePatchProductTableStatusMutation()
 
-	console.log(table)
-
 	const handleStatus = (e) => {
 		const id = e.target.dataset.id
 			? e.target.dataset.id
@@ -72,12 +68,6 @@ const TableProducts = ({
 		)
 
 		const status = target.dish_status
-
-		console.log(target.table_id)
-		console.log(person)
-		console.log(id)
-		console.log(status)
-
 		updateStatus({
 			tableId: target.table_id,
 			personId: person,
@@ -91,6 +81,7 @@ const TableProducts = ({
 			action: "status",
 		})
 	}
+	
 	return (
 		<Box
 			sx={{
@@ -110,7 +101,7 @@ const TableProducts = ({
 				onChange={handleChange}
 				variant="scrollable"
 				aria-label="basic tabs example"
-				sx={{minWidth: "70px"}}
+				sx={{ minWidth: "70px" }}
 			>
 				{peopleSet?.map((id, i) => (
 					<Tab
