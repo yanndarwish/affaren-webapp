@@ -62,13 +62,14 @@ const TablesSection = ({ theme, onClick }) => {
 					direction="down"
 				>
 					{activeTables &&
-						activeTables.map((card) => (
+						activeTables.map((card, i) => (
 							<SpeedDialAction
 								key={card.table_id}
 								icon={<TableRestaurantOutlinedIcon />}
 								data-id={card.table_id}
+								data-number={i + 1}
 								onClick={onClick}
-								tooltipTitle={card.table_id}
+								tooltipTitle={i + 1}
 								tooltipOpen
 							/>
 						))}

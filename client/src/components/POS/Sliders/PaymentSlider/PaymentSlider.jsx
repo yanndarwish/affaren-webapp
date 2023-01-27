@@ -117,7 +117,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		) {
 			let salePaymentMethods = {
 				...sale.paymentMethods,
-				[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : paying),
+				[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : leftPaying),
 			}
 
 			const timestamp = new Date()
@@ -219,7 +219,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	}
 
 	const printing = () => {
-		print(actualSale)
+		// print(actualSale)
 	}
 	const ModalFooter = () => {
 		return (

@@ -134,7 +134,7 @@ const Pos = () => {
 	}
 
 	const openDrawer = () => {
-		postDrawer()
+		// postDrawer()
 	}
 
 	const updateTotalAmount = () => {

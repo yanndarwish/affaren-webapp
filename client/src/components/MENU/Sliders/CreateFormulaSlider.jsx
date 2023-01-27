@@ -60,6 +60,7 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 		}
 		postDish(newDish)
 		resetInputs()
+		res.reset()
 	}
 
 	const resetInputs = () => {
@@ -68,7 +69,7 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 		setPrice("")
 		setActive(true)
 		const categories = document.querySelectorAll(".formula-category")
-		categories.forEach(input => {
+		categories.forEach((input) => {
 			input.value = "starter"
 		})
 	}
@@ -97,7 +98,6 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 	const handleAddItemInput = () => {
 		setInputList(inputList.concat(<ItemInput key={inputList.length} />))
 	}
-
 
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>

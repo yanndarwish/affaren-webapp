@@ -58,6 +58,8 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 		}
 		postDish(newDish)
 		resetInputs()
+			res.reset()
+
 	}
 
 	const resetInputs = () => {

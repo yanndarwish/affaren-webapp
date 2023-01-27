@@ -107,16 +107,12 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				dish_status: "todo",
 			}
 		}
-		let copy = Object.assign([], activeDishes)
-		copy.push(newDish)
 
 		postUpdateTableProducts({ products: [newDish] })
-		// setTable((current) => [...current, newDish])
+
 		ws?.sendMessage({
 			type: "lunch",
-			// table: dataTable?.table_id,
 			action: "add",
-			// products: copy,
 		})
 	}
 
@@ -134,28 +130,10 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			personId: person,
 			dishId: id,
 		})
-		let copyTable = Object.assign([], table)
-		copyTable = copyTable.filter(
-			(item) => item.dish_id !== id || item.table_person !== person
-		)
-
-		let copy = Object.assign([], activeDishes)
-		console.log(activeDishes)
-		copy = copy.filter(
-			(item) =>
-				item.table_id !== dataTable.table_id &&
-				item.table_person !== person &&
-				item.dish_id !== id
-		)
-
-		console.log(copy)
-		// setTable(copyTable)
 
 		ws?.sendMessage({
 			type: "lunch",
 			action: "remove",
-			// table: dataTable?.table_id,
-			// products: copy,
 		})
 	}
 
@@ -271,28 +249,17 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 					return update
 				})
 
-				// let copyTable = Object.assign([], table)
-				// copyTable = copyTable.filter((item) => item.table_person !== value)
-
-				// setTable(copyMeals.concat(copyTable))
-
-				// prevFormulas?.forEach((prevFormula) => {
-				// 	deleteOldFormula(prevFormula)
-				// })
-
 				addProductToPerson({ formula: foundFormula })
 			}
 		}
 	}
 
 	useEffect(() => {
-		console.log("lunch update")
 		getActiveDishes()
 	}, [lunchUpdate])
 
 	useEffect(() => {
 		if (dataTable?.table_id) {
-			console.log('updating table')
 			setTable(
 				activeDishes?.filter((item) => item.table_id === dataTable?.table_id)
 			)
