@@ -10,7 +10,6 @@ import {
 	useGetActiveTablesProductsMutation,
 	usePatchProductTableStatusMutation
 } from "../../../redux/services/tableProductsApi"
-import { useDispatch } from "react-redux"
 import { IconButton } from "@mui/material"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
@@ -46,9 +45,11 @@ const LunchTableDetail = ({ table }) => {
 		getActiveDishes()
 	}, [res.isSuccess])
 
+
+	console.log(table)
 	return (
 		<Column>
-			<ArtTitle>{table[0]?.table_id}</ArtTitle>
+			<ArtTitle>Table {table[0]?.table_number}</ArtTitle>
 			{table
 				?.filter((product) => product.dish_category !== "formula")
 				.map((product, i) =>

@@ -943,10 +943,10 @@ app.delete("/dishes/:id", auth, async (req, res) => {
 // create a table
 app.post("/tables", auth, async (req, res) => {
 	try {
-		const { year, month, day, status } = req.body
+		const { year, month, day, status, number } = req.body
 		const response = await pool.query(
-			"INSERT INTO tables (table_year, table_month, table_day, table_status) VALUES ($1, $2, $3, $4)",
-			[year, month, day, status]
+			"INSERT INTO tables (table_year, table_month, table_day, table_status, table_number) VALUES ($1, $2, $3, $4, $5)",
+			[year, month, day, status, number]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
@@ -1065,10 +1065,11 @@ app.post("/table-products", async (req, res) => {
 				table_year,
 				table_month,
 				table_day,
-				dish_status
+				dish_status,
+				table_number
 			} = product
 			const response = await pool.query(
-				"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_category, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day, dish_status, table_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'active')",
+				"INSERT INTO table_products (table_id, table_person, dish_id, dish_name, dish_category, dish_quantity, dish_price, dish_taxe, table_year, table_month, table_day, dish_status, table_status, table_number) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'active', $13)",
 				[
 					table_id,
 					table_person,
@@ -1081,7 +1082,8 @@ app.post("/table-products", async (req, res) => {
 					table_year,
 					table_month,
 					table_day,
-					dish_status
+					dish_status,
+					table_number
 				]
 			)
 

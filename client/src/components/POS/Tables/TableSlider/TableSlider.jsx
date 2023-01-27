@@ -12,7 +12,6 @@ import {
 } from "../../Sliders/Slider.styles"
 import {
 	ArtTitle,
-	SpaceHeaderCenter,
 	SubTitle,
 } from "../../../../assets/common/common.styles"
 import TableMenu from "../TableMenu"
@@ -86,6 +85,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				table_year: dataTable.table_year,
 				table_month: dataTable.table_month,
 				table_day: dataTable.table_day,
+				table_number: dataTable.table_number
 			}
 		} else {
 			const id = e.target.dataset.id
@@ -107,6 +107,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				table_month: dataTable.table_month,
 				table_day: dataTable.table_day,
 				dish_status: "todo",
+				table_number: dataTable.table_number,
 			}
 		}
 
@@ -278,7 +279,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			<Wrapper>
 				<Dialog id="dialog" theme={theme}>
 					<DialogHeader>
-						<SubTitle>Table {dataTable?.table_id}</SubTitle>
+						<SubTitle>Table {dataTable?.table_number}</SubTitle>
 						<DeleteTable tableId={dataTable?.table_id} setIsOpen={setIsOpen} />
 
 						<CloseOutlinedIcon onClick={() => close()} />

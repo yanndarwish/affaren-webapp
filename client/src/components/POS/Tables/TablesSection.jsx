@@ -26,14 +26,19 @@ const TablesSection = ({ theme, onClick }) => {
 		const month = timestamp.getMonth() + 1
 		const year = timestamp.getFullYear()
 
+		const tableNumber = activeTables?.length === 0 ? 1 : activeTables?.length +1
+
 		const table = {
 			year: year,
 			month: month,
 			day: day,
 			status: "active",
+			number: tableNumber
 		}
 		postTable(table)
 	}
+
+	// todo add res. error handling
 
 	return (
 		<>
@@ -47,7 +52,7 @@ const TablesSection = ({ theme, onClick }) => {
 						data-id={table.table_id}
 						onClick={onClick}
 					>
-						<CardTitle data-id={table.table_id}>{table.table_id}</CardTitle>
+						<CardTitle data-id={table.table_id}>{table.table_number}</CardTitle>
 					</StyledProductCard>
 				))}
 			</SmallScreen>
@@ -67,9 +72,8 @@ const TablesSection = ({ theme, onClick }) => {
 								key={card.table_id}
 								icon={<TableRestaurantOutlinedIcon />}
 								data-id={card.table_id}
-								data-number={i + 1}
 								onClick={onClick}
-								tooltipTitle={i + 1}
+								tooltipTitle={card.table_number}
 								tooltipOpen
 							/>
 						))}
