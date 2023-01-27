@@ -12,6 +12,7 @@ import {
 } from "../../Sliders/Slider.styles"
 import {
 	ArtTitle,
+	SpaceHeaderCenter,
 	SubTitle,
 } from "../../../../assets/common/common.styles"
 import TableMenu from "../TableMenu"
@@ -24,6 +25,7 @@ import {
 import { WebSocketContext } from "../../../../utils/context/webSocket"
 import TablePayment from "../TablePayment/TablePayment"
 import TableProducts from "../TableProducts/TableProducts"
+import DeleteTable from "../DeleteTable/DeleteTable"
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const ws = useContext(WebSocketContext)
@@ -277,16 +279,29 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				<Dialog id="dialog" theme={theme}>
 					<DialogHeader>
 						<SubTitle>Table {dataTable?.table_id}</SubTitle>
+						<DeleteTable tableId={dataTable?.table_id} setIsOpen={setIsOpen} />
+
 						<CloseOutlinedIcon onClick={() => close()} />
 					</DialogHeader>
 					<DialogBody>
 						<ArtTitle>Detail</ArtTitle>
 						<DialogCard theme={theme}>
-							<TableProducts table={table} value={value} peopleSet={peopleSet} handleChange={handleChange} handleDelete={handleDelete} handleAddPerson={handleAddPerson}/>
+							<TableProducts
+								table={table}
+								value={value}
+								peopleSet={peopleSet}
+								handleChange={handleChange}
+								handleDelete={handleDelete}
+								handleAddPerson={handleAddPerson}
+							/>
 						</DialogCard>
 					</DialogBody>
 					<DialogFooter>
-						<TablePayment table={table} setIsOpen={setIsOpen} setValue={setValue}/>
+						<TablePayment
+							table={table}
+							setIsOpen={setIsOpen}
+							setValue={setValue}
+						/>
 					</DialogFooter>
 				</Dialog>
 				<TableMenu

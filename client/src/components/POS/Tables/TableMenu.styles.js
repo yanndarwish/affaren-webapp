@@ -10,7 +10,7 @@ export const Container = styled.div`
 	padding: ${constant.PADDING_M}px;
 	width: 50%;
 	height: 100%;
-	z-index: 100;
+	z-index: 1;
 	overflow: scroll;
 	color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
