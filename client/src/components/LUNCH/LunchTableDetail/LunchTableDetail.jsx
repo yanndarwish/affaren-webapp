@@ -42,7 +42,6 @@ const LunchTableDetail = ({ table }) => {
 		)
 
 		const status = target.dish_status
-		console.log(status)
 		updateStatus({
 			tableId: tableId,
 			personId: personId,
@@ -60,7 +59,6 @@ const LunchTableDetail = ({ table }) => {
 		getActiveDishes()
 	}, [res.isSuccess])
 
-	console.log(table)
 	return (
 		<Column>
 			<ArtTitle>Table {table[0]?.table_number}</ArtTitle>
@@ -95,12 +93,20 @@ const LunchTableDetail = ({ table }) => {
 							</IconButton>
 						</SpaceHeaderCenter>
 					) : product.dish_status === "waiting" ? (
-						<SpaceHeaderCenter>
+						<SpaceHeaderCenter
+							key={
+								"detail" +
+								product.table_id +
+								product.table_person +
+								product.dish_id +
+								i
+							}
+						>
 							<SecondaryText>
 								{product.dish_quantity} {product.dish_name}
 							</SecondaryText>
 
-							<AccessTimeOutlinedIcon color="disabled"/>
+							<AccessTimeOutlinedIcon color="disabled" />
 						</SpaceHeaderCenter>
 					) : (
 						<SpaceHeaderCenter

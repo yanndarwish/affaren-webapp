@@ -22,9 +22,11 @@ const LunchAside = ({ theme, dishes }) => {
 				final[dish.table_id].push(dish)
 			}
 		})
-		Object.keys(final).forEach(id => {
+
+		Object.keys(final).sort().forEach(id => {
 			formattedArray.push(final[id])
 		})
+
 		setFormatted(formattedArray)
 	}
 	useEffect(() => {
