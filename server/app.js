@@ -225,7 +225,7 @@ app.post("/reset-password/:id/:token", async (req, res) => {
 
 // Create a new user
 
-app.post("/register", async (req, res) => {
+app.post("/register", auth, async (req, res) => {
 	try {
 		// get user input
 		const { firstName, lastName, role, email, password, isAdmin } = req.body
@@ -673,7 +673,7 @@ app.get("/sales/:year/:month/products", auth, async (req, res) => {
 })
 
 // get all products of the sales of a specific day
-app.get("/sales/:year/:month/:day/products", async (req, res) => {
+app.get("/sales/:year/:month/:day/products", auth, async (req, res) => {
 	try {
 		const { year, month, day } = req.params
 
@@ -750,7 +750,7 @@ app.delete("/cards/:id", auth, async (req, res) => {
 // ******************************* //
 
 // create an order
-app.post("/orders", async (req, res) => {
+app.post("/orders", auth, async (req, res) => {
 	try {
 		const {
 			title,
@@ -966,7 +966,7 @@ app.post("/tables", auth, async (req, res) => {
 })
 
 // update a table
-app.put("/tables/:id", async (req, res) => {
+app.put("/tables/:id", auth, async (req, res) => {
 	try {
 		const { id } = req.params
 		const { table_year, table_month, table_day, table_status, table_products } =
@@ -983,7 +983,7 @@ app.put("/tables/:id", async (req, res) => {
 })
 
 // update a table status
-app.patch("/tables/:id", async (req, res) => {
+app.patch("/tables/:id", auth, async (req, res) => {
 	try {
 		const { id } = req.params
 		const { table_status, sale_id } = req.body
@@ -1008,7 +1008,7 @@ app.patch("/tables/:id", async (req, res) => {
 })
 
 // get all tables
-app.get("/tables", async (req, res) => {
+app.get("/tables", auth, async (req, res) => {
 	try {
 		const response = await pool.query("SELECT * FROM tables")
 		res.status(200).send(response.rows)
@@ -1019,7 +1019,7 @@ app.get("/tables", async (req, res) => {
 })
 
 // get all active tables
-app.get("/tables/active", async (req, res) => {
+app.get("/tables/active", auth, async (req, res) => {
 	try {
 		const response = await pool.query(
 			"SELECT * FROM tables WHERE table_status = 'active'"
@@ -1066,7 +1066,7 @@ app.delete("/tables/:id", auth, async (req, res) => {
 // ******************************* //
 
 // create a table_product
-app.post("/table-products", async (req, res) => {
+app.post("/table-products", auth, async (req, res) => {
 	try {
 		const { products } = req.body
 		let responses = []
@@ -1117,25 +1117,30 @@ app.post("/table-products", async (req, res) => {
 })
 
 // patch a table_product price
-app.patch("/table-products/:tableId/:personId/:dishId", async (req, res) => {
-	try {
-		const { tableId, personId, dishId } = req.params
+app.patch(
+	"/table-products/:tableId/:personId/:dishId",
+	auth,
+	async (req, res) => {
+		try {
+			const { tableId, personId, dishId } = req.params
 
-		const response = await pool.query(
-			"UPDATE table_products SET dish_price = 0 WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
-			[tableId, personId, dishId]
-		)
+			const response = await pool.query(
+				"UPDATE table_products SET dish_price = 0 WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
+				[tableId, personId, dishId]
+			)
 
-		res.status(200).send(response)
-	} catch (err) {
-		console.log(err)
-		res.status(400).send(err)
+			res.status(200).send(response)
+		} catch (err) {
+			console.log(err)
+			res.status(400).send(err)
+		}
 	}
-})
+)
 
 // patch a product status
 app.patch(
 	"/table-products/status/:tableId/:personId/:dishId",
+	auth,
 	async (req, res) => {
 		try {
 			const { tableId, personId, dishId } = req.params
@@ -1156,7 +1161,7 @@ app.patch(
 )
 
 // patch a table status
-app.patch("/table-products/table-status/:tableId", async (req, res) => {
+app.patch("/table-products/table-status/:tableId", auth, async (req, res) => {
 	try {
 		const { tableId } = req.params
 		const response = await pool.query(
@@ -1172,7 +1177,7 @@ app.patch("/table-products/table-status/:tableId", async (req, res) => {
 })
 
 // get all tables products
-app.get("/table-products", async (req, res) => {
+app.get("/table-products", auth, async (req, res) => {
 	try {
 		const response = await pool.query("SELECT * FROM table_products")
 		res.status(200).send(response.rows)
@@ -1183,7 +1188,7 @@ app.get("/table-products", async (req, res) => {
 })
 
 // get all tables products
-app.get("/table-products/active", async (req, res) => {
+app.get("/table-products/active", auth, async (req, res) => {
 	try {
 		const response = await pool.query(
 			"SELECT * FROM table_products WHERE table_status = 'active'"
@@ -1196,7 +1201,7 @@ app.get("/table-products/active", async (req, res) => {
 })
 
 // get all tables products from specific day
-app.get("/table-products/:year/:month/:day", async (req, res) => {
+app.get("/table-products/:year/:month/:day", auth, async (req, res) => {
 	try {
 		const { year, month, day } = req.params
 		const response = await pool.query(
@@ -1211,7 +1216,7 @@ app.get("/table-products/:year/:month/:day", async (req, res) => {
 })
 
 // get all paid tables products from specific month
-app.get("/table-products/:year/:month", async (req, res) => {
+app.get("/table-products/:year/:month", auth, async (req, res) => {
 	try {
 		const { year, month } = req.params
 		const response = await pool.query(
@@ -1226,7 +1231,7 @@ app.get("/table-products/:year/:month", async (req, res) => {
 })
 
 // get a products of a specific table
-app.get("/table-products/:id", async (req, res) => {
+app.get("/table-products/:id", auth, async (req, res) => {
 	try {
 		const { id } = req.params
 		const response = await pool.query(
@@ -1241,7 +1246,7 @@ app.get("/table-products/:id", async (req, res) => {
 })
 
 // delete all products from table
-app.delete("/table-products/:tableId", async (req, res) => {
+app.delete("/table-products/:tableId", auth, async (req, res) => {
 	try {
 		const { tableId } = req.params
 
@@ -1257,19 +1262,23 @@ app.delete("/table-products/:tableId", async (req, res) => {
 })
 
 // delete a table product by id
-app.delete("/table-products/:tableId/:personId/:dishId", async (req, res) => {
-	try {
-		const { tableId, personId, dishId } = req.params
+app.delete(
+	"/table-products/:tableId/:personId/:dishId",
+	auth,
+	async (req, res) => {
+		try {
+			const { tableId, personId, dishId } = req.params
 
-		const response = await pool.query(
-			"DELETE FROM table_products WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
-			[tableId, personId, dishId]
-		)
-		res.status(200).send(response.rows)
-	} catch (err) {
-		console.log(err)
+			const response = await pool.query(
+				"DELETE FROM table_products WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
+				[tableId, personId, dishId]
+			)
+			res.status(200).send(response.rows)
+		} catch (err) {
+			console.log(err)
+		}
 	}
-})
+)
 
 // ******************************* //
 // ********** PRINTER ************ //
