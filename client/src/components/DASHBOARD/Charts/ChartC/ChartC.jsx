@@ -1,16 +1,11 @@
 import { useState } from "react"
 import { useEffect } from "react"
-import { useSelector } from "react-redux"
-import {
-	Body,
-	ErrorMessage,
-	SubTitle,
-} from "../../../../assets/common/common.styles"
+import InfoMessage from "../../../common/InfoMessage/InfoMessage"
+import { Body, SubTitle } from "../../../../assets/common/common.styles"
 import { useGetSalesProductsQuery } from "../../../../redux/services/salesApi"
 import BestSellersTable from "./BestSellersTable"
 
 const ChartC = ({ theme, months, month, year }) => {
-	const dashboard = useSelector((state) => state.dashboard)
 	const [skip, setSkip] = useState(true)
 	const [sortedData, setSortedData] = useState([])
 	const { data, isError } = useGetSalesProductsQuery(
@@ -22,14 +17,6 @@ const ChartC = ({ theme, months, month, year }) => {
 		if (month && year) {
 			setSkip(false)
 		}
-	}
-
-	const getMonth = (dateString) => {
-		return dateString && dateString.split("-")[1]
-	}
-
-	const getYear = (dateString) => {
-		return dateString && dateString.split("-")[0]
 	}
 
 	const formatBestSellers = (data) => {
@@ -77,8 +64,11 @@ const ChartC = ({ theme, months, month, year }) => {
 	return (
 		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
 			<SubTitle>{months[month - 1]}'s Best Sellers</SubTitle>
-			{isError && <ErrorMessage>Failed to fetch Data</ErrorMessage>}
-			<BestSellersTable data={sortedData} />
+			{isError ? (
+				<InfoMessage state="error" text="Failed to fetch month best sellers" />
+			) : (
+				<BestSellersTable data={sortedData} />
+			)}
 		</Body>
 	)
 }

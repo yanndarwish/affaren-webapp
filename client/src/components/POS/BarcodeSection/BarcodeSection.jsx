@@ -1,4 +1,3 @@
-import Input from "../../common/Input/Input.component"
 import { useEffect, useState } from "react"
 import { useGetProductQuery } from "../../../redux/services/productsApi"
 import { addProduct, updateProducts } from "../../../redux/features/sale"

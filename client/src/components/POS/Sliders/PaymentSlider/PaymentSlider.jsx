@@ -82,7 +82,6 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const user = useSelector((state) => state.user.user)
 	const tableId = useSelector((state) => state.sale.table)
 
-	const [updateProducts, respons] = usePatchTableProductsStatusMutation()
 	const [updateTable, respon] = useUpdateTableStatusMutation()
 	const [updateProduct, res] = useUpdateProductsMutation()
 	const [postSaleProducts, resp] = usePostSaleProductsMutation()
@@ -289,6 +288,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 						)}
 						{response.isError && (
 							<ErrorMessage>Failed to create sale</ErrorMessage>
+						)}
+						{respon.isError && (
+							<ErrorMessage>Failed to update table status</ErrorMessage>
 						)}
 					</DialogCard>
 				</DialogBody>

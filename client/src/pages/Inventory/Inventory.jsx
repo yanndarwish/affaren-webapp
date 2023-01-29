@@ -3,7 +3,6 @@ import Input from "../../components/common/Input/Input.component"
 import Button from "../../components/common/Button/Button.component"
 import {
 	Container,
-	ErrorMessage,
 	FitContainer,
 	Flex,
 	SearchSection,
@@ -19,6 +18,7 @@ import BarcodeInput from "../../components/common/BarcodeInput/BarcodeInput"
 import EditProduct from "../../components/INVENTORY/EditProduct/EditProduct"
 import CreateProduct from "../../components/INVENTORY/CreateProduct/CreateProduct"
 import { useNavigate } from "react-router-dom"
+import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 
 const Inventory = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -199,7 +199,7 @@ const Inventory = () => {
 							setSent={setSent}
 						/>
 					) : isError ? (
-						<ErrorMessage>Failed to fetch products</ErrorMessage>
+						<InfoMessage state="error" text="Failed to fetch products"/>
 					) : (
 						<InventoryTable
 							products={filteredProducts}

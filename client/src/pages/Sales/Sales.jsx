@@ -2,7 +2,6 @@ import { useSelector } from "react-redux"
 import {
 	Body,
 	Container,
-	ErrorMessage,
 	Header,
 	SubTitle,
 	Title,
@@ -11,6 +10,7 @@ import { useGetSalesQuery } from "../../redux/services/salesApi"
 import SalesTable from "../../components/SALES/SalesTable/SalesTable"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 
 const Sales = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -33,8 +33,11 @@ const Sales = () => {
 			</Header>
 			<Body theme={theme}>
 				<SubTitle>All Sales</SubTitle>
-				{isError && <ErrorMessage>Failed to fetch sales</ErrorMessage>}
-				<SalesTable array={data} />
+				{isError ? (
+					<InfoMessage state="error" text="Failed to fetch sales" />
+				) : (
+					<SalesTable array={data} />
+				)}
 			</Body>
 		</Container>
 	)

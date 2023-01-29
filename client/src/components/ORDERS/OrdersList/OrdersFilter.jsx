@@ -7,7 +7,6 @@ import {
 } from "@mui/material"
 import {
 	ArtTitle,
-	Column,
 	ColumnCenter,
 	VerticalCenter,
 } from "../../../assets/common/common.styles"

@@ -15,6 +15,7 @@ import {
 import { useContext } from "react"
 import { WebSocketContext } from "../../../../utils/context/webSocket"
 import { usePatchProductTableStatusMutation } from "../../../../redux/services/tableProductsApi"
+import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -81,7 +82,7 @@ const TableProducts = ({
 			action: "status",
 		})
 	}
-	
+
 	return (
 		<Box
 			sx={{
@@ -121,6 +122,12 @@ const TableProducts = ({
 								<SpaceHeaderCenter key={id + "-" + i}>
 									{item.dish_status === "waiting" ? (
 										<GapS>
+											{res.isError && (
+												<InfoMessage
+													state="error"
+													text="Failed to update product status"
+												/>
+											)}
 											<SecondaryText>{item.dish_name}</SecondaryText>
 											<SecondaryText>{item.dish_price} €</SecondaryText>
 											<IconButton

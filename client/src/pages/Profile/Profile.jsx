@@ -2,7 +2,6 @@ import { useSelector } from "react-redux"
 import {
 	Body,
 	Container,
-	ErrorMessage,
 	Header,
 	Title,
 } from "../../assets/common/common.styles"
@@ -14,6 +13,7 @@ import UserProfile from "../../components/PROFILE/UserProfile/UserProfile"
 import AdminProfile from "../../components/PROFILE/AdminProfile/AdminProfile"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 
 const Profile = () => {
 	useGetUserQuery()
@@ -48,8 +48,12 @@ const Profile = () => {
 			<Body theme={theme}>
 				<UserProfile user={user} />
 			</Body>
-			{res.isError && <ErrorMessage>Failed to get users</ErrorMessage>}
-			{user?.user_is_admin === "true" && <AdminProfile users={users} theme={theme} />}
+			{res.isError && (
+				<InfoMessage state="error" text="Failed to detch users" />
+			)}
+			{user?.user_is_admin === "true" && (
+				<AdminProfile users={users} theme={theme} />
+			)}
 		</Container>
 	)
 }

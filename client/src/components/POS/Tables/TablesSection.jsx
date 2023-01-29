@@ -10,6 +10,7 @@ import { useState } from "react"
 import { BigScreen, SmallScreen } from "./TableSection.styles"
 import { CardTitle, StyledProductCard } from "../ProductCard/ProductCard.styles"
 import AddIcon from "@mui/icons-material/Add"
+import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
 const TablesSection = ({ theme, onClick }) => {
 	useGetActiveTablesQuery()
@@ -26,22 +27,24 @@ const TablesSection = ({ theme, onClick }) => {
 		const month = timestamp.getMonth() + 1
 		const year = timestamp.getFullYear()
 
-		const tableNumber = activeTables?.length === 0 ? 1 : activeTables?.length +1
+		const tableNumber =
+			activeTables?.length === 0 ? 1 : activeTables?.length + 1
 
 		const table = {
 			year: year,
 			month: month,
 			day: day,
 			status: "active",
-			number: tableNumber
+			number: tableNumber,
 		}
 		postTable(table)
 	}
 
-	// todo add res. error handling
-
 	return (
 		<>
+			{res.isError && (
+				<InfoMessage state="error" text="Failed to create table" />
+			)}
 			<SmallScreen>
 				<StyledProductCard onClick={handleAddTable}>
 					<AddIcon />

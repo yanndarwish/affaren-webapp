@@ -23,10 +23,10 @@ import TablePayment from "../TablePayment/TablePayment"
 import TableProducts from "../TableProducts/TableProducts"
 import DeleteTable from "../DeleteTable/DeleteTable"
 import TablePaid from "../TablePaid/TablePaid"
+import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	const ws = useContext(WebSocketContext)
-	const dispatch = useDispatch()
 	const overlayRef = useRef()
 	const [peopleSet, setPeopleSet] = useState([])
 	const [value, setValue] = useState(0)
@@ -312,6 +312,9 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 								handleDelete={handleDelete}
 								handleAddPerson={handleAddPerson}
 							/>
+							{res.isError && <InfoMessage state="error" text="Failed to delete product"/>}
+							{respo.isError && <InfoMessage state="error" text="Failed to create product"/>}
+							{response.isError && <InfoMessage state="error" text="Failed to update product"/>}
 						</DialogCard>
 					</DialogBody>
 					<DialogFooter>

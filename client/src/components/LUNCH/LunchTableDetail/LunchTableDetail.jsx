@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import {
 	ArtTitle,
 	Column,
@@ -7,9 +7,8 @@ import {
 	SpaceHeaderCenter,
 } from "../../../assets/common/common.styles"
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined"
-
+import InfoMessage from '../../common/InfoMessage/InfoMessage'
 import {
-	useGetActiveTablesProductsMutation,
 	usePatchProductTableStatusMutation,
 } from "../../../redux/services/tableProductsApi"
 import { IconButton } from "@mui/material"
@@ -20,7 +19,6 @@ import { WebSocketContext } from "../../../utils/context/webSocket"
 const LunchTableDetail = ({ table }) => {
 	const ws = useContext(WebSocketContext)
 
-	const [getActiveDishes, response] = useGetActiveTablesProductsMutation()
 	const [updateStatus, res] = usePatchProductTableStatusMutation()
 
 	const handleClick = (e) => {
@@ -55,10 +53,6 @@ const LunchTableDetail = ({ table }) => {
 		})
 	}
 
-	useEffect(() => {
-		getActiveDishes()
-	}, [res.isSuccess])
-
 	return (
 		<Column>
 			<ArtTitle>Table {table[0]?.table_number}</ArtTitle>
@@ -67,14 +61,15 @@ const LunchTableDetail = ({ table }) => {
 				.map((product, i) =>
 					product.dish_status === "done" ? (
 						<SpaceHeaderCenter
-							key={
-								"detail" +
-								product.table_id +
-								product.table_person +
-								product.dish_id +
-								i
-							}
+						key={
+							"detail" +
+							product.table_id +
+							product.table_person +
+							product.dish_id +
+							i
+						}
 						>
+							{res.isError && <InfoMessage state="error" text="Failed to update dish status"/>}
 							<SecondaryText>
 								{product.dish_quantity} {product.dish_name}
 							</SecondaryText>

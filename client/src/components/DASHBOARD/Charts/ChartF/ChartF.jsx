@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react"
 import {
 	Body,
-	ErrorMessage,
 	SubTitle,
 } from "../../../../assets/common/common.styles"
 import { useGetSalesProductsQuery } from "../../../../redux/services/salesApi"
+import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 import BestSellersTable from "../ChartC/BestSellersTable"
 
 const ChartF = ({ theme, months, month, year }) => {
@@ -25,28 +25,31 @@ const ChartF = ({ theme, months, month, year }) => {
 		let products = []
 		let formatted = []
 		data &&
-			data.filter(item => item.product_id.includes('M')).forEach((product) => {
-				if (!products.includes(product.product_id)) {
-					products.push(product.product_id)
-					formatted.push(product)
-				} else {
-					let found = formatted.find(
-						(item) => item.product_id === product.product_id
-					)
-					// if found, add item qty to product qty
-					found = {
-						...found,
-						product_quantity: found.product_quantity + product.product_quantity,
+			data
+				.filter((item) => item.product_id.includes("M"))
+				.forEach((product) => {
+					if (!products.includes(product.product_id)) {
+						products.push(product.product_id)
+						formatted.push(product)
+					} else {
+						let found = formatted.find(
+							(item) => item.product_id === product.product_id
+						)
+						// if found, add item qty to product qty
+						found = {
+							...found,
+							product_quantity:
+								found.product_quantity + product.product_quantity,
+						}
+
+						const update = formatted.filter(
+							(item) => item.product_id !== product.product_id
+						)
+
+						formatted = update
+						formatted.push(found)
 					}
-
-					const update = formatted.filter(
-						(item) => item.product_id !== product.product_id
-					)
-
-					formatted = update
-					formatted.push(found)
-				}
-			})
+				})
 		return formatted
 	}
 
@@ -66,8 +69,14 @@ const ChartF = ({ theme, months, month, year }) => {
 	return (
 		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
 			<SubTitle>{months[month - 1]}'s Lunch Best Sellers</SubTitle>
-			{isError && <ErrorMessage>Failed to fetch Data</ErrorMessage>}
-			<BestSellersTable data={sortedData} />
+			{isError ? (
+				<InfoMessage
+					state="error"
+					text="Failed to fetch month's lunch best sellers"
+				/>
+			) : (
+				<BestSellersTable data={sortedData} />
+			)}
 		</Body>
 	)
 }

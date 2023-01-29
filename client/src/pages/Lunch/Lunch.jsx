@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 import { FullFlex } from "../../assets/common/common.styles"
 
 import { useNavigate } from "react-router-dom"
@@ -8,9 +8,10 @@ import LunchMain from "../../components/LUNCH/LunchMain/LunchMain"
 import LunchAside from "../../components/LUNCH/LunchAside/LunchAside"
 import { useGetActiveTablesProductsMutation } from "../../redux/services/tableProductsApi"
 import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined"
-import { setTargetTable } from "../../redux/features/tableProducts"
 import Button from "../../components/common/Button/Button.component"
 import { ButtonWrapper } from "../../components/LUNCH/LunchAside/LunchAside.styles"
+import Notif from "../../assets/sound/Notif.mp3"
+import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 
 const Lunch = () => {
 	const navigate = useNavigate()
@@ -23,6 +24,7 @@ const Lunch = () => {
 	const [isSideOpen, setIsSideOpen] = useState(true)
 	const [todoDishes, setTodoDishes] = useState([])
 	const [notif, setNotif] = useState(0)
+	const audioFile = new Audio(Notif)
 	const [getActiveDishes, res] = useGetActiveTablesProductsMutation()
 
 	const redirect = () => {
@@ -33,16 +35,17 @@ const Lunch = () => {
 		setIsSideOpen(!isSideOpen)
 	}
 
-	useEffect(() => {
-		console.log("updating state")
-			setTodoDishes(activeDishes)
+	const playAudio = () => {
+		audioFile?.play()
+	}
 
+	useEffect(() => {
+		setTodoDishes(activeDishes)
+		playAudio()
 	}, [activeDishes])
 
 	useEffect(() => {
-		console.log(lunchUpdate)
 		setTimeout(() => {
-			console.log("Delayed for 1/2 second.")
 			getActiveDishes()
 		}, "500")
 	}, [lunchUpdate])
@@ -58,6 +61,9 @@ const Lunch = () => {
 			<ButtonWrapper>
 				<Button title={<TableRestaurantOutlinedIcon />} onClick={toggleSide} />
 			</ButtonWrapper>
+			{res.isError && (
+				<InfoMessage state="error" text="Failed to fetch active dishes" />
+			)}
 			<LunchMain
 				theme={theme}
 				dishes={todoDishes}

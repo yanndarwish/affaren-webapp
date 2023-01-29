@@ -38,6 +38,8 @@ const TablePaid = ({ setIsOpen, tableId }) => {
 			<InfoMessage state="error" text="Failed to update table status" />
 		) : res.isSuccess ? (
 			<InfoMessage state="success" text="Table marked as paid" />
+		) : response.isError ? (
+			<InfoMessage state="error" text="Failed to update the status of products in the table" />
 		) : (
 			<ArtTitle>
 				Are you sure you want to mark this table as paid ? This will close the

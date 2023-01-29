@@ -1,4 +1,4 @@
-import { ErrorMessage, FullFlex } from "../../assets/common/common.styles"
+import { FullFlex } from "../../assets/common/common.styles"
 import OrdersList from "../../components/ORDERS/OrdersList/OrdersList"
 import { useGetOrdersMutation } from "../../redux/services/orderApi"
 import { useState } from "react"
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom"
 import { OrderButton } from "../../components/ORDERS/OrdersList/OrdersList.styles"
 import { IconButton } from "@mui/material"
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined"
+import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 
 const Orders = () => {
 	const [listIsOpen, setListIsOpen] = useState(true)
@@ -85,7 +86,7 @@ const Orders = () => {
 				setIsEdit={setIsEdit}
 				toggleList={isMobile && toggleList}
 			/>
-			{res.isError && <ErrorMessage>Failed to fetch orders</ErrorMessage>}
+			{res.isError && <InfoMessage state="error" text="Failed to fetch orders"/>}
 			{isMobile ? (
 				add && !listIsOpen ? (
 					<AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder} />

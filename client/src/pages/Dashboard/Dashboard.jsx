@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import {
 	Container,
-	ErrorMessage,
 	Flex,
 	SpaceHeader,
 	Title,
@@ -20,6 +19,7 @@ import ChartE from "../../components/DASHBOARD/Charts/ChartE/ChartE"
 import ChartF from "../../components/DASHBOARD/Charts/ChartF/ChartF"
 import ChartG from "../../components/DASHBOARD/Charts/ChartG/ChartG"
 import ChartH from "../../components/DASHBOARD/Charts/ChartH/ChartH"
+import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
 
 const Dashboard = () => {
 	const dispatch = useDispatch()
@@ -102,19 +102,25 @@ const Dashboard = () => {
 					<DateInput />
 				</Flex>
 			</SpaceHeader>
-				<ChartA theme={theme} />
-				<ChartH theme={theme} />
-				<ChartG theme={theme} />
-				<ChartB theme={theme} months={months} month={month} year={year} />
-				<ChartC theme={theme} months={months} month={month} year={year} />
-				{user?.user_is_admin === "true" && !res.isError ? (
-					<ChartD theme={theme} />
+			{error ? <InfoMessage state="error" text="Failed to fetch month's sales"/>
+			:<>
+			<ChartA theme={theme} />
+			<ChartH theme={theme} />
+			<ChartG theme={theme} />
+			<ChartB theme={theme} months={months} month={month} year={year} />
+			<ChartC theme={theme} months={months} month={month} year={year} />
+			{user?.user_is_admin === "true" && !res.isError ? (
+				<ChartD theme={theme} />
 				) : (
 					user?.user_is_admin === "true" &&
-					res.isError && <ErrorMessage>Failed to fetch users</ErrorMessage>
-				)}
-				<ChartE theme={theme} months={months} month={month} year={year} />
-				<ChartF theme={theme} months={months} month={month} year={year} />
+					res.isError && (
+						<InfoMessage state="error" text="Failed to fetch users data" />
+						)
+						)}
+			<ChartE theme={theme} months={months} month={month} year={year} />
+			<ChartF theme={theme} months={months} month={month} year={year} />
+						</>
+			}
 		</Container>
 	)
 }
