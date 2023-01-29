@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { useSelector } from "react-redux"
 import { FullFlex } from "../../assets/common/common.styles"
-
+import useSound from 'use-sound'
 import { useNavigate } from "react-router-dom"
 import LunchMain from "../../components/LUNCH/LunchMain/LunchMain"
 import LunchAside from "../../components/LUNCH/LunchAside/LunchAside"
@@ -26,6 +26,7 @@ const Lunch = () => {
 	const [notif, setNotif] = useState(0)
 	const audioFile = new Audio(Notif)
 	const [getActiveDishes, res] = useGetActiveTablesProductsMutation()
+	const [play] = useSound(Notif)
 
 	const redirect = () => {
 		!loggedIn && navigate("/login")
@@ -36,7 +37,7 @@ const Lunch = () => {
 	}
 
 	const playAudio = () => {
-		audioFile?.play()
+		play()
 	}
 
 	useEffect(() => {
