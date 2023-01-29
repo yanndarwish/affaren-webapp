@@ -657,7 +657,7 @@ app.get("/sales/:id/products", auth, async (req, res) => {
 	}
 })
 
-// get all products of the sales of a specific period
+// get all products of the sales of a specific month
 app.get("/sales/:year/:month/products", auth, async (req, res) => {
 	try {
 		const { year, month } = req.params
@@ -665,6 +665,21 @@ app.get("/sales/:year/:month/products", auth, async (req, res) => {
 		const response = await pool.query(
 			"SELECT * FROM sales_products WHERE sale_year = $1 AND sale_month = $2",
 			[year, month]
+		)
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get all products of the sales of a specific day
+app.get("/sales/:year/:month/:day/products", async (req, res) => {
+	try {
+		const { year, month, day } = req.params
+
+		const response = await pool.query(
+			"SELECT * FROM sales_products WHERE sale_year = $1 AND sale_month = $2 AND sale_day = $3",
+			[year, month, day]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {

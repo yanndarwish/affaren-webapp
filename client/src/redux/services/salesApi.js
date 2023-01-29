@@ -91,6 +91,12 @@ export const salesApi = createApi({
 				url: `sales/${year}/${month}/products`,
 			}),
 		}),
+		getDaySalesProducts: builder.query({
+			query: ({ year, month, day }) => ({
+				url: `sales/${year}/${month}/${day}/products`,
+			}),
+			providesTags: ["Sales"],
+		}),
 		deleteSaleProducts: builder.mutation({
 			query: ({ id }) => ({
 				url: `sales/${id}/products`,
@@ -112,6 +118,7 @@ export const {
 	usePostSaleProductsMutation,
 	useGetSaleProductsQuery,
 	useGetSalesProductsQuery,
+	useGetDaySalesProductsQuery,
 	useDeleteSaleProductsMutation,
 } = salesApi
 export default salesApi

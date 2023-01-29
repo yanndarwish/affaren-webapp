@@ -18,6 +18,7 @@ import ChartD from "../../components/DASHBOARD/Charts/ChartD/ChartD"
 import { useNavigate } from "react-router-dom"
 import ChartE from "../../components/DASHBOARD/Charts/ChartE/ChartE"
 import ChartF from "../../components/DASHBOARD/Charts/ChartF/ChartF"
+import ChartG from "../../components/DASHBOARD/Charts/ChartG/ChartG"
 
 const Dashboard = () => {
 	const dispatch = useDispatch()
@@ -111,6 +112,7 @@ const Dashboard = () => {
 				)}
 				<ChartE theme={theme} months={months} month={month} year={year} />
 				<ChartF theme={theme} months={months} month={month} year={year} />
+				<ChartG theme={theme} months={months} month={month} year={year} />
 		</Container>
 	)
 }

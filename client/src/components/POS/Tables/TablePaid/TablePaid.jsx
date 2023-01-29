@@ -14,7 +14,6 @@ const TablePaid = ({ setIsOpen, tableId }) => {
 	const [updateTable, res] = useUpdateTableStatusMutation()
 	const [modalIsOpen, setModalIsOpen] = useState(false)
 
-	console.log(tableId)
 	const handleModal = () => {
 		setModalIsOpen(!modalIsOpen)
 	}
