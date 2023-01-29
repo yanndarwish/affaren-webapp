@@ -10,14 +10,21 @@ import {
 	SubTitle,
 } from "../../../assets/common/common.styles"
 import { Container } from "../Card.styles"
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material"
 
 const LoginCard = ({ theme }) => {
-	const [email, setEmail] = useState("yann.darwish@gmail.com")
-	const [password, setPassword] = useState("password")
+	const [email, setEmail] = useState("")
+	const [password, setPassword] = useState("")
+	const [isChecked, setIsChecked] = useState(false)
 	const [getAuth, res] = useGetAuthMutation()
 	const navigate = useNavigate()
 
 	const handleLogin = async () => {
+		if (isChecked && email !== "") {
+			localStorage.username = email
+			localStorage.password = password
+			localStorage.checkbox = isChecked
+		}
 		const payload = {
 			email: email,
 			password: password,
@@ -30,6 +37,14 @@ const LoginCard = ({ theme }) => {
 			navigate("/profile")
 		}
 	}
+
+	useEffect(() => {
+		if (localStorage.checkbox && localStorage.email !== "") {
+			setIsChecked(true)
+			setEmail(localStorage.username)
+			setPassword(localStorage.password)
+		}
+	}, [])
 
 	useEffect(() => {
 		redirect()
@@ -58,6 +73,17 @@ const LoginCard = ({ theme }) => {
 						onChange={setPassword}
 						type="password"
 					/>
+					<FormGroup>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={isChecked}
+									onChange={(e) => setIsChecked(e.target.checked)}
+								/>
+							}
+							label="Remember me"
+						/>
+					</FormGroup>
 					<Link to="/forgot-password">Forgot you password ?</Link>
 				</Column>
 				<Button title="Login" color="success" onClick={handleLogin} />
