@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom"
 import ChartE from "../../components/DASHBOARD/Charts/ChartE/ChartE"
 import ChartF from "../../components/DASHBOARD/Charts/ChartF/ChartF"
 import ChartG from "../../components/DASHBOARD/Charts/ChartG/ChartG"
+import ChartH from "../../components/DASHBOARD/Charts/ChartH/ChartH"
 
 const Dashboard = () => {
 	const dispatch = useDispatch()
@@ -102,6 +103,8 @@ const Dashboard = () => {
 				</Flex>
 			</SpaceHeader>
 				<ChartA theme={theme} />
+				<ChartH theme={theme} />
+				<ChartG theme={theme} />
 				<ChartB theme={theme} months={months} month={month} year={year} />
 				<ChartC theme={theme} months={months} month={month} year={year} />
 				{user?.user_is_admin === "true" && !res.isError ? (
@@ -112,7 +115,6 @@ const Dashboard = () => {
 				)}
 				<ChartE theme={theme} months={months} month={month} year={year} />
 				<ChartF theme={theme} months={months} month={month} year={year} />
-				<ChartG theme={theme} months={months} month={month} year={year} />
 		</Container>
 	)
 }
