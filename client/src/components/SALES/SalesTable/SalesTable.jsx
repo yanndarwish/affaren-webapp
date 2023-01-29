@@ -81,7 +81,7 @@ export default function SalesTable({ array }) {
 			user: sale.sale_user,
 			year: sale.sale_year,
 		}
-		// print(formattedSale)
+		print(formattedSale)
 	}
 
 	const handleSaleDelete = () => {

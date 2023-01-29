@@ -177,9 +177,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			})
 
 			setActualSale(confirmedSale)
-			if (Object.keys(confirmedSale.paymentMethods).includes("cash")) {
+			// if (Object.keys(confirmedSale.paymentMethods).includes("cash")) {
 				openDrawer()
-			}
+			// }
 			// reset sale
 			dispatch(resetSale())
 			dispatch(setUser({ user: user.user_first_name }))
@@ -213,11 +213,11 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		)
 	}
 	const openDrawer = () => {
-		// postDrawer()
+		postDrawer()
 	}
 
 	const printing = () => {
-		// print(actualSale)
+		print(actualSale)
 	}
 	const ModalFooter = () => {
 		return (
