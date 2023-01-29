@@ -89,7 +89,7 @@ const TableProducts = ({
 				flexGrow: 1,
 				bgcolor: "background.paper",
 				display: "flex",
-				height: 300,
+				height: "100%",
 				borderBottom: 1,
 				borderColor: "divider",
 				overflow: "scroll",

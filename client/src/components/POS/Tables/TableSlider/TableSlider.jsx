@@ -161,6 +161,19 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		return table?.filter((item) => item.table_person === value)
 	}
 
+	const checkSalmon = (meals) => {
+		let containsSalmon = false
+		meals
+			.filter((item) => item.dish_category === "main")
+			.forEach((meal) => {
+				if (meal.dish_name.toLowerCase().includes("saumon")) {
+					containsSalmon = true
+				}
+			})
+
+		return containsSalmon
+	}
+
 	const getMealCat = (meal) => {
 		if (meal.dish_category !== "beverage" && meal.dish_category !== "formula") {
 			return meal.dish_category
@@ -174,10 +187,11 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		return similarFormula.length > 0
 	}
 
-	const findFormula = (meals, formulas) => {
+	const findFormula = (meals, formulas, hasSalmon) => {
 		let match = 0
 		let formulaMatch
 		let mealsCat = JSON.stringify(meals.sort())
+
 		// loop through all active formulas to find matches with person's meals category
 		formulas.forEach((formula) => {
 			let catMatch = 0
@@ -197,13 +211,15 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				match = catMatch
 				formulaMatch = formula
 			}
+			if (formulaCat === mealsCat && formula.dish_name.toLowerCase().includes('saumon') && hasSalmon) {
+				formulaMatch = formula
+			}
+
 		})
 		return formulaMatch
 	}
 
 	const deleteOldFormula = (formula) => {
-		console.log("deleting")
-		console.log(formula)
 		deleteProduct({
 			tableId: formula.table_id,
 			personId: formula.table_person,
@@ -226,19 +242,12 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				item.dish_category !== "beverage" && item.dish_category !== "formula"
 		)
 
-		console.log(allMeals)
-
 		let dishesCat = []
-		allMeals
-			?.filter(
-				(item) =>
-					item.dish_category !== "beverage" && item.dish_category !== "formula"
-			)
-			.forEach((meal) => {
-				dishesCat.push(getMealCat(meal))
-			})
+		meals.forEach((meal) => {
+			dishesCat.push(getMealCat(meal))
+		})
 
-		let foundFormula = findFormula(dishesCat, formulas)
+		let foundFormula = findFormula(dishesCat, formulas, checkSalmon(meals))
 
 		if (foundFormula) {
 			let prevFormulas = allMeals?.filter(
@@ -312,9 +321,15 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 								handleDelete={handleDelete}
 								handleAddPerson={handleAddPerson}
 							/>
-							{res.isError && <InfoMessage state="error" text="Failed to delete product"/>}
-							{respo.isError && <InfoMessage state="error" text="Failed to create product"/>}
-							{response.isError && <InfoMessage state="error" text="Failed to update product"/>}
+							{res.isError && (
+								<InfoMessage state="error" text="Failed to delete product" />
+							)}
+							{respo.isError && (
+								<InfoMessage state="error" text="Failed to create product" />
+							)}
+							{response.isError && (
+								<InfoMessage state="error" text="Failed to update product" />
+							)}
 						</DialogCard>
 					</DialogBody>
 					<DialogFooter>
