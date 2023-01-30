@@ -211,10 +211,13 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				match = catMatch
 				formulaMatch = formula
 			}
-			if (formulaCat === mealsCat && formula.dish_name.toLowerCase().includes('saumon') && hasSalmon) {
+			if (
+				formulaCat === mealsCat &&
+				formula.dish_name.toLowerCase().includes("saumon") &&
+				hasSalmon
+			) {
 				formulaMatch = formula
 			}
-
 		})
 		return formulaMatch
 	}
@@ -237,38 +240,50 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	const checkForFormulas = () => {
 		let allMeals = findPersonMeals(table, value)
+		console.log(allMeals)
 		let meals = allMeals?.filter(
 			(item) =>
 				item.dish_category !== "beverage" && item.dish_category !== "formula"
 		)
 
-		let dishesCat = []
-		meals.forEach((meal) => {
-			dishesCat.push(getMealCat(meal))
-		})
-
-		let foundFormula = findFormula(dishesCat, formulas, checkSalmon(meals))
-
-		if (foundFormula) {
-			let prevFormulas = allMeals?.filter(
-				(item) => item.dish_category === "formula"
-			)
-			prevFormulas?.forEach((prevFormula) => {
-				deleteOldFormula(prevFormula)
+		if (meals[0]?.dish_status !== "paid") {
+			let dishesCat = []
+			meals.forEach((meal) => {
+				dishesCat.push(getMealCat(meal))
 			})
+
+			let foundFormula = findFormula(dishesCat, formulas, checkSalmon(meals))
+
 			let copyMeals = Object.assign([], meals)
 			copyMeals.forEach((meal) => {
 				patchProductPrice(meal)
 			})
-			if (formulaAlreadyExists(allMeals, foundFormula)) {
-				return
-			} else {
-				copyMeals = copyMeals.map((meal) => {
-					let update = { ...meal, dish_price: 0 }
-					return update
-				})
+			if (foundFormula) {
+				// check that found formula is not already in allMeals
+				let alreadyExists = allMeals.filter(
+					(item) => item.dish_id === foundFormula.dish_id
+				)
 
-				addProductToPerson({ formula: foundFormula })
+				console.log(alreadyExists)
+
+				let prevFormulas = allMeals?.filter(
+					(item) => item.dish_category === "formula"
+				)
+				prevFormulas?.forEach((prevFormula) => {
+					deleteOldFormula(prevFormula)
+				})
+				if (alreadyExists.length === 0) {
+					if (formulaAlreadyExists(allMeals, foundFormula)) {
+						return
+					} else {
+						copyMeals = copyMeals.map((meal) => {
+							let update = { ...meal, dish_price: 0 }
+							return update
+						})
+
+						addProductToPerson({ formula: foundFormula })
+					}
+				}
 			}
 		}
 	}

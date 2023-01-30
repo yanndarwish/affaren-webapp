@@ -24,7 +24,6 @@ const Lunch = () => {
 	const [isSideOpen, setIsSideOpen] = useState(true)
 	const [todoDishes, setTodoDishes] = useState([])
 	const [notif, setNotif] = useState(0)
-	const audioFile = new Audio(Notif)
 	const [getActiveDishes, res] = useGetActiveTablesProductsMutation()
 	const [play] = useSound(Notif)
 
@@ -55,8 +54,6 @@ const Lunch = () => {
 		redirect()
 	}, [])
 
-	console.log(activeDishes)
-	console.log(todoDishes)
 	return (
 		<FullFlex>
 			<ButtonWrapper>

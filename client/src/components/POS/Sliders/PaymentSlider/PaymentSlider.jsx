@@ -34,7 +34,8 @@ import {
 	usePostSaleProductsMutation,
 	usePostSaleMutation,
 } from "../../../../redux/services/salesApi"
-import { usePatchTableProductsStatusMutation } from "../../../../redux/services/tableProductsApi"
+// import { usePatchTableProductsStatusMutation } from "../../../../redux/services/tableProductsApi"
+import { usePatchProductTableStatusMutation } from "../../../../redux/services/tableProductsApi"
 import { useUpdateProductsMutation } from "../../../../redux/services/productsApi"
 import { usePostPrintMutation } from "../../../../redux/services/printApi"
 import { usePostDrawerMutation } from "../../../../redux/services/printApi"
@@ -82,6 +83,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 	const user = useSelector((state) => state.user.user)
 	const tableId = useSelector((state) => state.sale.table)
 
+	const [patchProductStatus, r] = usePatchProductTableStatusMutation()
 	const [updateTable, respon] = useUpdateTableStatusMutation()
 	const [updateProduct, res] = useUpdateProductsMutation()
 	const [postSaleProducts, resp] = usePostSaleProductsMutation()
@@ -102,6 +104,9 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			}
 		}
 	}
+
+console.log(tableId)
+
 
 	const handlePayment = () => {
 		let paymentMethod = value === 0 ? "cash" : value === 1 ? "card" : "check"
@@ -171,10 +176,18 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				id: parseInt(confirmedSale.id),
 			})
 
-			updateTable({
-				id: tableId,
-				payload: { sale_id: parseInt(confirmedSale.id) },
-			})
+			if (tableId) {
+				updateTable({
+					id: tableId,
+					payload: { sale_id: parseInt(confirmedSale.id) },
+				})
+
+				let lunchProducts = sale.products.filter(item => item.id.includes("M"))
+				lunchProducts.forEach(product => {
+					// update status to 'paid'
+					patchProductStatus({tableId: tableId, personId: product.person, dishId: product.id, status: "paid"})
+				})
+			}
 
 			setActualSale(confirmedSale)
 			// if (Object.keys(confirmedSale.paymentMethods).includes("cash")) {

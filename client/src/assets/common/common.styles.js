@@ -275,6 +275,12 @@ export const SecondaryText = styled.p`
 	color: rgb(${light.COLOR_TEXT_RGB}, 0.5);
 `
 
+export const SuccessText = styled.p`
+	font-size: ${constant.FONT_BODY}px;
+	font-weight: 500;
+	color: ${constant.CLR_SUCCESS};
+`
+
 export const Wrap = styled.div`
 	display: flex;
 	gap: ${constant.GAP}px;

@@ -3,6 +3,7 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined"
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
 import { IconButton, Tab, Tabs } from "@mui/material"
+import CheckIcon from "@mui/icons-material/Check"
 import AddIcon from "@mui/icons-material/Add"
 import { Box } from "@mui/system"
 import {
@@ -11,6 +12,7 @@ import {
 	PrimaryText,
 	SecondaryText,
 	SpaceHeaderCenter,
+	SuccessText,
 } from "../../../../assets/common/common.styles"
 import { useContext } from "react"
 import { WebSocketContext } from "../../../../utils/context/webSocket"
@@ -154,6 +156,23 @@ const TableProducts = ({
 													data-person={id}
 												/>
 											</IconButton>
+										</GapS>
+									) : item.dish_status === "paid" ? (
+										<GapS>
+											{res.isError && (
+												<InfoMessage
+													state="error"
+													text="Failed to update product status"
+												/>
+											)}
+											<SuccessText>{item.dish_name}</SuccessText>
+											<SuccessText>paid</SuccessText>
+
+												<CheckIcon
+												color="success"
+													data-id={item.dish_id}
+													data-person={id}
+												/>
 										</GapS>
 									) : (
 										<GapS>
