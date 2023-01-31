@@ -25,7 +25,6 @@ const ChartE = ({ theme, months, month, year }) => {
 
 	const getLunchTotalRevenue =() => {
 		let total = '0'
-		console.log(lunchArray)
 		lunchArray?.forEach(item => {
 			total = (parseFloat(item.product_price) + parseFloat(total)).toFixed(2)
 		})

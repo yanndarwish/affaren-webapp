@@ -21,7 +21,6 @@ const MenuFilter = () => {
 		dispatch(setMenuTypeFilter(e.target.value))
 	}
 
-	console.log()
 	return (
 		<Column>
 			<ArtTitle>Filters</ArtTitle>

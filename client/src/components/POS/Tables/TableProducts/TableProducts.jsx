@@ -57,7 +57,6 @@ const TableProducts = ({
 	handleDelete,
 	handleAddPerson,
 }) => {
-	console.log(theme)
 	const ws = useContext(WebSocketContext)
 	const [updateStatus, res] = usePatchProductTableStatusMutation()
 

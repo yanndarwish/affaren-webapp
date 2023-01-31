@@ -105,9 +105,6 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		}
 	}
 
-console.log(tableId)
-
-
 	const handlePayment = () => {
 		let paymentMethod = value === 0 ? "cash" : value === 1 ? "card" : "check"
 		let leftToPay = parseFloat(leftPaying)

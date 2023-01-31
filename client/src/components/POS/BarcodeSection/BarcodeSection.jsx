@@ -21,7 +21,6 @@ const BarcodeSection = ({setNotFound}) => {
 	const addToCart = (data) => {
 		if (data !== undefined && data !== null) {
 			setNotFound(false)
-			console.log('if')
 			let found = products.find((product) => product.id === data.product_id)
 
 			if (!found) {

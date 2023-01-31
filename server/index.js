@@ -7,7 +7,6 @@ const { API_PORT } = process.env
 const port = process.env.PORT || API_PORT
 
 function heartbeat() {
-	console.log("pong")
 	this.isAlive = true
 }
 
@@ -57,26 +56,6 @@ const interval = setInterval(function ping() {
 wss.on("close", function close() {
 	clearInterval(interval)
 })
-
-// wss.on("connection", (ws) => {
-// 	ws.isAlive = true
-
-// 	ws.on("pong", () => {
-// 		console.log("pong received")
-// 		ws.isAlive = true
-// 	})
-// 	ws.on("message", (message) => {
-// 		console.log(`received ${message}`)
-
-// 		wss.clients.forEach((client) => {
-// 			if (client != ws) {
-// 				client.send(`Hello, broadcast message -> ${message}`)
-// 			}
-// 		})
-// 	})
-
-// 	ws.send(`Hello, you just connected to WS`)
-// })
 
 server.listen(port, () => {
 	console.log(`Server running on port ${port}`)

@@ -240,7 +240,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	const checkForFormulas = () => {
 		let allMeals = findPersonMeals(table, value)
-		console.log(allMeals)
 		let meals = allMeals?.filter(
 			(item) =>
 				item.dish_category !== "beverage" && item.dish_category !== "formula"
@@ -266,7 +265,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				})
 				// check that found formula is not already in allMeals
 				if (formulaAlreadyExists(allMeals, foundFormula)) {
-					console.log("exist so exiting")
 					return
 				} else {
 					addProductToPerson({ formula: foundFormula })
