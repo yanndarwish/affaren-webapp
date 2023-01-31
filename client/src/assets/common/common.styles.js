@@ -148,6 +148,11 @@ export const SpaceHeaderCenter = styled.header`
 	align-items: center;
 `
 
+export const SpaceBetween = styled.div`
+	display: flex;
+	justify-content: space-between;
+`
+
 export const Title = styled.h1`
 	font-size: ${constant.FONT_PAGE_TITLE}px;
 	font-weight: bold;
@@ -278,8 +283,29 @@ export const SecondaryText = styled.p`
 export const SuccessText = styled.p`
 	font-size: ${constant.FONT_BODY}px;
 	font-weight: 500;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	color: ${constant.CLR_SUCCESS};
-`
+	`
+	
+	export const Ellipsis = styled.p`
+		font-size: ${constant.FONT_BODY}px;
+		font-weight: 500;
+		width: 12ch;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: ${(props) =>
+			props.color === "success"
+				? constant.CLR_SUCCESS
+				: props.color === "primary"
+				? `rgb(${light.COLOR_TEXT_RGB})`
+				: props.color === "secondary" && `rgb(${light.COLOR_TEXT_RGB}, 0.5)`};
+		@media (max-width: 768px) {
+			width:9ch
+		}
+	`
 
 export const Wrap = styled.div`
 	display: flex;

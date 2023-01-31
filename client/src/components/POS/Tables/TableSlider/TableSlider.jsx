@@ -254,8 +254,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 			let foundFormula = findFormula(dishesCat, formulas, checkSalmon(meals))
 
-			let copyMeals = Object.assign([], meals)
-			copyMeals.forEach((meal) => {
+			meals.forEach((meal) => {
 				patchProductPrice(meal)
 			})
 			if (foundFormula) {
@@ -263,24 +262,18 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 				let alreadyExists = allMeals.filter(
 					(item) => item.dish_id === foundFormula.dish_id
 				)
-
-				console.log(alreadyExists)
-
-				let prevFormulas = allMeals?.filter(
-					(item) => item.dish_category === "formula"
-				)
-				prevFormulas?.forEach((prevFormula) => {
-					deleteOldFormula(prevFormula)
-				})
 				if (alreadyExists.length === 0) {
+
+					let prevFormulas = allMeals?.filter(
+						(item) => item.dish_category === "formula"
+					)
+					prevFormulas?.forEach((prevFormula) => {
+						deleteOldFormula(prevFormula)
+					})
 					if (formulaAlreadyExists(allMeals, foundFormula)) {
 						return
 					} else {
-						copyMeals = copyMeals.map((meal) => {
-							let update = { ...meal, dish_price: 0 }
-							return update
-						})
-
+						console.log(alreadyExists)
 						addProductToPerson({ formula: foundFormula })
 					}
 				}
@@ -306,13 +299,13 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		getPeopleNumber()
 		setTimeout(() => {
 			checkForFormulas()
-		}, "100")
+		}, "200")
 	}, [table])
 
 	useEffect(() => {
 		setTimeout(() => {
 			checkForFormulas()
-		}, "100")
+		}, "200")
 	}, [value])
 
 	return isOpen ? (

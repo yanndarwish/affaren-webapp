@@ -8,9 +8,11 @@ import AddIcon from "@mui/icons-material/Add"
 import { Box } from "@mui/system"
 import {
 	Column,
+	Ellipsis,
 	GapS,
 	PrimaryText,
 	SecondaryText,
+	SpaceBetween,
 	SpaceHeaderCenter,
 	SuccessText,
 } from "../../../../assets/common/common.styles"
@@ -123,60 +125,63 @@ const TableProducts = ({
 							.map((item, i) => (
 								<SpaceHeaderCenter key={id + "-" + i}>
 									{item.dish_status === "waiting" ? (
-										<GapS>
-											{res.isError && (
-												<InfoMessage
-													state="error"
-													text="Failed to update product status"
-												/>
-											)}
-											<SecondaryText>{item.dish_name}</SecondaryText>
-											<SecondaryText>{item.dish_price} €</SecondaryText>
-											<IconButton
-												aria-label="waiting"
-												color="disabled"
-												data-id={item.dish_id}
-												data-person={id}
-												onClick={handleStatus}
-											>
-												<AccessTimeOutlinedIcon
+										<SpaceHeaderCenter>
+											<GapS>
+												{res.isError && (
+													<InfoMessage
+														state="error"
+														text="Failed to update product status"
+													/>
+												)}
+												<Ellipsis color="secondary">{item.dish_name}</Ellipsis>
+												<SecondaryText>{item.dish_price} €</SecondaryText>
+												<IconButton
+													aria-label="waiting"
+													color="disabled"
 													data-id={item.dish_id}
 													data-person={id}
-												/>
-											</IconButton>
-											<IconButton
-												aria-label="delete"
-												color="error"
-												data-id={item.dish_id}
-												data-person={id}
-												onClick={handleDelete}
-											>
-												<DeleteOutlineIcon
+													onClick={handleStatus}
+												>
+													<AccessTimeOutlinedIcon
+														data-id={item.dish_id}
+														data-person={id}
+													/>
+												</IconButton>
+												<IconButton
+													aria-label="delete"
+													color="error"
 													data-id={item.dish_id}
 													data-person={id}
-												/>
-											</IconButton>
-										</GapS>
+													onClick={handleDelete}
+												>
+													<DeleteOutlineIcon
+														data-id={item.dish_id}
+														data-person={id}
+													/>
+												</IconButton>
+											</GapS>
+										</SpaceHeaderCenter>
 									) : item.dish_status === "paid" ? (
-										<GapS>
-											{res.isError && (
-												<InfoMessage
-													state="error"
-													text="Failed to update product status"
-												/>
-											)}
-											<SuccessText>{item.dish_name}</SuccessText>
-											<SuccessText>paid</SuccessText>
-
+										<SpaceBetween>
+											<GapS>
+												{res.isError && (
+													<InfoMessage
+														state="error"
+														text="Failed to update product status"
+													/>
+												)}
+												<Ellipsis color="success">{item.dish_name}</Ellipsis>
+												<SuccessText>paid</SuccessText>
 												<CheckIcon
-												color="success"
+													color="success"
 													data-id={item.dish_id}
 													data-person={id}
 												/>
-										</GapS>
+											</GapS>
+										</SpaceBetween>
 									) : (
 										<GapS>
-											<PrimaryText>{item.dish_name}</PrimaryText>
+											<Ellipsis color="primary">{item.dish_name}</Ellipsis>
 											<PrimaryText>{item.dish_price} €</PrimaryText>
 											<IconButton
 												aria-label="active"
