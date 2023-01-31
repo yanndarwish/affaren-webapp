@@ -254,28 +254,23 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 			let foundFormula = findFormula(dishesCat, formulas, checkSalmon(meals))
 
-			meals.forEach((meal) => {
-				patchProductPrice(meal)
-			})
+	
 			if (foundFormula) {
-				// check that found formula is not already in allMeals
-				let alreadyExists = allMeals.filter(
-					(item) => item.dish_id === foundFormula.dish_id
+				meals.forEach((meal) => {
+					patchProductPrice(meal)
+				})
+				let prevFormulas = allMeals?.filter(
+					(item) => item.dish_category === "formula"
 				)
-				if (alreadyExists.length === 0) {
-
-					let prevFormulas = allMeals?.filter(
-						(item) => item.dish_category === "formula"
-					)
-					prevFormulas?.forEach((prevFormula) => {
-						deleteOldFormula(prevFormula)
-					})
-					if (formulaAlreadyExists(allMeals, foundFormula)) {
-						return
-					} else {
-						console.log(alreadyExists)
-						addProductToPerson({ formula: foundFormula })
-					}
+				prevFormulas?.forEach((prevFormula) => {
+					deleteOldFormula(prevFormula)
+				})
+				// check that found formula is not already in allMeals
+				if (formulaAlreadyExists(allMeals, foundFormula)) {
+					console.log("exist so exiting")
+					return
+				} else {
+					addProductToPerson({ formula: foundFormula })
 				}
 			}
 		}
