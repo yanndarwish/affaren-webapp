@@ -271,13 +271,19 @@ export const FullCenter = styled.div`
 export const PrimaryText = styled.p`
 	font-size: ${constant.FONT_BODY}px;
 	font-weight: 500;
-	color: rgb(${light.COLOR_TEXT_RGB});
+	color: ${(props) =>
+		props.theme === "dark"
+			? `rgb(${dark.COLOR_TEXT_RGB})`
+			: `rgb(${light.COLOR_TEXT_RGB})`};
 `
 
 export const SecondaryText = styled.p`
 	font-size: ${constant.FONT_BODY}px;
 	font-weight: 500;
-	color: rgb(${light.COLOR_TEXT_RGB}, 0.5);
+	color: ${(props) =>
+		props.theme === "dark"
+			? `rgb(${dark.COLOR_TEXT_RGB}, 0.5)`
+			: `rgb(${light.COLOR_TEXT_RGB}, 0.5)`};
 `
 
 export const SuccessText = styled.p`
@@ -287,25 +293,29 @@ export const SuccessText = styled.p`
 	overflow: hidden;
 	text-overflow: ellipsis;
 	color: ${constant.CLR_SUCCESS};
-	`
-	
-	export const Ellipsis = styled.p`
-		font-size: ${constant.FONT_BODY}px;
-		font-weight: 500;
-		width: 12ch;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		color: ${(props) =>
-			props.color === "success"
-				? constant.CLR_SUCCESS
-				: props.color === "primary"
-				? `rgb(${light.COLOR_TEXT_RGB})`
-				: props.color === "secondary" && `rgb(${light.COLOR_TEXT_RGB}, 0.5)`};
-		@media (max-width: 768px) {
-			width:9ch
-		}
-	`
+`
+
+export const Ellipsis = styled.p`
+	font-size: ${constant.FONT_BODY}px;
+	font-weight: 500;
+	width: 12ch;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: ${(props) =>
+		props.theme === "dark" && props.color === "primary"
+			? `rgb(${dark.COLOR_TEXT_RGB})`
+			: props.theme === "dark" && props.color === "secondary"
+			? `rgb(${dark.COLOR_TEXT_RGB}, 0.5)`
+			: props.color === "success"
+			? constant.CLR_SUCCESS
+			: props.color === "primary"
+			? `rgb(${light.COLOR_TEXT_RGB})`
+			: props.color === "secondary" && `rgb(${light.COLOR_TEXT_RGB}, 0.5)`};
+	@media (max-width: 768px) {
+		width: 9ch;
+	}
+`
 
 export const Wrap = styled.div`
 	display: flex;

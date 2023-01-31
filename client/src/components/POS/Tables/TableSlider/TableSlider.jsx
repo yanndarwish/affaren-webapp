@@ -254,7 +254,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 			let foundFormula = findFormula(dishesCat, formulas, checkSalmon(meals))
 
-	
 			if (foundFormula) {
 				meals.forEach((meal) => {
 					patchProductPrice(meal)
@@ -317,6 +316,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 						<ArtTitle>Detail</ArtTitle>
 						<DialogCard theme={theme}>
 							<TableProducts
+								theme={theme}
 								table={table}
 								value={value}
 								peopleSet={peopleSet}

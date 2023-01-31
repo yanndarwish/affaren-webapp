@@ -49,6 +49,7 @@ function a11yProps(index) {
 }
 
 const TableProducts = ({
+	theme,
 	table,
 	value,
 	peopleSet,
@@ -56,6 +57,7 @@ const TableProducts = ({
 	handleDelete,
 	handleAddPerson,
 }) => {
+	console.log(theme)
 	const ws = useContext(WebSocketContext)
 	const [updateStatus, res] = usePatchProductTableStatusMutation()
 
@@ -133,8 +135,12 @@ const TableProducts = ({
 														text="Failed to update product status"
 													/>
 												)}
-												<Ellipsis color="secondary">{item.dish_name}</Ellipsis>
-												<SecondaryText>{item.dish_price} €</SecondaryText>
+												<Ellipsis theme={theme} color="secondary">
+													{item.dish_name}
+												</Ellipsis>
+												<SecondaryText theme={theme}>
+													{item.dish_price} €
+												</SecondaryText>
 												<IconButton
 													aria-label="waiting"
 													color="disabled"
@@ -170,7 +176,9 @@ const TableProducts = ({
 														text="Failed to update product status"
 													/>
 												)}
-												<Ellipsis color="success">{item.dish_name}</Ellipsis>
+												<Ellipsis theme={theme} color="success">
+													{item.dish_name}
+												</Ellipsis>
 												<SuccessText>paid</SuccessText>
 												<CheckIcon
 													color="success"
@@ -181,8 +189,12 @@ const TableProducts = ({
 										</SpaceBetween>
 									) : (
 										<GapS>
-											<Ellipsis color="primary">{item.dish_name}</Ellipsis>
-											<PrimaryText>{item.dish_price} €</PrimaryText>
+											<Ellipsis theme={theme} color="primary">
+												{item.dish_name}
+											</Ellipsis>
+											<PrimaryText theme={theme}>
+												{item.dish_price} €
+											</PrimaryText>
 											<IconButton
 												aria-label="active"
 												color="success"
