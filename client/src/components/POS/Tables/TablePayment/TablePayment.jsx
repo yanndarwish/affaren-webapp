@@ -27,7 +27,7 @@ const TablePayment = ({ table, setIsOpen, setValue, value }) => {
 				let product = {
 					id: dish.dish_id,
 					name: dish.dish_name,
-					price: dish.dish_price,
+					price: parseFloat(dish.dish_price).toFixed(2),
 					taxe: dish.dish_taxe,
 					quantity: dish.dish_quantity,
 					person: dish.table_person,
@@ -72,7 +72,7 @@ const TablePayment = ({ table, setIsOpen, setValue, value }) => {
 					let product = {
 						id: dish.dish_id,
 						name: dish.dish_name,
-						price: dish.dish_price,
+						price: parseFloat(dish.dish_price).toFixed(2),
 						taxe: dish.dish_taxe,
 						quantity: dish.dish_quantity,
 						person: dish.table_person,
