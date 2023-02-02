@@ -13,7 +13,7 @@ const LunchAside = ({ theme, dishes }) => {
 	const format = () => {
 		let final = {}
 		let formattedArray = []
-		dishes?.forEach((dish) => {
+		dishes?.filter(item => item.dish_status !== 'paid').forEach((dish) => {
 			// check if final contains the table id
 			if (!Object.keys(final).includes(dish.table_id)) {
 				let array = [dish]
