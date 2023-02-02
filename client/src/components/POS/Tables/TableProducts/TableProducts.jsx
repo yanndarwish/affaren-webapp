@@ -193,6 +193,20 @@ const TableProducts = ({
 												/>
 											</GapS>
 										</SpaceBetween>
+									) : item.dish_status === "done" ? (
+										<GapS>
+											<Ellipsis theme={theme} color="tertiary">
+												{item.dish_name}
+											</Ellipsis>
+											<Ellipsis theme={theme} color="tertiary">
+												{item.dish_price} €
+											</Ellipsis>
+											<CheckIcon
+												color="primary"
+												data-id={item.dish_id}
+												data-person={id}
+											/>
+										</GapS>
 									) : (
 										<GapS>
 											<Ellipsis theme={theme} color="primary">

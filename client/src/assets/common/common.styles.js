@@ -298,7 +298,7 @@ export const SuccessText = styled.p`
 export const Ellipsis = styled.p`
 	font-size: ${constant.FONT_BODY}px;
 	font-weight: 500;
-	width: 12ch;
+	max-width: 12ch;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -311,7 +311,9 @@ export const Ellipsis = styled.p`
 			? constant.CLR_SUCCESS
 			: props.color === "primary"
 			? `rgb(${light.COLOR_TEXT_RGB})`
-			: props.color === "secondary" && `rgb(${light.COLOR_TEXT_RGB}, 0.5)`};
+			: props.color === "secondary"
+			? `rgb(${light.COLOR_TEXT_RGB}, 0.5)`
+			: props.color === "tertiary" && "#1876D2"};
 	@media (max-width: 768px) {
 		width: 9ch;
 	}
