@@ -1,21 +1,32 @@
 import Button from "../../../common/Button/Button.component"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 import { useDeleteTableMutation } from "../../../../redux/services/tablesApi"
+import { useDeleteTableProductsMutation } from "../../../../redux/services/tableProductsApi"
 import { Modal } from "modal-rjs"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import {
 	ArtTitle,
 	SpaceHeaderCenter,
 } from "../../../../assets/common/common.styles"
+import { WebSocketContext } from "../../../../utils/context/webSocket"
 
 const DeleteTable = ({ tableId, setIsOpen }) => {
+	const ws = useContext(WebSocketContext)
+
 	const [deleteTable, res] = useDeleteTableMutation()
+	const [deleteProducts, response] = useDeleteTableProductsMutation()
 	const [modalIsOpen, setModalIsOpen] = useState(false)
 
 	const handleDelete = () => {
 		deleteTable({ id: tableId })
-		res.isSuccess && setIsOpen(false)
+		deleteProducts({id: tableId})
+		res.isSuccess && response.isSuccess && setIsOpen(false)
 		res.reset()
+		response.reset()
+		ws?.sendMessage({
+			type: "lunch",
+			action: "table deletion",
+		})
 	}
 
 	const handleModal = () => {
@@ -30,9 +41,11 @@ const DeleteTable = ({ tableId, setIsOpen }) => {
 	const ModalBody = () => {
 		return res.isError ? (
 			<InfoMessage state="error" text="Failed to delete table" />
-		) : res.isSuccess ? (
+		) : res.isSuccess && response.isSuccess ? (
 			<InfoMessage state="success" text="Table deleted successfully" />
-		) : (
+		) : response.isError ? (
+			<InfoMessage state="error" text="Failed to delete products" />
+		): (
 			<ArtTitle>Are you sure you want to delete table {tableId} ?</ArtTitle>
 		)
 	}

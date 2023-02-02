@@ -69,44 +69,26 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	}
 
 	const addProductToPerson = ({ e, formula }) => {
-		let newDish
-		if (formula) {
-			newDish = {
-				table_id: dataTable?.table_id,
-				table_person: value,
-				dish_id: formula.dish_id,
-				dish_name: formula.dish_name,
-				dish_category: formula.dish_category,
-				dish_quantity: 1,
-				dish_price: formula.dish_price,
-				dish_taxe: formula.product_taxe,
-				table_year: dataTable.table_year,
-				table_month: dataTable.table_month,
-				table_day: dataTable.table_day,
-				table_number: dataTable.table_number,
-			}
-		} else {
-			const id = e.target.dataset.id
-			let dish = Object.assign(
-				{},
-				dishes.filter((dish) => dish.dish_id === id)[0]
-			)
-			// create new dish
-			newDish = {
-				table_id: dataTable?.table_id,
-				table_person: value,
-				dish_id: dish.dish_id,
-				dish_name: dish.dish_name,
-				dish_category: dish.dish_category,
-				dish_quantity: 1,
-				dish_price: dish.dish_price,
-				dish_taxe: dish.product_taxe,
-				table_year: dataTable.table_year,
-				table_month: dataTable.table_month,
-				table_day: dataTable.table_day,
-				dish_status: "waiting",
-				table_number: dataTable.table_number,
-			}
+		const id = e.target.dataset.id
+		let dish = Object.assign(
+			{},
+			dishes.filter((dish) => dish.dish_id === id)[0]
+		)
+		// create new dish
+		let newDish = {
+			table_id: dataTable?.table_id,
+			table_person: value,
+			dish_id: dish.dish_id,
+			dish_name: dish.dish_name,
+			dish_category: dish.dish_category,
+			dish_quantity: 1,
+			dish_price: dish.dish_price,
+			dish_taxe: dish.product_taxe,
+			table_year: dataTable.table_year,
+			table_month: dataTable.table_month,
+			table_day: dataTable.table_day,
+			dish_status: "waiting",
+			table_number: dataTable.table_number,
 		}
 
 		postUpdateTableProducts({ products: [newDish] })
@@ -180,12 +162,12 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		}
 	}
 
-	const formulaAlreadyExists = (meals, formula) => {
-		let similarFormula = meals?.filter(
-			(item) => item.dish_id === formula.dish_id
-		)
-		return similarFormula.length > 0
-	}
+	// const formulaAlreadyExists = (meals, formula) => {
+	// 	let similarFormula = meals?.filter(
+	// 		(item) => item.dish_id === formula.dish_id
+	// 	)
+	// 	return similarFormula.length > 0
+	// }
 
 	const findFormula = (meals, formulas, hasSalmon) => {
 		let match = 0
@@ -238,37 +220,56 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		})
 	}
 
+	const addFormula = (formula) => {
+		let newFormula = {
+			table_id: dataTable?.table_id,
+			table_person: value,
+			dish_id: formula.dish_id,
+			dish_name: formula.dish_name,
+			dish_category: formula.dish_category,
+			dish_quantity: 1,
+			dish_price: formula.dish_price,
+			dish_taxe: formula.product_taxe,
+			table_year: dataTable.table_year,
+			table_month: dataTable.table_month,
+			table_day: dataTable.table_day,
+			table_number: dataTable.table_number,
+		}
+
+		postUpdateTableProducts({ products: [newFormula] })
+
+		ws?.sendMessage({
+			type: "lunch",
+			action: "formula",
+		})
+	}
+
 	const checkForFormulas = () => {
 		let allMeals = findPersonMeals(table, value)
 		let meals = allMeals?.filter(
 			(item) =>
-				item.dish_category !== "beverage" && item.dish_category !== "formula"
+				item.dish_category !== "drink" && item.dish_category !== "formula"
 		)
+
+		let prevFormulas = allMeals?.filter(
+			(item) => item.dish_category === "formula"
+		)
+		prevFormulas?.forEach((prevFormula) => {
+			deleteOldFormula(prevFormula)
+		})
 
 		if (meals[0]?.dish_status !== "paid") {
 			let dishesCat = []
 			meals.forEach((meal) => {
 				dishesCat.push(getMealCat(meal))
 			})
-
+			
 			let foundFormula = findFormula(dishesCat, formulas, checkSalmon(meals))
-
 			if (foundFormula) {
 				meals.forEach((meal) => {
 					patchProductPrice(meal)
 				})
-				let prevFormulas = allMeals?.filter(
-					(item) => item.dish_category === "formula"
-				)
-				prevFormulas?.forEach((prevFormula) => {
-					deleteOldFormula(prevFormula)
-				})
-				// check that found formula is not already in allMeals
-				if (formulaAlreadyExists(allMeals, foundFormula)) {
-					return
-				} else {
-					addProductToPerson({ formula: foundFormula })
-				}
+				addFormula(foundFormula)
 			}
 		}
 	}
@@ -289,16 +290,8 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	useEffect(() => {
 		getPeopleNumber()
-		setTimeout(() => {
-			checkForFormulas()
-		}, "200")
-	}, [table])
 
-	useEffect(() => {
-		setTimeout(() => {
-			checkForFormulas()
-		}, "200")
-	}, [value])
+	}, [table])
 
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
@@ -321,6 +314,7 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 								handleChange={handleChange}
 								handleDelete={handleDelete}
 								handleAddPerson={handleAddPerson}
+								applyFormula={checkForFormulas}
 							/>
 							{res.isError && (
 								<InfoMessage state="error" text="Failed to delete product" />

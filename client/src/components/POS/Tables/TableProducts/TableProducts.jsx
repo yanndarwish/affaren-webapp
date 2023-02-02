@@ -20,6 +20,8 @@ import { useContext } from "react"
 import { WebSocketContext } from "../../../../utils/context/webSocket"
 import { usePatchProductTableStatusMutation } from "../../../../redux/services/tableProductsApi"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
+import Button from "../../../common/Button/Button.component"
+import { FormulaButtonWrapper } from "./TableProducts.styles"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -56,6 +58,7 @@ const TableProducts = ({
 	handleChange,
 	handleDelete,
 	handleAddPerson,
+	applyFormula,
 }) => {
 	const ws = useContext(WebSocketContext)
 	const [updateStatus, res] = usePatchProductTableStatusMutation()
@@ -91,6 +94,7 @@ const TableProducts = ({
 	return (
 		<Box
 			sx={{
+				position: "relative",
 				flexGrow: 1,
 				bgcolor: "background.paper",
 				display: "flex",
@@ -121,6 +125,9 @@ const TableProducts = ({
 			{peopleSet?.map((id, i) => (
 				<TabPanel value={value} index={i} key={i + "panel"}>
 					<Column>
+						<FormulaButtonWrapper>
+							<Button title="Apply Formula" onClick={applyFormula} />
+						</FormulaButtonWrapper>
 						{table
 							?.filter((product) => product.table_person === parseInt(id))
 							.map((item, i) => (
