@@ -112,12 +112,14 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 			dispatch(setDiscount({ discount: productDiscount }))
 		})
 
-		const updated = products.map((product, i) => {
-			if (product?.id === discountedProducts[i]?.id) {
-				return discountedProducts[i]
+		const updated = products.map((product) => {
+			const found = discountedProducts.find(item => item.id === product.id)
+			if (found) {
+				return found
 			} else {
 				return product
 			}
+
 		})
 
 		dispatch(updateProducts({ products: updated }))

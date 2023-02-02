@@ -99,21 +99,21 @@ const Cart = () => {
 							<TableCell component="th" scope="row">
 								{i + 1}
 							</TableCell>
-							<TableCell>{product.name}</TableCell>
+							<TableCell>{product?.name}</TableCell>
 							<TableCell align="right">
 								<Wrapper>
 									<RemoveIcon
-										data-id={product.id}
+										data-id={product?.id}
 										onClick={(e) => updateQuantity(e, -1)}
 									/>
-									{product.quantity}
+									{product?.quantity}
 									<AddIcon
-										data-id={product.id}
+										data-id={product?.id}
 										onClick={(e) => updateQuantity(e, 1)}
 									/>
 								</Wrapper>
 							</TableCell>
-							<TableCell align="right">{product.price}</TableCell>
+							<TableCell align="right">{product?.price}</TableCell>
 							<TableCell align="right">
 								<DeleteOutlinedIcon
 									data-id={product.id}
