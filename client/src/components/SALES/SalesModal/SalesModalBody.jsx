@@ -3,6 +3,7 @@ import {
 	Column,
 	Gap,
 	HorizontalCenter,
+	SecondaryEllipsis,
 	SecondaryText,
 	SpaceHeader,
 	VerticalCenter,
@@ -62,9 +63,9 @@ const SalesModalBody = ({ data, selected, details }) => {
 				<Column>
 					{details?.map((row) => (
 						<SpaceHeader key={row.product_id}>
-							<SecondaryText key={row.product_id + "-name"}>
+							<SecondaryEllipsis key={row.product_id + "-name"}>
 								{row.product_name}
-							</SecondaryText>
+							</SecondaryEllipsis>
 							<Gap>
 								<SecondaryText key={row.product_id + "-qty"}>
 									{row.product_quantity}

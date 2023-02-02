@@ -286,6 +286,19 @@ export const SecondaryText = styled.p`
 			: `rgb(${light.COLOR_TEXT_RGB}, 0.5)`};
 `
 
+export const SecondaryEllipsis = styled.p`
+	font-size: ${constant.FONT_BODY}px;
+	font-weight: 500;
+	width: 14ch;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: ${(props) =>
+		props.theme === "dark"
+			? `rgb(${dark.COLOR_TEXT_RGB}, 0.5)`
+			: `rgb(${light.COLOR_TEXT_RGB}, 0.5)`};
+`
+
 export const SuccessText = styled.p`
 	font-size: ${constant.FONT_BODY}px;
 	font-weight: 500;
