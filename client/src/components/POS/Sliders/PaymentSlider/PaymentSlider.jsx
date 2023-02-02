@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, useContext } from "react"
 import {
 	Dialog,
 	DialogBody,
@@ -42,6 +42,7 @@ import { usePostDrawerMutation } from "../../../../redux/services/printApi"
 import { Modal } from "modal-rjs"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 import { useUpdateTableStatusMutation } from "../../../../redux/services/tablesApi"
+import { WebSocketContext } from "../../../../utils/context/webSocket"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -71,6 +72,8 @@ function a11yProps(index) {
 }
 
 const Slider = ({ theme, isOpen, setIsOpen }) => {
+	const ws = useContext(WebSocketContext)
+
 	const overlayRef = useRef()
 	const dispatch = useDispatch()
 	const [value, setValue] = useState(0)
@@ -185,6 +188,10 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				lunchProducts.forEach(product => {
 					// update status to 'paid'
 					patchProductStatus({tableId: tableId, personId: product.person, dishId: product.id, status: "paid"})
+				})
+				ws?.sendMessage({
+					type: "lunch",
+					action: "payment",
 				})
 			}
 
