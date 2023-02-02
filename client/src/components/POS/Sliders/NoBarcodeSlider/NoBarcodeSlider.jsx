@@ -97,6 +97,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 		setProduct(obj)
 		dispatch(addProduct({ products: obj }))
 		setIsOpen(false)
+		setProduct({...product, taxe: 5.5})
 	}
 
 	return isOpen ? (
@@ -114,7 +115,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 								<InputLabel id="demo-simple-select-label">Category</InputLabel>
 								<Select
 									labelId="demo-simple-select-label"
-									id="demo-simple-select"
+									id="nb-category"
 									value={product.taxe}
 									label="Category"
 									onChange={(e) => handleChange(e, "taxe")}
