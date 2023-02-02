@@ -263,13 +263,16 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			meals.forEach((meal) => {
 				dishesCat.push(getMealCat(meal))
 			})
-			
+
 			let foundFormula = findFormula(dishesCat, formulas, checkSalmon(meals))
 			if (foundFormula) {
 				meals.forEach((meal) => {
 					patchProductPrice(meal)
 				})
-				addFormula(foundFormula)
+				// 100ms delay to prevent data from being refetched before all updates are done
+				setTimeout(() => {
+					addFormula(foundFormula)
+				}, 100)
 			}
 		}
 	}
@@ -290,7 +293,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 	useEffect(() => {
 		getPeopleNumber()
-
 	}, [table])
 
 	return isOpen ? (
