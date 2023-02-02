@@ -32,7 +32,7 @@ const ChartB = ({ theme, months, month, year }) => {
 	}, [dashboard.fullArray])
 
 	return (
-		<Body theme={theme} style={{ width: "100%", height: "100%" }}>
+		<Body theme={theme} style={{ width: "100%", height: "fit-content" }}>
 			<SpaceHeader>
 				<SubTitle>{months[month - 1]}'s Revenue : {monthTotal}€</SubTitle>
 				<Button title="Details" onClick={handleDetailClick} />
