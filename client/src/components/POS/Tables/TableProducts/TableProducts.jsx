@@ -132,16 +132,7 @@ const TableProducts = ({
 							?.filter((product) => product.table_person === parseInt(id))
 							.map((item, i) => (
 								<SpaceHeaderCenter key={id + "-" + i}>
-									{item.dish_category === "formula" ? (
-										<GapS>
-											<Ellipsis theme={theme} color="tertiary">
-												{item.dish_name}
-											</Ellipsis>
-											<Ellipsis theme={theme} color="tertiary">
-												{item.dish_price} €
-											</Ellipsis>
-										</GapS>
-									) : item.dish_status === "waiting" ? (
+									{item.dish_status === "waiting" ? (
 										<SpaceHeaderCenter>
 											<GapS>
 												{res.isError && (
@@ -202,6 +193,15 @@ const TableProducts = ({
 												/>
 											</GapS>
 										</SpaceBetween>
+									) : item.dish_category === "formula" ? (
+										<GapS>
+											<Ellipsis theme={theme} color="tertiary">
+												{item.dish_name}
+											</Ellipsis>
+											<Ellipsis theme={theme} color="tertiary">
+												{item.dish_price} €
+											</Ellipsis>
+										</GapS>
 									) : item.dish_status === "done" ? (
 										<GapS>
 											<Ellipsis theme={theme} color="tertiary">
