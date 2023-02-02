@@ -10,6 +10,7 @@ export const SmallScreen = styled.div`
 		justify-content: center;
 		align-items: center;
 		width: 100%;
+		overflow: scroll;
 		gap: ${constant.GAP}px;
 	}
 `

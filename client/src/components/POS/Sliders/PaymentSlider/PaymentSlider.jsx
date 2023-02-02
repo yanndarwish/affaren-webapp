@@ -105,6 +105,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		}
 	}
 
+	console.log(sale.products)
 	const handlePayment = () => {
 		let paymentMethod = value === 0 ? "cash" : value === 1 ? "card" : "check"
 		let leftToPay = parseFloat(leftPaying)
@@ -179,7 +180,8 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 					payload: { sale_id: parseInt(confirmedSale.id) },
 				})
 
-				let lunchProducts = sale.products.filter(item => item.id.includes("M"))
+				let stringProducts = sale.products.filter(item => typeof(item.id) === 'string')
+				let lunchProducts = stringProducts.filter(item => item.id.includes('M'))
 				lunchProducts.forEach(product => {
 					// update status to 'paid'
 					patchProductStatus({tableId: tableId, personId: product.person, dishId: product.id, status: "paid"})
