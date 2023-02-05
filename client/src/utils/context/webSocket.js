@@ -36,7 +36,6 @@ const WebSocketProvider = ({ children }) => {
 			socket.addEventListener("message", (message) => {
 				let data = JSON.parse(message.data)
 				if (data.type === "lunch") {
-					console.log('lunchupdate')
 					dispatch(setLunchUpdate())
 				}
 				if (data.type === "order") {

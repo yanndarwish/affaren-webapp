@@ -108,7 +108,6 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		}
 	}
 
-	console.log(sale.products)
 	const handlePayment = () => {
 		let paymentMethod = value === 0 ? "cash" : value === 1 ? "card" : "check"
 		let leftToPay = parseFloat(leftPaying)

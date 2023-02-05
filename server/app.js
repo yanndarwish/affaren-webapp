@@ -190,7 +190,6 @@ app.post("/reset-password/:id/:token", async (req, res) => {
 		id,
 	])
 
-	console.log(password)
 	let oldUser = response.rows[0]
 	if (!oldUser) {
 		return res.send("User does not exist")
@@ -576,7 +575,7 @@ app.get("/sales-last", auth, async (req, res) => {
 		)
 
 		const lastSale = response.rows[0]
-		const nextSaleId = lastSale.sale_id + 1
+		const nextSaleId = lastSale ? lastSale.sale_id + 1 : 1
 
 		res.status(200).send({ nextSaleId: nextSaleId })
 	} catch (err) {
@@ -1145,8 +1144,6 @@ app.patch(
 		try {
 			const { tableId, personId, dishId } = req.params
 			const { status } = req.body
-			console.log("haya")
-			console.log(status)
 			const response = await pool.query(
 				"UPDATE table_products SET dish_status = $1 WHERE table_id = $2 AND table_person = $3 AND dish_id = $4",
 				[status, tableId, personId, dishId]
@@ -1254,7 +1251,6 @@ app.delete("/table-products/:tableId", auth, async (req, res) => {
 			"DELETE FROM table_products WHERE table_id = $1",
 			[tableId]
 		)
-		console.log(response)
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
@@ -1545,7 +1541,6 @@ app.post("/drawer", auth, async (req, res) => {
 			printer.openCashDrawer()
 			try {
 				let execute = printer.execute()
-				console.error("Print done!")
 				res.status(200).send()
 			} catch (error) {
 				console.log("Print failed:", error)
