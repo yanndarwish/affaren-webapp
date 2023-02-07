@@ -14,3 +14,9 @@ export const DialogCard = styled.div`
 			? dark.COLOR_BG_SECONDARY
 			: light.COLOR_BG_SECONDARY};
 `
+
+export const FullWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+`

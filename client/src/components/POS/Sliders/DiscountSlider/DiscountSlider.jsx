@@ -19,15 +19,15 @@ import {
 import {
 	Dialog,
 	DialogBody,
-	DialogFooter,
 	DialogHeader,
+	DialogFooter,
 	Overlay,
 } from "../Slider.styles"
 import { SubTitle } from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
 import NumPad from "../../../common/NumPad/NumPad"
-import { DialogCard } from "./DiscountSlider.styles"
+import { DialogCard, FullWrapper } from "./DiscountSlider.styles"
 import { updateProducts, setDiscount } from "../../../../redux/features/sale"
 
 const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
@@ -139,114 +139,116 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 	return isOpen ? (
 		<Overlay theme={theme} onClick={closeSlider} ref={overlayRef}>
 			<Dialog id="dialog" theme={theme}>
-				<DialogHeader>
-					<SubTitle>Discount</SubTitle>
-					<CloseOutlinedIcon onClick={() => setIsOpen(false)} />
-				</DialogHeader>
-				<DialogBody>
-					{/* <ArtTitle>Product List</ArtTitle> */}
-					<DialogCard theme={theme}>
-						<TableContainer component={Paper} sx={{ height: "100%" }}>
-							<Table
-								sx={{ minWidth: 650, height: "100%" }}
-								aria-label="simple table"
-							>
-								<TableHead>
-									<TableRow>
-										<TableCell padding="checkbox">
-											<Checkbox
-												color="primary"
-												checked={
-													products.length > 0 &&
-													selected.length === products.length
-												}
-												onChange={handleSelectAllClick}
-												inputProps={{
-													"aria-label": "select all desserts",
-												}}
-											/>
-										</TableCell>
-										<TableCell>Name</TableCell>
-										<TableCell>Qty</TableCell>
-										<TableCell>Price</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{products.map((product, index) => {
-										const isItemSelected = isSelected(product.id)
-										const labelId = `enhanced-table-checkbox-${index}`
+				<FullWrapper>
+					<DialogHeader>
+						<SubTitle>Discount</SubTitle>
+						<CloseOutlinedIcon onClick={() => setIsOpen(false)} />
+					</DialogHeader>
+					<DialogBody>
+						{/* <ArtTitle>Product List</ArtTitle> */}
+						<DialogCard theme={theme}>
+							<TableContainer component={Paper} sx={{ height: "100%" }}>
+								<Table
+									sx={{ minWidth: 650, height: "100%" }}
+									aria-label="simple table"
+								>
+									<TableHead>
+										<TableRow>
+											<TableCell padding="checkbox">
+												<Checkbox
+													color="primary"
+													checked={
+														products.length > 0 &&
+														selected.length === products.length
+													}
+													onChange={handleSelectAllClick}
+													inputProps={{
+														"aria-label": "select all desserts",
+													}}
+												/>
+											</TableCell>
+											<TableCell>Name</TableCell>
+											<TableCell>Qty</TableCell>
+											<TableCell>Price</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+										{products.map((product, index) => {
+											const isItemSelected = isSelected(product.id)
+											const labelId = `enhanced-table-checkbox-${index}`
 
-										return (
-											<TableRow
-												key={product.name}
-												hover
-												onClick={(event) => handleClick(event, product.id)}
-												role="checkbox"
-												aria-checked={isItemSelected}
-												tabIndex={-1}
-												selected={isItemSelected}
-												// sx={{
-												// 	"&:last-child td, &:last-child th": { border: 0 },
-												// }}
-											>
-												<TableCell padding="checkbox">
-													<Checkbox
-														color="primary"
-														checked={isItemSelected}
-														inputProps={{
-															"aria-labelledby": labelId,
-														}}
-													/>
-												</TableCell>
-												<TableCell component="th" scope="row">
-													{product.name}
-												</TableCell>
-												<TableCell>{product.quantity}</TableCell>
-												<TableCell>{product.price}</TableCell>
-											</TableRow>
-										)
-									})}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<FormControl>
-							<FormLabel id="demo-radio-buttons-group-label">Type</FormLabel>
-							<RadioGroup
-								aria-labelledby="type-radio-buttons-group-label"
-								defaultValue="percent"
-								name="discount-type"
-								row
-							>
-								<FormControlLabel
-									id="percent-checkbox"
-									value="percent"
-									control={<Radio />}
-									label="Percent"
-									onClick={toggleDiscountType}
-								/>
-								<FormControlLabel
-									value="cash"
-									control={<Radio />}
-									label="Cash"
-									onClick={toggleDiscountType}
-								/>
-							</RadioGroup>
-						</FormControl>
-						<NumPad
-							display
-							unit={discountType === "percent" ? "%" : "€"}
-							value={discountAmount}
-							setValue={setDiscountAmount}
+											return (
+												<TableRow
+													key={product.name}
+													hover
+													onClick={(event) => handleClick(event, product.id)}
+													role="checkbox"
+													aria-checked={isItemSelected}
+													tabIndex={-1}
+													selected={isItemSelected}
+													// sx={{
+													// 	"&:last-child td, &:last-child th": { border: 0 },
+													// }}
+												>
+													<TableCell padding="checkbox">
+														<Checkbox
+															color="primary"
+															checked={isItemSelected}
+															inputProps={{
+																"aria-labelledby": labelId,
+															}}
+														/>
+													</TableCell>
+													<TableCell component="th" scope="row">
+														{product.name}
+													</TableCell>
+													<TableCell>{product.quantity}</TableCell>
+													<TableCell>{product.price}</TableCell>
+												</TableRow>
+											)
+										})}
+									</TableBody>
+								</Table>
+							</TableContainer>
+							<FormControl>
+								<FormLabel id="demo-radio-buttons-group-label">Type</FormLabel>
+								<RadioGroup
+									aria-labelledby="type-radio-buttons-group-label"
+									defaultValue="percent"
+									name="discount-type"
+									row
+								>
+									<FormControlLabel
+										id="percent-checkbox"
+										value="percent"
+										control={<Radio />}
+										label="Percent"
+										onClick={toggleDiscountType}
+									/>
+									<FormControlLabel
+										value="cash"
+										control={<Radio />}
+										label="Cash"
+										onClick={toggleDiscountType}
+									/>
+								</RadioGroup>
+							</FormControl>
+							<NumPad
+								display
+								unit={discountType === "percent" ? "%" : "€"}
+								value={discountAmount}
+								setValue={setDiscountAmount}
+							/>
+						</DialogCard>
+					</DialogBody>
+					<DialogFooter>
+						<Button
+							title="Apply Discount"
+							color="success"
+							onClick={applyDiscount}
 						/>
-					</DialogCard>
-				</DialogBody>
-				<DialogFooter>
-					<Button
-						title="Apply Discount"
-						color="success"
-						onClick={applyDiscount}
-					/>
-				</DialogFooter>
+					</DialogFooter>
+				</FullWrapper>
 			</Dialog>
 		</Overlay>
 	) : null

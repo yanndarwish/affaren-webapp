@@ -37,7 +37,7 @@ export const Dialog = styled.div`
 		position: relative;
 		left: 0;
 		width: 100%;
-		height:100%;
+		height: 100%;
 	}
 `
 
