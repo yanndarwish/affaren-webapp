@@ -6,7 +6,7 @@ import { Flex } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import BarcodeInput from "../../common/BarcodeInput/BarcodeInput"
 
-const BarcodeSection = ({setNotFound}) => {
+const BarcodeSection = ({ setNotFound }) => {
 	const products = useSelector((state) => state.sale.products)
 
 	const dispatch = useDispatch()
@@ -49,7 +49,7 @@ const BarcodeSection = ({setNotFound}) => {
 
 				dispatch(updateProducts({ products: updated }))
 			}
-		} else if (data === null){
+		} else if (data === null) {
 			setNotFound(true)
 		}
 		setBarcode("")
@@ -63,8 +63,10 @@ const BarcodeSection = ({setNotFound}) => {
 	}
 
 	const handleSearch = () => {
-		setSkip(false)
-		document.getElementById("barcode-input").focus()
+		if (barcode.length > 0) {
+			setSkip(false)
+			document.getElementById("barcode-input").focus()
+		}
 	}
 
 	useEffect(() => {
