@@ -125,9 +125,6 @@ const TableProducts = ({
 			{peopleSet?.map((id, i) => (
 				<TabPanel value={value} index={i} key={i + "panel"}>
 					<Column>
-						<FormulaButtonWrapper>
-							<Button title="Apply Formula" onClick={applyFormula} />
-						</FormulaButtonWrapper>
 						{table
 							?.filter((product) => product.table_person === parseInt(id))
 							.map((item, i) => (
@@ -252,6 +249,9 @@ const TableProducts = ({
 									)}
 								</SpaceHeaderCenter>
 							))}
+						<FormulaButtonWrapper>
+							<Button title="Apply Formula" onClick={applyFormula} />
+						</FormulaButtonWrapper>
 					</Column>
 				</TabPanel>
 			))}
