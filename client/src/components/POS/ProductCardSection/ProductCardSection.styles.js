@@ -4,7 +4,6 @@ import light from "../../../assets/common/light.theme.styles"
 import { constant } from "../../../assets/common/common.styles"
 
 export const StyledProductCardSection = styled.div`
-	position: relative;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
