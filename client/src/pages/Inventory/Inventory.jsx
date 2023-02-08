@@ -26,6 +26,7 @@ const Inventory = () => {
 	const theme = useSelector((state) => state.theme.theme)
 	const [searchString, setSearchString] = useState("")
 	const [barcode, setBarcode] = useState("")
+	const [inputBarcode, setInputBarcode] = useState("")
 	const [barcodeSearch, setBarcodeSearch] = useState(false)
 	const [filteredProducts, setFilteredProducts] = useState([])
 	const [editingProduct, setEditingProduct] = useState({})
@@ -110,6 +111,8 @@ const Inventory = () => {
 		} else {
 			setIsProductFound(false)
 			setIsCreationMode(true)
+			setInputBarcode(barcode)
+			setBarcode("")
 		}
 	}
 
@@ -192,14 +195,14 @@ const Inventory = () => {
 						/>
 					) : isCreationMode ? (
 						<CreateProduct
-							inputBarcode={barcode}
+							inputBarcode={inputBarcode}
 							focusOnBarcode={focusOnBarcode}
 							resetBarcode={resetBarcode}
 							sent={sent}
 							setSent={setSent}
 						/>
 					) : isError ? (
-						<InfoMessage state="error" text="Failed to fetch products"/>
+						<InfoMessage state="error" text="Failed to fetch products" />
 					) : (
 						<InventoryTable
 							products={filteredProducts}
