@@ -50,6 +50,7 @@ const MenuFilter = () => {
 				/>
 				<FormControlLabel value="main" control={<Radio />} label="Mains" />
 				<FormControlLabel value="desert" control={<Radio />} label="Deserts" />
+				<FormControlLabel value="drink" control={<Radio />} label="Drinks" />
 				<FormControlLabel
 					value="formula"
 					control={<Radio />}

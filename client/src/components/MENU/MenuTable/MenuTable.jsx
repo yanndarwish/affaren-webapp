@@ -85,6 +85,21 @@ const MenuTable = ({ openEdit, openDelete, openEditFormula }) => {
 							openDelete={openDelete}
 						/>
 					))}
+				{(typeFilter === "all" || typeFilter === "drink") && (
+					<SubTitle>Drinks</SubTitle>
+				)}
+				{filteredMenu
+					?.filter((dish) => dish.dish_category === "drink")
+					.map((dish) => (
+						<MenuItem
+							data={dish}
+							key={dish.dish_id}
+							color="blue"
+							disabled={dish.dish_active === "false"}
+							openEdit={openEdit}
+							openDelete={openDelete}
+						/>
+					))}
 				{(typeFilter === "all" || typeFilter === "formula") && (
 					<SubTitle>Formulas</SubTitle>
 				)}

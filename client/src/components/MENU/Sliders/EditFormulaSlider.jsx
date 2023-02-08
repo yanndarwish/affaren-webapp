@@ -100,6 +100,7 @@ const EditFormulaSlider = ({ theme, isOpen, setIsOpen, dish, setDish }) => {
 					<MenuItem value={"starter"}>Starter</MenuItem>
 					<MenuItem value={"main"}>Main</MenuItem>
 					<MenuItem value={"desert"}>Desert</MenuItem>
+					<MenuItem value={"drink"}>Drink</MenuItem>
 				</Select>
 			</FormControl>
 		)

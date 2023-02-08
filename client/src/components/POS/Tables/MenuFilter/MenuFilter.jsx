@@ -24,6 +24,7 @@ const MenuFilter = ({ filter, setFilter }) => {
 				/>
 				<FormControlLabel value="main" control={<Radio />} label="Mains" />
 				<FormControlLabel value="desert" control={<Radio />} label="Deserts" />
+				<FormControlLabel value="drink" control={<Radio />} label="Drinks" />
 			</RadioGroup>
 		</Column>
 	)

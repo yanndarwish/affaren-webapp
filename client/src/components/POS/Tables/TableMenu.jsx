@@ -71,6 +71,20 @@ const TableMenu = ({ isOpen, theme, onClick }) => {
 							onClick={onClick}
 						/>
 					))}
+
+				{(typeFilter === "all" || typeFilter === "drink") && (
+					<SubTitle>Drinks</SubTitle>
+				)}
+				{filteredMenu
+					?.filter((dish) => dish.dish_category === "drink")
+					.map((dish) => (
+						<MenuItem
+							data={dish}
+							color="blue"
+							key={dish.dish_id}
+							onClick={onClick}
+						/>
+					))}
 			</Column>
 		</Container>
 	) : null
