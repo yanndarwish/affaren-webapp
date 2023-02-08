@@ -113,6 +113,7 @@ const Inventory = () => {
 			setIsCreationMode(true)
 			setInputBarcode(barcode)
 			setBarcode("")
+			setBarcodeSearch(false)
 		}
 	}
 
