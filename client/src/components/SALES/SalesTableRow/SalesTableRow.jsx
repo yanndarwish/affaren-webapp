@@ -2,8 +2,26 @@ import { TableCell, TableRow } from "@mui/material"
 import EuroSymbolOutlinedIcon from "@mui/icons-material/EuroSymbolOutlined"
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined"
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined"
+import { useEffect } from "react"
+import { useState } from "react"
 
 const SalesTableRow = ({sale, onClick}) => {
+	const [fail, setFail] = useState(false)
+	const diagnose = () => {
+		let total = 0
+		// loop through payment methods and add amount to total
+		let methods = Object.keys(sale.sale_payment_methods)
+		methods.forEach(method => {
+			total += sale.sale_payment_methods[method]
+		})
+		if (parseFloat(sale.sale_amount) !== total) {
+			setFail(true)
+		}
+	}
+
+	useEffect(() => {
+		diagnose()
+	}, [sale])
   return (
 		<TableRow
 			key={sale.sale_id}
@@ -12,6 +30,7 @@ const SalesTableRow = ({sale, onClick}) => {
 				"&:last-child td, &:last-child th": {
 					border: 0,
 				},
+				background: fail ? "red" : "transparent"
 			}}
 			onClick={onClick}
 		>
