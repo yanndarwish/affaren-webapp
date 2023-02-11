@@ -3,6 +3,7 @@ import {
 	useGetActiveTablesQuery,
 	usePostTableMutation,
 } from "../../../redux/services/tablesApi"
+import { TextField } from "@mui/material"
 import { Backdrop, SpeedDial, SpeedDialAction } from "@mui/material"
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined"
 import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined"
@@ -11,10 +12,15 @@ import { BigScreen, SmallScreen } from "./TableSection.styles"
 import { CardTitle, StyledProductCard } from "../ProductCard/ProductCard.styles"
 import AddIcon from "@mui/icons-material/Add"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
+import { Modal } from "modal-rjs"
+import { ColumnCenter } from "../../../assets/common/common.styles"
+import Button from "../../common/Button/Button.component"
 
 const TablesSection = ({ theme, onClick }) => {
 	useGetActiveTablesQuery()
 	const activeTables = useSelector((state) => state.table.activeTables)
+	const [modalIsOpen, setModalIsOpen] = useState(false)
+	const [tableNumber, setTableNumber] = useState(1)
 	const [postTable, res] = usePostTableMutation()
 	const [open, setOpen] = useState(false)
 	const handleOpen = () => setOpen(true)
@@ -27,9 +33,6 @@ const TablesSection = ({ theme, onClick }) => {
 		const month = timestamp.getMonth() + 1
 		const year = timestamp.getFullYear()
 
-		const tableNumber =
-			activeTables?.length === 0 ? 1 : activeTables?.length + 1
-
 		const table = {
 			year: year,
 			month: month,
@@ -40,13 +43,50 @@ const TablesSection = ({ theme, onClick }) => {
 		postTable(table)
 	}
 
+	const ModalBody = () => {
+		return res.isSuccess ? (
+			<InfoMessage state="success" text="Table created successfully" />
+		) : res.isError ? (
+			<InfoMessage state="error" text="Failed to create table" />
+		) : (
+			<ColumnCenter>
+				<TextField
+					size="lg"
+					type="number"
+					color="primary"
+					variant="outlined"
+					value={tableNumber}
+					onChange={(e) => setTableNumber(e.target.value)}
+				/>
+			</ColumnCenter>
+		)
+	}
+
+	const ModalFooter = () => {
+		return res.isSuccess || res.isError ? (
+			<Button title="Close" onClick={() => close()} />
+		) : (
+			<Button title="Add Table" onClick={() => handleAddTable()} />
+		)
+	}
+
+	const toggleModal = () => {
+		setModalIsOpen(!modalIsOpen)
+	}
+
+	const close = () => {
+		res.reset()
+		toggleModal()
+		setTableNumber(1)
+	}
+
 	return (
 		<>
 			{res.isError && (
 				<InfoMessage state="error" text="Failed to create table" />
 			)}
 			<SmallScreen>
-				<StyledProductCard onClick={handleAddTable}>
+				<StyledProductCard onClick={toggleModal}>
 					<AddIcon />
 				</StyledProductCard>
 				{activeTables?.map((table) => (
@@ -82,11 +122,18 @@ const TablesSection = ({ theme, onClick }) => {
 						))}
 					<SpeedDialAction
 						icon={<AddOutlinedIcon />}
-						onClick={handleAddTable}
+						onClick={toggleModal}
 						tooltipTitle="Add Table"
 					/>
 				</SpeedDial>
 			</BigScreen>
+			<Modal
+				title="Table number"
+				isOpen={modalIsOpen}
+				setIsOpen={setModalIsOpen}
+				bodyContent={<ModalBody />}
+				footerContent={<ModalFooter />}
+			/>
 		</>
 	)
 }
