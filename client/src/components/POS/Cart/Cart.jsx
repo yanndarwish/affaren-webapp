@@ -93,7 +93,7 @@ const Cart = () => {
 				<TableBody>
 					{products.map((product, i) => (
 						<TableRow
-							key={product.id}
+							key={i}
 							sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 						>
 							<TableCell component="th" scope="row">

@@ -23,7 +23,7 @@ const TablePayment = ({ table, setIsOpen, setValue, value }) => {
 		table?.filter(item => item.dish_status !== "paid").forEach((dish) => {
 			let found = array.find((product) => product.id === dish.dish_id)
 
-			if (!found) {
+			if (!found || (found && dish.dish_price !== found.price)) {
 				let product = {
 					id: dish.dish_id,
 					name: dish.dish_name,
@@ -68,7 +68,7 @@ const TablePayment = ({ table, setIsOpen, setValue, value }) => {
 			person?.forEach((dish) => {
 				let found = array.find((product) => product.id === dish.dish_id)
 
-				if (!found) {
+				if (!found || (found && dish.dish_price !== found.price)) {
 					let product = {
 						id: dish.dish_id,
 						name: dish.dish_name,
