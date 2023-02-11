@@ -119,9 +119,16 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 			(parseFloat(leftToPay) !== 0 &&
 				parseFloat(paying) > parseFloat(leftToPay))
 		) {
+			// check if payment method is already is in the sale
+			let isAlreadyPaymentMethod = Object.keys(sale.paymentMethods).includes(
+				paymentMethod
+			)
 			let salePaymentMethods = {
 				...sale.paymentMethods,
-				[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : leftPaying),
+				[paymentMethod]: isAlreadyPaymentMethod
+					? sale.paymentMethods[paymentMethod] +
+					  parseFloat(paying > leftPaying ? leftPaying : leftPaying)
+					: parseFloat(paying > leftPaying ? leftPaying : leftPaying),
 			}
 
 			const timestamp = new Date()
@@ -182,11 +189,20 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 					payload: { sale_id: parseInt(confirmedSale.id) },
 				})
 
-				let stringProducts = sale.products.filter(item => typeof(item.id) === 'string')
-				let lunchProducts = stringProducts.filter(item => item.id.includes('M'))
-				lunchProducts.forEach(product => {
+				let stringProducts = sale.products.filter(
+					(item) => typeof item.id === "string"
+				)
+				let lunchProducts = stringProducts.filter((item) =>
+					item.id.includes("M")
+				)
+				lunchProducts.forEach((product) => {
 					// update status to 'paid'
-					patchProductStatus({tableId: tableId, personId: product.person, dishId: product.id, status: "paid"})
+					patchProductStatus({
+						tableId: tableId,
+						personId: product.person,
+						dishId: product.id,
+						status: "paid",
+					})
 				})
 				ws?.sendMessage({
 					type: "lunch",
@@ -196,7 +212,7 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 
 			setActualSale(confirmedSale)
 			// if (Object.keys(confirmedSale.paymentMethods).includes("cash")) {
-				openDrawer()
+			openDrawer()
 			// }
 			// reset sale
 			dispatch(resetSale())
@@ -207,11 +223,15 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 		) {
 			// split
 			// set what is left to pay
-			setPaying(parseFloat((sale.amount - paying).toFixed(2)))
 			let salePaymentMethods = {
 				...sale.paymentMethods,
-				[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : paying),
+				[paymentMethod]: parseFloat(paying),
 			}
+			// let salePaymentMethods = {
+			// 	...sale.paymentMethods,
+			// 	[paymentMethod]: parseFloat(paying > leftPaying ? leftPaying : paying),
+			// }
+			setPaying(parseFloat((sale.amount - paying).toFixed(2)))
 
 			dispatch(setSalePaymentMethods({ paymentMethods: salePaymentMethods }))
 		}
