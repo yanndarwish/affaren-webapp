@@ -9,6 +9,7 @@ import dashboard from "../features/dashboard"
 import dishes from "../features/dishes"
 import table from "../features/table"
 import tableProducts from "../features/tableProducts"
+import day from "../features/day"
 import loginApi from "../services/loginApi"
 import productsApi from "../services/productsApi"
 import userApi from "../services/userApi"
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
 	dishes,
 	table,
 	tableProducts,
+	day,
 	[loginApi.reducerPath]: loginApi.reducer,
 	[productsApi.reducerPath]: productsApi.reducer,
 	[userApi.reducerPath]: userApi.reducer,

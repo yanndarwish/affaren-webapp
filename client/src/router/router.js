@@ -13,6 +13,7 @@ import Logout from "../pages/Logout/Logout"
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword"
 import Menu from "../pages/Menu/Menu"
 import Lunch from "../pages/Lunch/Lunch"
+import Opening from "../pages/Opening/Opening"
 
 const router = createBrowserRouter([
 	{
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
 			{
 				path: "forgot-password",
 				element: <ForgotPassword />,
+			},
+			{
+				path: "opening",
+				element: <Opening />,
 			},
 		],
 	},

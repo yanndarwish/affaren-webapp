@@ -34,7 +34,7 @@ const LoginCard = ({ theme }) => {
 
 	const redirect = () => {
 		if (res.status === "fulfilled") {
-			navigate("/profile")
+			navigate("/opening")
 		}
 	}
 
