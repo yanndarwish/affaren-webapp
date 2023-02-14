@@ -20,6 +20,7 @@ import printApi from "../services/printApi"
 import dishApi from "../services/dishApi"
 import tableApi from "../services/tablesApi"
 import tableProductsApi from "../services/tableProductsApi"
+import dayApi from "../services/dayApi"
 
 const rootReducer = combineReducers({
 	theme,
@@ -42,7 +43,8 @@ const rootReducer = combineReducers({
 	[printApi.reducerPath]: printApi.reducer,
 	[dishApi.reducerPath] : dishApi.reducer,
 	[tableApi.reducerPath] : tableApi.reducer,
-	[tableProductsApi.reducerPath]: tableProductsApi.reducer
+	[tableProductsApi.reducerPath]: tableProductsApi.reducer,
+	[dayApi.reducerPath]: dayApi.reducer
 })
 
 export default rootReducer

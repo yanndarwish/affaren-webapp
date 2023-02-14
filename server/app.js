@@ -1277,6 +1277,42 @@ app.delete(
 )
 
 // ******************************* //
+// ************* CASH ************ //
+// ******************************* //
+
+// add a cash value
+app.post("/cash-drawer", auth, async (req, res) => {
+	try {
+		const { year, month, day, amount } = req.body
+
+		const response = await pool.query(
+			"INSERT INTO drawer (year, month, day, drawer) VALUES ($1, $2, $3, $4)",
+			[year, month, day, amount]
+		)
+
+		res.status(200).send(response.rows)
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// get todays cash value
+app.get("/cash-drawer/:year/:month/:day", auth, async (req, res) => {
+	try {
+		const { year, month, day } = req.params
+
+		const response = await pool.query(
+			"SELECT * FROM drawer WHERE year = $1 AND month = $2 AND day = $3",
+			[year, month, day]
+		)
+
+		res.status(200).send(response.rows[0])
+	} catch (err) {
+		console.log(err)
+	}
+})
+
+// ******************************* //
 // ********** PRINTER ************ //
 // ******************************* //
 app.post("/print", auth, async (req, res) => {
