@@ -1,7 +1,7 @@
 import Button from "../../components/common/Button/Button.component"
 import { TextField } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useSelector,  } from "react-redux"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import {
 	ColumnCenter,
@@ -55,7 +55,7 @@ const Opening = () => {
 			const day = timestamp.getDate()
 			const month = timestamp.getMonth() + 1
 			const year = timestamp.getFullYear()
-			
+
 			// postDay cash
 			postDay({
 				year: year,
@@ -63,7 +63,9 @@ const Opening = () => {
 				day: day,
 				amount: parseFloat(cashInput),
 			})
-			getDay({ year: year, month: month, day: day })
+			setTimeout(() => {
+				getDay({ year: year, month: month, day: day })
+			}, 100)
 		} else {
 			setRequired(true)
 		}
