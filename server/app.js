@@ -1563,6 +1563,66 @@ app.post("/print", auth, async (req, res) => {
 	}
 })
 
+app.post("/print/cash", auth, async (req, res) => {
+	const {
+		user,
+	} = req.body
+
+	try {
+		let printer = new ThermalPrinter({
+			type: PrinterTypes.EPSON,
+			interface: "tcp://192.168.1.71",
+		})
+
+		let isConnected = await printer.isPrinterConnected()
+
+		if (isConnected) {
+			const getTime = () => {
+				const date = new Date()
+				const time = date.toLocaleTimeString()
+				return time
+			}
+
+			const timestamp = new Date()
+
+			const day = timestamp.getDate()
+			const month = timestamp.getMonth() + 1
+			const year = timestamp.getFullYear()
+
+
+			printer.setTextSize(1, 1)
+			printer.println(`Caissier: ${user}`)
+			printer.println(`Date: ${day}/${month}/${year} ${getTime()}`)
+			printer.newLine()
+			printer.println(`20€  X      =`)
+			printer.println(`10€  X      =`)
+			printer.println(`5€   X      =`)
+			printer.println(`2€   X      =`)
+			printer.println(`1€   X      =`)
+			printer.println(`0.5€ X      =`)
+			printer.newLine()
+			printer.println(`TOTAL`)
+
+
+			printer.cut()
+
+			try {
+				let execute = printer.execute()
+				console.error("Print done!")
+				res.status(200).send()
+			} catch (error) {
+				console.log("Print failed:", error)
+				res.status(400).send("Print failed")
+			}
+		} else {
+			res.status(400).send("Printer not connected")
+		}
+	} catch (err) {
+		console.log(err)
+		res.status(400).send("Print failed")
+	}
+})
+
 // open drawer
 app.post("/drawer", auth, async (req, res) => {
 	try {

@@ -1,9 +1,8 @@
 import Button from "../../components/common/Button/Button.component"
 import { TextField } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector,  } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { setCash } from "../../redux/features/day"
 import {
 	ColumnCenter,
 	Container,
@@ -17,46 +16,47 @@ import {
 import { usePostDrawerMutation } from "../../redux/services/printApi"
 import { useGetDayMutation } from "../../redux/services/dayApi"
 import { usePostDayMutation } from "../../redux/services/dayApi"
+import { usePostPrintCashMutation } from "../../redux/services/printApi"
+import { useGetUserQuery } from "../../redux/services/userApi"
 
 const Opening = () => {
-	const dispatch = useDispatch()
+	useGetUserQuery()
+
 	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const cash = useSelector((state) => state.day.cash)
+	const user = useSelector((state) => state.user.user)
 	const [cashInput, setCashInput] = useState(0)
 	const [required, setRequired] = useState(false)
 	const [postDrawer, res] = usePostDrawerMutation()
 	const [postDay, response] = usePostDayMutation()
 	const [getDay, resp] = useGetDayMutation()
-
-	console.log(cash)
+	const [printCash, re] = usePostPrintCashMutation()
 
 	const getDayCash = () => {
 		// get date
-		// getDay hook
 		const timestamp = new Date()
-
 		const day = timestamp.getDate()
 		const month = timestamp.getMonth() + 1
 		const year = timestamp.getFullYear()
+		// getDay hook
 		getDay({ year: year, month: month, day: day })
 	}
 
 	const printTicket = () => {
-		console.log("print ticket")
+		printCash({ user: user.user_first_name })
 	}
 
 	const handleOpen = () => {
 		if (cashInput !== 0) {
 			setRequired(false)
-			// postDay cash
 			const timestamp = new Date()
-
 			const day = timestamp.getDate()
 			const month = timestamp.getMonth() + 1
 			const year = timestamp.getFullYear()
-
+			
+			// postDay cash
 			postDay({
 				year: year,
 				month: month,
@@ -64,7 +64,6 @@ const Opening = () => {
 				amount: parseFloat(cashInput),
 			})
 			getDay({ year: year, month: month, day: day })
-
 		} else {
 			setRequired(true)
 		}
