@@ -19,9 +19,9 @@ export const dayApi = createApi({
 			return headers
 		},
 	}),
-	tagTypes: ["day"],
+	tagTypes: ["Day"],
 	endpoints: (builder) => ({
-		getDay: builder.query({
+		getDay: builder.mutation({
 			query: ({ year, month, day }) => ({
 				url: `cash-drawer/${year}/${month}/${day}`,
 			}),
@@ -33,13 +33,10 @@ export const dayApi = createApi({
 				method: "POST",
 				body: payload,
 			}),
-			invalidatesTags: ["Orders"],
+			invalidatesTags: ["Day"],
 		}),
 	}),
 })
 
-export const {
-	useGetDayQuery,
-    usePostDayMutation
-} = dayApi
+export const { useGetDayMutation, usePostDayMutation } = dayApi
 export default dayApi

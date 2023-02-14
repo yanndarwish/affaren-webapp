@@ -15,6 +15,8 @@ import {
 	Title,
 } from "../../assets/common/common.styles"
 import { usePostDrawerMutation } from "../../redux/services/printApi"
+import { useGetDayMutation } from "../../redux/services/dayApi"
+import { usePostDayMutation } from "../../redux/services/dayApi"
 
 const Opening = () => {
 	const dispatch = useDispatch()
@@ -25,8 +27,21 @@ const Opening = () => {
 	const [cashInput, setCashInput] = useState(0)
 	const [required, setRequired] = useState(false)
 	const [postDrawer, res] = usePostDrawerMutation()
+	const [postDay, response] = usePostDayMutation()
+	const [getDay, resp] = useGetDayMutation()
 
 	console.log(cash)
+
+	const getDayCash = () => {
+		// get date
+		// getDay hook
+		const timestamp = new Date()
+
+		const day = timestamp.getDate()
+		const month = timestamp.getMonth() + 1
+		const year = timestamp.getFullYear()
+		getDay({ year: year, month: month, day: day })
+	}
 
 	const printTicket = () => {
 		console.log("print ticket")
@@ -35,7 +50,21 @@ const Opening = () => {
 	const handleOpen = () => {
 		if (cashInput !== 0) {
 			setRequired(false)
-			dispatch(setCash({ cash: parseFloat(cashInput) }))
+			// postDay cash
+			const timestamp = new Date()
+
+			const day = timestamp.getDate()
+			const month = timestamp.getMonth() + 1
+			const year = timestamp.getFullYear()
+
+			postDay({
+				year: year,
+				month: month,
+				day: day,
+				amount: parseFloat(cashInput),
+			})
+			getDay({ year: year, month: month, day: day })
+
 		} else {
 			setRequired(true)
 		}
@@ -59,6 +88,7 @@ const Opening = () => {
 	}, [cash])
 
 	useEffect(() => {
+		getDayCash()
 		redirect()
 	}, [])
 
