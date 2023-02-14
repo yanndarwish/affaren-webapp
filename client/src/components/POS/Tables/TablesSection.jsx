@@ -42,8 +42,12 @@ const TablesSection = ({ theme, onClick }) => {
 		}
 		postTable(table)
 	}
-
+	
 	const ModalBody = () => {
+		const handleChange = (e) => {
+			setTableNumber(e.target.value)
+		}
+
 		return res.isSuccess ? (
 			<InfoMessage state="success" text="Table created successfully" />
 		) : res.isError ? (
@@ -51,12 +55,14 @@ const TablesSection = ({ theme, onClick }) => {
 		) : (
 			<ColumnCenter>
 				<TextField
+					id="table-number-input"
 					size="lg"
 					type="number"
 					color="primary"
 					variant="outlined"
 					value={tableNumber}
-					onChange={(e) => setTableNumber(e.target.value)}
+					onChange={(e) => handleChange(e)}
+					autoFocus={true}
 				/>
 			</ColumnCenter>
 		)
