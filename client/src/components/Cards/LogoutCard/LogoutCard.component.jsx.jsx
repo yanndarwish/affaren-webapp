@@ -25,7 +25,7 @@ const LogoutDialog = ({ theme }) => {
 	}
 
 	const handleCancel = () => {
-		navigate("/dashboard")
+		navigate("/closing")
 	}
 
 	const handleLogout = () => {

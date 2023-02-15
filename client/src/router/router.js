@@ -14,6 +14,7 @@ import ForgotPassword from "../pages/ForgotPassword/ForgotPassword"
 import Menu from "../pages/Menu/Menu"
 import Lunch from "../pages/Lunch/Lunch"
 import Opening from "../pages/Opening/Opening"
+import Closing from "../pages/Closing/Closing"
 
 const router = createBrowserRouter([
 	{
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
 			{
 				path: "help",
 				element: <Help />,
+			},
+			{
+				path: "closing",
+				element: <Closing />,
 			},
 			{
 				path: "logout",

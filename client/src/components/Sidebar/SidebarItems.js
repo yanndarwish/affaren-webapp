@@ -64,7 +64,7 @@ export const sidebarItems = [
 	{
 		id: 9,
 		icon: <LogoutOutlinedIcon />,
-		route: "logout",
+		route: "closing",
 	},
 ]
 

@@ -37,9 +37,8 @@ const Sidebar = () => {
 		dispatch(toggleTheme())
 	}
 
-
 	return (
-		loggedIn &&
+		loggedIn && (
 			<>
 				{!drawerIsOpen && (
 					<AppBar>
@@ -113,12 +112,24 @@ const Sidebar = () => {
 										</ListItem>
 								  ))
 								: sidebarItems.map((item) => (
-										<ListItem key={item.id} disablePadding>
+										<ListItem
+											key={item.id}
+											disablePadding
+											sx={{ justifyContent: "center" }}
+										>
 											<ListItemButton
 												sx={{
-													minHeight: 72,
+													minHeight: item.route === "closing" ? 60 : 72,
+													maxWidth: item.route === "closing" ? 60 : "auto",
 													justifyContent: "center",
 													px: 2.5,
+													aspectRatio: item.route === "closing" ? 1 : "auto",
+													borderRadius: item.route === "closing" ? "50%" : "0",
+													background:
+														item.route === "closing"
+															? "rgb(0, 0, 0, 0.1)"
+															: "none",
+													color: item.route === "closing" ? "red" : "black",
 												}}
 												onClick={() => handleNavClick(item.route)}
 											>
@@ -130,6 +141,7 @@ const Sidebar = () => {
 					</Drawer>
 				</Navbar>
 			</>
+		)
 	)
 }
 
