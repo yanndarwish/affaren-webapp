@@ -129,7 +129,7 @@ const Sidebar = () => {
 														item.route === "closing"
 															? "rgb(0, 0, 0, 0.1)"
 															: "none",
-													color: item.route === "closing" ? "red" : "black",
+													color: item.route === "closing" ? "red" : "auto",
 												}}
 												onClick={() => handleNavClick(item.route)}
 											>
