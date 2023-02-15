@@ -1,5 +1,5 @@
 import { InputAdornment, InputLabel, MenuItem, Select } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
 	ArtTitle,
 	Column,
@@ -81,6 +81,10 @@ const EditProduct = ({
 			</Column>
 		)
 	}
+
+	useEffect(() => {
+		setTaxe(product.product_taxe)
+	}, [product])
 
 	return product ? (
 		sent && res.isSuccess ? (
