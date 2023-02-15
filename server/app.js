@@ -1451,53 +1451,57 @@ app.post("/print", auth, async (req, res) => {
 				},
 			])
 			printer.setTextNormal()
-			printer.tableCustom([
-				{ text: "", align: "LEFT", width: 0.1, bold: true },
-				{
-					text: `Payé en ${
-						Object.keys(paymentMethods).length > 1
-							? Object.keys(paymentMethods)[0] === "cash"
-								? "ESPÈCES: " +
-								  paymentMethods[Object.keys(paymentMethods)[0]] +
-								  " €"
-								: Object.keys(paymentMethods)[0] === "card"
-								? "CARTE: " +
-								  paymentMethods[Object.keys(paymentMethods)[0]] +
-								  " €"
-								: "CHÈQUE: " +
-								  paymentMethods[Object.keys(paymentMethods)[0]] +
-								  " €"
-							: Object.keys(paymentMethods)[0] === "cash"
-							? "ESPÈCES"
-							: Object.keys(paymentMethods)[0] === "card"
-							? "CARTE"
-							: "CHÈQUE"
-					}`,
-					width: 0.5,
-					bold: true,
-				},
-			])
-			if (Object.keys(paymentMethods).length > 1) {
-				printer.tableCustom([
-					{ text: "", align: "LEFT", width: 0.1, bold: true },
-					{
-						text: `Payé en ${
-							Object.keys(paymentMethods)[1] === "cash"
-								? "ESPÈCES: " +
-								  paymentMethods[Object.keys(paymentMethods)[1]] +
-								  " €"
-								: Object.keys(paymentMethods)[1] === "card"
-								? "CARTE: " +
-								  paymentMethods[Object.keys(paymentMethods)[1]] +
-								  " €"
-								: "CHÈQUE: " +
-								  paymentMethods[Object.keys(paymentMethods)[1]] +
-								  " €"
-						}`,
-						width: 0.5,
-						bold: true,
-					},
-				])
+			{
+				if (paymentMethods !== "none") {
+					printer.tableCustom([
+						{ text: "", align: "LEFT", width: 0.1, bold: true },
+						{
+							text: `Payé en ${
+								Object.keys(paymentMethods).length > 1
+									? Object.keys(paymentMethods)[0] === "cash"
+										? "ESPÈCES: " +
+										  paymentMethods[Object.keys(paymentMethods)[0]] +
+										  " €"
+										: Object.keys(paymentMethods)[0] === "card"
+										? "CARTE: " +
+										  paymentMethods[Object.keys(paymentMethods)[0]] +
+										  " €"
+										: "CHÈQUE: " +
+										  paymentMethods[Object.keys(paymentMethods)[0]] +
+										  " €"
+									: Object.keys(paymentMethods)[0] === "cash"
+									? "ESPÈCES"
+									: Object.keys(paymentMethods)[0] === "card"
+									? "CARTE"
+									: "CHÈQUE"
+							}`,
+							width: 0.5,
+							bold: true,
+						},
+					])
+					if (Object.keys(paymentMethods).length > 1) {
+						printer.tableCustom([
+							{ text: "", align: "LEFT", width: 0.1, bold: true },
+							{
+								text: `Payé en ${
+									Object.keys(paymentMethods)[1] === "cash"
+										? "ESPÈCES: " +
+										  paymentMethods[Object.keys(paymentMethods)[1]] +
+										  " €"
+										: Object.keys(paymentMethods)[1] === "card"
+										? "CARTE: " +
+										  paymentMethods[Object.keys(paymentMethods)[1]] +
+										  " €"
+										: "CHÈQUE: " +
+										  paymentMethods[Object.keys(paymentMethods)[1]] +
+										  " €"
+								}`,
+								width: 0.5,
+								bold: true,
+							},
+						])
+					}
+				}
 			}
 			printer.alignCenter()
 			printer.println("--------------------------------------")
@@ -1564,9 +1568,7 @@ app.post("/print", auth, async (req, res) => {
 })
 
 app.post("/print/cash", auth, async (req, res) => {
-	const {
-		user,
-	} = req.body
+	const { user } = req.body
 
 	try {
 		let printer = new ThermalPrinter({
@@ -1589,7 +1591,6 @@ app.post("/print/cash", auth, async (req, res) => {
 			const month = timestamp.getMonth() + 1
 			const year = timestamp.getFullYear()
 
-
 			printer.setTextSize(1, 1)
 			printer.println(`Caissier: ${user}`)
 			printer.println(`Date: ${day}/${month}/${year} ${getTime()}`)
@@ -1602,7 +1603,6 @@ app.post("/print/cash", auth, async (req, res) => {
 			printer.println(`0.5€ X      =`)
 			printer.newLine()
 			printer.println(`TOTAL`)
-
 
 			printer.cut()
 

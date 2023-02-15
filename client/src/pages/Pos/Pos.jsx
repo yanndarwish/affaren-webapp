@@ -31,7 +31,10 @@ import {
 } from "../../assets/common/common.styles"
 import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
 import { useGetCardsQuery } from "../../redux/services/cardApi"
-import { usePostDrawerMutation } from "../../redux/services/printApi"
+import {
+	usePostDrawerMutation,
+	usePostPrintMutation,
+} from "../../redux/services/printApi"
 import { useEffect } from "react"
 import { setSaleAmount, setTaxes } from "../../redux/features/sale"
 import { useNavigate } from "react-router-dom"
@@ -63,6 +66,8 @@ const Pos = () => {
 	const { isError } = useGetCardsQuery()
 	const { error } = useGetNextSaleIdQuery()
 	const [postDrawer, res] = usePostDrawerMutation()
+	const [print, respo] = usePostPrintMutation()
+
 	useGetDishesQuery()
 	const redirect = () => {
 		!loggedIn && navigate("/login")
@@ -224,6 +229,22 @@ const Pos = () => {
 		dispatch(setTaxes({ taxes: taxesDetails }))
 	}
 
+	const printTicket = () => {
+		const timestamp = new Date()
+
+		const day = timestamp.getDate()
+		const month = timestamp.getMonth() + 1
+		const year = timestamp.getFullYear()
+		let actualSale = {
+			...sale,
+			year: year,
+			month: month,
+			day: day,
+			paymentMethods: "none",
+		}
+		print(actualSale)
+	}
+
 	useEffect(() => {
 		updateTotalAmount()
 		updateTaxes()
@@ -269,9 +290,13 @@ const Pos = () => {
 							<ButtonSection>
 								<Button title="Drawer" onClick={openDrawer} />
 								<Button title="Discount" onClick={() => openDiscountSlider()} />
+								<Button title="Print Ticket" onClick={() => printTicket()} />
 							</ButtonSection>
 							{res.isError && (
 								<ErrorMessage>Failed to open Drawer</ErrorMessage>
+							)}
+							{respo.isError && (
+								<ErrorMessage>Failed to print ticket</ErrorMessage>
 							)}
 							<Box>
 								<Button
