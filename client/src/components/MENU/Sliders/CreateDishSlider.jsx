@@ -45,7 +45,7 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 
 	const handleCreateDish = () => {
 		!name ? setNameError(true) : setNameError(false)
-		!price ? setPriceError(true) : setPriceError(false)
+		!price || isNaN(price) ? setPriceError(true) : setPriceError(false)
 		let ing = []
 		const ingredients = document.getElementById("dish-ingredients").value
 		const splittedIngredients = ingredients.split(",")
@@ -54,7 +54,7 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 		})
 		!ingredients ? setIngError(true) : setIngError(false)
 
-		if ((name, price, ingredients)) {
+		if (name && !isNaN(price) && price && ingredients) {
 			const newDish = {
 				dishName: name,
 				dishIngredients: ing,
@@ -66,6 +66,11 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 			resetInputs()
 			res.reset()
 		}
+	}
+
+	const handleClose = () => {
+		res.reset()
+		setIsOpen(false)
 	}
 
 	const resetInputs = () => {
@@ -149,11 +154,19 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 					</DialogCard>
 				</DialogBody>
 				<DialogFooter>
-					<Button
-						title="Add to Menu"
-						color="success"
-						onClick={handleCreateDish}
-					/>
+					{res.isSuccess ? (
+						<Button
+							title="Close"
+							color="success"
+							onClick={handleClose}
+						/>
+					) : (
+						<Button
+							title="Add to Menu"
+							color="success"
+							onClick={handleCreateDish}
+						/>
+					)}
 				</DialogFooter>
 			</Dialog>
 		</Overlay>
