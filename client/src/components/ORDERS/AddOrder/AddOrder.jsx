@@ -12,10 +12,10 @@ import Input from "../../common/Input/Input.component"
 import { usePostOrderMutation } from "../../../redux/services/orderApi"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
-import { WebSocketContext } from "../../../utils/context/webSocket"
+// import { WebSocketContext } from "../../../utils/context/webSocket"
 
 const AddOrder = ({ theme, setAdd, setNewOrder }) => {
-	const ws = useContext(WebSocketContext)
+	// const ws = useContext(WebSocketContext)
 	const [title, setTitle] = useState("")
 	const [inputList, setInputList] = useState([])
 	const [dueDate, setDueDate] = useState("")
@@ -55,11 +55,11 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 			setNewOrder(true)
 			setAdd(false)
 			postOrder(newOrder)
-			ws?.sendMessage({
-				type: "order",
-				action: "add",
-				order: newOrder
-			})
+			// ws?.sendMessage({
+			// 	type: "order",
+			// 	action: "add",
+			// 	order: newOrder
+			// })
 		}
 	}
 

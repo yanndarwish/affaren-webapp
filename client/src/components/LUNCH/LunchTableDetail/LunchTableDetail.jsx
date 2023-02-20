@@ -14,10 +14,10 @@ import {
 import { IconButton } from "@mui/material"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
-import { WebSocketContext } from "../../../utils/context/webSocket"
+// import { WebSocketContext } from "../../../utils/context/webSocket"
 
 const LunchTableDetail = ({ table }) => {
-	const ws = useContext(WebSocketContext)
+	// const ws = useContext(WebSocketContext)
 
 	const [updateStatus, res] = usePatchProductTableStatusMutation()
 
@@ -46,11 +46,11 @@ const LunchTableDetail = ({ table }) => {
 			dishId: dishId,
 			status: status === "todo" ? "done" : "todo",
 		})
-		ws?.sendMessage({
-			type: "lunch",
-			table: tableId,
-			action: "status",
-		})
+		// ws?.sendMessage({
+		// 	type: "lunch",
+		// 	table: tableId,
+		// 	action: "status",
+		// })
 	}
 
 	return (

@@ -18,15 +18,17 @@ import {
 	usePostTableProductMutation,
 	useGetActiveTablesProductsMutation,
 } from "../../../../redux/services/tableProductsApi"
-import { WebSocketContext } from "../../../../utils/context/webSocket"
+// import { WebSocketContext } from "../../../../utils/context/webSocket"
 import TablePayment from "../TablePayment/TablePayment"
 import TableProducts from "../TableProducts/TableProducts"
 import DeleteTable from "../DeleteTable/DeleteTable"
 import TablePaid from "../TablePaid/TablePaid"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
+import { setLunchUpdate } from "../../../../redux/features/tableProducts"
 
 const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
-	const ws = useContext(WebSocketContext)
+	const dispatch = useDispatch()
+	// const ws = useContext(WebSocketContext)
 	const overlayRef = useRef()
 	const [peopleSet, setPeopleSet] = useState([])
 	const [value, setValue] = useState(0)
@@ -93,10 +95,13 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 		postUpdateTableProducts({ products: [newDish] })
 
-		ws?.sendMessage({
-			type: "lunch",
-			action: "add",
-		})
+		// ws?.sendMessage({
+		// 	type: "lunch",
+		// 	action: "add",
+		// })
+
+		dispatch(setLunchUpdate())
+
 	}
 
 	const handleDelete = (e) => {
@@ -114,10 +119,12 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 			dishId: id,
 		})
 
-		ws?.sendMessage({
-			type: "lunch",
-			action: "remove",
-		})
+		// ws?.sendMessage({
+		// 	type: "lunch",
+		// 	action: "remove",
+		// })
+
+		dispatch(setLunchUpdate())
 	}
 
 	const getPeopleNumber = () => {
@@ -238,10 +245,11 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 
 		postUpdateTableProducts({ products: [newFormula] })
 
-		ws?.sendMessage({
-			type: "lunch",
-			action: "formula",
-		})
+		// ws?.sendMessage({
+		// 	type: "lunch",
+		// 	action: "formula",
+		// })
+		dispatch(setLunchUpdate())
 	}
 
 	const checkForFormulas = () => {
@@ -278,8 +286,12 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 	}
 
 	useEffect(() => {
-		getActiveDishes()
+		setTimeout(() => {
+			getActiveDishes()
+		}, 50)
 	}, [lunchUpdate])
+
+	console.log(lunchUpdate)
 
 	useEffect(() => {
 		if (dataTable?.table_id) {

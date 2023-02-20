@@ -42,7 +42,8 @@ import { usePostDrawerMutation } from "../../../../redux/services/printApi"
 import { Modal } from "modal-rjs"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 import { useUpdateTableStatusMutation } from "../../../../redux/services/tablesApi"
-import { WebSocketContext } from "../../../../utils/context/webSocket"
+import { setLunchUpdate } from "../../../../redux/features/tableProducts"
+// import { WebSocketContext } from "../../../../utils/context/webSocket"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -72,7 +73,7 @@ function a11yProps(index) {
 }
 
 const Slider = ({ theme, isOpen, setIsOpen }) => {
-	const ws = useContext(WebSocketContext)
+	// const ws = useContext(WebSocketContext)
 
 	const overlayRef = useRef()
 	const dispatch = useDispatch()
@@ -204,10 +205,12 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 						status: "paid",
 					})
 				})
-				ws?.sendMessage({
-					type: "lunch",
-					action: "payment",
-				})
+				dispatch(setLunchUpdate())
+
+				// ws?.sendMessage({
+				// 	type: "lunch",
+				// 	action: "payment",
+				// })
 			}
 
 			setActualSale(confirmedSale)

@@ -15,10 +15,10 @@ import Input from "../../common/Input/Input.component"
 import { useUpdateOrderMutation } from "../../../redux/services/orderApi"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
-import { WebSocketContext } from "../../../utils/context/webSocket"
+// import { WebSocketContext } from "../../../utils/context/webSocket"
 
 const EditOrder = ({ theme, order, setIsEdit, setSelectedOrder }) => {
-	const ws = useContext(WebSocketContext)
+	// const ws = useContext(WebSocketContext)
 
 	const [title, setTitle] = useState(order.order_title)
 	const [inputList, setInputList] = useState([])
@@ -60,10 +60,10 @@ const EditOrder = ({ theme, order, setIsEdit, setSelectedOrder }) => {
 		// close edit mode
 		setIsEdit(false)
 		// update order in websocket to update other devices live
-		ws?.sendMessage({
-			type: "order",
-			action: "edit",
-		})
+		// ws?.sendMessage({
+		// 	type: "order",
+		// 	action: "edit",
+		// })
 
 		// focus and display the edited order
 		const myOrder = {

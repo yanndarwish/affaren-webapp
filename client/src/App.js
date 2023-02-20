@@ -8,9 +8,9 @@ import "./App.css"
 function App() {
 	return (
 		<ThemeWrapper>
-			<WebSocketProvider>
+			{/* <WebSocketProvider> */}
 				<RouterProvider router={router} />
-			</WebSocketProvider>
+			{/* </WebSocketProvider> */}
 		</ThemeWrapper>
 	)
 }

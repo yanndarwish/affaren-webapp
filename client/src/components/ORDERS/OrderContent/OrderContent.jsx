@@ -20,7 +20,7 @@ import { useContext, useState } from "react"
 import { useDeleteOrderMutation } from "../../../redux/services/orderApi"
 import EditOrder from "../EditOrder/EditOrder"
 import OrderStatusMenu from "./OrderStatusMenu"
-import { WebSocketContext } from "../../../utils/context/webSocket"
+// import { WebSocketContext } from "../../../utils/context/webSocket"
 
 const OrderContent = ({
 	order,
@@ -30,7 +30,7 @@ const OrderContent = ({
 	setIsEdit,
 	setSelectedOrder,
 }) => {
-	const ws = useContext(WebSocketContext)
+	// const ws = useContext(WebSocketContext)
 
 	const [isOpen, setIsOpen] = useState(false)
 	const [deleteOrder] = useDeleteOrderMutation()
@@ -86,10 +86,10 @@ const OrderContent = ({
 			deleteOrder({ id: order.order_id })
 			setIsOpen(false)
 			setSelected("")
-			ws?.sendMessage({
-				type: "order",
-				action: "delete",
-			})
+			// ws?.sendMessage({
+			// 	type: "order",
+			// 	action: "delete",
+			// })
 		}
 		return (
 			<SpaceHeader>

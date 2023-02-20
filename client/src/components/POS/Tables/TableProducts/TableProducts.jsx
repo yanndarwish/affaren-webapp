@@ -17,11 +17,13 @@ import {
 	SuccessText,
 } from "../../../../assets/common/common.styles"
 import { useContext } from "react"
-import { WebSocketContext } from "../../../../utils/context/webSocket"
+// import { WebSocketContext } from "../../../../utils/context/webSocket"
 import { usePatchProductTableStatusMutation } from "../../../../redux/services/tableProductsApi"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 import Button from "../../../common/Button/Button.component"
 import { FormulaButtonWrapper } from "./TableProducts.styles"
+import { setLunchUpdate } from "../../../../redux/features/tableProducts"
+import { useDispatch } from "react-redux"
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props
@@ -60,7 +62,8 @@ const TableProducts = ({
 	handleAddPerson,
 	applyFormula,
 }) => {
-	const ws = useContext(WebSocketContext)
+	const dispatch = useDispatch()
+	// const ws = useContext(WebSocketContext)
 	const [updateStatus, res] = usePatchProductTableStatusMutation()
 
 	const handleStatus = (e) => {
@@ -84,11 +87,13 @@ const TableProducts = ({
 			status: status === "todo" ? "waiting" : "todo",
 		})
 
-		ws?.sendMessage({
-			type: "lunch",
-			table: target.table_id,
-			action: "status",
-		})
+		dispatch(setLunchUpdate())
+
+		// ws?.sendMessage({
+		// 	type: "lunch",
+		// 	table: target.table_id,
+		// 	action: "status",
+		// })
 	}
 
 	return (

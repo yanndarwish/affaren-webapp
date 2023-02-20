@@ -8,25 +8,28 @@ import {
 	ArtTitle,
 	SpaceHeaderCenter,
 } from "../../../../assets/common/common.styles"
-import { WebSocketContext } from "../../../../utils/context/webSocket"
+// import { WebSocketContext } from "../../../../utils/context/webSocket"
+import { setLunchUpdate } from "../../../../redux/features/tableProducts"
+import { useDispatch } from "react-redux"
 
 const DeleteTable = ({ tableId, setIsOpen }) => {
-	const ws = useContext(WebSocketContext)
-
+	// const ws = useContext(WebSocketContext)
+	const dispatch = useDispatch()
 	const [deleteTable, res] = useDeleteTableMutation()
 	const [deleteProducts, response] = useDeleteTableProductsMutation()
 	const [modalIsOpen, setModalIsOpen] = useState(false)
 
 	const handleDelete = () => {
 		deleteTable({ id: tableId })
-		deleteProducts({id: tableId})
+		deleteProducts({ id: tableId })
 		res.isSuccess && response.isSuccess && setIsOpen(false)
 		res.reset()
 		response.reset()
-		ws?.sendMessage({
-			type: "lunch",
-			action: "table deletion",
-		})
+		// ws?.sendMessage({
+		// 	type: "lunch",
+		// 	action: "table deletion",
+		// })
+		dispatch(setLunchUpdate())
 	}
 
 	const handleModal = () => {
@@ -45,7 +48,7 @@ const DeleteTable = ({ tableId, setIsOpen }) => {
 			<InfoMessage state="success" text="Table deleted successfully" />
 		) : response.isError ? (
 			<InfoMessage state="error" text="Failed to delete products" />
-		): (
+		) : (
 			<ArtTitle>Are you sure you want to delete table {tableId} ?</ArtTitle>
 		)
 	}
