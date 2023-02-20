@@ -291,8 +291,6 @@ const TableSlider = ({ theme, isOpen, setIsOpen, dataTable }) => {
 		}, 50)
 	}, [lunchUpdate])
 
-	console.log(lunchUpdate)
-
 	useEffect(() => {
 		if (dataTable?.table_id) {
 			setTable(
