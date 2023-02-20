@@ -28,6 +28,8 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 	const dispatch = useDispatch()
 	const overlayRef = useRef()
 	const [focusedInput, setFocusedInput] = useState("")
+	const [qtyError, setQtyError] = useState(false)
+	const [priceError, setPriceError] = useState(false)
 	const [product, setProduct] = useState({
 		id: "nb-1",
 		taxe: 5.5,
@@ -89,15 +91,30 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 		const quantity = document.getElementById("nb-qty").value
 		const price = document.getElementById("nb-price").value
 
-		let obj = { ...product }
-		obj["quantity"] = parseInt(quantity)
-		obj["price"] = parseFloat(price * quantity).toFixed(2)
-		obj["id"] = `nb-${products.length + 1}`
+		if (quantity && price) {
+			let obj = { ...product }
+			obj["quantity"] = parseInt(quantity)
+			obj["price"] = parseFloat(price * quantity).toFixed(2)
+			obj["id"] = `nb-${products.length + 1}`
 
-		setProduct(obj)
-		dispatch(addProduct({ products: obj }))
-		setIsOpen(false)
-		setProduct({...product, taxe: 5.5})
+			setPriceError(false)
+			setQtyError(false)
+			setProduct(obj)
+			dispatch(addProduct({ products: obj }))
+			setIsOpen(false)
+			setProduct({...product, taxe: 5.5})
+		} else if (!price && !quantity) {
+			setPriceError(true)
+			setQtyError(true)
+		} else if (!price) {
+			setQtyError(false)
+
+			setPriceError(true)
+		} else if (!quantity) {
+			setPriceError(false)
+
+			setQtyError(true)
+		}
 	}
 
 	return isOpen ? (
@@ -145,6 +162,8 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 											</InputAdornment>
 										),
 									}}
+									error={qtyError}
+									helperText={qtyError && "Required"}
 								/>
 
 								<Input
@@ -167,6 +186,8 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 											</InputAdornment>
 										),
 									}}
+									error={priceError}
+									helperText={priceError && "Required"}
 								/>
 							</FormWrapper>
 						</FormControl>
