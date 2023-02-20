@@ -33,6 +33,8 @@ import { usePostCardMutation } from "../../../../redux/services/cardApi"
 
 const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 	const overlayRef = useRef()
+	const [priceError, setPriceError] = useState(false)
+	const [nameError, setNameError] = useState(false)
 	const [product, setProduct] = useState({
 		id: "",
 		taxe: 5.5,
@@ -75,13 +77,27 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 	}
 
 	const handleAddCard = () => {
-		const newProduct = {
-			...product,
-			price: parseFloat(document.getElementById("c-price").value),
+		let price = parseFloat(document.getElementById("c-price").value)
+		let name = document.getElementById("c-name").value
+
+		if (!name && !price) {
+			setNameError(true)
+			setPriceError(true)
+		} else if (!name) {
+			setNameError(true)
+			setPriceError(false)
+		} else if (!price) {
+			setNameError(false)
+			setPriceError(true)
+		} else if (name && price) {
+			const newProduct = {
+				...product,
+				price: price,
+			}
+			postCard(newProduct)
+			res.isUninitialized === false && res.isSuccess && setIsOpen(false)
+			setIsOpen(false)
 		}
-		postCard(newProduct)
-		res.isUninitialized === false && res.isSuccess && setIsOpen(false)
-		setIsOpen(false)
 	}
 
 	const closeSlider = (e) => {
@@ -141,16 +157,21 @@ const AddCardSlider = ({ theme, isOpen, setIsOpen }) => {
 												</InputAdornment>
 											),
 										}}
+										error={priceError}
+										helperText={priceError && "Required"}
 									/>
 								</FormFlex>
 								<FormFlex>
 									<Input
+										id="c-name"
 										label="Name"
 										onClick={handleInputClick}
 										type="text"
 										onChange={(e) => handleChange(e, "name")}
 										value={product.name}
 										fullWidth
+										error={nameError}
+										helperText={nameError && "Required"}
 									/>
 								</FormFlex>
 							</FormWrapper>
