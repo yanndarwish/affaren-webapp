@@ -34,6 +34,9 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState("")
 	const [active, setActive] = useState(true)
+	const [nameError, setNameError] = useState(false)
+	const [priceError, setPriceError] = useState(false)
+
 	const overlayRef = useRef()
 	const [postDish, res] = usePostDishMutation()
 
@@ -45,22 +48,32 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 	}
 
 	const handleCreateFormula = () => {
-		let cat = []
-		const categories = document.querySelectorAll(".formula-category")
+		!name ? setNameError(true) : setNameError(false)
+		!price || isNaN(price) ? setPriceError(true) : setPriceError(false)
 
-		categories.forEach((el) => {
-			cat.push(el.querySelector("input").value)
-		})
-		const newDish = {
-			dishName: name,
-			dishIngredients: cat,
-			dishCategory: "formula",
-			dishPrice: parseFloat(price),
-			dishActive: active ? "true" : "false",
+		if (name && price && !isNaN(price)) {
+			let cat = []
+			const categories = document.querySelectorAll(".formula-category")
+
+			categories.forEach((el) => {
+				cat.push(el.querySelector("input").value)
+			})
+			const newDish = {
+				dishName: name,
+				dishIngredients: cat,
+				dishCategory: "formula",
+				dishPrice: parseFloat(price),
+				dishActive: active ? "true" : "false",
+			}
+			postDish(newDish)
+			resetInputs()
+			res.reset()
 		}
-		postDish(newDish)
-		resetInputs()
+	}
+
+	const handleClose = () => {
 		res.reset()
+		setIsOpen(false)
 	}
 
 	const resetInputs = () => {
@@ -124,6 +137,8 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 										label="Name"
 										value={name}
 										onChange={(e) => setName(e)}
+										error={nameError}
+										helperText={nameError && "Required"}
 									/>
 									<FormControl fullWidth>
 										<InputLabel id="demo-simple-select-label">
@@ -152,6 +167,8 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 										label="Price"
 										value={price}
 										onChange={(e) => setPrice(e)}
+										error={priceError}
+										helperText={priceError && "Required"}
 									/>
 									<FormControlLabel
 										control={
@@ -168,11 +185,15 @@ const CreateFormulaSlider = ({ theme, isOpen, setIsOpen }) => {
 					</DialogCard>
 				</DialogBody>
 				<DialogFooter>
-					<Button
-						title="Add to Menu"
-						color="success"
-						onClick={handleCreateFormula}
-					/>
+					{res.isSuccess ? (
+						<Button title="Close" color="success" onClick={handleClose} />
+					) : (
+						<Button
+							title="Add to Menu"
+							color="success"
+							onClick={handleCreateFormula}
+						/>
+					)}
 				</DialogFooter>
 			</Dialog>
 		</Overlay>
