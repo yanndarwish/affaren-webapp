@@ -400,15 +400,15 @@ app.delete("/users/:id", authorize, async (req, res) => {
 // create a product
 app.post("/products", auth, async (req, res) => {
 	try {
-		const { name, price, quantity, taxe, barcode, alert } = req.body
+		const { name, price, quantity, taxe, barcode } = req.body
 
-		if (!(name, price, quantity, taxe, barcode, alert)) {
+		if (!(name, price, quantity, taxe, barcode)) {
 			res.status(400).send("All inputs are required")
 		}
 
 		const response = await pool.query(
-			"INSERT INTO products (product_name, product_price, product_taxe, product_quantity, product_barcode, product_alert) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-			[name, price, taxe, quantity, barcode, alert]
+			"INSERT INTO products (product_name, product_price, product_taxe, product_quantity, product_barcode) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+			[name, price, taxe, quantity, barcode]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {
