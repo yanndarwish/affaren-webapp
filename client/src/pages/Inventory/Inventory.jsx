@@ -126,6 +126,14 @@ const Inventory = () => {
 		focusOnBarcode()
 	}
 
+	const softResetBarcode = () => {
+		setBarcode("")
+		// setEditingProduct({})
+		setBarcodeSearch(false)
+		// filterProducts({ data: data })
+		focusOnBarcode()
+	}
+
 	useEffect(() => {
 		filterProducts({ data, searchString })
 	}, [data, searchString])
@@ -189,7 +197,7 @@ const Inventory = () => {
 						<EditProduct
 							product={editingProduct}
 							focusOnBarcode={focusOnBarcode}
-							resetBarcode={resetBarcode}
+							resetBarcode={softResetBarcode}
 							setIsProductFound={setIsProductFound}
 							setSent={setSent}
 							sent={sent}
