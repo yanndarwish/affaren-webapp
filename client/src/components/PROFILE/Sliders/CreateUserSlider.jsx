@@ -40,6 +40,11 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 	const [password, setPassword] = useState("")
 	const [confirmPass, setConfirmPass] = useState("")
 	const [isAdmin, setIsAdmin] = useState(false)
+	const [nameError, setNameError] = useState(false)
+	const [lNameError, setLNameError] = useState(false)
+	const [mailError, setMailError] = useState(false)
+	const [roleError, setRoleError] = useState(false)
+	const [passError, setPassError] = useState(false)
 	const [register, res] = useRegisterMutation()
 	const theme = useSelector((state) => state.theme.theme)
 	const overlayRef = useRef()
@@ -55,15 +60,23 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 	}
 
 	const handleCreate = () => {
-		let user = {
-			firstName: firstName,
-			lastName: lastName,
-			role: role,
-			email: email,
-			password: confirmPass,
-			isAdmin: isAdmin ? "true" : "false",
+		!firstName ? setNameError(true) : setNameError(false)
+		!lastName ? setLNameError(true) : setLNameError(false)
+		!email ? setMailError(true) : setMailError(false)
+		!role ? setRoleError(true) : setRoleError(false)
+		!password ? setPassError(true) : setPassError(false)
+
+		if (firstName && lastName && role && email) {
+			let user = {
+				firstName: firstName,
+				lastName: lastName,
+				role: role,
+				email: email,
+				password: confirmPass,
+				isAdmin: isAdmin ? "true" : "false",
+			}
+			register(user)
 		}
-		register(user)
 	}
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show)
@@ -93,11 +106,15 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 										value={firstName}
 										onChange={setFirstName}
 										label="First Name"
+										error={nameError}
+										helperText={nameError && "Required"}
 									/>
 									<Input
 										value={lastName}
 										onChange={setLastName}
 										label="Last Name"
+										error={lNameError}
+										helperText={lNameError && "Required"}
 									/>
 									<FormControl fullWidth>
 										<InputLabel id="demo-simple-select-label">Role</InputLabel>
@@ -107,12 +124,20 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 											value={role}
 											label="Role"
 											onChange={(e) => setRole(e.target.value)}
+											error={roleError}
+											helpertext={roleError ? "Required" : undefined}
 										>
 											<MenuItem value="user">User</MenuItem>
 											<MenuItem value="cook">Cook</MenuItem>
 										</Select>
 									</FormControl>
-									<Input value={email} onChange={setEmail} label="Email" />
+									<Input
+										value={email}
+										onChange={setEmail}
+										label="Email"
+										error={mailError}
+										helperText={mailError && "Required"}
+									/>
 									<Input
 										value={password}
 										onChange={setPassword}
@@ -132,6 +157,8 @@ const CreateUserSlider = ({ isOpen, setIsOpen }) => {
 												</InputAdornment>
 											),
 										}}
+										error={passError}
+										helperText={passError && "Required"}
 									/>
 									<FormControl error={password !== confirmPass}>
 										<Input
