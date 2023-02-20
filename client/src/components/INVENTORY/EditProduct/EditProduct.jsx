@@ -28,7 +28,6 @@ const EditProduct = ({
 	const [barcode, setBarcode] = useState("")
 	const [quantity, setQuantity] = useState("")
 	const [received, setReceived] = useState("")
-	const [alert, setAlert] = useState("")
 	const [updateProduct, res] = useUpdateFullProductMutation()
 	const [deleteProduct, response] = useDeleteProductMutation()
 	const [isOpen, setIsOpen] = useState(false)
@@ -43,7 +42,6 @@ const EditProduct = ({
 				: product.product_quantity + (received === "" ? 0 : parseInt(received)),
 			taxe: taxe ? parseFloat(taxe) : product.product_taxe,
 			barcode: barcode ? barcode : product.product_barcode,
-			alert: alert ? parseInt(alert) : product.product_alert,
 		}
 
 		updateProduct({ payload: newProduct, id: product.product_id })
@@ -168,19 +166,6 @@ const EditProduct = ({
 						),
 					}}
 					onChange={(e) => setBarcode(e)}
-				/>
-				<Input
-					label="Alert"
-					type="number"
-					fullWidth
-					inputAdornment={{
-						startAdornment: (
-							<InputAdornment data-id="nb-qty" position="start">
-								<p data-id="nb-qty">{product.product_alert}</p>
-							</InputAdornment>
-						),
-					}}
-					onChange={(e) => setAlert(e)}
 				/>
 				<FullCenter>
 					<Button title="Delete Product" color="error" onClick={handleModal} />
