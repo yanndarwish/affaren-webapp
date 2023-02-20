@@ -30,6 +30,9 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 	const [category, setCategory] = useState("starter")
 	const [price, setPrice] = useState("")
 	const [active, setActive] = useState(true)
+	const [nameError, setNameError] = useState(false)
+	const [ingError, setIngError] = useState(false)
+	const [priceError, setPriceError] = useState(false)
 	const overlayRef = useRef()
 	const [postDish, res] = usePostDishMutation()
 
@@ -41,25 +44,28 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 	}
 
 	const handleCreateDish = () => {
+		!name ? setNameError(true) : setNameError(false)
+		!price ? setPriceError(true) : setPriceError(false)
 		let ing = []
-		const ingredients = document
-			.getElementById("dish-ingredients")
-			.value.split(",")
-		ingredients.forEach((ingre) => {
+		const ingredients = document.getElementById("dish-ingredients").value
+		const splittedIngredients = ingredients.split(",")
+		splittedIngredients.forEach((ingre) => {
 			ing.push(ingre.trim())
 		})
+		!ingredients ? setIngError(true) : setIngError(false)
 
-		const newDish = {
-			dishName: name,
-			dishIngredients: ing,
-			dishCategory: category,
-			dishPrice: parseFloat(price),
-			dishActive: active ? "true" : "false",
-		}
-		postDish(newDish)
-		resetInputs()
+		if ((name, price, ingredients)) {
+			const newDish = {
+				dishName: name,
+				dishIngredients: ing,
+				dishCategory: category,
+				dishPrice: parseFloat(price),
+				dishActive: active ? "true" : "false",
+			}
+			postDish(newDish)
+			resetInputs()
 			res.reset()
-
+		}
 	}
 
 	const resetInputs = () => {
@@ -90,8 +96,19 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 							/>
 						) : (
 							<FormWrapper>
-								<Input label="Name" value={name} onChange={(e) => setName(e)} />
-								<Input label="Ingredients" id="dish-ingredients" />
+								<Input
+									label="Name"
+									value={name}
+									onChange={(e) => setName(e)}
+									error={nameError}
+									helperText={nameError && "Required"}
+								/>
+								<Input
+									label="Ingredients"
+									id="dish-ingredients"
+									error={ingError}
+									helperText={ingError && "Required"}
+								/>
 								<FormControl>
 									<InputLabel id="demo-simple-select-label">
 										Category
@@ -115,6 +132,8 @@ const CreateDishSlider = ({ theme, isOpen, setIsOpen }) => {
 									label="Price"
 									value={price}
 									onChange={(e) => setPrice(e)}
+									error={priceError}
+									helperText={priceError && "Required"}
 								/>
 								<FormControlLabel
 									control={
