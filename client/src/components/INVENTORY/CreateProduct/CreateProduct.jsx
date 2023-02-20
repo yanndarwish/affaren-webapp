@@ -30,26 +30,43 @@ const CreateProduct = ({
 			: ""
 	)
 	const [quantity, setQuantity] = useState("")
-	const [alert, setAlert] = useState("")
 	const [newProduct, setNewProduct] = useState("")
+	const [nameError, setNameError] = useState(false)
+	const [priceError, setPriceError] = useState(false)
+	const [qtyError, setQtyError] = useState(false)
+	const [barcodeError, setBarcodeError] = useState(false)
 	const [postProduct, res] = usePostProductMutation()
 
 	const handleCreate = () => {
-		let newProduct = {
-			name: name,
-			price: price,
-			quantity: quantity,
-			taxe: taxe,
-			barcode: barcode,
-			alert: alert,
+		!name ? setNameError(true) : setNameError(false)
+		!price || isNaN(price) ? setPriceError(true) : setPriceError(false)
+		!quantity || isNaN(quantity) ? setQtyError(true) : setQtyError(false)
+		!barcode || isNaN(barcode) ? setBarcodeError(true) : setBarcodeError(false)
+
+		if (
+			name &&
+			price &&
+			!isNaN(price) &&
+			quantity &&
+			!isNaN(quantity) &&
+			barcode &&
+			!isNaN(barcode)
+		) {
+			let newProduct = {
+				name: name,
+				price: price,
+				quantity: quantity,
+				taxe: taxe,
+				barcode: barcode,
+			}
+			setNewProduct(newProduct)
+			postProduct(newProduct)
+			setSent(true)
+			focusOnBarcode()
+			resetInputs()
+			resetBarcode()
+			document.getElementById("barcode-input").focus()
 		}
-		setNewProduct(newProduct)
-		postProduct(newProduct)
-		setSent(true)
-		focusOnBarcode()
-		resetInputs()
-		resetBarcode()
-		document.getElementById("barcode-input").focus()
 	}
 
 	const resetInputs = () => {
@@ -58,7 +75,6 @@ const CreateProduct = ({
 		setTaxe("")
 		setBarcode("")
 		setQuantity("")
-		setAlert("")
 	}
 
 	useEffect(() => {
@@ -91,12 +107,21 @@ const CreateProduct = ({
 			<FullCenter>
 				<ArtTitle>Create a Product</ArtTitle>
 			</FullCenter>
-			<Input value={name} label="Name" fullWidth onChange={(e) => setName(e)} />
+			<Input
+				value={name}
+				label="Name"
+				fullWidth
+				onChange={(e) => setName(e)}
+				error={nameError}
+				helperText={nameError && "Required"}
+			/>
 			<Input
 				value={price}
 				label="Price"
 				fullWidth
 				onChange={(e) => setPrice(e)}
+				error={priceError}
+				helperText={priceError && "Required"}
 			/>
 			<InputLabel id="demo-simple-select-label">Category</InputLabel>
 			<Select
@@ -117,19 +142,16 @@ const CreateProduct = ({
 				type="number"
 				fullWidth
 				onChange={(e) => setQuantity(e)}
+				error={qtyError}
+				helperText={qtyError && "Required"}
 			/>
 			<Input
 				value={barcode}
 				label="Barcode"
 				fullWidth
 				onChange={(e) => setBarcode(e)}
-			/>
-			<Input
-				value={alert}
-				label="Alert"
-				type="number"
-				fullWidth
-				onChange={(e) => setAlert(e)}
+				error={barcodeError}
+				helperText={barcodeError && "Required"}
 			/>
 			<FullCenter>
 				<Button title="Create Product" onClick={handleCreate} />
