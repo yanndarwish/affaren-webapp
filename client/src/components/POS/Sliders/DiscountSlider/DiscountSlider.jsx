@@ -23,7 +23,7 @@ import {
 	DialogFooter,
 	Overlay,
 } from "../Slider.styles"
-import { SubTitle } from "../../../../assets/common/common.styles"
+import { ErrorMessage, SubTitle } from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
 import NumPad from "../../../common/NumPad/NumPad"
@@ -34,6 +34,8 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 	const products = useSelector((state) => state.sale.products)
 	const dispatch = useDispatch()
 	const overlayRef = useRef()
+	const [selectedError, setSelectedError] = useState(false)
+	const [amountError, setAmountError] = useState(false)
 	const [selected, setSelected] = useState([])
 	const [discountType, setDiscountType] = useState("percent")
 	const [discountAmount, setDiscountAmount] = useState(0)
@@ -81,50 +83,60 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 	}
 
 	const applyDiscount = () => {
-		let discountedProducts = []
-		let reduction
-		let newPrice
-		// find the products
-		selected.forEach((id) => {
-			const found = products.find((product) => product.id === id)
-			// apply discount
-			if (discountType === "percent") {
-				reduction = (found.price * discountAmount) / 100
-				newPrice = Math.floor((found.price - reduction) * 100) / 100
-			} else {
-				reduction = Math.floor((discountAmount / selected.length) * 100) / 100
-				newPrice = Math.floor((found.price - reduction) * 100) / 100
-			}
-			// create new updated object
-			let obj = { ...found }
-			obj.price = newPrice
-			discountedProducts.push(obj)
+		if (selected.length === 0 && discountAmount === 0) {
+			setSelectedError(true)
+			setAmountError(true)
+		} else if (selected.length === 0) {
+			setSelectedError(true)
+			setAmountError(false)
+		} else if (discountAmount === 0) {
+			setSelectedError(false)
+			setAmountError(true)
+		} else if (selected.length > 0 && discountAmount !== 0) {
+			let discountedProducts = []
+			let reduction
+			let newPrice
+			// find the products
+			selected.forEach((id) => {
+				const found = products.find((product) => product.id === id)
+				// apply discount
+				if (discountType === "percent") {
+					reduction = (found.price * discountAmount) / 100
+					newPrice = Math.floor((found.price - reduction) * 100) / 100
+				} else {
+					reduction = Math.floor((discountAmount / selected.length) * 100) / 100
+					newPrice = Math.floor((found.price - reduction) * 100) / 100
+				}
+				// create new updated object
+				let obj = { ...found }
+				obj.price = newPrice
+				discountedProducts.push(obj)
 
-			let productDiscount = {
-				productId: id,
-				discountType: discountType,
-				discountAmount: discountAmount,
-				originalPrice: found.price,
-				reduction: reduction,
-				newPrice: newPrice,
-			}
+				let productDiscount = {
+					productId: id,
+					discountType: discountType,
+					discountAmount: discountAmount,
+					originalPrice: found.price,
+					reduction: reduction,
+					newPrice: newPrice,
+				}
 
-			dispatch(setDiscount({ discount: productDiscount }))
-		})
+				dispatch(setDiscount({ discount: productDiscount }))
+			})
 
-		const updated = products.map((product) => {
-			const found = discountedProducts.find(item => item.id === product.id)
-			if (found) {
-				return found
-			} else {
-				return product
-			}
+			const updated = products.map((product) => {
+				const found = discountedProducts.find((item) => item.id === product.id)
+				if (found) {
+					return found
+				} else {
+					return product
+				}
+			})
 
-		})
-
-		dispatch(updateProducts({ products: updated }))
-		resetDiscount()
-		setIsOpen(false)
+			dispatch(updateProducts({ products: updated }))
+			resetDiscount()
+			setIsOpen(false)
+		}
 	}
 
 	const resetDiscount = () => {
@@ -210,6 +222,11 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 									</TableBody>
 								</Table>
 							</TableContainer>
+							{selectedError && (
+								<ErrorMessage>
+									You have to select at least one item
+								</ErrorMessage>
+							)}
 							<FormControl>
 								<FormLabel id="demo-radio-buttons-group-label">Type</FormLabel>
 								<RadioGroup
@@ -233,6 +250,10 @@ const DiscountSlider = ({ theme, isOpen, setIsOpen }) => {
 									/>
 								</RadioGroup>
 							</FormControl>
+							{amountError && (
+								<ErrorMessage>The amount must be greater than 0</ErrorMessage>
+							)}
+
 							<NumPad
 								display
 								unit={discountType === "percent" ? "%" : "€"}
