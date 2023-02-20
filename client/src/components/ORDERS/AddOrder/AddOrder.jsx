@@ -23,33 +23,44 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 	const [clientName, setClientName] = useState("")
 	const [clientPhone, setClientPhone] = useState("")
 	const [orderLocation, setOrderLocation] = useState("pick-up")
+	const [titleError, setTitleError] = useState(false)
+	const [dateError, setDateError] = useState(false)
+	const [phoneError, setPhoneError] = useState(false)
+	const [nameError, setNameError] = useState(false)
 	const [postOrder, res] = usePostOrderMutation()
 
 	const handleCreate = () => {
-		const items = document.querySelectorAll(".order-items")
-		let description = []
-		items.forEach((item) => {
-			let value = item.querySelector("textarea").value
-			description.push(value)
-		})
+		!title ? setTitleError(true) : setTitleError(false)
+		!clientName ? setNameError(true) : setNameError(false)
+		!clientPhone ? setPhoneError(true) : setPhoneError(false)
+		!dueDate ? setDateError(true) : setDateError(false)
 
-		const newOrder = {
-			title: title,
-			description: description,
-			dueDate: dueDate,
-			dueTime: dueTime,
-			clientName: clientName,
-			clientPhone: clientPhone,
-			orderLocation: orderLocation,
+		if ((title, clientName, clientPhone, dueDate)) {
+			const items = document.querySelectorAll(".order-items")
+			let description = []
+			items.forEach((item) => {
+				let value = item.querySelector("textarea").value
+				description.push(value)
+			})
+
+			const newOrder = {
+				title: title,
+				description: description,
+				dueDate: dueDate,
+				dueTime: dueTime,
+				clientName: clientName,
+				clientPhone: clientPhone,
+				orderLocation: orderLocation,
+			}
+			setNewOrder(true)
+			setAdd(false)
+			postOrder(newOrder)
+			ws?.sendMessage({
+				type: "order",
+				action: "add",
+				order: newOrder
+			})
 		}
-		setNewOrder(true)
-		setAdd(false)
-		postOrder(newOrder)
-		ws?.sendMessage({
-			type: "order",
-			action: "add",
-			order: newOrder
-		})
 	}
 
 	const handleRadio = (e) => {
@@ -86,12 +97,16 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 									label="Client Name"
 									fullWidth
 									onChange={(e) => setClientName(e)}
+									error={nameError}
+									helperText={nameError && "Required"}
 								/>
 								<Input
 									value={clientPhone}
 									label="Client Phone"
 									fullWidth
 									onChange={(e) => setClientPhone(e)}
+									error={phoneError}
+									helperText={phoneError && "Required"}
 								/>
 							</SearchSection>
 						</Column>
@@ -102,6 +117,8 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 								label="Title"
 								fullWidth
 								onChange={(e) => setTitle(e)}
+								error={titleError}
+								helperText={titleError && "Required"}
 							/>
 							<Column>
 								<Input
@@ -124,6 +141,8 @@ const AddOrder = ({ theme, setAdd, setNewOrder }) => {
 									type="date"
 									fullWidth
 									onChange={(e) => setDueDate(e)}
+									error={dateError}
+									helperText={dateError && "Required"}
 								/>
 								<Input
 									value={dueTime}
