@@ -14,6 +14,7 @@ const Input = ({
 	multiline,
 	onClick,
 	error,
+	helperText
 }) => {
 	return (
 		<TextField
@@ -29,6 +30,7 @@ const Input = ({
 			onClick={onClick}
 			placeholder={placeholder}
 			InputProps={inputAdornment && inputAdornment}
+			helperText={helperText}
 		/>
 	)
 }
