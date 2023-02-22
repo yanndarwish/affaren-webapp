@@ -411,8 +411,10 @@ app.post("/products", auth, async (req, res) => {
 			[name, price, taxe, quantity, barcode]
 		)
 		res.status(200).send(response.rows)
+		return
 	} catch (err) {
 		console.log(err)
+		return
 	}
 })
 
