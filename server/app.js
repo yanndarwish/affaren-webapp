@@ -425,7 +425,7 @@ app.put("/products/:id", auth, async (req, res) => {
 		const { name, price, quantity, taxe, barcode } = req.body
 
 		const response = await pool.query(
-			"UPDATE products SET product_name = $1, product_price = $2, product_taxe = $3, product_quantity = $4, product_barcode = $5 WHERE product_id = $6 RETURNING *",
+			"UPDATE products SET product_name = $1, product_price = $2, product_taxe = $3, product_quantity = $4, product_barcode = $5 WHERE product_id = $7 RETURNING *",
 			[name, price, taxe, quantity, barcode, id]
 		)
 		res.status(200).send(response.rows)
