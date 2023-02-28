@@ -222,7 +222,7 @@ const Closing = () => {
 			<ColumnCenter>
 				<SubTitle>1 - Check card revenue</SubTitle>
 				<Column>
-					<ArtTitle>You made {todayCard}€ in card today</ArtTitle>
+					<ArtTitle>You made {parseFloat(todayCard).toFixed(2)}€ in card today</ArtTitle>
 
 					<PrimaryText>
 						On the card terminal, print the days tickets
@@ -246,11 +246,11 @@ const Closing = () => {
 				<SubTitle>2 - Count the cash</SubTitle>
 				<Column>
 					<PrimaryText>
-						You already had {cash}€ in the drawer this morning
+						You already had {parseFloat(cash).toFixed(2)}€ in the drawer this morning
 					</PrimaryText>
-					<PrimaryText>You made {todayCash}€ in cash today</PrimaryText>
+					<PrimaryText>You made {parseFloat(todayCash).toFixed(2)}€ in cash today</PrimaryText>
 					{todayCheck !== 0 && (
-						<ArtTitle>You made {todayCheck}€ in check today</ArtTitle>
+						<ArtTitle>You made {parseFloat(todayCheck).toFixed(2)}€ in check today</ArtTitle>
 					)}
 					<ArtTitle>
 						So now, you should have {parseFloat(cash + todayCash).toFixed(2)}€
