@@ -300,6 +300,7 @@ const Pos = () => {
 							)}
 							<Box>
 								<Button
+									disabled={parseFloat(sale.amount) === 0}
 									color="success"
 									title="Continue to Payment"
 									onClick={() => openPaymentSlider()}
