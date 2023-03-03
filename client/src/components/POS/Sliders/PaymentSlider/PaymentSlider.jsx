@@ -311,15 +311,15 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 						</Box>
 						<TabPanel value={value} index={0}>
 							<NumPad display value={paying} setValue={setPaying} unit="€" />
-							<EuroSymbolOutlinedIcon />
+							<EuroSymbolOutlinedIcon fontSize="large" />
 						</TabPanel>
 						<TabPanel value={value} index={1}>
 							<NumPad display value={paying} setValue={setPaying} unit="€" />
-							<CreditCardOutlinedIcon />
+							<CreditCardOutlinedIcon fontSize="large" />
 						</TabPanel>
 						<TabPanel value={value} index={2}>
 							<NumPad display value={paying} setValue={setPaying} unit="€" />
-							<SellOutlinedIcon />
+							<SellOutlinedIcon fontSize="large" />
 						</TabPanel>
 						{res.isError && (
 							<ErrorMessage>Failed to update Products quantity</ErrorMessage>
@@ -337,7 +337,13 @@ const Slider = ({ theme, isOpen, setIsOpen }) => {
 				</DialogBody>
 				<DialogFooter>
 					<Button
-						title="Confirm Payment"
+						title={
+							value === 0
+								? "Confirm CASH Payment"
+								: value === 1
+								? "Confirm CARD Payment"
+								: "Confirm CHECK Payment"
+						}
 						color="success"
 						onClick={handlePayment}
 					/>
