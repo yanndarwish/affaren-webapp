@@ -37,12 +37,6 @@ export const salesApi = createApi({
 			}),
 			invalidatesTags: ["Sales"],
 		}),
-		getYearSales: builder.query({
-			query: ({ year }) => ({
-				url: `sales-period/${year}`,
-			}),
-			providesTags: ["Sales"],
-		}),
 		getMonthSales: builder.query({
 			query: ({ year, month }) => ({
 				url: `sales-period/${year}/${month}`,
@@ -51,7 +45,7 @@ export const salesApi = createApi({
 		}),
 		getNextSaleId: builder.query({
 			query: () => ({
-				url: "sales-last",
+				url: "sales-period/last",
 			}),
 			providesTags: ["NextId"],
 		}),
@@ -110,7 +104,6 @@ export const {
 	usePostSaleMutation,
 	useUpdateSaleMutation,
 	useGetSalesQuery,
-	useGetYearSalesQuery,
 	useGetMonthSalesQuery,
 	useGetNextSaleIdQuery,
 	useGetSaleQuery,

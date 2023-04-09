@@ -36,7 +36,7 @@ export const printApi = createApi({
 		}),
 		postDrawer: builder.mutation({
 			query: () => ({
-				url: "drawer",
+				url: "print/drawer",
 				method: "POST",
 			}),
 		}),
