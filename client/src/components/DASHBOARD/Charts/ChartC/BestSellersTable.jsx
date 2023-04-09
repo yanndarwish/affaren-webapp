@@ -11,7 +11,7 @@ import {
 const BestSellersTable = ({ data }) => {
 	return (
 		<TableContainer component={Paper} sx={{ maxHeight: 320 }} >
-			<Table id="detail-table" sx={{ minWidth: 350 }} aria-label="simple table">
+			<Table sx={{ minWidth: 350 }} aria-label="simple table">
 				<TableHead>
 					<TableRow>
 						<TableCell>Id</TableCell>
