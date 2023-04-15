@@ -50,8 +50,8 @@ export const salesApi = createApi({
 			providesTags: ["NextId"],
 		}),
 		getSales: builder.query({
-			query: () => ({
-				url: "sales",
+			query: (page) => ({
+				url: `sales${page ? "?page=" + page + "&limit=25" : ""}`,
 			}),
 			providesTags: ["Sales"],
 		}),

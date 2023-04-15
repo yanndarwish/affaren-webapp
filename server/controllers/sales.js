@@ -19,9 +19,17 @@ const createSale = async (req, res) => {
 // get all sales
 const getSales = async (req, res) => {
 	try {
-		const response = await pool.query(
-			"SELECT * FROM sales ORDER BY sale_id DESC"
-		)
+		// pagination (default return all sales)
+		const page = Number(req.query.page) || ""
+		const limit = Number(req.query.limit) || ""
+		const offset = limit * page - limit
+
+		// build request string based on pagination if necessary
+		let request = `SELECT * FROM sales ORDER BY sale_id DESC ${
+			limit ? "LIMIT " + limit : ""
+		} ${offset ? "OFFSET " + offset : ""}`
+
+		const response = await pool.query(request)
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
