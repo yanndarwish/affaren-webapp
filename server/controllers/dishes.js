@@ -52,17 +52,15 @@ const updateDish = async (req, res) => {
 			dishCategory,
 			dishPrice,
 			dishActive,
-			dishTaxe,
 		} = req.body
 		const response = await pool.query(
-			"UPDATE dishes SET dish_name = $1, dish_ingredients = $2, dish_category = $3, dish_price = $4, dish_active = $5, product_taxe = $6 WHERE dish_id = $7",
+			"UPDATE dishes SET dish_name = $1, dish_ingredients = $2, dish_category = $3, dish_price = $4, dish_active = $5, product_taxe = 5.5 WHERE dish_id = $6",
 			[
 				dishName,
 				dishIngredients,
 				dishCategory,
 				dishPrice,
 				dishActive,
-				dishTaxe,
 				id,
 			]
 		)
