@@ -2,6 +2,19 @@ const ThermalPrinter = require("node-thermal-printer").printer
 const PrinterTypes = require("node-thermal-printer").types
 // print ticket
 const printTicket = async (req, res) => {
+	const {
+		id,
+		amount,
+		day,
+		month,
+		year,
+		paymentMethods,
+		discount,
+		products,
+		taxes,
+		user,
+	} = req.body
+
 	try {
 		let printer = new ThermalPrinter({
 			type: PrinterTypes.EPSON,
@@ -242,6 +255,7 @@ const printTicket = async (req, res) => {
 
 // print cash detail ticket
 const printCashTicket = async (req, res) => {
+	const { user } = req.body
 	try {
 		let printer = new ThermalPrinter({
 			type: PrinterTypes.EPSON,
