@@ -15,11 +15,8 @@ import { useDeleteSaleMutation } from "../../../redux/services/salesApi"
 import { useGetSaleProductsQuery } from "../../../redux/services/salesApi"
 import {
 	ArtTitle,
-	ColumnCenter,
-	FullCenter,
 } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import { usePostPrintMutation } from "../../../redux/services/printApi"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
 
@@ -90,6 +87,10 @@ export default function SalesTable({ array }) {
 	}
 
 	const DeleteConfirmation = () => {
+		setTimeout(()=> {
+			setIsOpen(false)
+			res.reset()
+		}, 1000)
 		return (
 			<InfoMessage
 				state="success"
