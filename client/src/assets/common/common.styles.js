@@ -260,6 +260,11 @@ export const HorizontalCenter = styled.div`
 	justify-content: center;
 `
 
+export const HorizontalEnd= styled.div`
+	display: flex;
+	justify-content: end;
+`
+
 export const FullCenter = styled.div`
 	display: flex;
 	height: 100%;
