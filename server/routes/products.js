@@ -4,7 +4,6 @@ const auth = require("../middleware/auth")
 
 const {
 	getProducts,
-	getProduct,
 	createProduct,
 	patchProduct,
 	updateProduct,
@@ -14,8 +13,6 @@ const {
 router.post("/", auth, createProduct)
 
 router.get("/", auth, getProducts)
-
-router.get("/:barcode", auth, getProduct)
 
 router.patch("/:id", auth, patchProduct)
 

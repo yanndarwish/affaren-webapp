@@ -46,16 +46,12 @@ export const productsApi = createApi({
 			invalidatesTags: ["Products"],
 		}),
 		getProducts: builder.query({
-			query: () => ({
-				url: "products",
+			query: ({ name, barcode, page }) => ({
+				url: `products?${name ? `name=${name}` : ""}${
+					barcode ? `&barcode=${barcode}` : ""
+				}${page ? "&page=" + page + "&limit=25" : ""}`,
 			}),
 			providesTags: ["Products"],
-		}),
-		getProduct: builder.query({
-			query: ({ barcode }) => ({
-				url: `products/${barcode}`,
-			}),
-			providesTags: ["Product"],
 		}),
 		deleteProduct: builder.mutation({
 			query: ({ id }) => ({
@@ -69,8 +65,7 @@ export const productsApi = createApi({
 
 export const {
 	usePostProductMutation, 
-    useGetProductQuery, 
-    useGetProductsQuery, 
+    useGetProductsQuery,
     useUpdateProductsMutation, 
 	useUpdateFullProductMutation,
     useDeleteProductMutation

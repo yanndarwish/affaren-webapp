@@ -16,7 +16,7 @@ import {
 import Button from "../../components/common/Button/Button.component"
 import BarcodeInput from "../../components/common/BarcodeInput/BarcodeInput"
 import {
-	useGetProductQuery,
+	useGetProductsQuery,
 	useUpdateProductsMutation,
 } from "../../redux/services/productsApi"
 import AddIcon from "@mui/icons-material/Add"
@@ -32,7 +32,7 @@ const Kitchen = () => {
 	const [home, setHome] = useState(true)
 	const [quantity, setQuantity] = useState(0)
 	const [updateProduct, res] = useUpdateProductsMutation()
-	const { data, isError, isSuccess } = useGetProductQuery(
+	const { data, isError, isSuccess } = useGetProductsQuery(
 		{ barcode: barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode },
 		{ skip }
 	)
@@ -44,7 +44,7 @@ const Kitchen = () => {
 
 	const handleApply = () => {
 		setSkip(true)
-		updateProduct({ quantity: quantity, id: data?.product_id })
+		updateProduct({ quantity: quantity, id: data?.[0].product_id })
 	}
 
 	const handleSearch = () => {
@@ -80,21 +80,21 @@ const Kitchen = () => {
 				<Button title="Search" onClick={handleSearch} />
 				<Button title="Clear" color="warning" onClick={reset} />
 			</Flex>
-			{data === null && (
+			{data && data?.[0] === undefined && (
 				<Body theme={theme}>
 					<FullCenter>
 						<SubTitle>Product Not Found</SubTitle>
 					</FullCenter>
 				</Body>
 			)}
-			{!home && isSuccess && data !== null ? (
+			{!home && isSuccess && data?.[0] !== undefined ? (
 				<Body theme={theme}>
-					<SubTitle>{data?.product_name}</SubTitle>
+					<SubTitle>{data?.[0]?.product_name}</SubTitle>
 					<FullCenter>
 						<ColumnCenter>
 							<ArtTitle>Current Stock</ArtTitle>
 							<VerticalCenter>
-								<Title>{data?.product_quantity - quantity}</Title>
+								<Title>{data?.[0]?.product_quantity - quantity}</Title>
 							</VerticalCenter>
 							<ArtTitle>How much do you want to take ?</ArtTitle>
 							<VerticalCenter>

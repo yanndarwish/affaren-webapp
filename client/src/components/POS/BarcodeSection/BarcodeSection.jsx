@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useGetProductQuery } from "../../../redux/services/productsApi"
+import { useGetProductsQuery } from "../../../redux/services/productsApi"
 import { addProduct, updateProducts } from "../../../redux/features/sale"
 import { useDispatch, useSelector } from "react-redux"
 import { Flex } from "../../../assets/common/common.styles"
@@ -12,7 +12,7 @@ const BarcodeSection = ({ setNotFound }) => {
 	const dispatch = useDispatch()
 	const [skip, setSkip] = useState(true)
 	const [barcode, setBarcode] = useState("")
-	const { data } = useGetProductQuery(
+	const { data } = useGetProductsQuery(
 		{ barcode: barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode },
 		{ skip }
 	)
@@ -49,7 +49,7 @@ const BarcodeSection = ({ setNotFound }) => {
 
 				dispatch(updateProducts({ products: updated }))
 			}
-		} else if (data === null) {
+		} else if (data === null || data === undefined) {
 			setNotFound(true)
 		}
 		setBarcode("")
@@ -74,7 +74,9 @@ const BarcodeSection = ({ setNotFound }) => {
 	}, [barcode])
 
 	useEffect(() => {
-		addToCart(data)
+		if (data) {
+			addToCart(data[0])
+		}
 	}, [data])
 
 	return (

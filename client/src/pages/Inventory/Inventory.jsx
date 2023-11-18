@@ -7,12 +7,15 @@ import {
 	Flex,
 	SearchSection,
 	SpaceHeader,
+	SpaceHeaderCenter,
 	SubTitle,
 	Title,
 } from "../../assets/common/common.styles"
 import InventoryTable from "../../components/INVENTORY/InventoryTable/InventoryTable"
 import { useState } from "react"
-import { useGetProductsQuery } from "../../redux/services/productsApi"
+import {
+	useGetProductsQuery,
+} from "../../redux/services/productsApi"
 import { useEffect } from "react"
 import BarcodeInput from "../../components/common/BarcodeInput/BarcodeInput"
 import EditProduct from "../../components/INVENTORY/EditProduct/EditProduct"
@@ -24,46 +27,47 @@ const Inventory = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
+	const [pageNumber, setPageNumber] = useState(1)
 	const [searchString, setSearchString] = useState("")
 	const [barcode, setBarcode] = useState("")
+	const [barcodeValue, setBarcodeValue] = useState("")
 	const [inputBarcode, setInputBarcode] = useState("")
 	const [barcodeSearch, setBarcodeSearch] = useState(false)
-	const [filteredProducts, setFilteredProducts] = useState([])
+	const [products, setProducts] = useState([])
 	const [editingProduct, setEditingProduct] = useState({})
 	const [isEditMode, setIsEditMode] = useState(false)
 	const [isCreationMode, setIsCreationMode] = useState(false)
 	const [isProductFound, setIsProductFound] = useState(false)
 	const [sent, setSent] = useState(false)
 
-	const { data, isError } = useGetProductsQuery()
+	const { data, isError, refetch } =
+		useGetProductsQuery({
+			page: pageNumber,
+			name: searchString,
+			barcode: barcodeValue,
+		})
 
 	const redirect = () => {
 		!loggedIn && navigate("/login")
 	}
 
-	const toggleEditMode = () => {
-		setIsEditMode(!isEditMode)
+	const focusOnBarcode = () => {
+		const input = document.getElementById("barcode-input")
+		input.focus()
+	}
+
+	const handlePageClick = (num) => {
+		setPageNumber(pageNumber + num)
 	}
 
 	const toggleCreationMode = () => {
+		setInputBarcode("")
+		setSearchString("")
 		setIsCreationMode(!isCreationMode)
 	}
 
 	const cancelEditingMode = () => {
 		setIsEditMode(false)
-	}
-
-	const filterProducts = ({ data, searchString }) => {
-		// if empty string, return data
-		if (!searchString) {
-			setFilteredProducts(data)
-			// else, look for string matches
-		} else {
-			let array = data?.filter((item) =>
-				item.product_name.toLowerCase().includes(searchString.toLowerCase())
-			)
-			setFilteredProducts(array)
-		}
 	}
 
 	// when clickin on table row, open editor
@@ -74,47 +78,25 @@ const Inventory = () => {
 		setIsCreationMode(false)
 	}
 
-	// focus automatically on barcode input
-	const focusOnBarcode = () => {
-		const input = document.getElementById("barcode-input")
-		input.focus()
-	}
+	const fetchProducts = ({ barcode, name }) => {
+		setIsCreationMode(false)
+		setIsEditMode(false)
 
-	// find product with barcode
-	const findBarcode = ({ nosuffix, barcode }) => {
-		// reset found values
-		setIsProductFound(false)
-		setSent(false)
-		// search for match
-		let found
-		if (nosuffix) {
-			found = data?.filter((item) => item.product_barcode === barcode)
-		} else {
-			found = data?.filter(
-				(item) => item.product_barcode === barcode.slice(0, -2)
-			)
-		}
-		// set barcode search to update button (search or reset ?)
-		setBarcodeSearch(true)
-		// if found, close creation mode, set product found, open editor
-		if (found.length > 0) {
-			setIsCreationMode(false)
-			setIsProductFound(true)
-			setFilteredProducts(found)
-			setEditingProduct(found[0])
-			// if in edit mode, reset barcode to speed workflow
-			if (isEditMode) {
-				setBarcode("")
-				setBarcodeSearch(false)
-			}
-			// if not found, open creation mode
-		} else {
-			setIsProductFound(false)
-			setIsCreationMode(true)
-			setInputBarcode(barcode)
+		if (barcode) {
+			let barcodeValue = barcode.endsWith("/n")
+				? barcode.slice(0, -2)
+				: barcode
+
+			setBarcodeSearch(true)
+			setBarcodeValue(barcodeValue)
+		} else if (name) {
 			setBarcode("")
+			setBarcodeValue("")
+		} else {
 			setBarcodeSearch(false)
+			setBarcodeValue(barcode)
 		}
+		refetch()
 	}
 
 	const resetBarcode = () => {
@@ -122,7 +104,7 @@ const Inventory = () => {
 		setBarcode("")
 		setEditingProduct({})
 		setBarcodeSearch(false)
-		filterProducts({ data: data })
+		fetchProducts({})
 		focusOnBarcode()
 	}
 
@@ -135,14 +117,23 @@ const Inventory = () => {
 	}
 
 	useEffect(() => {
-		filterProducts({ data, searchString })
-	}, [data, searchString])
+		fetchProducts({ name: searchString })
+	}, [searchString])
 
 	useEffect(() => {
-		if (barcode.endsWith("/n")) {
-			findBarcode({ barcode })
+		if (barcode.endsWith("/n") || barcode.length === 0) {
+			fetchProducts({ barcode: barcode })
 		}
 	}, [barcode])
+
+	useEffect(() => {
+		setProducts(data)
+		if (data && data.length === 0) {
+			setIsProductFound(false)
+			setIsCreationMode(true)
+			setInputBarcode(barcode)
+		}
+	}, [data])
 
 	useEffect(() => {
 		redirect()
@@ -152,26 +143,22 @@ const Inventory = () => {
 		<Container theme={theme}>
 			<SpaceHeader>
 				<Title>Inventory</Title>
-				<Button
+				{/* <Button
 					title="Edit Mode"
 					variant={isEditMode ? "contained" : "outlined"}
 					color={isEditMode ? "success" : "error"}
 					onClick={toggleEditMode}
-				/>
+				/> */}
 			</SpaceHeader>
 			<SearchSection>
 				<Flex>
-					<BarcodeInput
-						barcode={barcode}
-						setBarcode={setBarcode}
-						setFilteredProducts={setFilteredProducts}
-					/>
+					<BarcodeInput barcode={barcode} setBarcode={setBarcode} />
 					<Button
 						title={barcodeSearch ? "Reset" : "Search"}
 						onClick={
 							barcodeSearch
 								? () => resetBarcode()
-								: () => findBarcode({ nosuffix: true, barcode })
+								: () => fetchProducts({ barcode: barcode })
 						}
 					/>
 				</Flex>
@@ -213,10 +200,21 @@ const Inventory = () => {
 					) : isError ? (
 						<InfoMessage state="error" text="Failed to fetch products" />
 					) : (
-						<InventoryTable
-							products={filteredProducts}
-							openEditor={openEditor}
-						/>
+						<>
+							<InventoryTable products={products} openEditor={openEditor} />
+							<SpaceHeaderCenter style={{ width: "100%" }}>
+								<Button
+									title="Prev"
+									onClick={() => handlePageClick(-1)}
+									disabled={pageNumber === 1}
+								/>
+								<Button
+									title="Next"
+									onClick={() => handlePageClick(1)}
+									disabled={products && products.length < 25}
+								/>
+							</SpaceHeaderCenter>
+						</>
 					)}
 				</div>
 			</FitContainer>

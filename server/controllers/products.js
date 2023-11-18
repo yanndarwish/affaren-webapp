@@ -21,26 +21,37 @@ const createProduct = async (req, res) => {
 	}
 }
 
-// get all products
+// getproducts with all the query filters possible
 const getProducts = async (req, res) => {
 	try {
-		const response = await pool.query("SELECT * FROM products")
+		// pagination (default return all products)
+		const page = Number(req.query.page) || ""
+		const limit = Number(req.query.limit) || ""
+		const offset = limit * page - limit
+
+		let request = `SELECT * FROM products ORDER BY product_id DESC ${
+			limit ? "LIMIT " + limit : ""
+		} ${offset ? "OFFSET " + offset : ""}`
+
+		// filter by name
+		if (req.query.name) {
+			const name = req.query.name.toLowerCase()
+			const string = `%${name}%`
+			request = `SELECT * FROM products WHERE LOWER(product_name) LIKE '${string}' ORDER BY product_id DESC ${
+				limit ? "LIMIT " + limit : ""
+			} ${offset ? "OFFSET " + offset : ""}`
+		}
+		// filter by barcode
+		if (req.query.barcode) {
+			const barcode = req.query.barcode
+			request = `SELECT * FROM products WHERE product_barcode = '${barcode}' ORDER BY product_id DESC ${
+				limit ? "LIMIT " + limit : ""
+			} ${offset ? "OFFSET " + offset : ""}`
+		}
+
+		const response = await pool.query(request)
 		res.status(200).send(response.rows)
-	} catch (err) {
-		console.log(err)
-	}
-}
 
-// get a product by barcode
-const getProduct = async (req, res) => {
-	try {
-		const barcode = req.params.barcode
-
-		const response = await pool.query(
-			"SELECT * FROM products WHERE product_barcode = $1",
-			[barcode]
-		)
-		res.status(200).send(response.rows[0])
 	} catch (err) {
 		console.log(err)
 	}
@@ -98,7 +109,6 @@ const deleteProduct = async (req, res) => {
 module.exports = {
 	createProduct,
 	getProducts,
-	getProduct,
 	patchProduct,
 	updateProduct,
 	deleteProduct,
