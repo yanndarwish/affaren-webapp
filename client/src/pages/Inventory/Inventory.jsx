@@ -13,9 +13,7 @@ import {
 } from "../../assets/common/common.styles"
 import InventoryTable from "../../components/INVENTORY/InventoryTable/InventoryTable"
 import { useState } from "react"
-import {
-	useGetProductsQuery,
-} from "../../redux/services/productsApi"
+import { useGetProductsQuery } from "../../redux/services/productsApi"
 import { useEffect } from "react"
 import BarcodeInput from "../../components/common/BarcodeInput/BarcodeInput"
 import EditProduct from "../../components/INVENTORY/EditProduct/EditProduct"
@@ -40,12 +38,11 @@ const Inventory = () => {
 	const [isProductFound, setIsProductFound] = useState(false)
 	const [sent, setSent] = useState(false)
 
-	const { data, isError, refetch } =
-		useGetProductsQuery({
-			page: pageNumber,
-			name: searchString,
-			barcode: barcodeValue,
-		})
+	const { data, isError, refetch } = useGetProductsQuery({
+		page: pageNumber,
+		name: searchString,
+		barcode: barcodeValue,
+	})
 
 	const redirect = () => {
 		!loggedIn && navigate("/login")
@@ -63,6 +60,7 @@ const Inventory = () => {
 	const toggleCreationMode = () => {
 		setInputBarcode("")
 		setSearchString("")
+		setSent(!sent)
 		setIsCreationMode(!isCreationMode)
 	}
 
@@ -79,13 +77,8 @@ const Inventory = () => {
 	}
 
 	const fetchProducts = ({ barcode, name }) => {
-		setIsCreationMode(false)
-		setIsEditMode(false)
-
 		if (barcode) {
-			let barcodeValue = barcode.endsWith("/n")
-				? barcode.slice(0, -2)
-				: barcode
+			let barcodeValue = barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode
 
 			setBarcodeSearch(true)
 			setBarcodeValue(barcodeValue)
@@ -117,10 +110,16 @@ const Inventory = () => {
 	}
 
 	useEffect(() => {
+		setIsCreationMode(false)
+		setIsEditMode(false)
 		fetchProducts({ name: searchString })
 	}, [searchString])
 
 	useEffect(() => {
+		if (barcode.length !== 0) {
+			setIsCreationMode(false)
+			setIsEditMode(false)
+		}
 		if (barcode.endsWith("/n") || barcode.length === 0) {
 			fetchProducts({ barcode: barcode })
 		}

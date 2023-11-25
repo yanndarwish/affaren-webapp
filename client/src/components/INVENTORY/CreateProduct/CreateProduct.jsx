@@ -60,8 +60,8 @@ const CreateProduct = ({
 				barcode: barcode,
 			}
 			setNewProduct(newProduct)
-			postProduct(newProduct)
 			setSent(true)
+			postProduct(newProduct)
 			focusOnBarcode()
 			resetInputs()
 			resetBarcode()
