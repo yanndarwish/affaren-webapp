@@ -13,9 +13,7 @@ import SalesModalBody from "../SalesModal/SalesModalBody"
 import SalesModalFooter from "../SalesModal/SalesModalFooter"
 import { useDeleteSaleMutation } from "../../../redux/services/salesApi"
 import { useGetSaleProductsQuery } from "../../../redux/services/salesApi"
-import {
-	ArtTitle,
-} from "../../../assets/common/common.styles"
+import { ArtTitle } from "../../../assets/common/common.styles"
 import Button from "../../common/Button/Button.component"
 import { usePostPrintMutation } from "../../../redux/services/printApi"
 import InfoMessage from "../../common/InfoMessage/InfoMessage"
@@ -87,7 +85,7 @@ export default function SalesTable({ array }) {
 	}
 
 	const DeleteConfirmation = () => {
-		setTimeout(()=> {
+		setTimeout(() => {
 			setIsOpen(false)
 			res.reset()
 		}, 1000)
@@ -97,6 +95,53 @@ export default function SalesTable({ array }) {
 				text={"Sale " + selected + " has been deleted successfully!"}
 			/>
 		)
+	}
+
+	const getDailyCashTotal = (data) => {
+		let total = 0
+
+		data.forEach((sale) => {
+			if (sale.sale_payment_methods.cash) {
+				total += sale.sale_payment_methods.cash
+			}
+		})
+
+		return total
+	}
+
+	const getDailyCardTotal = (data) => {
+		let total = 0
+
+		data.forEach((sale) => {
+			if (sale.sale_payment_methods.card) {
+				total += sale.sale_payment_methods.card
+			}
+		})
+
+		return total
+	}
+
+	const getDailyCheckTotal = (data) => {
+		let total = 0
+
+		data.forEach((sale) => {
+			if (sale.sale_payment_methods.check) {
+				total += sale.sale_payment_methods.check
+			}
+		})
+
+		return total
+	}
+
+	const getDaysSales = (day) => {
+		const result = []
+
+		array.forEach((sale) => {
+			if (sale.sale_day === day) {
+				result.push(sale)
+			}
+		})
+		return result
 	}
 
 	return (
@@ -119,14 +164,28 @@ export default function SalesTable({ array }) {
 							array.map((sale, i) => {
 								return i === 0 ? (
 									<Fragment key={"separator " + i}>
-										<SalesTableRowSeparator sale={sale} />
+										<SalesTableRowSeparator
+											sale={sale}
+											cashTotal={getDailyCashTotal(getDaysSales(sale.sale_day))}
+											cardTotal={getDailyCardTotal(getDaysSales(sale.sale_day))}
+											checkTotal={getDailyCheckTotal(
+												getDaysSales(sale.sale_day)
+											)}
+										/>
 										<SalesTableRow sale={sale} onClick={handleClick} />
 									</Fragment>
 								) : i > 0 &&
 								  array &&
 								  array[i].sale_day !== array[i - 1].sale_day ? (
 									<Fragment key={"separatore" + i}>
-										<SalesTableRowSeparator sale={sale} />
+										<SalesTableRowSeparator
+											sale={sale}
+											cashTotal={getDailyCashTotal(getDaysSales(sale.sale_day))}
+											cardTotal={getDailyCardTotal(getDaysSales(sale.sale_day))}
+											checkTotal={getDailyCheckTotal(
+												getDaysSales(sale.sale_day)
+											)}
+										/>
 
 										<SalesTableRow sale={sale} onClick={handleClick} />
 									</Fragment>
