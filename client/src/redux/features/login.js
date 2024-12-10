@@ -6,9 +6,22 @@ const initialState = {
 	token: false,
 }
 
+const getAuth = () => {
+	const token = localStorage.getItem("token")
+
+	if (token) {
+		return {
+			token,
+			loggedIn: true,
+		}
+	}
+
+	return initialState
+}
+
 const loginSlice = createSlice({
 	name: "login",
-	initialState,
+	initialState: getAuth(),
 	reducers: {
 		logout: () => initialState,
 	},

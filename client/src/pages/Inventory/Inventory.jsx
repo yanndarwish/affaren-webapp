@@ -20,6 +20,9 @@ import EditProduct from "../../components/INVENTORY/EditProduct/EditProduct"
 import CreateProduct from "../../components/INVENTORY/CreateProduct/CreateProduct"
 import { useNavigate } from "react-router-dom"
 import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
+import { ModalCreateProduct } from "../../components/INVENTORY/modals/create"
+import { useModal } from "../../components/shared/modal"
+import { ModalEditProduct } from "../../components/INVENTORY/modals/edit"
 
 const Inventory = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -29,14 +32,10 @@ const Inventory = () => {
 	const [searchString, setSearchString] = useState("")
 	const [barcode, setBarcode] = useState("")
 	const [barcodeValue, setBarcodeValue] = useState("")
-	const [inputBarcode, setInputBarcode] = useState("")
 	const [barcodeSearch, setBarcodeSearch] = useState(false)
 	const [products, setProducts] = useState([])
-	const [editingProduct, setEditingProduct] = useState({})
-	const [isEditMode, setIsEditMode] = useState(false)
-	const [isCreationMode, setIsCreationMode] = useState(false)
-	const [isProductFound, setIsProductFound] = useState(false)
-	const [sent, setSent] = useState(false)
+	const createProductController = useModal()
+	const editProductController = useModal()
 
 	const { data, isError, refetch } = useGetProductsQuery({
 		page: pageNumber,
@@ -57,23 +56,13 @@ const Inventory = () => {
 		setPageNumber(pageNumber + num)
 	}
 
-	const toggleCreationMode = () => {
-		setInputBarcode("")
-		setSearchString("")
-		setSent(!sent)
-		setIsCreationMode(!isCreationMode)
+	const handleCreateProduct = () => {
+		createProductController.openModal()
 	}
 
-	const cancelEditingMode = () => {
-		setIsEditMode(false)
-	}
-
-	// when clickin on table row, open editor
-	const openEditor = (product) => {
-		setIsEditMode(true)
-		setIsProductFound(true)
-		setEditingProduct(product)
-		setIsCreationMode(false)
+	const handleEditProduct = (product) => {
+		editProductController.openModal()
+		editProductController.setData(product)
 	}
 
 	const fetchProducts = ({ barcode, name }) => {
@@ -93,33 +82,17 @@ const Inventory = () => {
 	}
 
 	const resetBarcode = () => {
-		// setIsProductFound(false)
 		setBarcode("")
-		setEditingProduct({})
 		setBarcodeSearch(false)
 		fetchProducts({})
 		focusOnBarcode()
 	}
 
-	const softResetBarcode = () => {
-		setBarcode("")
-		// setEditingProduct({})
-		setBarcodeSearch(false)
-		// filterProducts({ data: data })
-		focusOnBarcode()
-	}
-
 	useEffect(() => {
-		setIsCreationMode(false)
-		setIsEditMode(false)
 		fetchProducts({ name: searchString })
 	}, [searchString])
 
 	useEffect(() => {
-		if (barcode.length !== 0) {
-			setIsCreationMode(false)
-			setIsEditMode(false)
-		}
 		if (barcode.endsWith("/n") || barcode.length === 0) {
 			fetchProducts({ barcode: barcode })
 		}
@@ -127,80 +100,45 @@ const Inventory = () => {
 
 	useEffect(() => {
 		setProducts(data)
-		if (data && data.length === 0) {
-			setIsProductFound(false)
-			setIsCreationMode(true)
-			setInputBarcode(barcode)
-		}
 	}, [data])
 
-	useEffect(() => {
-		redirect()
-	}, [])
+	// useEffect(() => {
+	// 	redirect()
+	// }, [])
 
 	return (
 		<Container theme={theme}>
 			<SpaceHeader>
 				<Title>Inventory</Title>
-				{/* <Button
-					title="Edit Mode"
-					variant={isEditMode ? "contained" : "outlined"}
-					color={isEditMode ? "success" : "error"}
-					onClick={toggleEditMode}
-				/> */}
+				<Button title="Create Product" onClick={handleCreateProduct} />
 			</SpaceHeader>
 			<SearchSection>
 				<Flex>
 					<BarcodeInput barcode={barcode} setBarcode={setBarcode} />
-					<Button
-						title={barcodeSearch ? "Reset" : "Search"}
-						onClick={
-							barcodeSearch
-								? () => resetBarcode()
-								: () => fetchProducts({ barcode: barcode })
-						}
-					/>
+					{barcodeSearch ? (
+						<Button title="Reset" onClick={() => resetBarcode()} />
+					) : (
+						<Button
+							title="Search"
+							onClick={() => fetchProducts({ barcode: barcode })}
+						/>
+					)}
 				</Flex>
 				<Flex>
 					<Input label="Name" value={searchString} onChange={setSearchString} />
 				</Flex>
 			</SearchSection>
 			<FitContainer theme={theme}>
-				<SpaceHeader>
-					<SubTitle>{isEditMode ? "Edit Mode" : "Products"}</SubTitle>
-
-					{isEditMode ? (
-						<Button title="Cancel" onClick={cancelEditingMode} />
-					) : (
-						<Button
-							title={isCreationMode ? "Cancel" : "Create a Product"}
-							onClick={toggleCreationMode}
-						/>
-					)}
-				</SpaceHeader>
+				<SubTitle>Products</SubTitle>
 				<div>
-					{isProductFound && isEditMode ? (
-						<EditProduct
-							product={editingProduct}
-							focusOnBarcode={focusOnBarcode}
-							resetBarcode={softResetBarcode}
-							setIsProductFound={setIsProductFound}
-							setSent={setSent}
-							sent={sent}
-						/>
-					) : isCreationMode ? (
-						<CreateProduct
-							inputBarcode={inputBarcode}
-							focusOnBarcode={focusOnBarcode}
-							resetBarcode={resetBarcode}
-							sent={sent}
-							setSent={setSent}
-						/>
-					) : isError ? (
+					{isError ? (
 						<InfoMessage state="error" text="Failed to fetch products" />
 					) : (
 						<>
-							<InventoryTable products={products} openEditor={openEditor} />
+							<InventoryTable
+								products={products}
+								openEditor={handleEditProduct}
+							/>
 							<SpaceHeaderCenter style={{ width: "100%" }}>
 								<Button
 									title="Prev"
@@ -217,6 +155,8 @@ const Inventory = () => {
 					)}
 				</div>
 			</FitContainer>
+			<ModalCreateProduct controller={createProductController} />
+			<ModalEditProduct controller={editProductController} />
 		</Container>
 	)
 }

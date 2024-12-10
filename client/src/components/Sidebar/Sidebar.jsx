@@ -31,7 +31,7 @@ const Sidebar = () => {
 		setDrawerIsOpen(!drawerIsOpen)
 	}
 
-	const drawerWidth = 100
+	const drawerWidth = 200
 
 	const handleTheme = () => {
 		dispatch(toggleTheme())
@@ -115,25 +115,21 @@ const Sidebar = () => {
 										<ListItem
 											key={item.id}
 											disablePadding
-											sx={{ justifyContent: "center" }}
+											sx={{ justifyContent: "start" }}
 										>
 											<ListItemButton
 												sx={{
+													display: "flex",
+													gap: "1em",
 													minHeight: item.route === "closing" ? 60 : 72,
-													maxWidth: item.route === "closing" ? 60 : "auto",
-													justifyContent: "center",
 													px: 2.5,
 													aspectRatio: item.route === "closing" ? 1 : "auto",
 													borderRadius: item.route === "closing" ? "50%" : "0",
-													background:
-														item.route === "closing"
-															? "rgb(0, 0, 0, 0.1)"
-															: "none",
 													color: item.route === "closing" ? "red" : "auto",
 												}}
 												onClick={() => handleNavClick(item.route)}
 											>
-												{item.icon}
+												{item.icon} {item.label}
 											</ListItemButton>
 										</ListItem>
 								  ))}
