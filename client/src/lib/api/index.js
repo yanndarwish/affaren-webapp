@@ -13,13 +13,11 @@ const query = async (url, method, options) => {
 			...options,
 		})
 
-		console.log(response)
-
 		if (response.status < 200 || response.status >= 300) {
 			throw new Error(response.statusText)
 		}
 
-		if (url.includes("print")) {
+		if (!url.includes("print")) {
 			return response.json()
 		} else {
 			return response
