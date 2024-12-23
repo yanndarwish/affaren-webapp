@@ -238,7 +238,7 @@ const printTicket = async (req, res) => {
 
 			try {
 				printer.execute()
-				res.status(200).send()
+				res.status(200).send({})
 			} catch (error) {
 				console.log("Print failed:", error)
 				res.status(400).send("Print failed")
@@ -293,7 +293,7 @@ const printCashTicket = async (req, res) => {
 
 			try {
 				printer.execute()
-				res.status(200).send()
+				res.status(200).send({})
 			} catch (error) {
 				console.log("Print failed:", error)
 				res.status(400).send("Print failed")
@@ -321,7 +321,7 @@ const openDrawer = async (req, res) => {
 			printer.openCashDrawer()
 			try {
 				let execute = printer.execute()
-				res.status(200).send()
+				res.status(200).send({})
 			} catch (error) {
 				console.log("Print failed:", error)
 				res.status(400).send("Failed to open Drawer")
