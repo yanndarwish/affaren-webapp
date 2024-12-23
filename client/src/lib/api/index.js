@@ -13,9 +13,13 @@ const query = async (url, method, options) => {
 			...options,
 		})
 
+		console.log(response)
+
 		if (response.status < 200 || response.status >= 300) {
 			throw new Error(response.statusText)
 		}
+
+		console.log(response?.json())
 
 		return response.json()
 	} catch (error) {
