@@ -19,8 +19,6 @@ const query = async (url, method, options) => {
 			throw new Error(response.statusText)
 		}
 
-		console.log(response?.json())
-
 		return response.json()
 	} catch (error) {
 		console.log(error)
@@ -102,6 +100,7 @@ export const deleteProduct = async (id) => {
 
 export const openDrawer = async () => {
 	const response = await post("print/drawer")
+	console.log(response)
 	return response
 }
 
