@@ -19,7 +19,11 @@ const query = async (url, method, options) => {
 			throw new Error(response.statusText)
 		}
 
-		return response.json()
+		if (url.includes("print")) {
+			return response.json()
+		} else {
+			return response
+		}
 	} catch (error) {
 		console.log(error)
 		throw error
