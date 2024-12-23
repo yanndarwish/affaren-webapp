@@ -46,7 +46,16 @@ router.post("/", async (req, res) => {
 				"UPDATE users SET user_token = $1 WHERE user_id = $2",
 				[token, user.user_id]
 			)
-			res.status(200).json({ token: token })
+			res.status(200).json({
+				token: token,
+				user: {
+					id: user.user_id,
+					firstName: user.user_first_name,
+					lastName: user.user_last_name,
+					email: user.user_email,
+					role: user.user_role,
+				},
+			})
 			return
 		}
 		res.status(400).send("Invalid Credentials")

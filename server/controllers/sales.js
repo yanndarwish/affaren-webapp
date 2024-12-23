@@ -1,5 +1,9 @@
 const pool = require("../db")
 
+const roundUpToTwoDecimals = (number) => {
+	return Math.ceil(number * 100) / 100
+}
+
 // create a sale
 const createSale = async (req, res) => {
 	try {
@@ -20,19 +24,84 @@ const createSale = async (req, res) => {
 const getSales = async (req, res) => {
 	try {
 		// pagination (default return all sales)
-		const page = Number(req.query.page) || ""
+		const offset = Number(req.query.offset) || ""
 		const limit = Number(req.query.limit) || ""
-		const offset = limit * page - limit
+
+		const { year, month, day } = req.query
+
+		const allSalesRequest = `SELECT * FROM sales WHERE sale_year = ${year} AND sale_month = ${month} AND sale_day = ${day} ORDER BY sale_id DESC`
+
+		const allSalesResponse = await pool.query(allSalesRequest)
+
+		const allSales = allSalesResponse.rows
+
+		const totalCash = roundUpToTwoDecimals(
+			allSales.reduce(
+				(acc, sale) =>
+					acc +
+					(sale.sale_payment_methods.cash ? sale.sale_payment_methods.cash : 0),
+				0
+			)
+		)
+		const totalCard = roundUpToTwoDecimals(
+			allSales.reduce(
+				(acc, sale) =>
+					acc +
+					(sale.sale_payment_methods.card ? sale.sale_payment_methods.card : 0),
+				0
+			)
+		)
+		const totalCheck = roundUpToTwoDecimals(
+			allSales.reduce(
+				(acc, sale) =>
+					acc +
+					(sale.sale_payment_methods.check
+						? sale.sale_payment_methods.check
+						: 0),
+				0
+			)
+		)
+
+		const total = roundUpToTwoDecimals(totalCash + totalCard + totalCheck)
+
+		const pageTotal = Math.ceil(allSales.length / limit)
 
 		// build request string based on pagination if necessary
-		let request = `SELECT * FROM sales ORDER BY sale_id DESC ${
+		let request = `SELECT * FROM sales WHERE sale_year = ${year} AND sale_month = ${month} AND sale_day = ${day} ORDER BY sale_id DESC ${
 			limit ? "LIMIT " + limit : ""
 		} ${offset ? "OFFSET " + offset : ""}`
 
 		const response = await pool.query(request)
+
+		const data = {
+			data: response.rows,
+			totalCash,
+			totalCard,
+			totalCheck,
+			total,
+			pageTotal,
+		}
+
+		res.status(200).send(data)
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(err)
+	}
+}
+
+const getMonthSales = async (req, res) => {
+	try {
+		const { year, month } = req.query
+
+		const response = await pool.query(
+			"SELECT * FROM sales WHERE sale_year = $1 AND sale_month = $2",
+			[year, month]
+		)
+
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -160,15 +229,18 @@ const getDaySalesProducts = async (req, res) => {
 			"SELECT * FROM sales_products WHERE sale_year = $1 AND sale_month = $2 AND sale_day = $3",
 			[year, month, day]
 		)
+
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
 	}
 }
 
+
 module.exports = {
 	createSale,
 	getSales,
+	getMonthSales,
 	getSale,
 	updateSale,
 	deleteSale,

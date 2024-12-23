@@ -17,14 +17,18 @@ export const CorrectBtn = styled.div`
 
 export const Keypad = styled.div`
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
 `
 
 export const NumRow = styled.div`
 	display: flex;
+	gap: 5px;
 	width: 100%;
 `
 
-export const Num = styled.div`
+export const Num = styled.button`
 	display: flex;
 	justify-content: center;
 	align-items: center;

@@ -18,7 +18,7 @@ import { ArtTitle, SubTitle } from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
 import Input from "../../../common/Input/Input.component"
-import NumPad from "../../../common/NumPad/NumPad"
+import NumPad from "../../../common/NumPad/NumPad_orig"
 import { FormWrapper, DialogCard } from "./NoBarcodeSlider.styles"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 import { addProduct } from "../../../../redux/features/sale"
@@ -102,7 +102,7 @@ const NoBarcodeSlider = ({ theme, isOpen, setIsOpen }) => {
 			setProduct(obj)
 			dispatch(addProduct({ products: obj }))
 			setIsOpen(false)
-			setProduct({...product, taxe: 5.5})
+			setProduct({ ...product, taxe: 5.5 })
 		} else if (!price && !quantity) {
 			setPriceError(true)
 			setQtyError(true)

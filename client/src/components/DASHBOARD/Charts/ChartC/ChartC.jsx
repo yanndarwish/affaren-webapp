@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
 import { Body, SubTitle } from "../../../../assets/common/common.styles"
 import { useGetSalesProductsQuery } from "../../../../redux/services/salesApi"
-import BestSellersTable from "./BestSellersTable"
+// import BestSellersTable from "./BestSellersTable"
 
 const ChartC = ({ theme, months, month, year }) => {
 	const [skip, setSkip] = useState(true)
@@ -67,7 +67,8 @@ const ChartC = ({ theme, months, month, year }) => {
 			{isError ? (
 				<InfoMessage state="error" text="Failed to fetch month best sellers" />
 			) : (
-				<BestSellersTable data={sortedData} />
+				<></>
+				// <BestSellersTable data={sortedData} />
 			)}
 		</Body>
 	)

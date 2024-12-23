@@ -13,7 +13,7 @@ import {
 } from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
-import NumPad from "../../../common/NumPad/NumPad"
+import NumPad from "../../../common/NumPad/NumPad_orig"
 import Input from "../../../common/Input/Input.component"
 import {
 	FormControl,

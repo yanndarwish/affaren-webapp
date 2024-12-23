@@ -5,7 +5,7 @@ import {
 	SubTitle,
 } from "../../../../assets/common/common.styles"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
-import BestSellersTable from "../ChartC/BestSellersTable"
+
 import { useGetDaySalesProductsQuery } from "../../../../redux/services/salesApi"
 
 const ChartG = ({ theme }) => {
@@ -82,7 +82,8 @@ const ChartG = ({ theme }) => {
 					text="Failed to fetch daily lunch best sellers"
 				/>
 			) : (
-				<BestSellersTable data={sortedData} />
+				<></>
+				// <TableBestSellers date={date} />
 			)}
 		</Body>
 	)

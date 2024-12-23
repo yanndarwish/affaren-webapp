@@ -1,90 +1,89 @@
 import { useEffect, useState } from "react"
-import { useGetProductsQuery } from "../../../redux/services/productsApi"
-import { addProduct, updateProducts } from "../../../redux/features/sale"
-import { useDispatch, useSelector } from "react-redux"
-import { Flex } from "../../../assets/common/common.styles"
-import Button from "../../common/Button/Button.component"
-import BarcodeInput from "../../common/BarcodeInput/BarcodeInput"
+import { Input } from "../../ui/input"
+import { Button } from "../../ui/button"
+import { getProductByBarcode, getProducts } from "../../../lib/api"
+import { useQuery } from "../../../lib/hooks/useQuery"
+import { useNotify } from "../../../lib/hooks/useNotify"
+import { useNavigate } from "react-router-dom"
+import { Stack } from "@mui/material"
 
-const BarcodeSection = ({ setNotFound }) => {
-	const products = useSelector((state) => state.sale.products)
-
-	const dispatch = useDispatch()
-	const [skip, setSkip] = useState(true)
+const BarcodeSection = ({ onSuccess }) => {
 	const [barcode, setBarcode] = useState("")
-	const { data } = useGetProductsQuery(
-		{ barcode: barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode },
-		{ skip }
-	)
+	const { notifyError } = useNotify()
+	const navigate = useNavigate()
 
-	// add data (product) to cart
-	const addToCart = (data) => {
-		if (data !== undefined && data !== null) {
-			setNotFound(false)
-			let found = products.find((product) => product.id === data.product_id)
+	const queryGetProduct = useQuery({
+		queryFn: getProducts,
+		onSuccess: (data) => {
+			handleSuccess(data.data)
+		},
+		onError: () => {
+			notifyError("An error occurred")
+		},
+	})
 
-			if (!found) {
-				let product = {
-					id: data.product_id,
-					name: data.product_name,
-					price: parseFloat(data.product_price),
-					taxe: data.product_taxe,
-					quantity: 1,
-				}
-				dispatch(addProduct({ products: product }))
-			} else {
-				found = {
-					...found,
-					quantity: found.quantity + 1,
-					price: (data.product_price * (found.quantity + 1)).toFixed(2),
-				}
+	const handleCreateNewProduct = (productBarcode) => {
+		navigate(`/inventory?new=${productBarcode}`)
+	}
 
-				const updated = products.map((product) => {
-					if (product.id === found.id) {
-						return found
-					} else {
-						return product
-					}
-				})
+	const handleSuccess = (data) => {
+		if (data.length === 0) {
+			const productBarcode = barcode.endsWith("/n")
+				? barcode.slice(0, -2)
+				: barcode
 
-				dispatch(updateProducts({ products: updated }))
-			}
-		} else if (data === null || data === undefined) {
-			setNotFound(true)
+			notifyError(`Product ${productBarcode} not found, create new ?`, () =>
+				handleCreateNewProduct(productBarcode)
+			)
+		} else {
+			onSuccess(data)
 		}
 		setBarcode("")
-		setSkip(true)
 	}
 
 	const handleBarcodeInput = (barcode) => {
 		if (barcode.endsWith("/n")) {
-			setSkip(false)
+			const barcodeWithoutNewLine = barcode.slice(0, -2)
+			queryGetProduct.send({ barcode: barcodeWithoutNewLine })
 		}
 	}
 
-	const handleSearch = () => {
+	const handleBarcodeSearch = () => {
 		if (barcode.length > 0) {
-			setSkip(false)
+			queryGetProduct.send({ barcode })
 			document.getElementById("barcode-input").focus()
 		}
 	}
+
+	
+
+	const handleBarcodeChange = (e) => {
+		setBarcode(e.target.value)
+	}
+
+	
 
 	useEffect(() => {
 		handleBarcodeInput(barcode)
 	}, [barcode])
 
-	useEffect(() => {
-		if (data) {
-			addToCart(data[0])
-		}
-	}, [data])
+
 
 	return (
-		<Flex>
-			<BarcodeInput barcode={barcode} setBarcode={setBarcode} />
-
-			<Button title="Search" onClick={handleSearch} />
-		</Flex>
+		<Stack direction="row" spacing={2}>
+			<div className="flex w-full max-w-sm items-center space-x-2">
+				<Input
+					id="barcode-input"
+					type="text"
+					placeholder="Barcode"
+					value={barcode}
+					onChange={handleBarcodeChange}
+				/>
+				<Button type="submit" onClick={handleBarcodeSearch}>
+					Search
+				</Button>
+			</div>
+		</Stack>
 	)
 }
 

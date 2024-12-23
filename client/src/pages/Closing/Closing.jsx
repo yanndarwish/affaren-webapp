@@ -1,293 +1,288 @@
 import React, { useState } from "react"
 import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import {
-	ColumnCenter,
-	ErrorMessage,
-	Gap,
-	PrimaryText,
-	SpaceHeader,
-	SubTitle,
-	Title,
-	Container,
-	ArtTitle,
-	SecondaryText,
-	Column,
-} from "../../assets/common/common.styles"
-import Button from "../../components/common/Button/Button.component"
-import { setDetailArray, setFullArray } from "../../redux/features/dashboard"
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "../../components/ui/card"
 import {
-	usePostDrawerMutation,
-	usePostPrintCashMutation,
-} from "../../redux/services/printApi"
-import { useGetMonthSalesQuery } from "../../redux/services/salesApi"
-import {
-	setTodayCard,
-	setTodayCash,
-	setTodayCheck,
-} from "../../redux/features/day"
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbSeparator,
+} from "../../components/ui/breadcrumb"
+import { UserStep } from "../../components/userStep"
+import { Button } from "../../components/ui/button"
+import { Stack } from "@mui/material"
+import { useModal } from "../../components/shared/modal"
+import { ModalLogout } from "../../components/Cards/ModalLogout/ModalLogout"
+import { useDailyTotal } from "../../lib/providers/dailyTotal"
+import { getDayCash, printCashTicket, openDrawer } from "../../lib/api"
+import { useQuery } from "../../lib/hooks/useQuery"
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
+import ReceiptIcon from "@mui/icons-material/Receipt"
+import { Banknote, CreditCard } from "lucide-react"
+import { useNotify } from "../../lib/hooks/useNotify"
+import { useSession } from "../../lib/hooks/useSession"
 
 const Closing = () => {
-	const navigate = useNavigate()
-	const dispatch = useDispatch()
-	const [skip, setSkip] = useState(true)
-	const loggedIn = useSelector((state) => state.login.loggedIn)
-	const cash = useSelector((state) => state.day.cash)
-	const dashboard = useSelector((state) => state.dashboard)
-	const todayCash = useSelector((state) => state.day.todayCash)
-	const todayCard = useSelector((state) => state.day.todayCard)
-	const todayCheck = useSelector((state) => state.day.todayCheck)
-	const user = useSelector((state) => state.user.user)
-	const theme = useSelector((state) => state.theme.theme)
-	const [month, setMonth] = useState("")
-	const [year, setYear] = useState("")
-	const { data, error, isLoading } = useGetMonthSalesQuery(
-		{
-			month: month,
-			year: year,
-		},
-		{ skip }
-	)
+	const [step, setStep] = useState(1)
+	const modalLogout = useModal()
 
-	const setDate = () => {
-		const timestamp = new Date()
-		const month = timestamp.getMonth() + 1
-		const year = timestamp.getFullYear()
-		setYear(year)
-		setMonth(month)
+	const handleOpenLogout = () => {
+		modalLogout.openModal()
 	}
 
-	const storeFullArrayInState = (data) => {
-		dispatch(setFullArray({ fullArray: data }))
+	const handleNextStep = () => {
+		setStep(step + 1)
 	}
 
-	const [printCash, re] = usePostPrintCashMutation()
-	const [postDrawer, res] = usePostDrawerMutation()
-
-	const printTicket = () => {
-		printCash({ user: user.user_first_name })
-	}
-
-	const openDrawer = () => {
-		postDrawer()
-	}
-
-	const formatData = (data) => {
-		const timestamp = new Date()
-		const today = timestamp.getDate()
-
-		let days = []
-		let detail = []
-
-		data?.forEach((item) => {
-			if (!days.includes(item.sale_day)) {
-				days.push(item.sale_day)
-				let day = {
-					day: item.sale_day,
-					alimentation: item.sale_taxes.total1
-						? parseFloat(item.sale_taxes.total1)
-						: 0,
-					magazine: item.sale_taxes.total2
-						? parseFloat(item.sale_taxes["total2"])
-						: 0,
-					decoAlcool: item.sale_taxes.total3
-						? parseFloat(item.sale_taxes.total3)
-						: 0,
-					htAlimentation: item.sale_taxes.ht1
-						? parseFloat(item.sale_taxes.ht1)
-						: 0,
-					htMagazine: item.sale_taxes.ht2 ? parseFloat(item.sale_taxes.ht2) : 0,
-					htDecoAlcool: item.sale_taxes.ht3
-						? parseFloat(item.sale_taxes.ht3)
-						: 0,
-					tvaAlimentation: item.sale_taxes.tva1
-						? parseFloat(item.sale_taxes.tva1)
-						: 0,
-					tvaMagazine: item.sale_taxes.tva2
-						? parseFloat(item.sale_taxes.tva2)
-						: 0,
-					tvaDecoAlcool: item.sale_taxes.tva3
-						? parseFloat(item.sale_taxes.tva3)
-						: 0,
-					totalHt: item.sale_taxes.totalHt
-						? parseFloat(item.sale_taxes.totalHt)
-						: 0,
-					totalTva: item.sale_taxes.totalTva
-						? parseFloat(item.sale_taxes.totalTva)
-						: 0,
-					cash: item.sale_payment_methods.cash
-						? parseFloat(item.sale_payment_methods.cash)
-						: 0,
-					carte: item.sale_payment_methods.card
-						? parseFloat(item.sale_payment_methods.card)
-						: 0,
-					cheque: item.sale_payment_methods.check
-						? parseFloat(item.sale_payment_methods.check)
-						: 0,
-					total: item.sale_amount ? parseFloat(item.sale_amount) : 0,
-				}
-				detail.push(day)
-			} else {
-				let index = detail.findIndex((det) => det.day === item.sale_day)
-
-				detail[index].alimentation += item.sale_taxes.total1
-					? parseFloat(item.sale_taxes.total1)
-					: 0
-				detail[index].magazine += item.sale_taxes.total2
-					? parseFloat(item.sale_taxes["total2"])
-					: 0
-				detail[index].decoAlcool += item.sale_taxes.total3
-					? parseFloat(item.sale_taxes.total3)
-					: 0
-				detail[index].htAlimentation += item.sale_taxes.ht1
-					? parseFloat(item.sale_taxes.ht1)
-					: 0
-				detail[index].htMagazine += item.sale_taxes.ht2
-					? parseFloat(item.sale_taxes.ht2)
-					: 0
-				detail[index].htDecoAlcool += item.sale_taxes.ht3
-					? parseFloat(item.sale_taxes.ht3)
-					: 0
-				detail[index].tvaAlimentation += item.sale_taxes.tva1
-					? parseFloat(item.sale_taxes.tva1)
-					: 0
-				detail[index].tvaMagazine += item.sale_taxes.tva2
-					? parseFloat(item.sale_taxes.tva2)
-					: 0
-				detail[index].tvaDecoAlcool += item.sale_taxes.tva3
-					? parseFloat(item.sale_taxes.tva3)
-					: 0
-				detail[index].totalHt += item.sale_taxes.totalHt
-					? parseFloat(item.sale_taxes.totalHt)
-					: 0
-				detail[index].totalTva += item.sale_taxes.totalTva
-					? parseFloat(item.sale_taxes.totalTva)
-					: 0
-				detail[index].cash += item.sale_payment_methods.cash
-					? parseFloat(item.sale_payment_methods.cash)
-					: 0
-				detail[index].carte += item.sale_payment_methods.card
-					? parseFloat(item.sale_payment_methods.card)
-					: 0
-				detail[index].cheque += item.sale_payment_methods.check
-					? parseFloat(item.sale_payment_methods.check)
-					: 0
-				detail[index].total += item.sale_amount
-					? parseFloat(item.sale_amount)
-					: 0
-			}
-
-			if (item.sale_day === today) {
-				let todayDetail = detail.find((item) => item.day === today)
-				dispatch(setTodayCash({ cash: parseFloat(todayDetail.cash) }))
-				dispatch(setTodayCard({ card: parseFloat(todayDetail.carte) }))
-				dispatch(setTodayCheck({ check: parseFloat(todayDetail.cheque) }))
-			}
-		})
-		detail = detail.sort((a, b) => a.day - b.day)
-		dispatch(setDetailArray({ detailArray: detail }))
-	}
-
-	const redirect = (destination) => {
-		if (destination === "logout") {
-			navigate("/logout")
-		} 
-		!loggedIn && navigate("/login")
-	}
-
-	useEffect(() => {
-		if (month && year) {
-			setSkip(false)
+	const handlePreviousStep = () => {
+		if (step > 1) {
+			setStep(step - 1)
 		}
-	}, [month, year])
+	}
 
-	useEffect(() => {
-		storeFullArrayInState(data)
-	}, [data])
-
-	useEffect(() => {
-		formatData(dashboard.fullArray)
-	}, [dashboard.fullArray])
-
-	useEffect(() => {
-		redirect()
-		setDate()
-	}, [])
 	return (
-		<Container theme={theme}>
-			<SpaceHeader>
-				<Title>Closing</Title>
-			</SpaceHeader>
-			<ColumnCenter>
-				<SubTitle>1 - Check card revenue</SubTitle>
-				<Column>
-					<ArtTitle>You made {parseFloat(todayCard).toFixed(2)}€ in card today</ArtTitle>
-
-					<PrimaryText>
-						On the card terminal, print the days tickets
-					</PrimaryText>
-					<SecondaryText>
-						Grey button, then "Param", then select the 2 "CB EMV", then press 1
-						for "Consultation"
-					</SecondaryText>
-					<SecondaryText>
-						Repeat for number 3 "CB CLESS", 4 "AMEX CONTACT", and 5 "AX QUICK
-						PAY"
-					</SecondaryText>
-					<PrimaryText>
-						Once you have the tickets, add the totals together to get today's
-						Total Card Revenue
-					</PrimaryText>
-					<PrimaryText>
-						Now, make sure this number matches with the card amount above.
-					</PrimaryText>
-				</Column>
-				<SubTitle>2 - Count the cash</SubTitle>
-				<Column>
-					<PrimaryText>
-						You already had {parseFloat(cash).toFixed(2)}€ in the drawer this morning
-					</PrimaryText>
-					<PrimaryText>You made {parseFloat(todayCash).toFixed(2)}€ in cash today</PrimaryText>
-					{todayCheck !== 0 && (
-						<ArtTitle>You made {parseFloat(todayCheck).toFixed(2)}€ in check today</ArtTitle>
-					)}
-					<ArtTitle>
-						So now, you should have {parseFloat(cash + todayCash).toFixed(2)}€
-						in the drawer
-					</ArtTitle>
-					<PrimaryText>Print the ticket and fill in the details</PrimaryText>
-					<Gap>
-						<Button title="PRINT TICKET" onClick={() => printTicket()} />
-					</Gap>
-					{res.isError && !res.isSuccess && (
-						<ErrorMessage>
-							Failed to open drawer, make sure the printer is turned on
-						</ErrorMessage>
-					)}
-					<PrimaryText>Once filled, put the ticket in the drawer</PrimaryText>
-					<Gap>
-						<Button title="OPEN DRAWER" onClick={() => openDrawer()} />
-					</Gap>
-				</Column>
-				<SubTitle>3 - Turn off everything</SubTitle>
-				<Column>
-					<PrimaryText>
-						Now you can turn off everything: the ticket printer, the keyboard,
-						and the speaker.
-					</PrimaryText>
-					<PrimaryText>
-						You can turn off the iPad after you log out.
-					</PrimaryText>
-					<Button
-						title="LOGOUT"
-						color="success"
-						onClick={() => redirect("logout")}
-					/>
-				</Column>
-			</ColumnCenter>
-		</Container>
+		<Stack className="items-center justify-center h-full">
+			<Card className="relative w-[510px] h-[650px]">
+				<CardHeader>
+					<CardTitle>Closing</CardTitle>
+				</CardHeader>
+				<CardContent>
+					{step === 1 && <CardCheckout />}
+					{step === 2 && <CashCheckout />}
+					{step === 3 && <FinalCheckout />}
+				</CardContent>
+				<CardFooter className="absolute bottom-0 w-full">
+					<Stack direction="row" className="space-x-4 w-full">
+						{step > 1 && (
+							<Button
+								variant="outline"
+								onClick={handlePreviousStep}
+								className="w-full"
+							>
+								Previous
+							</Button>
+						)}
+						{step < 3 ? (
+							<Button onClick={handleNextStep} className="w-full">
+								Next
+							</Button>
+						) : (
+							<Button
+								variant="destructive"
+								onClick={handleOpenLogout}
+								className="w-full"
+							>
+								Logout
+							</Button>
+						)}
+					</Stack>
+				</CardFooter>
+			</Card>
+			<ModalLogout controller={modalLogout} />
+		</Stack>
 	)
 }
 
 export default Closing
+
+const CardCheckout = () => {
+	const { credit } = useDailyTotal()
+	const EMVItems = ["Grey Button", "Param", "CB EMV", "Consultation"]
+	const CLESSItems = ["Grey Button", "Param", "CB CLESS", "Consultation"]
+	const AMEXItems = ["Grey Button", "Param", "AMEX CONTACT", "Consultation"]
+	const AXQuickPayItems = [
+		"Grey Button",
+		"Param",
+		"AX QUICK PAY",
+		"Consultation",
+	]
+
+	return (
+		<UserStep
+			number={1}
+			title="Check card revenue"
+			description="Print the days tickets"
+		>
+			<Stack className="space-y-4">
+				<BreadcrumbTuto items={EMVItems} />
+				<BreadcrumbTuto items={CLESSItems} />
+				<BreadcrumbTuto items={AMEXItems} />
+				<BreadcrumbTuto items={AXQuickPayItems} />
+
+				<p className="text-gray-500">
+					Once you have the tickets, add the totals together to get today's
+					Total Card Revenue
+				</p>
+				<p className="text-gray-500">
+					Now, make sure this number matches with the card amount above.
+				</p>
+				<Stack
+					direction="row"
+					spacing={2}
+					justifyContent="space-between"
+					className="border border-gray-100 rounded-lg p-2 w-full bg-gray-50"
+				>
+					<Stack direction="row" spacing={2} className="items-center">
+						<CreditCard />
+						<p className="text-sm font-bold">Total Card Revenue</p>
+					</Stack>
+					<p className="text-sm font-bold">{credit} €</p>
+				</Stack>
+			</Stack>
+		</UserStep>
+	)
+}
+
+const BreadcrumbTuto = ({ items }) => {
+	return (
+		<Breadcrumb className="border border-gray-100 rounded-lg p-2 w-full">
+			<BreadcrumbList>
+				{items.map((item, index) => (
+					<Stack direction="row" key={index} className="items-center gap-2">
+						<BreadcrumbItem className="font-bold text-black">
+							<BreadcrumbLink className="text-md">{item}</BreadcrumbLink>
+						</BreadcrumbItem>
+						{index < items.length - 1 && <BreadcrumbSeparator />}
+					</Stack>
+				))}
+			</BreadcrumbList>
+		</Breadcrumb>
+	)
+}
+
+const CashCheckout = () => {
+	const [cashBase, setCashBase] = useState(0)
+	const { user } = useSession()
+	const { cash } = useDailyTotal()
+	const { notifyError, notifySuccess } = useNotify()
+
+	const queryGetTodayCashBase = useQuery({
+		queryFn: getDayCash,
+		onSuccess: (data) => {
+			setCashBase(data.drawer)
+		},
+		onError: () => {
+			notifyError("An error occurred while fetching the cash base")
+		},
+	})
+
+	const queryPrintCashTicket = useQuery({
+		queryFn: printCashTicket,
+		onSuccess: () => {
+			notifySuccess("Ticket printed")
+		},
+		onError: () => {
+			notifyError("An error occurred while printing the ticket")
+		},
+	})
+
+	const queryOpenDrawer = useQuery({
+		queryFn: openDrawer,
+		onSuccess: () => {
+			notifySuccess("Drawer opened")
+		},
+		onError: () => {
+			notifyError("An error occurred while opening the drawer")
+		},
+	})
+
+	const fetchDayCash = () => {
+		// get date
+		const timestamp = new Date()
+		const day = timestamp.getDate()
+		const month = timestamp.getMonth() + 1
+		const year = timestamp.getFullYear()
+		// getDay hook
+		queryGetTodayCashBase.send({ year: year, month: month, day: day })
+	}
+
+	const handlePrintCashTicket = () => {
+		queryPrintCashTicket.send({ user: user.firstName })
+	}
+
+	const handleOpenDrawer = () => {
+		queryOpenDrawer.send()
+	}
+
+	useEffect(() => {
+		fetchDayCash()
+	}, [])
+
+	return (
+		<UserStep
+			number={2}
+			title="Count the cash"
+			description="Print the ticket and fill in the details"
+		>
+			<Stack className="space-y-4">
+				<Stack
+					direction="row"
+					spacing={2}
+					justifyContent="space-between"
+					className="border border-gray-100 rounded-lg p-2 w-full"
+				>
+					<p className="text-sm font-bold">Cash from yesterday</p>
+					<p className="text-sm font-bold">{cashBase} €</p>
+				</Stack>
+				<Stack
+					direction="row"
+					spacing={2}
+					justifyContent="space-between"
+					className="border border-gray-100 rounded-lg p-2 w-full"
+				>
+					<p className="text-sm font-bold">Cash from today</p>
+					<p className="text-sm font-bold">{cash} €</p>
+				</Stack>
+				<Stack
+					direction="row"
+					spacing={2}
+					justifyContent="space-between"
+					className="border border-gray-100 rounded-lg p-2 w-full bg-gray-50"
+				>
+					<Stack direction="row" spacing={2} className="items-center">
+						<Banknote />
+						<p className="text-sm font-bold">Total in Drawer</p>
+					</Stack>
+					<p className="text-sm font-bold">{cashBase + cash} €</p>
+				</Stack>
+				<Stack direction="row" className="space-x-4">
+					<Button onClick={handleOpenDrawer} className="w-full">
+						<PointOfSaleIcon />
+					</Button>
+					<Button
+						onClick={handlePrintCashTicket}
+						className="w-full bg-orange-400"
+					>
+						<ReceiptIcon />
+					</Button>
+				</Stack>
+			</Stack>
+		</UserStep>
+	)
+}
+
+const FinalCheckout = () => {
+	return (
+		<UserStep
+			number={3}
+			title="Turn off everything"
+			description="Make sure everything is off"
+		>
+			<Stack className="space-y-4">
+				<p className="text-gray-500">
+					Now you can turn off everything: the ticket printer, the keyboard, and
+					the speaker.
+				</p>
+				<p className="text-gray-500">
+					You can turn off the iPad after you log out.
+				</p>
+			</Stack>
+		</UserStep>
+	)
+}

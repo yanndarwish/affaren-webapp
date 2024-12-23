@@ -1,365 +1,116 @@
-import { useSelector, useDispatch } from "react-redux"
-import ProductCardSection from "../../components/POS/ProductCardSection/ProductCardSection"
 import BarcodeSection from "../../components/POS/BarcodeSection/BarcodeSection"
-import Button from "../../components/common/Button/Button.component"
-import Cart from "../../components/POS/Cart/Cart"
-import { Box } from "@mui/material"
-import {
-	ButtonSection,
-	ButtonSectionSpace,
-	PosContainer,
-	StyledPos,
-	TotalSection,
-} from "./Pos.styles"
-import {
-	CardSectionButton,
-	CardSectionIcon,
-} from "../../components/POS/ProductCardSection/ProductCardSection.styles"
+import Cart from "../../components/POS/Cart"
+import { Stack } from "@mui/material"
 import { useState } from "react"
-import PaymentSlider from "../../components/POS/Sliders/PaymentSlider/PaymentSlider"
-import NoBarcodeSlider from "../../components/POS/Sliders/NoBarcodeSlider/NoBarcodeSlider"
-import DiscountSlider from "../../components/POS/Sliders/DiscountSlider/DiscountSlider"
-import AddCardSlider from "../../components/POS/Sliders/AddCardSlider/AddCardSlider"
 import {
-	Body,
-	Container,
-	SpaceHeader,
-	SearchSection,
-	SubTitle,
-	Title,
-	ErrorMessage,
-} from "../../assets/common/common.styles"
-import { useGetNextSaleIdQuery } from "../../redux/services/salesApi"
-import { useGetCardsQuery } from "../../redux/services/cardApi"
-import {
-	usePostDrawerMutation,
-	usePostPrintMutation,
-} from "../../redux/services/printApi"
-import { useEffect } from "react"
-import { setSaleAmount, setTaxes } from "../../redux/features/sale"
-import { useNavigate } from "react-router-dom"
-import TablesSection from "../../components/POS/Tables/TablesSection"
-import TableSlider from "../../components/POS/Tables/TableSlider/TableSlider"
-import { useGetDishesQuery } from "../../redux/services/dishApi"
-import { useRef } from "react"
-import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from "../../components/ui/tabs"
+
+import { PageTitle } from "../../components/shared/pageTitle"
+import { tabs } from "../../lib/pos/utils.js"
+import { Card } from "../../components/ui/card"
+import { TotalSection } from "../../components/POS/totalSection/index.js"
+import { useSale } from "../../lib/providers/sale"
+import { useNotify } from "../../lib/hooks/useNotify/index.js"
 
 const Pos = () => {
-	const loggedIn = useSelector((state) => state.login.loggedIn)
-	const navigate = useNavigate()
-	const theme = useSelector((state) => state.theme.theme)
-	const sale = useSelector((state) => state.sale)
-	const activeTables = useSelector((state) => state.table.activeTables)
-	const dispatch = useDispatch()
-	const cardSectionRef = useRef()
-	const cardSectionButtonRef = useRef()
-	const cardSectionButtonIconRef = useRef()
-	const [cardSection, setCardSection] = useState(false)
-	const [paymentSlider, setPaymentSlider] = useState(false)
-	const [noBarcodeSlider, setNoBarcodeSlider] = useState(false)
-	const [discountSlider, setDiscountSlider] = useState(false)
-	const [addCardSlider, setAddCardSlider] = useState(false)
-	const [tableSlider, setTableSlider] = useState(false)
-	const [selectedTable, setSelectedTable] = useState({})
-	const [notFound, setNotFound] = useState(false)
+	const [selectedTab, setSelectedTab] = useState(tabs[0].name)
+	const sale = useSale()
+	const { notifySuccess, notifyInfo } = useNotify()
 
-	const { isError } = useGetCardsQuery()
-	const { error } = useGetNextSaleIdQuery()
-	const [postDrawer, res] = usePostDrawerMutation()
-	const [print, respo] = usePostPrintMutation()
-
-	useGetDishesQuery()
-	const redirect = () => {
-		!loggedIn && navigate("/login")
+	const handleDiscount = () => {
+		setSelectedTab(tabs[2].name)
 	}
 
-	const toggleCardSection = () => {
-		const cardSectionEl = document.getElementById("card-section")
-		const productCards = document.querySelectorAll(".product-card")
+	const handleBookmark = () => {
+		setSelectedTab(tabs[3].name)
+	}
 
-		if (cardSection) {
-			productCards.forEach((card) => {
-				card.style.display = "none"
-			})
-			cardSectionEl.style.width = "0"
+	const updateCart = (data) => {
+		const foundProduct = data[0]
+		let found = sale.products.find(
+			(product) => product.id === foundProduct.product_id
+		)
+
+		if (!found) {
+			let product = {
+				id: foundProduct.product_id,
+				name: foundProduct.product_name,
+				price: parseFloat(foundProduct.product_price),
+				taxe: foundProduct.product_taxe,
+				quantity: 1,
+			}
+
+			sale.updateSale({ products: [...sale.products, product] })
+			notifySuccess(`Product ${foundProduct.product_name} added to the cart`)
 		} else {
-			productCards.forEach((card) => {
-				card.style.display = "flex"
+			found = {
+				...found,
+				quantity: found.quantity + 1,
+			}
+
+			const updated = sale.products.map((product) => {
+				if (product.id === found.id) {
+					return found
+				} else {
+					return product
+				}
 			})
-			cardSectionEl.style.width = "148px"
-		}
-		setCardSection(!cardSection)
-		document.getElementById("barcode-input").focus()
-	}
-
-	const closeProductSection = (e) => {
-		const cardSectionEl = document.getElementById("card-section")
-		const productCards = document.querySelectorAll(".product-card")
-		if (
-			cardSectionRef.current !== e.target &&
-			cardSectionButtonRef.current !== e.target &&
-			cardSectionButtonIconRef.current !== e.target
-		) {
-			if (cardSection) {
-				setCardSection(false)
-				productCards.forEach((card) => {
-					card.style.display = "none"
-				})
-				cardSectionEl.style.width = "0"
-			}
+			sale.updateSale({ products: updated })
+			notifyInfo(`Product ${foundProduct.product_name} quantity updated`)
 		}
 	}
 
-	const openPaymentSlider = () => {
-		setPaymentSlider(true)
-	}
-
-	const opentNoBarcodeSlider = () => {
-		setNoBarcodeSlider(true)
-	}
-
-	const openDiscountSlider = () => {
-		setDiscountSlider(true)
-	}
-
-	const openAddCardSlider = () => {
-		setAddCardSlider(true)
-	}
-
-	const openTableSlider = (e) => {
-		setTableSlider(true)
-		const id = e.target.dataset.id
-			? e.target.dataset.id
-			: e.target.parentNode.dataset.id
-			? e.target.parentNode.dataset.id
-			: e.target.parentNode.parentNode.dataset.id
-			? e.target.parentNode.parentNode.dataset.id
-			: e.target.parentNode.parentNode.parentNode.dataset.id
-		setSelectedTable(activeTables?.filter((table) => table.table_id === id)[0])
-	}
-
-	const openDrawer = () => {
-		postDrawer()
-	}
-
-	const updateTotalAmount = () => {
-		let total = 0
-		sale.products.forEach((product) => {
-			total += parseFloat(product.price)
-		})
-
-		dispatch(setSaleAmount({ amount: total.toFixed(2) }))
-	}
-
-	const updateTaxes = () => {
-		let taxesDetails = {}
-		sale.products.forEach((product) => {
-			let ht = (product.price / (1 + parseFloat(product.taxe) / 100)).toFixed(2)
-			let tva = (product.price - ht).toFixed(2)
-			switch (parseFloat(product.taxe)) {
-				case 5.5:
-					taxesDetails = {
-						...taxesDetails,
-						tva1: taxesDetails.tva1
-							? (parseFloat(taxesDetails.tva1) + parseFloat(tva)).toFixed(2)
-							: tva,
-						ht1: taxesDetails.ht1
-							? (parseFloat(taxesDetails.ht1) + parseFloat(ht)).toFixed(2)
-							: ht,
-						total1: taxesDetails.total1
-							? (
-									parseFloat(taxesDetails.total1) + parseFloat(product.price)
-							  ).toFixed(2)
-							: product.price,
-						totalTva: taxesDetails.totalTva
-							? (parseFloat(taxesDetails.totalTva) + parseFloat(tva)).toFixed(2)
-							: tva,
-						totalHt: taxesDetails.totalHt
-							? (parseFloat(taxesDetails.totalHt) + parseFloat(ht)).toFixed(2)
-							: ht,
-					}
-					break
-				case 2.1:
-					taxesDetails = {
-						...taxesDetails,
-						tva2: taxesDetails.tva2
-							? (parseFloat(taxesDetails.tva2) + parseFloat(tva)).toFixed(2)
-							: tva,
-						ht2: taxesDetails.ht2
-							? (parseFloat(taxesDetails.ht2) + parseFloat(ht)).toFixed(2)
-							: ht,
-						total2: taxesDetails.total2
-							? (
-									parseFloat(taxesDetails.total2) + parseFloat(product.price)
-							  ).toFixed(2)
-							: product.price,
-						totalTva: taxesDetails.totalTva
-							? (parseFloat(taxesDetails.totalTva) + parseFloat(tva)).toFixed(2)
-							: tva,
-						totalHt: taxesDetails.totalHt
-							? (parseFloat(taxesDetails.totalHt) + parseFloat(ht)).toFixed(2)
-							: ht,
-					}
-					break
-				case 20:
-					taxesDetails = {
-						...taxesDetails,
-						tva3: taxesDetails.tva3
-							? (parseFloat(taxesDetails.tva3) + parseFloat(tva)).toFixed(2)
-							: tva,
-						ht3: taxesDetails.ht3
-							? (parseFloat(taxesDetails.ht3) + parseFloat(ht)).toFixed(2)
-							: ht,
-						total3: taxesDetails.total3
-							? (
-									parseFloat(taxesDetails.total3) + parseFloat(product.price)
-							  ).toFixed(2)
-							: product.price,
-						totalTva: taxesDetails.totalTva
-							? (parseFloat(taxesDetails.totalTva) + parseFloat(tva)).toFixed(2)
-							: tva,
-						totalHt: taxesDetails.totalHt
-							? (parseFloat(taxesDetails.totalHt) + parseFloat(ht)).toFixed(2)
-							: ht,
-					}
-					break
-				default:
-			}
-		})
-		dispatch(setTaxes({ taxes: taxesDetails }))
-	}
-
-	const printTicket = () => {
-		const timestamp = new Date()
-
-		const day = timestamp.getDate()
-		const month = timestamp.getMonth() + 1
-		const year = timestamp.getFullYear()
-		let actualSale = {
-			...sale,
-			year: year,
-			month: month,
-			day: day,
-			paymentMethods: "none",
-		}
-		print(actualSale)
-	}
-
-	useEffect(() => {
-		updateTotalAmount()
-		updateTaxes()
-		if (res.isError) {
-			res.reset()
-		}
-	}, [sale.products])
-
-	useEffect(() => {
-		document.getElementById("barcode-input").focus()
-	}, [paymentSlider, noBarcodeSlider, discountSlider, addCardSlider])
-
-	useEffect(() => {
-		redirect()
-	}, [])
+	const displayedTabs = sale.isActiveDiscount ? tabs : tabs.slice(0, 2)
 
 	return (
-		<PosContainer theme={theme}>
-			<StyledPos>
-				<Container theme={theme} onClick={closeProductSection}>
-					<SpaceHeader xs={12}>
-						<Title>Sale N°{sale.id ? sale.id : 1}</Title>
-						{error && <ErrorMessage>Failed to fetch next sale ID</ErrorMessage>}
-						{isError && <ErrorMessage>Failed to fetch cards</ErrorMessage>}
-					</SpaceHeader>
-					<SearchSection>
-						<BarcodeSection setNotFound={setNotFound} />
-						<Button title="No Barcode" onClick={() => opentNoBarcodeSlider()} />
-					</SearchSection>
-					{notFound && <InfoMessage state="error" text="Product not found" />}
-					<Body theme={theme}>
-						<Box>
-							<SubTitle>Panier</SubTitle>
-						</Box>
-						<Box sx={{ height: "100%" }}>
-							<Cart />
-						</Box>
-						<TotalSection display="flex" justifyContent="flex-end">
-							<SubTitle>Total</SubTitle>
-							<SubTitle>{sale.amount}€</SubTitle>
-						</TotalSection>
-						<ButtonSectionSpace>
-							<ButtonSection>
-								<Button title="Drawer" onClick={openDrawer} />
-								<Button title="Discount" onClick={() => openDiscountSlider()} />
-								<Button title="Print Ticket" onClick={() => printTicket()} />
-							</ButtonSection>
-							{res.isError && (
-								<ErrorMessage>Failed to open Drawer</ErrorMessage>
-							)}
-							{respo.isError && (
-								<ErrorMessage>Failed to print ticket</ErrorMessage>
-							)}
-							<Box>
-								<Button
-									disabled={parseFloat(sale.amount) === 0}
-									color="success"
-									title="Continue to Payment"
-									onClick={() => openPaymentSlider()}
-								/>
-							</Box>
-						</ButtonSectionSpace>
-					</Body>
-					<CardSectionButton
-						onClick={toggleCardSection}
-						id="card-section-button"
-						theme={theme}
-						ref={cardSectionButtonRef}
-						display={cardSection.toString()}
+		<Stack direction="column" spacing={3} className="w-full h-full">
+			<Stack
+				direction="row"
+				alignItems="flex-start"
+				spacing={2}
+				className="h-full"
+			>
+				<Stack
+					direction="column"
+					spacing={2}
+					className="w-full h-full relative"
+				>
+					<PageTitle title={`Sale N°${sale.id ?? 1}`} />
+					<BarcodeSection onSuccess={updateCart} />
+					<Stack className="h-full overflow-y-auto">
+						<Cart onDiscount={handleDiscount} onBookmark={handleBookmark} />
+					</Stack>
+					<Stack className="sticky bottom-0 w-full">
+						<TotalSection />
+					</Stack>
+				</Stack>
+
+				<Card className="relative w-[400px] h-full">
+					<Tabs
+						value={selectedTab}
+						onValueChange={setSelectedTab}
+						className="w-full h-full"
 					>
-						<CardSectionIcon ref={cardSectionButtonIconRef} theme={theme} />
-					</CardSectionButton>
-				</Container>
-				<ProductCardSection
-					theme={theme}
-					onClick={openAddCardSlider}
-					reference={cardSectionRef}
-				/>
-
-				<PaymentSlider
-					theme={theme}
-					isOpen={paymentSlider}
-					setIsOpen={setPaymentSlider}
-				/>
-				<NoBarcodeSlider
-					theme={theme}
-					isOpen={noBarcodeSlider}
-					setIsOpen={setNoBarcodeSlider}
-				/>
-
-				{discountSlider && (
-					<DiscountSlider
-						theme={theme}
-						isOpen={discountSlider}
-						setIsOpen={setDiscountSlider}
-					/>
-				)}
-				{addCardSlider && (
-					<AddCardSlider
-						theme={theme}
-						isOpen={addCardSlider}
-						setIsOpen={setAddCardSlider}
-					/>
-				)}
-			</StyledPos>
-			<TablesSection theme={theme} onClick={openTableSlider} />
-			{tableSlider && (
-				<TableSlider
-					dataTable={selectedTable}
-					theme={theme}
-					isOpen={tableSlider}
-					setIsOpen={setTableSlider}
-				/>
-			)}
-		</PosContainer>
+						<TabsList className="w-full">
+							{displayedTabs.map((tab) => (
+								<TabsTrigger key={tab.name} value={tab.name} className="w-full">
+									{tab.label}
+								</TabsTrigger>
+							))}
+						</TabsList>
+						{displayedTabs.map((tab) => (
+							<TabsContent key={tab.name} value={tab.name}>
+								{tab.component}
+							</TabsContent>
+						))}
+					</Tabs>
+				</Card>
+			</Stack>
+		</Stack>
 	)
 }
 

@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react"
-import {
-	Body,
-	SubTitle,
-} from "../../../../assets/common/common.styles"
+import { Body, SubTitle } from "../../../../assets/common/common.styles"
 import { useGetSalesProductsQuery } from "../../../../redux/services/salesApi"
 import InfoMessage from "../../../common/InfoMessage/InfoMessage"
-import BestSellersTable from "../ChartC/BestSellersTable"
+// import BestSellersTable from "../ChartC/BestSellersTable"
 
 const ChartF = ({ theme, months, month, year }) => {
 	const [skip, setSkip] = useState(true)
@@ -75,7 +72,8 @@ const ChartF = ({ theme, months, month, year }) => {
 					text="Failed to fetch month's lunch best sellers"
 				/>
 			) : (
-				<BestSellersTable data={sortedData} />
+				<></>
+				// <TableBestSellers data={sortedData} />
 			)}
 		</Body>
 	)

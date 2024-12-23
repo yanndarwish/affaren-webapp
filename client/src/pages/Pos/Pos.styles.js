@@ -3,9 +3,10 @@ import dark from "../../assets/common/dark.theme.styles"
 import light from "../../assets/common/light.theme.styles"
 export const PosContainer = styled.div`
 	display: flex;
-	flex: 1;
-	height: 100vh;
+	flex-direction: column;
+	gap: 1rem;
 	overflow: hidden;
+	height: 100%;
 	color: ${(props) =>
 		props.theme === "dark" ? dark.COLOR_TEXT : light.COLOR_TEXT};
 	background-color: ${(props) =>
@@ -32,7 +33,6 @@ export const TotalSection = styled.div`
 export const StyledPos = styled.div`
 	display: flex;
 	flex: 1;
-	height: 100vh;
 	overflow: hidden;
 	@media (max-width: 768px) {
 		display: none;

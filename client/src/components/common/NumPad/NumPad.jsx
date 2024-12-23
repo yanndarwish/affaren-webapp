@@ -1,88 +1,74 @@
 import { useState } from "react"
 import { ArtTitle } from "../../../assets/common/common.styles"
-import { CorrectBtn, Display, Keypad, Num, NumRow } from "./NumPad.styles"
+import { CorrectBtn, Display, Keypad, NumRow } from "./NumPad.styles"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
+import { Button } from "../../ui/button"
 
-const NumPad = ({ display, size, target, unit, value, setValue }) => {
-	// const [value, setValue] = useState("")
+export const NumPad = ({
+	size,
+	value,
+	unit,
+	display,
+	onClick = () => null,
+	onCorrect = () => null,
+}) => {
 	const handleClick = (e) => {
-		if (target) {
-			document.getElementById(target).value += e.target.dataset.value
-		} else {
-			let totalString =
-				value === 0 ? e.target.dataset.value : value + e.target.dataset.value
-			setValue(totalString)
-		}
+		onClick(e.target.dataset.value)
 	}
 
 	const handleCorrect = () => {
-		let newValue = value.toString().slice(0, -1)
-
-		setValue(newValue === "" ? 0 : parseFloat(newValue))
+		onCorrect()
 	}
+
 	return (
-		<div className="numpad">
+		<div className="numpad space-y-4">
 			{display ? (
-				<Display className="display">
+				<Display className="display space-x-4">
 					<ArtTitle>
 						{value} {unit}
 					</ArtTitle>
-					<CorrectBtn onClick={handleCorrect}>
+					<Button onClick={handleCorrect}>
 						<BackspaceOutlinedIcon />
-					</CorrectBtn>
+					</Button>
 				</Display>
 			) : null}
 			<Keypad>
 				<NumRow>
-					<Num size={size} className="num" data-value={1} onClick={handleClick}>
-						1
-					</Num>
-					<Num size={size} className="num" data-value={2} onClick={handleClick}>
-						2
-					</Num>
-					<Num size={size} className="num" data-value={3} onClick={handleClick}>
-						3
-					</Num>
+					<Num size={size} className="num" value={1} onClick={handleClick} />
+					<Num size={size} className="num" value={2} onClick={handleClick} />
+					<Num size={size} className="num" value={3} onClick={handleClick} />
 				</NumRow>
 				<NumRow className="num-row">
-					<Num size={size} className="num" data-value={4} onClick={handleClick}>
-						4
-					</Num>
-					<Num size={size} className="num" data-value={5} onClick={handleClick}>
-						5
-					</Num>
-					<Num size={size} className="num" data-value={6} onClick={handleClick}>
-						6
-					</Num>
+					<Num size={size} className="num" value={4} onClick={handleClick} />
+					<Num size={size} className="num" value={5} onClick={handleClick} />
+					<Num size={size} className="num" value={6} onClick={handleClick} />
 				</NumRow>
 				<NumRow className="num-row">
-					<Num size={size} className="num" data-value={7} onClick={handleClick}>
-						7
-					</Num>
-					<Num size={size} className="num" data-value={8} onClick={handleClick}>
-						8
-					</Num>
-					<Num size={size} className="num" data-value={9} onClick={handleClick}>
-						9
-					</Num>
+					<Num size={size} className="num" value={7} onClick={handleClick} />
+					<Num size={size} className="num" value={8} onClick={handleClick} />
+					<Num size={size} className="num" value={9} onClick={handleClick} />
 				</NumRow>
 				<NumRow className="num-row">
-					<Num
-						size={size}
-						className="num"
-						data-value=""
-						onClick={handleClick}
-					></Num>
-					<Num size={size} className="num" data-value={0} onClick={handleClick}>
-						0
-					</Num>
-					<Num size={size} className="num" data-value="." onClick={handleClick}>
-						.
-					</Num>
+					<Num size={size} className="num" value="" onClick={handleClick} />
+					<Num size={size} className="num" value={0} onClick={handleClick} />
+					<Num size={size} className="num" value="" onClick={handleClick} />
 				</NumRow>
 			</Keypad>
 		</div>
 	)
 }
 
-export default NumPad
+const Num = ({ size, value, onClick }) => {
+	return (
+		<button
+			size={size}
+			className={`flex justify-center items-center flex-1 p-2 text-slate-600 rounded ${
+				value !== "" ? "bg-slate-100" : ""
+			}`}
+			data-value={value}
+			onClick={onClick}
+		>
+			{value}
+		</button>
+	)
+}

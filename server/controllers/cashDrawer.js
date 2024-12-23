@@ -26,7 +26,11 @@ const getCashValue = async (req, res) => {
 			[year, month, day]
 		)
 
-		res.status(200).send(response.rows[0])
+		if (response.rows.length === 0) {
+			res.status(200).send({ drawer: 0 })
+		} else {
+			res.status(200).send(response.rows[0])
+		}
 	} catch (err) {
 		console.log(err)
 	}

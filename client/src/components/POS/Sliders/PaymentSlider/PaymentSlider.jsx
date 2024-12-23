@@ -22,7 +22,7 @@ import EuroSymbolOutlinedIcon from "@mui/icons-material/EuroSymbolOutlined"
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined"
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined"
 import Button from "../../../common/Button/Button.component"
-import NumPad from "../../../common/NumPad/NumPad"
+import NumPad from "../../../common/NumPad/NumPad_orig"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	setSalePaymentMethods,

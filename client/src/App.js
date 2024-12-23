@@ -1,11 +1,10 @@
 import { RouterProvider } from "react-router-dom"
 import { useState, useMemo, useEffect } from "react"
 import router from "./router/router"
-import WebSocketProvider from "./utils/context/webSocket"
 import ThemeWrapper from "./ThemeWrapper"
-import RefreshDialog from "./components/Cards/RefreshCard/RefreshCard.component.jsx"
-
+import RefreshDialog from "./components/Cards/RefreshCard/RefreshCard"
 import "./App.css"
+import "toastify-js/src/toastify.css"
 
 function App() {
 	const [isAlreadyOpened, setIsAlreadyOpened] = useState(false)
@@ -23,13 +22,11 @@ function App() {
 
 	return (
 		<ThemeWrapper>
-			{/* <WebSocketProvider> */}
 			{!isAlreadyOpened ? (
 				<RouterProvider router={router} />
 			) : (
 				<RefreshDialog />
 			)}
-			{/* </WebSocketProvider> */}
 		</ThemeWrapper>
 	)
 }

@@ -1,138 +1,177 @@
-import Button from "../../components/common/Button/Button.component"
-import { TextField } from "@mui/material"
+import { Stack } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
+import ReceiptIcon from "@mui/icons-material/Receipt"
+
 import {
-	ColumnCenter,
-	Container,
-	ErrorMessage,
-	Gap,
-	PrimaryText,
-	SpaceHeader,
-	SubTitle,
-	Title,
-} from "../../assets/common/common.styles"
-import { usePostDrawerMutation } from "../../redux/services/printApi"
-import { useGetDayMutation } from "../../redux/services/dayApi"
-import { usePostDayMutation } from "../../redux/services/dayApi"
-import { usePostPrintCashMutation } from "../../redux/services/printApi"
-import { useGetUserQuery } from "../../redux/services/userApi"
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "../../components/ui/card"
+import { Input } from "../../components/ui/input"
+import { Button } from "../../components/ui/button"
+import { useNotify } from "../../lib/hooks/useNotify"
+import { useQuery } from "../../lib/hooks/useQuery"
+import {
+	getDayCash,
+	postDayCash,
+	printCashTicket,
+	openDrawer,
+} from "../../lib/api"
+import { useSession } from "../../lib/hooks/useSession"
+import { UserStep } from "../../components/userStep"
 
 const Opening = () => {
-	useGetUserQuery()
-
-	const navigate = useNavigate()
-	const theme = useSelector((state) => state.theme.theme)
-	const loggedIn = useSelector((state) => state.login.loggedIn)
-	const cash = useSelector((state) => state.day.cash)
-	const user = useSelector((state) => state.user.user)
 	const [cashInput, setCashInput] = useState(0)
-	const [required, setRequired] = useState(false)
-	const [postDrawer, res] = usePostDrawerMutation()
-	const [postDay, response] = usePostDayMutation()
-	const [getDay, resp] = useGetDayMutation()
-	const [printCash, re] = usePostPrintCashMutation()
 
-	const getDayCash = () => {
+	const { user } = useSession()
+	const navigate = useNavigate()
+	const { notifyError, notifySuccess, notifyWarning } = useNotify()
+
+	const queryOpenDrawer = useQuery({
+		queryFn: openDrawer,
+		onSuccess: () => {
+			notifySuccess("Drawer opened successfully")
+		},
+		onError: (error) => {
+			notifyError("Failed to open drawer")
+		},
+	})
+
+	const queryGetTodayCashBase = useQuery({
+		queryFn: getDayCash,
+		onSuccess: (data) => {
+			if (data.drawer > 0) {
+				navigate("/pos")
+			}
+		},
+		onError: () => {
+			notifyError("Failed to get cash amount")
+		},
+	})
+
+	const queryPostDaysCash = useQuery({
+		queryFn: postDayCash,
+		onSuccess: () => {
+			notifySuccess("Cash amount saved successfully")
+			navigate("/pos")
+		},
+		onError: () => {
+			notifyError("Failed to save cash amount")
+		},
+	})
+
+	const queryPrintCashTicket = useQuery({
+		queryFn: printCashTicket,
+		onSuccess: () => {
+			notifySuccess("Cash ticket printed successfully")
+		},
+		onError: () => {
+			notifyError("Failed to print cash ticket")
+		},
+	})
+
+	const fetchDayCash = () => {
 		// get date
 		const timestamp = new Date()
 		const day = timestamp.getDate()
 		const month = timestamp.getMonth() + 1
 		const year = timestamp.getFullYear()
 		// getDay hook
-		getDay({ year: year, month: month, day: day })
+		queryGetTodayCashBase.send({ year: year, month: month, day: day })
 	}
 
-	const printTicket = () => {
-		printCash({ user: user.user_first_name })
+	const handlePrintTicket = () => {
+		queryPrintCashTicket.send({ user: user.name })
 	}
 
 	const handleOpen = () => {
 		if (cashInput !== 0) {
-			setRequired(false)
 			const timestamp = new Date()
 			const day = timestamp.getDate()
 			const month = timestamp.getMonth() + 1
 			const year = timestamp.getFullYear()
 
-			// postDay cash
-			postDay({
+			const payload = {
 				year: year,
 				month: month,
 				day: day,
 				amount: parseFloat(cashInput),
-			})
-			setTimeout(() => {
-				getDay({ year: year, month: month, day: day })
-			}, 100)
+			}
+
+			queryPostDaysCash.send(payload)
 		} else {
-			setRequired(true)
+			notifyWarning("Please enter the cash amount")
 		}
 	}
 
-	const openDrawer = () => {
-		postDrawer()
-	}
-
-	const redirect = (destination) => {
-		if (destination === "pos") {
-			navigate("/pos")
-		}
-		!loggedIn && navigate("/login")
+	const handleOpenDrawer = () => {
+		queryOpenDrawer.send()
 	}
 
 	useEffect(() => {
-		if (cash !== 0) {
-			redirect("pos")
-		}
-	}, [cash])
-
-	useEffect(() => {
-		getDayCash()
-		redirect()
+		fetchDayCash()
 	}, [])
 
 	return (
-		<Container theme={theme}>
-			<SpaceHeader>
-				<Title>Opening</Title>
-				<Button title="SKIP" onClick={() => redirect("pos")} />
-			</SpaceHeader>
-			<ColumnCenter>
-				<ColumnCenter>
-					<SubTitle>1 - Count the cash</SubTitle>
-					<PrimaryText>Print the ticket and fill in the details</PrimaryText>
-					<Gap>
-						<Button title="PRINT TICKET" onClick={() => printTicket()} />
-						<Button title="OPEN DRAWER" onClick={() => openDrawer()} />
-					</Gap>
-					{res.isError && !res.isSuccess && (
-						<ErrorMessage>
-							Failed to open drawer, make sure the printer is turned on
-						</ErrorMessage>
-					)}
-					<PrimaryText>Enter the total Cash amount</PrimaryText>
-					<TextField
-						type="number"
-						placeholder="Enter cash total"
-						value={cashInput}
-						onChange={(e) => setCashInput(e.target.value)}
-					/>
-					{required && <ErrorMessage>Cash total is required</ErrorMessage>}
-					<PrimaryText>Once filled, put the ticket in the drawer</PrimaryText>
-				</ColumnCenter>
-				<ColumnCenter>
-					<SubTitle>2 - Turn on everything</SubTitle>
-					<PrimaryText>
-						Make sure everything is on: the ticket printer, the keyboard.
-					</PrimaryText>
-					<PrimaryText>Turn on the speaker and put some music</PrimaryText>
-				</ColumnCenter>
-				<Button title="OPEN" onClick={() => handleOpen()} color="success" />
-			</ColumnCenter>
-		</Container>
+		<Stack className="items-center justify-center h-full ">
+			<Card className="w-[400px]">
+				<CardHeader>
+					<CardTitle>Opening</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					<UserStep
+						number={1}
+						title="Count the cash"
+						description="Print the ticket and fill in the details"
+					>
+						<Button
+							onClick={handlePrintTicket}
+							className="bg-orange-400 w-full"
+						>
+							<ReceiptIcon />
+						</Button>
+					</UserStep>
+					<UserStep
+						number={2}
+						title="Enter the total"
+						description="Then put the ticket in the drawer"
+					>
+						<Stack className="space-y-4">
+							<Input
+								type="number"
+								value={cashInput}
+								onChange={(e) => setCashInput(e.target.value)}
+							/>
+							<Button onClick={handleOpenDrawer} className="w-full">
+								<PointOfSaleIcon />
+							</Button>
+						</Stack>
+					</UserStep>
+					<UserStep
+						number={3}
+						title="Turn on everything"
+						description="Make sure everything is on"
+					>
+						<Stack className="space-y-4">
+							<p className="text-gray-500">
+								Make sure everything is on: the ticket printer, the keyboard.
+								Turn on the speaker and put some music
+							</p>
+							<Button onClick={handleOpen} className="w-full">
+								Open
+							</Button>
+						</Stack>
+					</UserStep>
+				</CardContent>
+			</Card>
+		</Stack>
 	)
 }
 
 export default Opening
+
+

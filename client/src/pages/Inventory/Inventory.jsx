@@ -1,30 +1,24 @@
 import { useSelector } from "react-redux"
-import Input from "../../components/common/Input/Input.component"
-import Button from "../../components/common/Button/Button.component"
-import {
-	Container,
-	FitContainer,
-	Flex,
-	SearchSection,
-	SpaceHeader,
-	SpaceHeaderCenter,
-	SubTitle,
-	Title,
-} from "../../assets/common/common.styles"
 import InventoryTable from "../../components/INVENTORY/InventoryTable/InventoryTable"
 import { useState } from "react"
 import { useGetProductsQuery } from "../../redux/services/productsApi"
 import { useEffect } from "react"
-import BarcodeInput from "../../components/common/BarcodeInput/BarcodeInput"
-import EditProduct from "../../components/INVENTORY/EditProduct/EditProduct"
-import CreateProduct from "../../components/INVENTORY/CreateProduct/CreateProduct"
-import { useNavigate } from "react-router-dom"
-import InfoMessage from "../../components/common/InfoMessage/InfoMessage"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { ModalCreateProduct } from "../../components/INVENTORY/modals/create"
 import { useModal } from "../../components/shared/modal"
 import { ModalEditProduct } from "../../components/INVENTORY/modals/edit"
+import { Stack } from "@mui/material"
+import { PageTitle } from "../../components/shared/pageTitle"
+import BarcodeSection from "../../components/POS/BarcodeSection/BarcodeSection"
+import { PlusIcon } from "lucide-react"
+import { Button } from "../../components/ui/button"
+import { useQuery } from "../../lib/hooks/useQuery"
+import { useNotify } from "../../lib/hooks/useNotify"
+import { getProducts } from "../../lib/api"
+import { Input } from "../../components/ui/input"
 
 const Inventory = () => {
+	const { notifyError } = useNotify()
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const navigate = useNavigate()
 	const theme = useSelector((state) => state.theme.theme)
@@ -34,131 +28,132 @@ const Inventory = () => {
 	const [barcodeValue, setBarcodeValue] = useState("")
 	const [barcodeSearch, setBarcodeSearch] = useState(false)
 	const [products, setProducts] = useState([])
-	const createProductController = useModal()
-	const editProductController = useModal()
-
-	const { data, isError, refetch } = useGetProductsQuery({
-		page: pageNumber,
-		name: searchString,
-		barcode: barcodeValue,
+	const [pagination, setPagination] = useState({
+		pageSize: 25,
+		pageNumber: 1,
+		pageTotal: 0,
 	})
 
-	const redirect = () => {
-		!loggedIn && navigate("/login")
-	}
+	const createProductController = useModal()
+	let [searchParams] = useSearchParams()
+	const [name, setName] = useState("")
 
-	const focusOnBarcode = () => {
-		const input = document.getElementById("barcode-input")
-		input.focus()
-	}
+	const barcodeParam = searchParams.get("new")
 
-	const handlePageClick = (num) => {
-		setPageNumber(pageNumber + num)
-	}
+	const queryGetProducts = useQuery({
+		queryFn: getProducts,
+		onSuccess: (data) => {
+			setProducts(data.data)
+			setPagination({
+				...pagination,
+				pageTotal: data.pageTotal,
+			})
+		},
+		onError: () => {
+			notifyError("Failed to fetch products")
+		},
+	})
 
 	const handleCreateProduct = () => {
 		createProductController.openModal()
 	}
 
-	const handleEditProduct = (product) => {
-		editProductController.openModal()
-		editProductController.setData(product)
-	}
-
-	const fetchProducts = ({ barcode, name }) => {
-		if (barcode) {
-			let barcodeValue = barcode.endsWith("/n") ? barcode.slice(0, -2) : barcode
-
-			setBarcodeSearch(true)
-			setBarcodeValue(barcodeValue)
-		} else if (name) {
-			setBarcode("")
-			setBarcodeValue("")
-		} else {
-			setBarcodeSearch(false)
-			setBarcodeValue(barcode)
+	const handlePreviousPage = () => {
+		if (pagination.pageNumber > 1) {
+			setPagination({
+				...pagination,
+				pageNumber: pagination.pageNumber - 1,
+			})
 		}
-		refetch()
 	}
 
-	const resetBarcode = () => {
-		setBarcode("")
-		setBarcodeSearch(false)
-		fetchProducts({})
-		focusOnBarcode()
-	}
-
-	useEffect(() => {
-		fetchProducts({ name: searchString })
-	}, [searchString])
-
-	useEffect(() => {
-		if (barcode.endsWith("/n") || barcode.length === 0) {
-			fetchProducts({ barcode: barcode })
+	const handleNextPage = () => {
+		if (pagination.pageNumber < pagination.pageTotal) {
+			setPagination({
+				...pagination,
+				pageNumber: pagination.pageNumber + 1,
+			})
 		}
-	}, [barcode])
+	}
+
+	const handleReset = () => {
+		setName("")
+		queryGetProducts.send({ pagination })
+	}
+
+	const handleNameChange = (e) => {
+		setName(e.target.value)
+	}
+
+	const scrollToTop = () => {
+		const scrollableBody = document.getElementById("scrollable-body")
+		scrollableBody.scrollTo({ top: 0, behavior: "smooth" })
+	}
 
 	useEffect(() => {
-		setProducts(data)
-	}, [data])
+		if (barcodeParam) {
+			createProductController.openModal()
+		}
+	}, [barcodeParam])
 
-	// useEffect(() => {
-	// 	redirect()
-	// }, [])
+	useEffect(() => {
+		queryGetProducts.send({ pagination, name })
+		scrollToTop()
+	}, [pagination.pageNumber, name])
 
 	return (
-		<Container theme={theme}>
-			<SpaceHeader>
-				<Title>Inventory</Title>
-				<Button title="Create Product" onClick={handleCreateProduct} />
-			</SpaceHeader>
-			<SearchSection>
-				<Flex>
-					<BarcodeInput barcode={barcode} setBarcode={setBarcode} />
-					{barcodeSearch ? (
-						<Button title="Reset" onClick={() => resetBarcode()} />
-					) : (
-						<Button
-							title="Search"
-							onClick={() => fetchProducts({ barcode: barcode })}
-						/>
-					)}
-				</Flex>
-				<Flex>
-					<Input label="Name" value={searchString} onChange={setSearchString} />
-				</Flex>
-			</SearchSection>
-			<FitContainer theme={theme}>
-				<SubTitle>Products</SubTitle>
-				<div>
-					{isError ? (
-						<InfoMessage state="error" text="Failed to fetch products" />
-					) : (
-						<>
-							<InventoryTable
-								products={products}
-								openEditor={handleEditProduct}
-							/>
-							<SpaceHeaderCenter style={{ width: "100%" }}>
-								<Button
-									title="Prev"
-									onClick={() => handlePageClick(-1)}
-									disabled={pageNumber === 1}
-								/>
-								<Button
-									title="Next"
-									onClick={() => handlePageClick(1)}
-									disabled={products && products.length < 25}
-								/>
-							</SpaceHeaderCenter>
-						</>
-					)}
-				</div>
-			</FitContainer>
-			<ModalCreateProduct controller={createProductController} />
-			<ModalEditProduct controller={editProductController} />
-		</Container>
+		<Stack direction="column" spacing={2} className="w-full h-full">
+			<Stack
+				direction="row"
+				alignItems="center"
+				justifyContent="space-between"
+				spacing={2}
+			>
+				<PageTitle title="Inventory" />
+				<Button onClick={handleCreateProduct}>
+					<PlusIcon />
+				</Button>
+			</Stack>
+			<Stack direction="row" spacing={2} justifyContent="space-between">
+				<Stack direction="row" spacing={2}>
+					<BarcodeSection onSuccess={setProducts} />
+					<NameSection name={name} handleNameChange={handleNameChange} />
+				</Stack>
+				<Button onClick={handleReset}>Reset</Button>
+			</Stack>
+			<Stack className="space-y-8 h-full overflow-y-hidden">
+				<InventoryTable
+					products={products}
+					pagination={pagination}
+					handlePreviousPage={handlePreviousPage}
+					handleNextPage={handleNextPage}
+					onSuccess={() => {
+						queryGetProducts.send(pagination)
+					}}
+				/>
+			</Stack>
+			<ModalCreateProduct
+				controller={createProductController}
+				onSuccess={() => {
+					queryGetProducts.send(pagination)
+				}}
+			/>
+		</Stack>
 	)
 }
 
 export default Inventory
+
+const NameSection = ({ name, handleNameChange }) => {
+	return (
+		<div className="flex max-w-sm items-center space-x-2">
+			<Input
+				id="name-input"
+				type="text"
+				placeholder="Name"
+				value={name}
+				onChange={handleNameChange}
+			/>
+		</div>
+	)
+}

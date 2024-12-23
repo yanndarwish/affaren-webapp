@@ -5,6 +5,7 @@ const auth = require("../middleware/auth")
 const {
 	createSale,
 	getSales,
+	getMonthSales,
 	getSale,
 	updateSale,
 	deleteSale,
@@ -18,6 +19,8 @@ const {
 router.post("/", auth, createSale)
 
 router.get("/", auth, getSales)
+
+router.get("/month", auth, getMonthSales)
 
 router.get("/:id", auth, getSale)
 

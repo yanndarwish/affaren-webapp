@@ -15,9 +15,6 @@ const SalesTableRow = ({sale, onClick}) => {
 			total += sale.sale_payment_methods[method]
 		})
 		if (parseFloat(sale.sale_amount) !== total) {
-			console.log('fail')
-			console.log(sale.sale_payment_methods)
-			console.log(sale.sale_amount)
 			setFail(true)
 		}
 	}

@@ -1,8 +1,11 @@
 import { Modal } from "../../../shared/modal"
 import { FormProduct } from "../../form"
 
-export const ModalEditProduct = ({ controller }) => {
-
+export const ModalEditProduct = ({ controller, onSubmit = () => null }) => {
+	const handleSubmit = () => {
+		controller.closeModal()
+		onSubmit()
+	}
 
 	return (
 		<Modal
@@ -10,7 +13,7 @@ export const ModalEditProduct = ({ controller }) => {
 			title="Edit Product"
 			handleClose={controller.closeModal}
 		>
-			<FormProduct data={controller.data} onSubmit={controller.closeModal} />
+			<FormProduct data={controller.data} onSubmit={handleSubmit} />
 		</Modal>
 	)
 }

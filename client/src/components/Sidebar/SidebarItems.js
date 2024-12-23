@@ -15,13 +15,13 @@ export const sidebarItems = [
 		id: 0,
 		icon: <HomeOutlinedIcon />,
 		route: "pos",
-		label: "Point de vente",
+		label: "Point of sale",
 	},
 	{
 		id: 1,
 		icon: <FormatListNumberedIcon />,
 		route: "sales",
-		label: "Ventes",
+		label: "Sales",
 	},
 	{
 		id: 4,
@@ -33,20 +33,20 @@ export const sidebarItems = [
 		id: 5,
 		icon: <Inventory2OutlinedIcon />,
 		route: "inventory",
-		label: "Inventaire",
+		label: "Inventory",
 	},
-	{
-		id: 2,
-		icon: <LibraryBooksOutlinedIcon />,
-		route: "orders",
-		label: "Commandes",
-	},
-	{
-		id: 3,
-		icon: <RestaurantMenuOutlinedIcon />,
-		route: "menu",
-		label: "Menu",
-	},
+	// {
+	// 	id: 2,
+	// 	icon: <LibraryBooksOutlinedIcon />,
+	// 	route: "orders",
+	// 	label: "Orders",
+	// },
+	// {
+	// 	id: 3,
+	// 	icon: <RestaurantMenuOutlinedIcon />,
+	// 	route: "menu",
+	// 	label: "Menu",
+	// },
 	// {
 	// 	id: 6,
 	// 	icon: <SoupKitchenOutlinedIcon />,
@@ -63,63 +63,18 @@ export const sidebarItems = [
 		id: 7,
 		icon: <PersonOutlineOutlinedIcon />,
 		route: "profile",
-		label: "Profil",
+		label: "Profile",
 	},
-	{
-		id: 8,
-		icon: <HelpOutlineOutlinedIcon />,
-		route: "help",
-		label: "Aide",
-	},
+	// {
+	// 	id: 8,
+	// 	icon: <HelpOutlineOutlinedIcon />,
+	// 	route: "help",
+	// 	label: "Aide",
+	// },
 	{
 		id: 9,
 		icon: <LogoutOutlinedIcon />,
 		route: "closing",
-		label: "Fermeture",
-	},
-]
-
-export const cookSidebarItems = [
-	{
-		id: 0,
-		icon: <LibraryBooksOutlinedIcon />,
-		route: "orders",
-		label: "Commandes",
-	},
-	// {
-	// 	id: 6,
-	// 	icon: <LunchDiningIcon />,
-	// 	route: "lunch",
-	// 	label: "Plats",
-	// },
-	{
-		id: 1,
-		icon: <RestaurantMenuOutlinedIcon />,
-		route: "menu",
-		label: "Menu",
-	},
-	// {
-	// 	id: 2,
-	// 	icon: <SoupKitchenOutlinedIcon />,
-	// 	route: "kitchen",
-	// 	label: "Cuisine",
-	// },
-	{
-		id: 3,
-		icon: <PersonOutlineOutlinedIcon />,
-		route: "profile",
-		label: "Profil",
-	},
-	{
-		id: 4,
-		icon: <HelpOutlineOutlinedIcon />,
-		route: "help",
-		label: "Aide",
-	},
-	{
-		id: 5,
-		icon: <LogoutOutlinedIcon />,
-		route: "logout",
-		label: "Déconnexion",
+		label: "Closing",
 	},
 ]

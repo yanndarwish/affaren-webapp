@@ -3,11 +3,11 @@ const pool = require("../db")
 // create a card
 const createCard = async (req, res) => {
 	try {
-		const { id, name, price, taxe } = req.body
+		const { id, name, price, taxe, type } = req.body
 
 		const response = await pool.query(
-			"INSERT INTO cards (card_id, card_name, card_price, card_taxe) VALUES ($1, $2, $3, $4)",
-			[id, name, price, taxe]
+			"INSERT INTO cards (card_id, card_name, card_price, card_taxe, card_type) VALUES ($1, $2, $3, $4, $5)",
+			[id, name, price, taxe, type]
 		)
 		res.status(200).send(response.rows)
 	} catch (err) {

@@ -16,13 +16,8 @@ import { resetDashboard } from "../../../redux/features/dashboard"
 import { resetOrders } from "../../../redux/features/orders"
 
 const LogoutDialog = ({ theme }) => {
-	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-
-	const redirect = () => {
-		!loggedIn && navigate("/login")
-	}
 
 	const handleCancel = () => {
 		navigate("/closing")
@@ -36,12 +31,8 @@ const LogoutDialog = ({ theme }) => {
 		dispatch(resetDashboard())
 		dispatch(resetOrders())
 		navigate("/login")
-		window.location.reload()
+		// window.location.reload()
 	}
-
-	useEffect(() => {
-		redirect()
-	}, [])
 
 	return (
 		<Container theme={theme}>

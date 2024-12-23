@@ -26,7 +26,7 @@ import {
 import { ErrorMessage, SubTitle } from "../../../../assets/common/common.styles"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import Button from "../../../common/Button/Button.component"
-import NumPad from "../../../common/NumPad/NumPad"
+import NumPad from "../../../common/NumPad/NumPad_orig"
 import { DialogCard, FullWrapper } from "./DiscountSlider.styles"
 import { updateProducts, setDiscount } from "../../../../redux/features/sale"
 

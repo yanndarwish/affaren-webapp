@@ -1,123 +1,272 @@
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
-import TableCell from "@mui/material/TableCell"
-import TableContainer from "@mui/material/TableContainer"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
-import Paper from "@mui/material/Paper"
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp"
 import { useState } from "react"
 import {
 	CloseColumn,
 	VerticalCenter,
 } from "../../../assets/common/common.styles"
 import { useEffect } from "react"
+import { Card } from "../../ui/card"
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "../../ui/table"
+import { EmptyData } from "../../shared/emptyData"
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "../../ui/pagination"
+import { Stack } from "@mui/material"
+import { Button } from "../../ui/button"
+import { Pencil, Trash2Icon } from "lucide-react"
+import { useNotify } from "../../../lib/hooks/useNotify"
+import { Modal, useModal } from "../../shared/modal"
+import { useQuery } from "../../../lib/hooks/useQuery"
+import { ModalEditProduct } from "../modals/edit"
+import { deleteProduct } from "../../../lib/api"
 
-export default function InventoryTable({ products, openEditor }) {
-	const [sort, setSort] = useState(false)
-	const [qty, setQty] = useState("")
-	const [filteredProducts, setFilteredProducts] = useState([])
+const columns = [
+	{
+		label: "Id",
+		field: "product_id",
+		className: "text-left",
+	},
+	{
+		label: "Name",
+		field: "product_name",
+		className: "text-left",
+	},
+	{
+		label: "Price",
+		field: "product_price",
+		className: "",
+	},
+	{
+		label: "Quantity",
+		field: "product_quantity",
+		className: "",
+	},
+	{
+		label: "Taxe",
+		field: "product_taxe",
+		className: "",
+	},
+	{
+		label: "Barcode",
+		field: "product_barcode",
+		className: "text-right",
+	},
+	{
+		label: "Actions",
+		field: "actions",
+		className: "text-right",
+	},
+]
 
-	const handleClick = (e) => {
-		const targetId = e.target.dataset.id
-			? e.target.dataset.id
-			: e.target.parentNode.dataset.id
-		let found = products.find(
-			(product) => product.product_id === parseInt(targetId)
-		)
-		openEditor(found)
+export default function InventoryTable({
+	products,
+	pagination,
+	handlePreviousPage,
+	handleNextPage,
+	onSuccess = () => null,
+}) {
+	const { notifySuccess, notifyError } = useNotify()
+	const editProductController = useModal()
+	const modalDeleteProduct = useModal()
+
+	const queryDeleteProduct = useQuery({
+		queryFn: deleteProduct,
+		onSuccess: () => {
+			notifySuccess("Product deleted successfully")
+			onSuccess()
+		},
+		onError: () => {
+			notifyError("Failed to delete product")
+		},
+	})
+
+	const handleClickEdit = (product) => {
+		editProductController.setData(product)
+		editProductController.openModal()
 	}
 
-	const handleSort = () => {
-		let filtered = products && [...products]
-		if (sort && qty === "down") {
-			// reset sorting
-			setSort(false)
-			setQty("")
-		} else if (qty === "") {
-			// sort from min to max
-			filtered = filtered?.sort(
-				(a, b) => a.product_quantity - b.product_quantity
-			)
-			setSort(true)
-			setQty("up")
-		} else if (qty === "up") {
-			// sort from max to min
-			filtered = filtered?.sort(
-				(a, b) => b.product_quantity - a.product_quantity
-			)
-			setQty("down")
-		}
-		setFilteredProducts(filtered)
+	const handleClickDelete = (product) => {
+		modalDeleteProduct.setData(product)
+		modalDeleteProduct.openModal()
 	}
 
-	useEffect(() => {
-		handleSort()
-	}, [products])
+	const handleConfirmDelete = (productId) => {
+		queryDeleteProduct.send(productId)
+	}
 
 	return (
-		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 650 }} aria-label="simple table">
-				<TableHead>
-					<TableRow>
-						<TableCell>Id</TableCell>
-						<TableCell>Name</TableCell>
-						<TableCell align="right">Price</TableCell>
-						<TableCell align="right" onClick={handleSort}>
-							<VerticalCenter>
-								Quantity
-								{sort ? (
-									qty === "up" ? (
-										<ArrowDropUpIcon />
-									) : (
-										qty === "down" && <ArrowDropDownIcon />
-									)
-								) : (
-									<CloseColumn>
-										<ArrowDropUpIcon />
-										<ArrowDropDownIcon />
-									</CloseColumn>
+		<Card className="overflow-hidden h-full">
+			<div className="flex flex-col h-full relative">
+				{/* Sticky Header */}
+				<Table>
+					<TableHeader className="sticky top-0 bg-white z-10 border-b">
+						<TableRow>
+							{columns.map((column, index) => (
+								<TableHead key={index} className={column.className}>
+									{column.label}
+								</TableHead>
+							))}
+						</TableRow>
+					</TableHeader>
+				</Table>
+
+				{/* Scrollable Body */}
+				<div id="scrollable-body" className="flex-1 overflow-auto">
+					<Table>
+						<TableBody id="scrollable-body" className="flex-1 overflow-hidden">
+							{/* Empty state rows to maintain height */}
+							{!products || products.length === 0 ? (
+								<EmptyData
+									message="No products found"
+									span={columns.length + 1}
+									className="h-[calc(100vh-300px)]"
+								/>
+							) : (
+								products?.map((product) => (
+									<TableRow key={product.product_id}>
+										<TableCell component="th" scope="row">
+											{product.product_id}
+										</TableCell>
+										<TableCell align="left">{product.product_name}</TableCell>
+										<TableCell align="left">{product.product_price}</TableCell>
+										<TableCell align="left">
+											{product.product_quantity}
+										</TableCell>
+										<TableCell align="right">{product.product_taxe}</TableCell>
+										<TableCell align="right">
+											{product.product_barcode}
+										</TableCell>
+										<TableCell className="text-right">
+											<Stack
+												direction="row"
+												justifyContent="flex-end"
+												spacing={2}
+											>
+												<Button
+													size="icon"
+													onClick={() => handleClickEdit(product)}
+												>
+													<Pencil />
+												</Button>
+												<Button
+													size="icon"
+													variant="destructive"
+													onClick={() => handleClickDelete(product)}
+												>
+													<Trash2Icon />
+												</Button>
+											</Stack>
+										</TableCell>
+									</TableRow>
+								))
+							)}
+						</TableBody>
+					</Table>
+				</div>
+				{/* Sticky Footer */}
+				<div className="sticky bottom-0 bg-white border-t">
+					<Pagination className="py-2">
+						<PaginationContent>
+							<PaginationItem>
+								<PaginationPrevious
+									onClick={handlePreviousPage}
+									isActive={pagination.pageNumber >= 1}
+									className={
+										pagination.pageNumber === 1
+											? "opacity-20 cursor-not-allowed"
+											: ""
+									}
+								/>
+							</PaginationItem>
+							<PaginationItem>
+								<PaginationLink>{pagination.pageNumber}</PaginationLink>
+							</PaginationItem>
+							{pagination.pageTotal !== pagination.pageNumber &&
+								pagination.pageTotal !== 0 && (
+									<>
+										<PaginationItem>
+											<PaginationEllipsis />
+										</PaginationItem>
+										<PaginationItem>
+											<PaginationLink>{pagination.pageTotal}</PaginationLink>
+										</PaginationItem>
+									</>
 								)}
-							</VerticalCenter>
-						</TableCell>
-						<TableCell align="right">Taxe</TableCell>
-						<TableCell align="right">Barcode</TableCell>
-						<TableCell align="right">Alert</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{filteredProducts &&
-						filteredProducts.map((product) => (
-							<TableRow
-								key={product && product.product_id}
-								sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-								data-id={product && product.product_id}
-								onClick={handleClick}
-							>
-								<TableCell component="th" scope="row">
-									{product && product.product_id}
-								</TableCell>
-								<TableCell>{product && product.product_name}</TableCell>
-								<TableCell align="right">
-									{product && product.product_price}
-								</TableCell>
-								<TableCell align="right">
-									{product && product.product_quantity}
-								</TableCell>
-								<TableCell align="right">
-									{product && product.product_taxe}
-								</TableCell>
-								<TableCell align="right">
-									{product && product.product_barcode}
-								</TableCell>
-								<TableCell align="right">
-									{product && product.product_alert}
-								</TableCell>
-							</TableRow>
-						))}
-				</TableBody>
-			</Table>
-		</TableContainer>
+							<PaginationItem>
+								<PaginationNext
+									onClick={handleNextPage}
+									isActive={pagination.pageNumber <= pagination.pageTotal}
+									className={
+										pagination.pageNumber >= pagination.pageTotal
+											? "opacity-20 cursor-not-allowed"
+											: ""
+									}
+								/>
+							</PaginationItem>
+						</PaginationContent>
+					</Pagination>
+				</div>
+			</div>
+			<ModalDeleteProduct
+				controller={modalDeleteProduct}
+				onConfirm={handleConfirmDelete}
+			/>
+			<ModalEditProduct
+				controller={editProductController}
+				onSubmit={onSuccess}
+			/>
+		</Card>
+	)
+}
+
+export const ModalDeleteProduct = ({ controller, onConfirm = () => null }) => {
+	const product = controller.data
+
+	const handleConfirmDelete = () => {
+		onConfirm(product.product_id)
+		controller.closeModal()
+	}
+
+	return (
+		<Modal
+			open={controller.open}
+			title={`Delete Product ${product.product_name}`}
+			handleClose={controller.closeModal}
+		>
+			<Stack direction="column" spacing={4}>
+				<p className="text-center text-lg font-medium text-gray-900">
+					Are you sure you want to delete this product?
+				</p>
+			</Stack>
+
+			<Stack direction="row" spacing={2}>
+				<Button
+					onClick={controller.closeModal}
+					variant="outline"
+					className="w-full"
+				>
+					Cancel
+				</Button>
+				<Button
+					onClick={handleConfirmDelete}
+					variant="destructive"
+					className="w-full"
+				>
+					Delete
+				</Button>
+			</Stack>
+		</Modal>
 	)
 }

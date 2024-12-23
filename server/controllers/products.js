@@ -24,10 +24,12 @@ const createProduct = async (req, res) => {
 // getproducts with all the query filters possible
 const getProducts = async (req, res) => {
 	try {
+
 		// pagination (default return all products)
-		const page = Number(req.query.page) || ""
+		const offset = Number(req.query.offset) || ""
 		const limit = Number(req.query.limit) || ""
-		const offset = limit * page - limit
+
+		let pageTotal = 1
 
 		let request = `SELECT * FROM products ORDER BY product_id DESC ${
 			limit ? "LIMIT " + limit : ""
@@ -40,18 +42,40 @@ const getProducts = async (req, res) => {
 			request = `SELECT * FROM products WHERE LOWER(product_name) LIKE '${string}' ORDER BY product_id DESC ${
 				limit ? "LIMIT " + limit : ""
 			} ${offset ? "OFFSET " + offset : ""}`
-		}
-		// filter by barcode
-		if (req.query.barcode) {
+
+			const allProductsRequest = `SELECT * FROM products WHERE LOWER(product_name) LIKE '${string}' ORDER BY product_id DESC`
+
+			const allProductsResponse = await pool.query(allProductsRequest)
+
+			pageTotal = Math.ceil(allProductsResponse.rows.length / limit)
+		} else if (req.query.barcode) {
+			// filter by barcode
 			const barcode = req.query.barcode
 			request = `SELECT * FROM products WHERE product_barcode = '${barcode}' ORDER BY product_id DESC ${
 				limit ? "LIMIT " + limit : ""
 			} ${offset ? "OFFSET " + offset : ""}`
+
+			const allProductsRequest = `SELECT * FROM products WHERE product_barcode = '${barcode}' ORDER BY product_id DESC`
+
+			const allProductsResponse = await pool.query(allProductsRequest)
+
+			pageTotal = Math.ceil(allProductsResponse.rows.length / limit)
+		} else {
+			const allProductsRequest = `SELECT * FROM products ORDER BY product_id DESC`
+
+			const allProductsResponse = await pool.query(allProductsRequest)
+
+			pageTotal = Math.ceil(allProductsResponse.rows.length / limit)
 		}
 
 		const response = await pool.query(request)
-		res.status(200).send(response.rows)
 
+		const data = {
+			data: response.rows,
+			pageTotal: pageTotal,
+		}
+
+		res.status(200).send(data)
 	} catch (err) {
 		console.log(err)
 	}

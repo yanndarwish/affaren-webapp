@@ -39,7 +39,7 @@ export const Container = styled.main`
 	display: flex;
 	flex-direction: column;
 	flex: 1;
-	padding: ${constant.PADDING_L}px;
+	// padding: ${constant.PADDING_L}px;
 	height: 100%;
 	width: 100%;
 	overflow: scroll;

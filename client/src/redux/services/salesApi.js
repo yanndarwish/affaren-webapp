@@ -43,6 +43,12 @@ export const salesApi = createApi({
 			}),
 			providesTags: ["Sales"],
 		}),
+		getDaySales: builder.query({
+			query: ({ year, month, day }) => ({
+				url: `sales-period/${year}/${month}/${day}`,
+			}),
+			providesTags: ["Sales"],
+		}),
 		getNextSaleId: builder.query({
 			query: () => ({
 				url: "sales-period/last",
@@ -105,6 +111,7 @@ export const {
 	useUpdateSaleMutation,
 	useGetSalesQuery,
 	useGetMonthSalesQuery,
+	useGetDaySalesQuery,
 	useGetNextSaleIdQuery,
 	useGetSaleQuery,
 	useDeleteSaleMutation,

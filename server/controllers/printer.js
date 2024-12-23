@@ -237,8 +237,7 @@ const printTicket = async (req, res) => {
 			printer.cut()
 
 			try {
-				let execute = printer.execute()
-				console.error("Print done!")
+				printer.execute()
 				res.status(200).send()
 			} catch (error) {
 				console.log("Print failed:", error)
@@ -293,8 +292,7 @@ const printCashTicket = async (req, res) => {
 			printer.cut()
 
 			try {
-				let execute = printer.execute()
-				console.error("Print done!")
+				printer.execute()
 				res.status(200).send()
 			} catch (error) {
 				console.log("Print failed:", error)

@@ -8,8 +8,9 @@ const initialState = {
 
 const getAuth = () => {
 	const token = localStorage.getItem("token")
+	const expirationDate = localStorage.getItem("expirationDate")
 
-	if (token) {
+	if (token && expirationDate && new Date(expirationDate) > new Date()) {
 		return {
 			token,
 			loggedIn: true,
