@@ -126,15 +126,6 @@ export default function SalesTable() {
 		}
 	}
 
-	const updateTodaysTotals = () => {
-		const dailyTotals = formatDailyTotals(sales)
-
-		setCash(dailyTotals.cash)
-		setCredit(dailyTotals.card)
-		setCheck(dailyTotals.check)
-		setTotal(dailyTotals.total)
-	}
-
 	const fetchSales = () => {
 		const year = selectedDate.getFullYear()
 		const month = selectedDate.getMonth() + 1
@@ -176,12 +167,6 @@ export default function SalesTable() {
 		const scrollableBody = document.getElementById("scrollable-body")
 		scrollableBody.scrollTo({ top: 0, behavior: "smooth" })
 	}
-
-	useEffect(() => {
-		if (selectedDate?.toDateString() === new Date().toDateString()) {
-			updateTodaysTotals()
-		}
-	}, [sales])
 
 	useEffect(() => {
 		if (selectedDate) {
