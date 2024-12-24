@@ -13,6 +13,7 @@ import {
 	getTotalReduction,
 } from "../../../lib/pos"
 import { useNotify } from "../../../lib/hooks/useNotify"
+import { Separator } from "../../ui/separator"
 
 const discountTypes = [
 	{ name: "percent", label: "Percent", unit: "%" },
@@ -165,7 +166,16 @@ export const CardDiscount = () => {
 	return (
 		<>
 			<CardHeader>
-				<CardTitle>Discount</CardTitle>
+				<CardTitle>
+					<Stack direction="row" className="justify-between">
+						Discount
+						{sale.discount.length > 0 && (
+							<Button onClick={handleResetDiscount} variant="destructive">
+								<Trash2Icon />
+							</Button>
+						)}
+					</Stack>
+				</CardTitle>
 			</CardHeader>
 			<CardContent className="space-y-2">
 				{sale.discount.length === 0 ? (
@@ -177,32 +187,44 @@ export const CardDiscount = () => {
 					</div>
 				) : (
 					<div className="space-y-4 ">
-						<div>
+						{/* <div>
 							<p>Original Price: {getTotalOriginalPrice(sale.discount)} €</p>
 							<p>Reduction: {getTotalReduction(sale.discount)} €</p>
 							<p>New Price: {getTotalNewPrice(sale.discount)} €</p>
-						</div>
-						<Button onClick={handleResetDiscount} className="w-full">
-							Reset Discount
-						</Button>
-						<article className="space-y-2 flex flex-col gap-2 border border-gray-200 rounded-md p-2">
-							{sale.discount.map((product) => (
-								<Stack
-									key={product.productId}
-									direction="row"
-									alignItems="center"
-									justifyContent="space-between"
-								>
-									<div>{product.productName}</div>
-									<div className="text-gray-500">{product.originalPrice}</div>
-									<div>{product.newPrice} €</div>
-									<Button
-										variant="destructive"
-										size="icon"
-										onClick={() => handleRemoveDiscount(product.id)}
+						</div> */}
+
+						<article className="space-y-2 flex flex-col border border-gray-200 rounded-md p-2 overflow-y-auto max-h-[20vh]">
+							{sale.discount.map((product, i) => (
+								<Stack key={product.productId} className="space-y-2">
+									<Stack
+										direction="row"
+										alignItems="center"
+										justifyContent="space-between"
 									>
-										<Trash2Icon />
-									</Button>
+										<div>{product.productName}</div>
+										<Stack
+											direction="row"
+											justifyContent="flex-end"
+											alignItems="center"
+											className="space-x-2"
+										>
+											<div className="text-gray-500">
+												{product.originalPrice}
+											</div>
+											<div className="w-[50px] text-end">
+												{product.newPrice} €
+											</div>
+											<Button
+												size="icon"
+												onClick={() => handleRemoveDiscount(product.id)}
+											>
+												<Trash2Icon />
+											</Button>
+										</Stack>
+									</Stack>
+									{i !== sale.discount.length - 1 && (
+										<Separator className="p-0 m-0" />
+									)}
 								</Stack>
 							))}
 						</article>

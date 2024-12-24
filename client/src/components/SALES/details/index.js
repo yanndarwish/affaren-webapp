@@ -10,6 +10,16 @@ import { SaleTotalSummary } from "./saleTotalSummary"
 import { useEffect, useState } from "react"
 import { formatSaleProducts } from "../../../lib/sales"
 
+const formatProducts = (products) => {
+	return products.map((p) => ({
+		id: p.product_id,
+		name: p.product_name,
+		price: p.product_price,
+		quantity: p.product_quantity,
+		taxe: p.product_taxe,
+	}))
+}
+
 export const SaleDetails = ({ sale, readOnly = false }) => {
 	const { notifySuccess, notifyError } = useNotify()
 	const [products, setProducts] = useState()
@@ -36,7 +46,11 @@ export const SaleDetails = ({ sale, readOnly = false }) => {
 
 	const handlePrintTicket = () => {
 		const formatedSale = formatSale(sale)
-		queryPrintTicket.send(formatedSale)
+
+		queryPrintTicket.send({
+			...formatedSale,
+			products: formatProducts(products),
+		})
 	}
 
 	const formatSale = (sale) => {
@@ -54,6 +68,8 @@ export const SaleDetails = ({ sale, readOnly = false }) => {
 			}
 		}
 	}, [sale?.id])
+
+	console.log(sale)
 
 	return (
 		<Stack className="space-y-4">

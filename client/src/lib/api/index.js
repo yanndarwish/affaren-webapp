@@ -252,3 +252,8 @@ const getDateFilters = (date) => {
 
 	return `year=${year}&month=${month}&day=${day}`
 }
+
+export const forgotPassword = async (body) => {
+	const response = await post("password/forgot", body)
+	return response
+}

@@ -80,6 +80,13 @@ export default function SalesTable() {
 			setTotalCard(data.totalCard)
 			setTotalCheck(data.totalCheck)
 			setTotalTotal(data.total)
+
+			if (selectedDate?.toDateString() === new Date().toDateString()) {
+				setCash(data.totalCash)
+				setCredit(data.totalCard)
+				setCheck(data.totalCheck)
+				setTotal(data.total)
+			}
 		},
 		onError: () => {
 			notifyError("An error occurred while fetching sales")

@@ -67,49 +67,43 @@ const Pos = () => {
 	const displayedTabs = sale.isActiveDiscount ? tabs : tabs.slice(0, 2)
 
 	return (
-		<Stack direction="column" spacing={3} className="w-full h-full">
-			<Stack
-				direction="row"
-				alignItems="flex-start"
-				spacing={2}
-				className="h-full"
-			>
-				<Stack
-					direction="column"
-					spacing={2}
-					className="w-full h-full relative"
-				>
-					<PageTitle title={`Sale N°${sale.id ?? 1}`} />
-					<BarcodeSection onSuccess={updateCart} />
-					<Stack className="h-full overflow-y-auto">
-						<Cart onDiscount={handleDiscount} onBookmark={handleBookmark} />
-					</Stack>
-					<Stack className="sticky bottom-0 w-full">
-						<TotalSection />
-					</Stack>
+		<Stack
+			direction="row"
+			alignItems="flex-start"
+			spacing={2}
+			className="h-full"
+		>
+			<Stack direction="column" spacing={2} className="w-full h-full relative">
+				<PageTitle title={`Sale N°${sale.id ?? 1}`} />
+				<BarcodeSection onSuccess={updateCart} />
+				<Stack className="h-full overflow-y-auto">
+					<Cart onDiscount={handleDiscount} onBookmark={handleBookmark} />
 				</Stack>
-
-				<Card className="relative w-[400px] h-full">
-					<Tabs
-						value={selectedTab}
-						onValueChange={setSelectedTab}
-						className="w-full h-full"
-					>
-						<TabsList className="w-full">
-							{displayedTabs.map((tab) => (
-								<TabsTrigger key={tab.name} value={tab.name} className="w-full">
-									{tab.label}
-								</TabsTrigger>
-							))}
-						</TabsList>
-						{displayedTabs.map((tab) => (
-							<TabsContent key={tab.name} value={tab.name}>
-								{tab.component}
-							</TabsContent>
-						))}
-					</Tabs>
-				</Card>
+				<Stack className="sticky bottom-0 w-full">
+					<TotalSection />
+				</Stack>
 			</Stack>
+
+			<Card className="relative w-[400px] h-full">
+				<Tabs
+					value={selectedTab}
+					onValueChange={setSelectedTab}
+					className="w-full h-full"
+				>
+					<TabsList className="w-full">
+						{displayedTabs.map((tab) => (
+							<TabsTrigger key={tab.name} value={tab.name} className="w-full">
+								{tab.label}
+							</TabsTrigger>
+						))}
+					</TabsList>
+					{displayedTabs.map((tab) => (
+						<TabsContent key={tab.name} value={tab.name}>
+							{tab.component}
+						</TabsContent>
+					))}
+				</Tabs>
+			</Card>
 		</Stack>
 	)
 }

@@ -1,20 +1,38 @@
 import { useEffect, useState } from "react"
-import Box from "@mui/material/Box"
+
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+	useSidebar,
+} from "../ui/sidebar"
+import { AppSidebar } from "../Sidebar"
 
 import { Outlet, useNavigate } from "react-router-dom"
 import { Grid } from "../../assets/common/common.styles"
-import Sidebar from "../Sidebar/Sidebar"
+// import Sidebar from "../Sidebar/Sidebar"
 import { useDailyTotal } from "../../lib/providers/dailyTotal"
 import { formatDailyTotals } from "../../lib/sales"
 import { useSession } from "../../lib/hooks/useSession"
 import { useQuery } from "../../lib/hooks/useQuery"
 import { getDaySales } from "../../lib/api"
+import { useLocation } from "react-router-dom"
+import { Separator } from "../ui/separator"
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "../ui/breadcrumb"
+import { AppHeader } from "../Sidebar/appHeader"
 
 const Root = () => {
 	const navigate = useNavigate()
-	const [open, setOpen] = useState(false)
 	const { isLoggedIn } = useSession()
 	const { setCash, setCredit, setCheck, setTotal } = useDailyTotal()
+	const location = useLocation()
 
 	const queryGetDaySales = useQuery({
 		queryFn: getDaySales,
@@ -32,9 +50,13 @@ const Root = () => {
 	})
 
 	useEffect(() => {
-		if (!isLoggedIn) {
+		if (
+			!isLoggedIn &&
+			location.pathname !== "/login" &&
+			location.pathname !== "/forgot-password"
+		) {
 			navigate("/login")
-		} else {
+		} else if (isLoggedIn) {
 			queryGetDaySales.send({
 				year: new Date().getFullYear(),
 				month: new Date().getMonth() + 1,
@@ -43,12 +65,18 @@ const Root = () => {
 		}
 	}, [isLoggedIn])
 
-	return (
-		<Grid>
-			<Sidebar open={open} setOpen={setOpen}>
-				<Outlet />
-			</Sidebar>
-		</Grid>
+	return isLoggedIn ? (
+		<SidebarProvider>
+			<AppSidebar />
+			<SidebarInset>
+				<AppHeader />
+				<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+					<Outlet />
+				</div>
+			</SidebarInset>
+		</SidebarProvider>
+	) : (
+		<Outlet />
 	)
 }
 

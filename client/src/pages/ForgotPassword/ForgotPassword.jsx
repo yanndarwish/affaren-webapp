@@ -1,13 +1,10 @@
 import { CenterContainer } from "../../assets/common/common.styles"
-import ForgotPasswordCard from "../../components/Cards/ForgotPasswordCard/ForgotPasswordCard"
-import { useSelector } from "react-redux"
+import { ForgotPasswordCard } from "../../components/Cards/ForgotPasswordCard"
 
 const ForgotPassword = () => {
-	const theme = useSelector((state) => state.theme.theme)
-
 	return (
-		<CenterContainer theme={theme}>
-			<ForgotPasswordCard theme={theme} />
+		<CenterContainer>
+			<ForgotPasswordCard />
 		</CenterContainer>
 	)
 }
