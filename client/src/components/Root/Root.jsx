@@ -17,15 +17,6 @@ import { useSession } from "../../lib/hooks/useSession"
 import { useQuery } from "../../lib/hooks/useQuery"
 import { getDaySales } from "../../lib/api"
 import { useLocation } from "react-router-dom"
-import { Separator } from "../ui/separator"
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "../ui/breadcrumb"
 import { AppHeader } from "../Sidebar/appHeader"
 
 const Root = () => {

@@ -110,7 +110,7 @@ export function MonthSalesChart({ monthString, month, year }) {
 	}, [month, year])
 
 	return (
-		<Card className="">
+		<Card className="flex flex-col h-full">
 			<CardHeader>
 				<CardTitle>
 					<Stack
@@ -152,48 +152,51 @@ export function MonthSalesChart({ monthString, month, year }) {
 					Showing total sales for {monthString} {year}
 				</CardDescription>
 			</CardHeader>
-			<CardContent className="h-[calc(100vh-310px)]">
+			<CardContent className="h-full overflow-hidden">
 				{selectedTab === "chart" ? (
-					<Card className="h-full relative overflow-hidden">
+					<Card className="h-full overflow-auto">
 						{chartData.length === 0 ? (
-							<div className="flex flex-col items-center justify-center space-y-8 h-full">
+							<div className="flex flex-col items-center justify-center space-y-8 ">
 								<CircleOff className="w-10 h-10 text-gray-200" />
 								<p className="text-md text-gray-500">No sales data available</p>
 							</div>
 						) : (
-							<ChartContainer
-								config={chartConfig}
-								className="h-[calc(100vh-365px)] w-full"
-							>
-								<AreaChart
-									accessibilityLayer
-									data={chartData}
-									margin={{
-										left: 3,
-										right: 3,
-									}}
+							<div className="grid grid-cols-1 h-96">
+								<ChartContainer
+									config={chartConfig}
+									className="row-start-1 row-span-1 h-full "
 								>
-									<CartesianGrid vertical={false} />
-									<XAxis
-										dataKey="day"
-										tickLine={false}
-										axisLine={false}
-										tickMargin={8}
-										tickFormatter={(value) => value.slice(0, 3)}
-									/>
-									<ChartTooltip
-										cursor={false}
-										content={<ChartTooltipContent indicator="line" />}
-									/>
-									<Area
-										dataKey="amount"
-										type="natural"
-										fill="var(--color-desktop)"
-										fillOpacity={0.4}
-										stroke="var(--color-desktop)"
-									/>
-								</AreaChart>
-							</ChartContainer>
+									<AreaChart
+										accessibilityLayer
+										data={chartData}
+										margin={{
+											left: 3,
+											right: 3,
+										}}
+										className="h-full"
+									>
+										<CartesianGrid vertical={false} />
+										<XAxis
+											dataKey="day"
+											tickLine={false}
+											axisLine={false}
+											tickMargin={8}
+											tickFormatter={(value) => value.slice(0, 3)}
+										/>
+										<ChartTooltip
+											cursor={false}
+											content={<ChartTooltipContent indicator="line" />}
+										/>
+										<Area
+											dataKey="amount"
+											type="natural"
+											fill="var(--color-desktop)"
+											fillOpacity={0.4}
+											stroke="var(--color-desktop)"
+										/>
+									</AreaChart>
+								</ChartContainer>
+							</div>
 						)}
 					</Card>
 				) : (

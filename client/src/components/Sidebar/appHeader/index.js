@@ -28,12 +28,12 @@ export const AppHeader = () => {
 					<Breadcrumb>
 						<BreadcrumbList>
 							<BreadcrumbItem className="hidden md:block">
-								<BreadcrumbLink href={activeItem?.url}>{activeItem?.title}</BreadcrumbLink>
+								<BreadcrumbLink href={activeItem?.url}>{activeItem?.label}</BreadcrumbLink>
 							</BreadcrumbItem>
-							<BreadcrumbSeparator className="hidden md:block" />
+							{/* <BreadcrumbSeparator className="hidden md:block" />
 							<BreadcrumbItem>
 								<BreadcrumbPage></BreadcrumbPage>
-							</BreadcrumbItem>
+							</BreadcrumbItem> */}
 						</BreadcrumbList>
 					</Breadcrumb>
 				</div>
