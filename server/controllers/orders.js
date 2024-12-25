@@ -13,6 +13,10 @@ const createOrder = async (req, res) => {
 			orderLocation,
 		} = req.body
 
+		if (!title || !description || !dueDate || !dueTime || !clientPhone || !clientName || !orderLocation) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"INSERT INTO orders (order_title, order_description, order_status, order_due_date, order_due_time, order_client_phone, order_client_name, order_location) VALUES ($1, $2, 'todo', $3, $4, $5, $6, $7)",
 			[
@@ -28,16 +32,18 @@ const createOrder = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
 // get all orders
-const getOrders = async (req, res) => {
+const getOrders = async (_req, res) => {
 	try {
 		const response = await pool.query("SELECT * FROM orders")
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -45,6 +51,11 @@ const getOrders = async (req, res) => {
 const getOrder = async (req, res) => {
 	try {
 		const { id } = req.params
+
+		if (!id) {
+			return res.status(400).send("Order ID is required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM orders WHERE order_id = $1",
 			[id]
@@ -52,6 +63,7 @@ const getOrder = async (req, res) => {
 		res.status(200).send(response.rows[0])
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -59,6 +71,10 @@ const getOrder = async (req, res) => {
 const updateOrder = async (req, res) => {
 	try {
 		const id = req.params.id
+
+		if (!id) {
+			return res.status(400).send("Order ID is required")
+		}
 
 		const {
 			title,
@@ -70,6 +86,10 @@ const updateOrder = async (req, res) => {
 			clientName,
 			orderLocation,
 		} = req.body
+
+		if (!title || !description || !status || !dueDate || !dueTime || !clientPhone || !clientName || !orderLocation) {
+			return res.status(400).send("All fields are required")
+		}
 
 		const response = await pool.query(
 			"UPDATE orders SET order_title = $1, order_description = $2, order_status = $3, order_due_date = $4, order_due_time = $5, order_client_phone = $6, order_client_name = $7, order_location = $8 WHERE order_id = $9",
@@ -88,6 +108,7 @@ const updateOrder = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -96,6 +117,10 @@ const deleteOrder = async (req, res) => {
 	try {
 		const { id } = req.params
 
+		if (!id) {
+			return res.status(400).send("Order ID is required")
+		}
+
 		const response = await pool.query(
 			"DELETE FROM orders WHERE order_id = $1",
 			[id]
@@ -103,6 +128,7 @@ const deleteOrder = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 

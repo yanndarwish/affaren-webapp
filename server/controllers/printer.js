@@ -15,6 +15,10 @@ const printTicket = async (req, res) => {
 		user,
 	} = req.body
 
+	if (!id || !amount || !day || !month || !year || !paymentMethods || !discount || !products || !taxes || !user) {
+		return res.status(400).send("All fields are required")
+	}
+
 	try {
 		let printer = new ThermalPrinter({
 			type: PrinterTypes.EPSON,
@@ -248,13 +252,18 @@ const printTicket = async (req, res) => {
 		}
 	} catch (err) {
 		console.log(err)
-		res.status(400).send("Print failed")
+		res.status(500).send("Internal server error")
 	}
 }
 
 // print cash detail ticket
 const printCashTicket = async (req, res) => {
 	const { user } = req.body
+
+	if (!user) {
+		return res.status(400).send("User is required")
+	}
+
 	try {
 		let printer = new ThermalPrinter({
 			type: PrinterTypes.EPSON,
@@ -303,12 +312,12 @@ const printCashTicket = async (req, res) => {
 		}
 	} catch (err) {
 		console.log(err)
-		res.status(400).send("Print failed")
+		res.status(500).send("Internal server error")
 	}
 }
 
 // open drawer
-const openDrawer = async (req, res) => {
+const openDrawer = async (_req, res) => {
 	try {
 		let printer = new ThermalPrinter({
 			type: PrinterTypes.EPSON,
@@ -320,19 +329,17 @@ const openDrawer = async (req, res) => {
 		if (isConnected) {
 			printer.openCashDrawer()
 			try {
-				let execute = printer.execute()
+				printer.execute()
 				res.status(200).send({})
 			} catch (error) {
-				console.log("Print failed:", error)
 				res.status(400).send("Failed to open Drawer")
 			}
 		} else {
-			console.log("Drawer not connected")
-			res.status(400).send("Drawer not connected")
+			res.status(404).send("Drawer not connected")
 		}
 	} catch (err) {
 		console.log(err)
-		res.status(400).send("Failed to open Drawer")
+		res.status(500).send("Internal server error")
 	}
 }
 

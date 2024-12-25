@@ -1,9 +1,10 @@
 const pool = require("../db")
 
 // as Admin, get all users
-const getUsers = async (req, res) => {
-	const response = await pool.query("SELECT * FROM users")
-	const data = response.rows
+const getUsers = async (_req, res) => {
+	try {
+		const response = await pool.query("SELECT * FROM users")
+		const data = response.rows
 
 	let clone = Object.assign([], data)
 
@@ -13,8 +14,11 @@ const getUsers = async (req, res) => {
 			delete item.user_token
 		})
 
-	res.status(200).send({ users: clone })
-	return
+		res.status(200).send({ users: clone })
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(err)
+	}
 }
 
 // update a user by id
@@ -60,6 +64,7 @@ const updateUser = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -78,6 +83,7 @@ const updateUserRole = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -86,12 +92,17 @@ const deleteUser = async (req, res) => {
 	try {
 		const { id } = req.params
 
+		if (!id) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query("DELETE FROM users WHERE user_id = $1", [
 			id,
 		])
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 

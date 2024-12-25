@@ -5,6 +5,10 @@ const postCashValue = async (req, res) => {
 	try {
 		const { year, month, day, amount } = req.body
 
+		if (!year || !month || !day || !amount) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"INSERT INTO drawer (year, month, day, drawer) VALUES ($1, $2, $3, $4)",
 			[year, month, day, amount]
@@ -13,6 +17,7 @@ const postCashValue = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -20,6 +25,10 @@ const postCashValue = async (req, res) => {
 const getCashValue = async (req, res) => {
 	try {
 		const { year, month, day } = req.params
+
+		if (!year || !month || !day) {
+			return res.status(400).send("All fields are required")
+		}
 
 		const response = await pool.query(
 			"SELECT * FROM drawer WHERE year = $1 AND month = $2 AND day = $3",
@@ -33,6 +42,7 @@ const getCashValue = async (req, res) => {
 		}
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 

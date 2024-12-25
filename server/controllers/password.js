@@ -33,12 +33,18 @@ const checkPassword = async (req, res) => {
 		return
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
 // forgot password
 const SendRecoveryLink = async (req, res) => {
 	const { email } = req.body
+
+	if (!email) {
+		return res.status(400).send("Email is required")
+	}
+
 	try {
 		const response = await pool.query(
 			"SELECT * FROM users WHERE user_email = $1",
@@ -85,26 +91,32 @@ const SendRecoveryLink = async (req, res) => {
 		res.status(200).send({})
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
 // verify token match
 const verifyToken = async (req, res) => {
 	const { id, token } = req.params
+
+	if (!id || !token) {
+		return res.status(400).send("All fields are required")
+	}
+
 	const response = await pool.query("SELECT * FROM users WHERE user_id = $1", [
 		id,
 	])
 
 	let oldUser = response.rows[0]
 	if (!oldUser) {
-		return res.send("User does not exist")
+		return res.status(404).send("User does not exist")
 	}
 	const secret = process.env.TOKEN_KEY + oldUser.user_password
 	try {
 		const verify = jwt.verify(token, secret)
 		res.render("index", { email: verify.email, status: "Not Verified" })
 	} catch (error) {
-		res.send("Not verified")
+		res.status(400).send("Not verified")
 	}
 }
 
@@ -113,13 +125,17 @@ const setNewPassword = async (req, res) => {
 	const { id, token } = req.params
 	const { password } = req.body
 
+	if (!id || !token || !password) {
+		return res.status(400).send("All fields are required")
+	}
+
 	const response = await pool.query("SELECT * FROM users WHERE user_id = $1", [
 		id,
 	])
 
 	let oldUser = response.rows[0]
 	if (!oldUser) {
-		return res.send("User does not exist")
+		return res.status(404).send("User does not exist")
 	}
 	const secret = process.env.TOKEN_KEY + oldUser.user_password
 	try {
@@ -141,7 +157,7 @@ const setNewPassword = async (req, res) => {
 		// res.json({ status: "Password Updated" })
 		res.render("index", { email: verify.email, status: "verified" })
 	} catch (error) {
-		res.json({ status: "Something went wrong" })
+		res.status(500).send("Internal server error")
 	}
 }
 

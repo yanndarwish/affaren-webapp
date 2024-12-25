@@ -13,6 +13,7 @@ const getNextId = async (req, res) => {
 		res.status(200).send({ nextSaleId: nextSaleId })
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -20,6 +21,11 @@ const getNextId = async (req, res) => {
 const getMonthSales = async (req, res) => {
 	try {
 		const { year, month } = req.params
+
+		if (!year || !month) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM sales WHERE sale_year = $1 AND sale_month = $2",
 			[year, month]
@@ -28,6 +34,7 @@ const getMonthSales = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -35,6 +42,11 @@ const getMonthSales = async (req, res) => {
 const getDaySales = async (req, res) => {
 	try {
 		const { year, month, day } = req.params
+
+		if (!year || !month || !day) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM sales WHERE sale_year = $1 AND sale_month = $2 AND sale_day = $3",
 			[year, month, day]
@@ -43,6 +55,7 @@ const getDaySales = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 

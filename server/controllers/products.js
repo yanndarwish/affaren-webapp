@@ -14,10 +14,9 @@ const createProduct = async (req, res) => {
 			[name, price, taxe, quantity, barcode]
 		)
 		res.status(200).send(response.rows)
-		return
 	} catch (err) {
 		console.log(err)
-		return
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -28,6 +27,10 @@ const getProducts = async (req, res) => {
 		// pagination (default return all products)
 		const offset = Number(req.query.offset) || ""
 		const limit = Number(req.query.limit) || ""
+
+		if (offset === undefined || limit === undefined) {
+			return res.status(400).send("All fields are required")
+		}
 
 		let pageTotal = 1
 
@@ -78,6 +81,7 @@ const getProducts = async (req, res) => {
 		res.status(200).send(data)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -86,6 +90,10 @@ const patchProduct = async (req, res) => {
 	try {
 		const id = req.params.id
 		const { quantity } = req.body
+
+		if (!id || !quantity) {
+			return res.status(400).send("All fields are required")
+		}
 
 		let qty = parseInt(quantity)
 
@@ -96,6 +104,7 @@ const patchProduct = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -105,6 +114,10 @@ const updateProduct = async (req, res) => {
 		const { id } = req.params
 		const { name, price, quantity, taxe, barcode } = req.body
 
+		if (!id || !name || !price || !quantity || !taxe || !barcode) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"UPDATE products SET product_name = $1, product_price = $2, product_taxe = $3, product_quantity = $4, product_barcode = $5 WHERE product_id = $6 RETURNING *",
 			[name, price, taxe, quantity, barcode, id]
@@ -112,6 +125,7 @@ const updateProduct = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -120,6 +134,10 @@ const deleteProduct = async (req, res) => {
 	try {
 		const id = req.params.id
 
+		if (!id) {
+			return res.status(400).send("Product ID is required")
+		}
+
 		const response = await pool.query(
 			"DELETE FROM products WHERE product_id = $1",
 			[id]
@@ -127,6 +145,7 @@ const deleteProduct = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 

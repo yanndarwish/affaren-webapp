@@ -6,6 +6,11 @@ const pool = require("../db")
 const createTableProduct = async (req, res) => {
 	try {
 		const { products } = req.body
+
+		if (!products) {
+			return res.status(400).send("All fields are required")
+		}
+
 		let responses = []
 
 		products.forEach(async (product) => {
@@ -49,20 +54,20 @@ const createTableProduct = async (req, res) => {
 		res.status(200).send(responses)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
 // GET
 
 // get all tables products
-const getAllTableProducts = async (req, res) => {
+const getAllTableProducts = async (_req, res) => {
 	try {
 		const response = await pool.query("SELECT * FROM table_products")
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -70,6 +75,11 @@ const getAllTableProducts = async (req, res) => {
 const getTableProducts = async (req, res) => {
 	try {
 		const { id } = req.params
+
+		if (!id) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM table_products WHERE table_id = $1",
 			[id]
@@ -77,12 +87,12 @@ const getTableProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
 // get all active table products
-const getActiveTableProducts = async (req, res) => {
+const getActiveTableProducts = async (_req, res) => {
 	try {
 		const response = await pool.query(
 			"SELECT * FROM table_products WHERE table_status = 'active'"
@@ -90,7 +100,7 @@ const getActiveTableProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -98,6 +108,11 @@ const getActiveTableProducts = async (req, res) => {
 const getDayTableProducts = async (req, res) => {
 	try {
 		const { year, month, day } = req.params
+
+		if (!year || !month || !day) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM table_products WHERE table_year = $1 AND table_month = $2 AND table_day = $3",
 			[year, month, day]
@@ -105,7 +120,7 @@ const getDayTableProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -113,6 +128,11 @@ const getDayTableProducts = async (req, res) => {
 const getMonthTableProducts = async (req, res) => {
 	try {
 		const { year, month } = req.params
+
+		if (!year || !month) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM table_products WHERE table_year = $1 AND table_month = $2 AND table_status = 'paid'",
 			[year, month]
@@ -120,7 +140,7 @@ const getMonthTableProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -131,6 +151,10 @@ const updateTableProductPrice = async (req, res) => {
 	try {
 		const { tableId, personId, dishId } = req.params
 
+		if (!tableId || !personId || !dishId) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"UPDATE table_products SET dish_price = 0 WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
 			[tableId, personId, dishId]
@@ -139,7 +163,7 @@ const updateTableProductPrice = async (req, res) => {
 		res.status(200).send(response)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -148,6 +172,11 @@ const updateTableProductStatus = async (req, res) => {
 	try {
 		const { tableId, personId, dishId } = req.params
 		const { status } = req.body
+
+		if (!tableId || !personId || !dishId || !status) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"UPDATE table_products SET dish_status = $1 WHERE table_id = $2 AND table_person = $3 AND dish_id = $4",
 			[status, tableId, personId, dishId]
@@ -156,7 +185,7 @@ const updateTableProductStatus = async (req, res) => {
 		res.status(200).send(response)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -164,6 +193,11 @@ const updateTableProductStatus = async (req, res) => {
 const updateTableStatus = async (req, res) => {
 	try {
 		const { tableId } = req.params
+
+		if (!tableId) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"UPDATE table_products SET table_status = 'paid' WHERE table_id = $1",
 			[tableId]
@@ -172,7 +206,7 @@ const updateTableStatus = async (req, res) => {
 		res.status(200).send(response)
 	} catch (err) {
 		console.log(err)
-		res.status(400).send(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -183,6 +217,10 @@ const deleteTableProducts = async (req, res) => {
 	try {
 		const { tableId } = req.params
 
+		if (!tableId) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"DELETE FROM table_products WHERE table_id = $1",
 			[tableId]
@@ -190,6 +228,7 @@ const deleteTableProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -198,6 +237,10 @@ const deleteTableProduct = async (req, res) => {
 	try {
 		const { tableId, personId, dishId } = req.params
 
+		if (!tableId || !personId || !dishId) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"DELETE FROM table_products WHERE table_id = $1 AND table_person = $2 AND dish_id = $3",
 			[tableId, personId, dishId]
@@ -205,6 +248,7 @@ const deleteTableProduct = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 

@@ -10,6 +10,19 @@ const createSale = async (req, res) => {
 		const { year, month, day, amount, paymentMethods, discount, taxes, user } =
 			req.body
 
+		if (
+			!year ||
+			!month ||
+			!day ||
+			!amount ||
+			!paymentMethods ||
+			!discount ||
+			!taxes ||
+			!user
+		) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"INSERT INTO sales (sale_year, sale_month, sale_day, sale_amount, sale_payment_methods, sale_discount, sale_taxes, sale_user) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
 			[year, month, day, amount, paymentMethods, discount, taxes, user]
@@ -17,6 +30,7 @@ const createSale = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send("Internal server error")
 	}
 }
 
@@ -27,7 +41,15 @@ const getSales = async (req, res) => {
 		const offset = Number(req.query.offset) || ""
 		const limit = Number(req.query.limit) || ""
 
+		if (offset === undefined || limit === undefined) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const { year, month, day } = req.query
+
+		if (!year || !month || !day) {
+			return res.status(400).send("All fields are required")
+		}
 
 		const allSalesRequest = `SELECT * FROM sales WHERE sale_year = ${year} AND sale_month = ${month} AND sale_day = ${day} ORDER BY sale_id DESC`
 
@@ -93,6 +115,10 @@ const getMonthSales = async (req, res) => {
 	try {
 		const { year, month } = req.query
 
+		if (!year || !month) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM sales WHERE sale_year = $1 AND sale_month = $2",
 			[year, month]
@@ -110,6 +136,10 @@ const getSale = async (req, res) => {
 	try {
 		const id = req.params.id
 
+		if (!id) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM sales WHERE sale_id = $1",
 			[id]
@@ -117,6 +147,7 @@ const getSale = async (req, res) => {
 		res.status(200).send(response.rows[0])
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -125,7 +156,15 @@ const updateSale = async (req, res) => {
 	try {
 		const id = req.params.id
 
+		if (!id) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const { amount, paymentMethods, discount, taxes } = req.body
+
+		if (!amount || !paymentMethods || !discount || !taxes) {
+			return res.status(400).send("All fields are required")
+		}
 
 		const response = await pool.query(
 			"UPDATE sales SET sale_amount = $1, sale_payment_methods = $2, sale_discount = $3, sale_taxes = $4 WHERE sale_id = $5",
@@ -134,6 +173,7 @@ const updateSale = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -142,12 +182,17 @@ const deleteSale = async (req, res) => {
 	try {
 		const id = req.params.id
 
+		if (!id) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query("DELETE FROM sales WHERE sale_id = $1", [
 			id,
 		])
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -158,6 +203,11 @@ const createSaleProduct = async (req, res) => {
 		const saleId = req.params.id
 
 		const { products, year, month, day } = req.body
+
+		if (!products || !year || !month || !day) {
+			return res.status(400).send("All fields are required")
+		}
+
 		let responses = []
 
 		products.forEach(async (product) => {
@@ -172,6 +222,7 @@ const createSaleProduct = async (req, res) => {
 		res.status(200).send(responses)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -180,6 +231,10 @@ const getSaleProducts = async (req, res) => {
 	try {
 		const id = req.params.id
 
+		if (!id) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM sales_products WHERE sale_id = $1",
 			[id]
@@ -187,6 +242,7 @@ const getSaleProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -195,6 +251,10 @@ const deleteSaleProducts = async (req, res) => {
 	try {
 		const id = req.params.id
 
+		if (!id) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"DELETE FROM sales_products WHERE sale_id = $1",
 			[id]
@@ -202,6 +262,7 @@ const deleteSaleProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -210,6 +271,10 @@ const getMonthSalesProducts = async (req, res) => {
 	try {
 		const { year, month } = req.params
 
+		if (!year || !month) {
+			return res.status(400).send("All fields are required")
+		}
+
 		const response = await pool.query(
 			"SELECT * FROM sales_products WHERE sale_year = $1 AND sale_month = $2",
 			[year, month]
@@ -217,6 +282,7 @@ const getMonthSalesProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -224,6 +290,10 @@ const getMonthSalesProducts = async (req, res) => {
 const getDaySalesProducts = async (req, res) => {
 	try {
 		const { year, month, day } = req.params
+
+		if (!year || !month || !day) {
+			return res.status(400).send("All fields are required")
+		}
 
 		const response = await pool.query(
 			"SELECT * FROM sales_products WHERE sale_year = $1 AND sale_month = $2 AND sale_day = $3",
@@ -233,9 +303,9 @@ const getDaySalesProducts = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		res.status(500).send(err)
 	}
 }
-
 
 module.exports = {
 	createSale,
