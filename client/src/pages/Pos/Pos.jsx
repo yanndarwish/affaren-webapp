@@ -15,11 +15,13 @@ import { Card } from "../../components/ui/card"
 import { TotalSection } from "../../components/POS/totalSection/index.js"
 import { useSale } from "../../lib/providers/sale"
 import { useNotify } from "../../lib/hooks/useNotify/index.js"
+import { useConfig } from "../../lib/hooks/useConfig/index.js"
 
 const Pos = () => {
 	const [selectedTab, setSelectedTab] = useState(tabs[0].name)
-	const sale = useSale()
 	const { notifySuccess, notifyInfo } = useNotify()
+	const sale = useSale()
+	const { isActiveComponent } = useConfig()
 
 	const handleDiscount = () => {
 		setSelectedTab(tabs[2].name)
@@ -64,7 +66,11 @@ const Pos = () => {
 		}
 	}
 
-	const displayedTabs = sale.isActiveDiscount ? tabs : tabs.slice(0, 2)
+	const displayedTabs = () => {
+		return tabs.filter((tab) => {
+			return isActiveComponent("pos", tab.name)
+		})
+	}
 
 	return (
 		<Stack
@@ -75,9 +81,13 @@ const Pos = () => {
 		>
 			<Stack direction="column" spacing={2} className="w-full h-full relative">
 				<PageTitle title={`Sale N°${sale.id ?? 1}`} />
-				<BarcodeSection onSuccess={updateCart} />
+				{isActiveComponent("pos", "barcode") && (
+					<BarcodeSection onSuccess={updateCart} />
+				)}
 				<Stack className="h-full overflow-y-auto">
-					<Cart onDiscount={handleDiscount} onBookmark={handleBookmark} />
+					{isActiveComponent("pos", "cart") && (
+						<Cart onDiscount={handleDiscount} onBookmark={handleBookmark} />
+					)}
 				</Stack>
 				<Stack className="sticky bottom-0 w-full">
 					<TotalSection />
@@ -91,13 +101,13 @@ const Pos = () => {
 					className="w-full h-full"
 				>
 					<TabsList className="w-full">
-						{displayedTabs.map((tab) => (
+						{displayedTabs().map((tab) => (
 							<TabsTrigger key={tab.name} value={tab.name} className="w-full">
 								{tab.label}
 							</TabsTrigger>
 						))}
 					</TabsList>
-					{displayedTabs.map((tab) => (
+					{displayedTabs().map((tab) => (
 						<TabsContent key={tab.name} value={tab.name}>
 							{tab.component}
 						</TabsContent>

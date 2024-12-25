@@ -107,7 +107,7 @@ export default function InventoryTable({
 	}
 
 	return (
-		<Card className="overflow-hidden h-full">
+		<Card className="flex flex-col h-[calc(100vh-195px)]  overflow-hidden">
 			<div className="flex flex-col h-full relative">
 				{/* Sticky Header */}
 				<Table>
@@ -125,7 +125,7 @@ export default function InventoryTable({
 				{/* Scrollable Body */}
 				<div id="scrollable-body" className="flex-1 overflow-auto">
 					<Table>
-						<TableBody id="scrollable-body" className="flex-1 overflow-hidden">
+						<TableBody>
 							{/* Empty state rows to maintain height */}
 							{!products || products.length === 0 ? (
 								<EmptyData

@@ -19,25 +19,17 @@ import { Input } from "../../components/ui/input"
 
 const Inventory = () => {
 	const { notifyError } = useNotify()
-	const loggedIn = useSelector((state) => state.login.loggedIn)
-	const navigate = useNavigate()
-	const theme = useSelector((state) => state.theme.theme)
-	const [pageNumber, setPageNumber] = useState(1)
-	const [searchString, setSearchString] = useState("")
-	const [barcode, setBarcode] = useState("")
-	const [barcodeValue, setBarcodeValue] = useState("")
-	const [barcodeSearch, setBarcodeSearch] = useState(false)
+	let [searchParams] = useSearchParams()
+	const createProductController = useModal()
+	
+	const [name, setName] = useState("")
 	const [products, setProducts] = useState([])
 	const [pagination, setPagination] = useState({
 		pageSize: 25,
 		pageNumber: 1,
 		pageTotal: 0,
 	})
-
-	const createProductController = useModal()
-	let [searchParams] = useSearchParams()
-	const [name, setName] = useState("")
-
+	
 	const barcodeParam = searchParams.get("new")
 
 	const queryGetProducts = useQuery({

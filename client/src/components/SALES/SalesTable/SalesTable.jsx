@@ -214,7 +214,7 @@ export default function SalesTable() {
 						total={totalTotal}
 					/>
 				</Stack>
-				<Card className="flex flex-col h-[calc(100%-115px)]">
+				<Card className="flex flex-col h-[calc(100%-115px)] overflow-hidden">
 					<div className="flex flex-col h-full relative">
 						{/* Sticky Header */}
 						<Table>

@@ -31,7 +31,7 @@ const Dashboard = () => {
 	return (
 		<Stack direction="column" spacing={3} className="w-full h-full">
 			<PageTitle title="Dashboard" />
-			<Stack direction="column" spacing={2} className="w-full pb-6">
+			<Stack direction="column" spacing={2} className="w-full">
 				<Stack direction="row" spacing={2} className="w-full justify-between">
 					<DateNavigator
 						selectedDate={selectedDate}
@@ -45,7 +45,7 @@ const Dashboard = () => {
 					/>
 					<DayTotal date={selectedDate} />
 				</Stack>
-				<Stack spacing={2} className="w-full">
+				{/* <Stack spacing={2} className="w-full"> */}
 					<MonthSalesChart
 						monthString={selectedDate?.toLocaleString("en", {
 							month: "long",
@@ -61,7 +61,7 @@ const Dashboard = () => {
 							<TableBestSellers date={selectedDate} />
 						</Card>
 					</Stack> */}
-				</Stack>
+				{/* </Stack> */}
 			</Stack>
 		</Stack>
 	)

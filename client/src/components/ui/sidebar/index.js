@@ -38,7 +38,7 @@ function useSidebar() {
 
 const SidebarProvider = React.forwardRef((props, ref) => {
   const {
-    defaultOpen = true,
+    defaultOpen = false,
     open: openProp,
     onOpenChange: setOpenProp,
     className,

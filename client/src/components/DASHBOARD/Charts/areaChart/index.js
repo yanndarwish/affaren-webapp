@@ -28,6 +28,7 @@ import {
 	Table,
 	TableBody,
 	TableCell,
+	TableFooter,
 	TableHead,
 	TableHeader,
 	TableRow,
@@ -109,7 +110,7 @@ export function MonthSalesChart({ monthString, month, year }) {
 	}, [month, year])
 
 	return (
-		<Card className="max-w-[calc(100vw-3em)]">
+		<Card className="">
 			<CardHeader>
 				<CardTitle>
 					<Stack
@@ -120,7 +121,10 @@ export function MonthSalesChart({ monthString, month, year }) {
 						Sales
 						<Stack direction="row" spacing={2}>
 							{selectedTab === "table" && (
-								<Button onClick={exportToExcel} disabled={chartData.length === 0}>
+								<Button
+									onClick={exportToExcel}
+									disabled={chartData.length === 0}
+								>
 									Export to Excel
 								</Button>
 							)}
@@ -148,7 +152,7 @@ export function MonthSalesChart({ monthString, month, year }) {
 					Showing total sales for {monthString} {year}
 				</CardDescription>
 			</CardHeader>
-			<CardContent className="h-[calc(100vh-340px)]">
+			<CardContent className="h-[calc(100vh-310px)]">
 				{selectedTab === "chart" ? (
 					<Card className="h-full relative overflow-hidden">
 						{chartData.length === 0 ? (
@@ -428,83 +432,144 @@ const TableMonthSales = ({ month, year }) => {
 	}, [month, year])
 
 	return (
-		<Card className="flex flex-col h-full relative overflow-hidden">
-			{/* Sticky Header */}
-			<Table id="month-sales-table">
-				<TableHeader className="sticky top-0 bg-white z-10 border-b">
-					<TableRow>
-						{columns.map((column, index) => (
-							<TableHead key={index} className={column.className}>
-								{column.label}
-							</TableHead>
-						))}
-					</TableRow>
-				</TableHeader>
-				{/* <div id="scrollable-body" className="flex-1 overflow-auto"> */}
-				<TableBody className="flex-1 overflow-auto">
-					{/* Empty state rows to maintain height */}
-					{!data || data.length === 1 ? (
-						<EmptyData
-							message="No sales data available"
-							span={columns.length + 1}
-							className="h-[calc(100vh-350px)]"
-						/>
-					) : (
-						data?.map((sale, i) => (
-							<TableRow
-								key={i}
-								className={
-									i === data.length - 1
-										? "bg-gray-100 font-bold sticky bottom-0"
-										: ""
-								}
-							>
-								<TableCell className="text-left">{sale.day}</TableCell>
-								<TableCell className="text-right">{sale.total1}</TableCell>
-								<TableCell className="text-right">{sale.total2}</TableCell>
-								<TableCell className="text-right">{sale.total3}</TableCell>
-								<TableCell className="text-right">{sale.ht1}</TableCell>
-								<TableCell className="text-right">{sale.ht2}</TableCell>
-								<TableCell className="text-right">{sale.ht3}</TableCell>
-								<TableCell className="text-right">{sale.tva1}</TableCell>
-								<TableCell className="text-right">{sale.tva2}</TableCell>
-								<TableCell className="text-right">{sale.tva3}</TableCell>
-								<TableCell
-									className={`text-right ${
-										i === data.length - 1
-											? "bg-gray-100"
-											: "bg-gray-50 font-medium"
-									}`}
-								>
-									{sale.cash}
+		<Card className="flex flex-col h-[calc(100vh-200px)]">
+			<div className="flex flex-col h-full">
+				{/* Sticky Header */}
+				<div className="sticky top-0 z-20 bg-white border-b">
+					<Table>
+						<TableHeader>
+							<TableRow>
+								{columns.map((column, index) => (
+									<TableHead key={index} className={column.className}>
+										{column.label}
+									</TableHead>
+								))}
+							</TableRow>
+						</TableHeader>
+					</Table>
+				</div>
+				<div id="scrollable-body" className="flex-1 overflow-auto">
+					<Table>
+						<TableBody>
+							{/* Empty state rows to maintain height */}
+							{!data || data.length === 1 ? (
+								<EmptyData
+									message="No sales data available"
+									span={columns.length + 1}
+									className="h-[calc(100vh-350px)]"
+								/>
+							) : (
+								data?.map(
+									(sale, i) =>
+										i < data.length - 1 && (
+											<TableRow
+												key={i}
+												className={
+													i === data.length - 1
+														? "bg-gray-100 font-bold sticky bottom-0"
+														: ""
+												}
+											>
+												<TableCell className="text-left">{sale.day}</TableCell>
+												<TableCell className="text-right">
+													{sale.total1}
+												</TableCell>
+												<TableCell className="text-right">
+													{sale.total2}
+												</TableCell>
+												<TableCell className="text-right">
+													{sale.total3}
+												</TableCell>
+												<TableCell className="text-right">{sale.ht1}</TableCell>
+												<TableCell className="text-right">{sale.ht2}</TableCell>
+												<TableCell className="text-right">{sale.ht3}</TableCell>
+												<TableCell className="text-right">
+													{sale.tva1}
+												</TableCell>
+												<TableCell className="text-right">
+													{sale.tva2}
+												</TableCell>
+												<TableCell className="text-right">
+													{sale.tva3}
+												</TableCell>
+												<TableCell
+													className={`text-right ${
+														i === data.length - 1
+															? "bg-gray-100"
+															: "bg-gray-50 font-medium"
+													}`}
+												>
+													{sale.cash}
+												</TableCell>
+												<TableCell
+													className={`text-right ${
+														i === data.length - 1
+															? "bg-gray-100"
+															: "bg-gray-50 font-medium"
+													}`}
+												>
+													{sale.card}
+												</TableCell>
+												<TableCell
+													className={`text-right ${
+														i === data.length - 1
+															? "bg-gray-100"
+															: "bg-gray-50 font-medium"
+													}`}
+												>
+													{sale.check}
+												</TableCell>
+												<TableCell className="text-right font-bold bg-gray-100">
+													{sale.total}
+												</TableCell>
+											</TableRow>
+										)
+								)
+							)}
+						</TableBody>
+						<TableFooter className="sticky bottom-0 bg-white border-t">
+							<TableRow className="bg-gray-100 font-bold">
+								<TableCell className="text-left">
+									{data[data.length - 1]?.day}
 								</TableCell>
-								<TableCell
-									className={`text-right ${
-										i === data.length - 1
-											? "bg-gray-100"
-											: "bg-gray-50 font-medium"
-									}`}
-								>
-									{sale.card}
+								<TableCell className="text-right">
+									{data[data.length - 1]?.total1}
 								</TableCell>
-								<TableCell
-									className={`text-right ${
-										i === data.length - 1
-											? "bg-gray-100"
-											: "bg-gray-50 font-medium"
-									}`}
-								>
-									{sale.check}
+								<TableCell className="text-right">
+									{data[data.length - 1]?.total2}
 								</TableCell>
+								<TableCell className="text-right">
+									{data[data.length - 1]?.total3}
+								</TableCell>
+								<TableCell className="text-right">
+									{data[data.length - 1]?.ht1}
+								</TableCell>
+								<TableCell className="text-right">
+									{data[data.length - 1]?.ht2}
+								</TableCell>
+								<TableCell className="text-right">
+									{data[data.length - 1]?.ht3}
+								</TableCell>
+								<TableCell className="text-right">
+									{data[data.length - 1]?.tva1}
+								</TableCell>
+								<TableCell className="text-right">
+									{data[data.length - 1]?.tva2}
+								</TableCell>
+								<TableCell className="text-right">
+									{data[data.length - 1]?.tva3}
+								</TableCell>
+								<TableCell>{data[data.length - 1]?.cash}</TableCell>
+								<TableCell>{data[data.length - 1]?.card}</TableCell>
+								<TableCell>{data[data.length - 1]?.check}</TableCell>
 								<TableCell className="text-right font-bold bg-gray-100">
-									{sale.total}
+									{data[data.length - 1]?.total}
 								</TableCell>
 							</TableRow>
-						))
-					)}
-				</TableBody>
-				{/* </div> */}
-			</Table>
+						</TableFooter>
+					</Table>
+				</div>
+			</div>
 		</Card>
 	)
 }

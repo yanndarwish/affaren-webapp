@@ -26,6 +26,7 @@ import { Modal, useModal } from "../../shared/modal"
 import { NumPad } from "../../common/NumPad/NumPad"
 import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
+import { useConfig } from "../../../lib/hooks/useConfig"
 
 const COLUMNS = [
 	{ label: "Name", field: "name", className: "" },
@@ -38,7 +39,6 @@ const Cart = ({ onDiscount, onBookmark }) => {
 	const { notifySuccess, notifyInfo } = useNotify()
 	const modalRefund = useModal()
 	const modalBookmark = useModal()
-
 	// Product Management
 	const handleQuantityUpdate = (id, value) => {
 		const product = findProduct(id)
@@ -221,41 +221,49 @@ const Cart = ({ onDiscount, onBookmark }) => {
 }
 
 // Subcomponents
-const CartHeader = ({ sale, onRefund, onBookmark, onDiscount, onClear }) => (
-	<CardHeader>
-		<Stack direction="row" className="space-x-4 justify-between">
-			<CardTitle>Shopping Cart</CardTitle>
-			<Stack direction="row" spacing={2}>
-				<Button
-					onClick={onRefund}
-					variant="outline"
-					disabled={sale.products.length > 0}
-				>
-					<Undo2 />
-				</Button>
-				<Button
-					onClick={onBookmark}
-					variant="outline"
-					disabled={sale.products.length === 0}
-				>
-					<BookmarkPlus />
-				</Button>
-				{sale.isActiveDiscount && (
-					<Button
-						onClick={onDiscount}
-						disabled={sale.products.length === 0}
-						variant="outline"
-					>
-						<BadgePercent />
+const CartHeader = ({ sale, onRefund, onBookmark, onDiscount, onClear }) => {
+	const { isActiveComponent } = useConfig()
+
+	return (
+		<CardHeader>
+			<Stack direction="row" className="space-x-4 justify-between">
+				<CardTitle>Shopping Cart</CardTitle>
+				<Stack direction="row" spacing={2}>
+					{isActiveComponent("pos", "refund") && (
+						<Button
+							onClick={onRefund}
+							variant="outline"
+							disabled={sale.products.length > 0}
+						>
+							<Undo2 />
+						</Button>
+					)}
+					{isActiveComponent("pos", "bookmarks") && (
+						<Button
+							onClick={onBookmark}
+							variant="outline"
+							disabled={sale.products.length === 0}
+						>
+							<BookmarkPlus />
+						</Button>
+					)}
+					{isActiveComponent("pos", "discount") && (
+						<Button
+							onClick={onDiscount}
+							disabled={sale.products.length === 0}
+							variant="outline"
+						>
+							<BadgePercent />
+						</Button>
+					)}
+					<Button onClick={onClear} variant="destructive">
+						<Trash2Icon />
 					</Button>
-				)}
-				<Button onClick={onClear} variant="destructive">
-					<Trash2Icon />
-				</Button>
+				</Stack>
 			</Stack>
-		</Stack>
-	</CardHeader>
-)
+		</CardHeader>
+	)
+}
 
 const CartContent = ({
 	sale,

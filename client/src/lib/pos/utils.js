@@ -6,7 +6,7 @@ import { CardBookmark } from "../../components/POS/cardBookmark"
 
 export const tabs = [
 	{
-		name: "no_barcode",
+		name: "no-barcode",
 		label: (
 			<div className="relative flex items-center gap-2">
 				<Slash className="absolute left-0 w-4 h-4" />
@@ -16,7 +16,7 @@ export const tabs = [
 		component: <CardNoBarcode />,
 	},
 	{
-		name: "shorcuts",
+		name: "shortcuts",
 		label: <Layers2 className="w-4 h-4" />,
 		component: <CardShortcut />,
 	},
@@ -26,7 +26,7 @@ export const tabs = [
 		component: <CardDiscount />,
 	},
 	{
-		name: "bookmark",
+		name: "bookmarks",
 		label: <BookmarkCheck className="w-4 h-4" />,
 		component: <CardBookmark />,
 	},
