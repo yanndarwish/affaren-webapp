@@ -212,7 +212,7 @@ const ProductCard = ({ card, onDelete = () => null }) => {
 
 	return (
 		<Stack
-			className="relative w-full h-20 bg-slate-900 text-white rounded-md flex items-center justify-center"
+			className="relative long-press w-full h-20 bg-slate-900 text-white rounded-md flex items-center justify-center"
 			{...handlers}
 		>
 			{card.card_name}
