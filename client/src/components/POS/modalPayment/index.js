@@ -155,7 +155,6 @@ export const ModalPayment = ({ controller }) => {
 
 	const finalizeSale = async (confirmedSale) => {
 		try {
-			console.log({ confirmedSale })
 			await queries.postSale.send({
 				sale: {
 					...confirmedSale,
@@ -190,21 +189,7 @@ export const ModalPayment = ({ controller }) => {
 	}
 
 	const handleSaleCompletion = (confirmedSale) => {
-		const totalProductsQuantity = sale.products.reduce(
-			(total, product) => total + product.quantity,
-			0
-		)
-
-		const totalPaidQuantity = sale.paidProducts.reduce(
-			(total, product) => total + product.quantity,
-			0
-		)
-
-		if (totalPaidQuantity === totalProductsQuantity) {
-			sale.resetSale()
-		} else {
-			sale.updateSale({ paidProducts: productsToUpdate(confirmedSale) })
-		}
+		sale.updateSale({ paidProducts: newPaidProducts(confirmedSale) })
 
 		if (sale.bookmarkId) {
 			sale.removeBookmark(sale.bookmarkId)
@@ -224,10 +209,77 @@ export const ModalPayment = ({ controller }) => {
 		}
 	}
 
+	// const productsToUpdate = (sale) => {
+	// 	return sale.selectedProducts.length > 0
+	// 		? sale.selectedProducts
+	// 		: sale.products
+	// }
+
 	const productsToUpdate = (sale) => {
-		return sale.selectedProducts.length > 0
-			? sale.selectedProducts
-			: sale.products
+		// First determine which products to use as base
+		const baseProducts =
+			sale.selectedProducts.length > 0 ? sale.selectedProducts : sale.products
+
+		// Filter out fully paid products and adjust quantities for partially paid ones
+		return baseProducts.reduce((acc, product) => {
+			// Find if product has been paid
+			const paidProduct = sale.paidProducts.find((p) => p.id === product.id)
+			const originalProduct = sale.products.find((p) => p.id === product.id)
+
+			// Skip if product is fully paid
+			if (paidProduct && paidProduct.quantity >= originalProduct.quantity) {
+				return acc
+			}
+
+			// If product is partially paid, adjust quantity
+			if (paidProduct) {
+				const remainingQuantity =
+					originalProduct.quantity - paidProduct.quantity
+				// Only include if there's remaining quantity
+				if (remainingQuantity > 0) {
+					return [
+						...acc,
+						{
+							...product,
+							quantity: Math.min(product.quantity, remainingQuantity),
+						},
+					]
+				}
+				return acc
+			}
+
+			// If not paid at all, include as is
+			return [...acc, product]
+		}, [])
+	}
+
+	const newPaidProducts = (confirmedSale) => {
+		const newProducts = productsToUpdate(confirmedSale)
+
+		// Start with existing paid products
+		const updatedPaidProducts = [...sale.paidProducts]
+
+		newProducts.forEach((newProduct) => {
+			// Find if product already exists in paid products
+			const existingPaidProductIndex = updatedPaidProducts.findIndex(
+				(p) => p.id === newProduct.id
+			)
+
+			if (existingPaidProductIndex !== -1) {
+				// Update quantity if product exists
+				updatedPaidProducts[existingPaidProductIndex] = {
+					...updatedPaidProducts[existingPaidProductIndex],
+					quantity:
+						updatedPaidProducts[existingPaidProductIndex].quantity +
+						newProduct.quantity,
+				}
+			} else {
+				// Add new product if it doesn't exist
+				updatedPaidProducts.push(newProduct)
+			}
+		})
+
+		return updatedPaidProducts
 	}
 
 	// Modal handlers
@@ -269,12 +321,6 @@ export const ModalPayment = ({ controller }) => {
 			selectedTab: sale.isRefund ? "cash" : "card",
 		}))
 	}, [controller.data, sale.isRefund])
-
-	useEffect(() => {
-		if (sale.paidProducts.length === sale.products.length) {
-			handleSaleCompletion(sale)
-		}
-	}, [sale.paidProducts])
 
 	return (
 		<PaymentModalContent
@@ -327,8 +373,9 @@ const PaymentModalContent = ({
 	)
 }
 
-const CompletedPaymentView = ({ giveBack, actualSale }) => (
-	<Stack direction="column" spacing={4}>
+const CompletedPaymentView = ({ giveBack, actualSale }) => {
+	return (
+		<Stack direction="column" spacing={4}>
 		{giveBack > 0 && (
 			<h1 className="text-2xl font-extrabold text-center">
 				Give back : {giveBack} €
@@ -336,7 +383,7 @@ const CompletedPaymentView = ({ giveBack, actualSale }) => (
 		)}
 		<SaleDetails sale={actualSale} />
 	</Stack>
-)
+)}
 
 const ActivePaymentView = ({
 	sale,

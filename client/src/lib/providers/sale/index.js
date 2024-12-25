@@ -10,6 +10,7 @@ const SaleContext = createContext()
 
 const initialState = {
 	id: 0,
+	date: "",
 	products: [],
 	table: "",
 	amount: "00.00",
@@ -26,12 +27,31 @@ const initialState = {
 
 // Helper function to get products to calculate
 const getProductsToCalculate = (sale) => {
-	const baseProducts =
-		sale.selectedProducts.length > 0 ? sale.selectedProducts : sale.products
+	if (sale.selectedProducts.length > 0) {
+		return sale.selectedProducts
+	}
 
-	return baseProducts.filter(
-		(product) => !sale.paidProducts.some((p) => p.id === product.id)
-	)
+	const baseProducts = sale.products
+
+	return baseProducts.reduce((acc, product) => {
+		// Find the original product to get total quantity
+		const originalProduct = sale.products.find((p) => p.id === product.id)
+		const paidProduct = sale.paidProducts.find((p) => p.id === product.id)
+
+		// If not paid at all, include the selected product as is
+		if (!paidProduct) {
+			return [...acc, product]
+		}
+
+		// If fully paid (compared to original quantity), don't include
+		if (paidProduct.quantity >= originalProduct.quantity) {
+			return acc
+		}
+
+		// For partially paid, include the selected product
+		// (the quantity is already adjusted in the selection)
+		return [...acc, { ...product, quantity: originalProduct.quantity - paidProduct.quantity }]
+	}, [])
 }
 
 const SaleProvider = ({ children }) => {
@@ -75,6 +95,22 @@ const SaleProvider = ({ children }) => {
 		setSale((current) => {
 			const newSale = { ...current, ...updates }
 
+			const totalProductsQuantity = newSale.products.reduce(
+				(total, product) => total + product.quantity,
+				0
+			)
+
+			const totalPaidQuantity = newSale.paidProducts.reduce(
+				(total, product) => total + product.quantity,
+				0
+			)
+
+			if (
+				totalPaidQuantity === totalProductsQuantity &&
+				newSale.amount !== "00.00"
+			) {
+				resetSale()
+			}
 			// Automatically update amount and taxes when products change
 			if (
 				updates.products ||
@@ -82,6 +118,7 @@ const SaleProvider = ({ children }) => {
 				updates.paidProducts
 			) {
 				const productsToCalculate = getProductsToCalculate(newSale)
+
 				newSale.amount = getAmount(productsToCalculate)
 				newSale.taxes = updateTaxes(productsToCalculate)
 			}
@@ -95,7 +132,7 @@ const SaleProvider = ({ children }) => {
 	const resetSale = () => {
 		const resetState = {
 			...initialState,
-			date: new Date().toISOString(),
+			date: "",
 			user: sessionUser?.firstName || "",
 		}
 		setSale(resetState)

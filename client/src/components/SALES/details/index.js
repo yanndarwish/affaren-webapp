@@ -59,17 +59,13 @@ export const SaleDetails = ({ sale, readOnly = false }) => {
 
 	useEffect(() => {
 		if (sale.id) {
-			if (sale.paidProducts?.length > 0) {
-				setProducts(formatSaleProducts(sale.paidProducts))
-			} else if (sale.products) {
+			if (sale.products) {
 				setProducts(formatSaleProducts(sale.products))
 			} else {
 				queryGetProducts.send(sale.id)
 			}
 		}
 	}, [sale?.id])
-
-	console.log(sale)
 
 	return (
 		<Stack className="space-y-4">

@@ -27,6 +27,7 @@ import { NumPad } from "../../common/NumPad/NumPad"
 import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
 import { useConfig } from "../../../lib/hooks/useConfig"
+import { cn } from "../../../lib/utils"
 
 const COLUMNS = [
 	{ label: "Name", field: "name", className: "" },
@@ -345,41 +346,69 @@ const CartRow = ({
 	onRemove = () => null,
 	onAddToDiscount = () => null,
 }) => {
-	const isPaid = sale.paidProducts.some((p) => p.id === product.id)
-	const isSelected = sale.selectedProducts.some((p) => p.id === product.id)
-	const selectedProduct = sale.selectedProducts.find((p) => p.id === product.id)
-
-	const isFullyPaid = () => {
+	const getProductInfo = (product, sale) => {
 		const paidProduct = sale.paidProducts.find((p) => p.id === product.id)
-		if (!paidProduct) return false
-		return paidProduct.quantity === product.quantity
+		const selectedProduct = sale.selectedProducts.find(
+			(p) => p.id === product.id
+		)
+		const isSelected = !!selectedProduct
+
+		const info = {
+			isSelected,
+			selectedProduct,
+			paidProduct,
+			isFullyPaid: false,
+			isPartiallyPaid: false,
+			displayQuantity: product.quantity - (paidProduct?.quantity || 0),
+			price: product.price * product.quantity,
+			addIsDisabled: false,
+			removeIsDisabled: false,
+		}
+
+		// Update paid status
+		if (paidProduct) {
+			info.isFullyPaid = paidProduct.quantity === product.quantity
+			info.isPartiallyPaid = paidProduct.quantity < product.quantity
+			info.displayQuantity = product.quantity - paidProduct.quantity
+			info.price = product.price * info.displayQuantity
+		}
+
+		// Update quantity and price if selected
+		if (selectedProduct) {
+			// info.displayQuantity = selectedProduct.quantity
+			info.price = selectedProduct.price * selectedProduct.quantity
+		}
+
+		// Update disabled states
+		info.addIsDisabled =
+			info.isFullyPaid || selectedProduct?.quantity === info.displayQuantity
+		info.removeIsDisabled = info.isFullyPaid || selectedProduct?.quantity === 1
+
+		return info
 	}
 
-	const fullyPaid = isFullyPaid()
-	const price = isSelected
-		? selectedProduct.price * selectedProduct.quantity
-		: product.price * product.quantity
+	const {
+		isSelected,
+		isFullyPaid,
+		displayQuantity,
+		price,
+		addIsDisabled,
+		removeIsDisabled,
+	} = getProductInfo(product, sale)
 
 	const handleQuantityUpdate = (id, value) => {
-		if (isSelected) {
-			onSelectedQuantityUpdate(id, value)
-		} else {
-			onQuantityUpdate(id, value)
-		}
+		const handler = isSelected ? onSelectedQuantityUpdate : onQuantityUpdate
+		handler(id, value)
 	}
-
-	const addIsDisabled =
-		fullyPaid || selectedProduct?.quantity === product.quantity
-	const removeIsDisabled = fullyPaid || selectedProduct?.quantity === 1
 
 	return (
 		<TableRow
-			className={fullyPaid ? "opacity-50 line-through bg-green-300/50" : ""}
+			className={isFullyPaid ? "opacity-50 line-through bg-green-300/50" : ""}
 		>
 			<TableCell className="font-medium">
 				<Checkbox
 					checked={isSelected}
-					disabled={fullyPaid} // Changed from function to boolean
+					disabled={isFullyPaid}
 					onCheckedChange={() => onSelect(product)}
 					aria-label="Select row"
 				/>
@@ -389,19 +418,20 @@ const CartRow = ({
 			<TableCell>
 				<QuantityControl
 					product={product}
+					productInfo={getProductInfo(product, sale)}
 					addIsDisabled={addIsDisabled}
 					removeIsDisabled={removeIsDisabled}
 					onUpdate={handleQuantityUpdate}
 				/>
 			</TableCell>
 			<TableCell className="text-right">
-				{Math.round(price * 100) / 100}
+				{(Math.round(price * 100) / 100).toFixed(2)}
 			</TableCell>
 			<TableCell className="text-right">
 				<ProductActions
 					product={product}
 					sale={sale}
-					disabled={fullyPaid} // Changed from function to boolean
+					disabled={isFullyPaid}
 					onRemove={onRemove}
 					onAddToDiscount={onAddToDiscount}
 				/>
@@ -412,32 +442,38 @@ const CartRow = ({
 
 const QuantityControl = ({
 	product,
+	productInfo,
+	onUpdate,
 	addIsDisabled,
 	removeIsDisabled,
-	onUpdate,
 }) => {
-	const sale = useSale()
-
-	const selectedProduct = sale.selectedProducts.find((p) => p.id === product.id)
-
-	const quantity = selectedProduct ? selectedProduct.quantity : product.quantity
-
 	return (
 		<div className="flex items-center gap-8 justify-center">
 			<RemoveIcon
-				data-id={product.id}
+				className={cn(
+					"cursor-pointer",
+					removeIsDisabled && "opacity-50 cursor-not-allowed"
+				)}
 				onClick={() => !removeIsDisabled && onUpdate(product.id, -1)}
-				disabled={removeIsDisabled}
 			/>
 			<span className="text-sm text-gray-500">
-				{quantity !== product.quantity
-					? `${quantity} / ${product.quantity}`
-					: quantity}
+				{productInfo.isSelected
+					? productInfo.selectedProduct?.quantity +
+					  " / " +
+					  productInfo.displayQuantity
+					: productInfo.displayQuantity}
+				{productInfo.isPartiallyPaid && (
+					<span className="text-xs text-orange-500 ml-1">
+						({productInfo.paidProduct.quantity} paid)
+					</span>
+				)}
 			</span>
 			<AddIcon
-				data-id={product.id}
+				className={cn(
+					"cursor-pointer",
+					addIsDisabled && "opacity-50 cursor-not-allowed"
+				)}
 				onClick={() => !addIsDisabled && onUpdate(product.id, 1)}
-				disabled={addIsDisabled}
 			/>
 		</div>
 	)

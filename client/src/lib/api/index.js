@@ -102,7 +102,6 @@ export const deleteProduct = async (id) => {
 
 export const openDrawer = async () => {
 	const response = await post("print/drawer")
-	console.log(response)
 	return response
 }
 
