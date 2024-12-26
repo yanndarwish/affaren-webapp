@@ -10,25 +10,25 @@ import {
 } from "../../components/ui/tabs"
 
 import { PageTitle } from "../../components/shared/pageTitle"
-import { tabs } from "../../lib/pos/utils.js"
 import { Card } from "../../components/ui/card"
 import { TotalSection } from "../../components/POS/totalSection/index.js"
 import { useSale } from "../../lib/providers/sale"
 import { useNotify } from "../../lib/hooks/useNotify/index.js"
 import { useConfig } from "../../lib/hooks/useConfig/index.js"
+import { config } from "./config.js"
 
 const Pos = () => {
-	const [selectedTab, setSelectedTab] = useState(tabs[0].name)
+	const [selectedTab, setSelectedTab] = useState(config.tabs[0].name)
 	const { notifySuccess, notifyInfo } = useNotify()
-	const sale = useSale()
 	const { isActiveComponent } = useConfig()
+	const sale = useSale()
 
 	const handleDiscount = () => {
-		setSelectedTab(tabs[2].name)
+		setSelectedTab(config.tabs[2].name)
 	}
 
 	const handleBookmark = () => {
-		setSelectedTab(tabs[3].name)
+		setSelectedTab(config.tabs[3].name)
 	}
 
 	const updateCart = (data) => {
@@ -67,8 +67,8 @@ const Pos = () => {
 	}
 
 	const displayedTabs = () => {
-		return tabs.filter((tab) => {
-			return isActiveComponent("pos", tab.name)
+		return config.tabs.filter((tab) => {
+			return isActiveComponent(config.name, tab.name)
 		})
 	}
 
