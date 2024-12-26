@@ -431,6 +431,7 @@ const CartRow = ({
 				<ProductActions
 					product={product}
 					sale={sale}
+					isSelected={isSelected}
 					disabled={isFullyPaid}
 					onRemove={onRemove}
 					onAddToDiscount={onAddToDiscount}
@@ -482,6 +483,7 @@ const QuantityControl = ({
 const ProductActions = ({
 	product,
 	sale,
+	isSelected,
 	disabled,
 	onRemove,
 	onAddToDiscount,
@@ -492,7 +494,7 @@ const ProductActions = ({
 				variant="outline"
 				size="icon"
 				onClick={() => onAddToDiscount([product])}
-				disabled={disabled}
+				disabled={disabled || !isSelected}
 			>
 				<BadgePercent />
 			</Button>

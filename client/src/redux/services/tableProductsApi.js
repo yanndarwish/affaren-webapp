@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import store from "../store/store"
-import { ip } from "../ip"
+const ip = "localhost"
 
 export const tableProductsApi = createApi({
 	reducerPath: "tableProductsApi",

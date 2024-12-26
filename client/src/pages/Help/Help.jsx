@@ -13,7 +13,6 @@ import { TextCenter } from "./Help.styles"
 const Help = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const navigate = useNavigate()
-	const theme = useSelector((state) => state.theme.theme)
 
 	const redirect = () => {
 		!loggedIn && navigate("/login")
@@ -24,11 +23,11 @@ const Help = () => {
 	}, [])
 
 	return (
-		<Container theme={theme}>
+		<Container>
 			<SpaceHeader>
 				<Title>Help</Title>
 			</SpaceHeader>
-			<CenterContainer theme={theme}>
+			<CenterContainer>
 				<TextCenter>
 					Find all the help you need{" "}
 					<a

@@ -17,7 +17,6 @@ const Orders = () => {
 	const isMobile = window.innerWidth <= 820 ? true : false
 	const loggedIn = useSelector((state) => state.login.loggedIn)
 	const navigate = useNavigate()
-	const theme = useSelector((state) => state.theme.theme)
 	const orders = useSelector((state) => state.orders.orders)
 	const ordersUpdate = useSelector((state) => state.orders.ordersUpdate)
 	const [selectedOrderId, setSelectedOrderId] = useState("")
@@ -72,7 +71,7 @@ const Orders = () => {
 	}, [])
 
 	return (
-		<FullFlex theme={theme}>
+		<FullFlex>
 			<OrderButton onClick={() => toggleList()}>
 				<IconButton>
 					<LibraryBooksOutlinedIcon />
@@ -86,14 +85,15 @@ const Orders = () => {
 				setIsEdit={setIsEdit}
 				toggleList={isMobile && toggleList}
 			/>
-			{res.isError && <InfoMessage state="error" text="Failed to fetch orders"/>}
+			{res.isError && (
+				<InfoMessage state="error" text="Failed to fetch orders" />
+			)}
 			{isMobile ? (
 				add && !listIsOpen ? (
-					<AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder} />
+					<AddOrder setAdd={setAdd} setNewOrder={setNewOrder} />
 				) : (
 					!listIsOpen && (
 						<OrderContent
-							theme={theme}
 							order={selectedOrder && selectedOrder}
 							setSelected={setSelectedOrderId}
 							isEdit={isEdit}
@@ -102,10 +102,9 @@ const Orders = () => {
 					)
 				)
 			) : add ? (
-				<AddOrder theme={theme} setAdd={setAdd} setNewOrder={setNewOrder} />
+				<AddOrder setAdd={setAdd} setNewOrder={setNewOrder} />
 			) : (
 				<OrderContent
-					theme={theme}
 					order={selectedOrder && selectedOrder}
 					setSelectedOrder={setSelectedOrder}
 					setSelected={setSelectedOrderId}

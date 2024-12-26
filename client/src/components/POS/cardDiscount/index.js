@@ -14,6 +14,7 @@ import {
 } from "../../../lib/pos"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { Separator } from "../../ui/separator"
+import { Checkbox } from "../../ui/checkbox"
 
 const discountTypes = [
 	{ name: "percent", label: "Percent", unit: "%" },
@@ -25,6 +26,7 @@ export const CardDiscount = () => {
 	const sale = useSale()
 	const [discountType, setDiscountType] = useState(discountTypes[0].name)
 	const [discountAmount, setDiscountAmount] = useState("0")
+	const [selected, setSelected] = useState(sale?.discount || [])
 
 	const handleRemoveDiscount = (id) => {
 		const updatedList = sale.discount.filter((product) => product.id !== id)
@@ -116,43 +118,69 @@ export const CardDiscount = () => {
 		sale.refocus()
 	}
 
+	const handlePercentDiscount = (discountPercent) => {
+		const newDiscount = sale.discount.map((target, i) => {
+			const found = sale.products.find(
+				(product) => product.id === target.productId
+			)
+
+			// if last item to be discounted, check if the reduction applied correspond to the remaining applied discount
+			// and fill the difference if necessary
+
+			let remainingDiscountAmount = discountAmount
+			let reduction = (found.price * Number(discountPercent)) / 100
+
+			if (i === sale.discount.length - 1) {
+			}
+			const newPrice = found.price - reduction
+
+			let productDiscount = {
+				productId: found.id,
+				discountType: discountType,
+				discountAmount: remainingDiscountAmount,
+				originalPrice: target.originalPrice,
+				reduction: reduction,
+				newPrice: newPrice,
+				productName: found.name,
+			}
+
+			return productDiscount
+		})
+
+		const updatedProducts = sale.products.map((product) => {
+			const found = newDiscount.find((item) => item.productId === product.id)
+			if (found) {
+				return { ...product, price: found.newPrice }
+			} else {
+				return product
+			}
+		})
+
+		sale.updateSale({ products: updatedProducts, discount: newDiscount })
+	}
+
+	const handleAmountDiscount = () => {
+		const percentDiscount = (discountAmount / sale.amount) * 100
+
+		handlePercentDiscount(percentDiscount)
+	}
+
 	const handleApplyDiscount = () => {
 		if (discountType === "percent") {
-			const newDiscount = sale.discount.map((target) => {
-				const found = sale.products.find(
-					(product) => product.id === target.productId
-				)
-				const reduction = (found.price * Number(discountAmount)) / 100
-				const newPrice = Math.floor((found.price - reduction) * 100) / 100
-
-				let productDiscount = {
-					productId: found.id,
-					discountType: discountType,
-					discountAmount: discountAmount,
-					originalPrice: target.originalPrice,
-					reduction: reduction,
-					newPrice: newPrice,
-					productName: found.name,
-				}
-
-				return productDiscount
-			})
-
-			const updatedProducts = sale.products.map((product) => {
-				const found = newDiscount.find((item) => item.productId === product.id)
-				if (found) {
-					return { ...product, price: found.newPrice }
-				} else {
-					return product
-				}
-			})
-
-			sale.updateSale({ products: updatedProducts, discount: newDiscount })
+			handlePercentDiscount(discountAmount)
 		} else {
-			// TODO: handle amount discount
+			handleAmountDiscount()
 		}
 
 		sale.refocus()
+	}
+
+	const handleSelect = (product) => {
+		if (selected.some((p) => p.productId === product.productId)) {
+			setSelected(selected.filter((p) => p.productId !== product.productId))
+		} else {
+			setSelected([...selected, product])
+		}
 	}
 
 	useEffect(() => {
@@ -201,6 +229,13 @@ export const CardDiscount = () => {
 										alignItems="center"
 										justifyContent="space-between"
 									>
+										<Checkbox
+											checked={selected.some(
+												(p) => p.productId === product.productId
+											)}
+											onCheckedChange={() => handleSelect(product)}
+											aria-label="Select row"
+										/>
 										<div>{product.productName}</div>
 										<Stack
 											direction="row"
@@ -208,12 +243,12 @@ export const CardDiscount = () => {
 											alignItems="center"
 											className="space-x-2"
 										>
-											<div className="text-gray-500">
+											{/* <div className="text-gray-500">
 												{product.originalPrice}
 											</div>
 											<div className="w-[50px] text-end">
 												{product.newPrice} €
-											</div>
+											</div> */}
 											<Button
 												size="icon"
 												onClick={() => handleRemoveDiscount(product.id)}

@@ -17,7 +17,6 @@ import { MuteButtonWrapper } from "./Lunch.styles"
 const Lunch = () => {
 	const navigate = useNavigate()
 	const loggedIn = useSelector((state) => state.login.loggedIn)
-	const theme = useSelector((state) => state.theme.theme)
 	const activeDishes = useSelector(
 		(state) => state.tableProducts.activeTablesProducts
 	)
@@ -71,13 +70,8 @@ const Lunch = () => {
 			{res.isError && (
 				<InfoMessage state="error" text="Failed to fetch active dishes" />
 			)}
-			<LunchMain
-				theme={theme}
-				dishes={todoDishes}
-				notif={notif}
-				setNotif={setNotif}
-			/>
-			{isSideOpen && <LunchAside theme={theme} dishes={todoDishes} />}
+			<LunchMain dishes={todoDishes} notif={notif} setNotif={setNotif} />
+			{isSideOpen && <LunchAside dishes={todoDishes} />}
 		</FullFlex>
 	)
 }

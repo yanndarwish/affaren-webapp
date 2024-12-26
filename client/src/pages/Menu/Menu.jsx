@@ -26,7 +26,6 @@ import EditFormulaSlider from "../../components/MENU/Sliders/EditFormulaSlider"
 
 const Menu = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
-	const theme = useSelector((state) => state.theme.theme)
 	const dishes = useSelector((state) => state.dishes.dishes)
 	const [deleteIsOpen, setDeleteIsOpen] = useState(false)
 	const [createIsOpen, setCreateIsOpen] = useState(false)
@@ -111,7 +110,7 @@ const Menu = () => {
 	}, [])
 
 	return (
-		<Container theme={theme}>
+		<Container>
 			<SpaceHeader>
 				<Title>Menu</Title>
 				<Gap>
@@ -131,21 +130,15 @@ const Menu = () => {
 					/>
 				</Column>
 			)}
-			<CreateDishSlider
-				isOpen={createIsOpen}
-				setIsOpen={setCreateIsOpen}
-				theme={theme}
-			/>
+			<CreateDishSlider isOpen={createIsOpen} setIsOpen={setCreateIsOpen} />
 			<CreateFormulaSlider
 				isOpen={createFormulaIsOpen}
 				setIsOpen={setCreateFormulaIsOpen}
-				theme={theme}
 			/>
 			{Object.keys(selected).length > 0 && (
 				<EditDishSlider
 					isOpen={editIsOpen}
 					setIsOpen={setEditIsOpen}
-					theme={theme}
 					dish={selected}
 					setDish={setSelected}
 				/>
@@ -154,7 +147,6 @@ const Menu = () => {
 				<EditFormulaSlider
 					isOpen={editFormulaIsOpen}
 					setIsOpen={setEditFormulaIsOpen}
-					theme={theme}
 					dish={selected}
 					setDish={setSelected}
 				/>

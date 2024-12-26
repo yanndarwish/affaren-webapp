@@ -17,7 +17,7 @@ const defaultConfig = {
 				{ name: "no-barcode", label: "No barcode", active: true },
 				{ name: "bookmarks", label: "Bookmarks", active: true },
 				{ name: "refund", label: "Refund", active: true },
-				{ name: "discount", label: "Discount", active: false },
+				{ name: "discount", label: "Discount", active: true },
 				{ name: "drawer", label: "Drawer", active: true },
 				{ name: "receipt", label: "Receipt", active: true },
 			],

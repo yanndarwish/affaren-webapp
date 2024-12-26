@@ -6,8 +6,6 @@ import Sales from "../pages/Sales/Sales"
 import Orders from "../pages/Orders/Orders"
 import Dashboard from "../pages/Dashboard"
 import Inventory from "../pages/Inventory/Inventory"
-import Kitchen from "../pages/Kitchen/Kitchen"
-import Profile from "../pages/Profile/Profile"
 import Help from "../pages/Help/Help"
 import Logout from "../pages/Logout/Logout"
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword"
@@ -52,14 +50,6 @@ const router = createBrowserRouter([
 			{
 				path: "inventory",
 				element: <Inventory />,
-			},
-			{
-				path: "kitchen",
-				element: <Kitchen />,
-			},
-			{
-				path: "profile",
-				element: <Profile />,
 			},
 			{
 				path: "lunch",

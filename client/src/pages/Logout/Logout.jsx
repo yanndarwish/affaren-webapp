@@ -6,7 +6,6 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 const Logout = () => {
-	const theme = useSelector((state) => state.theme.theme)
 	const modalLogout = useModal()
 	const navigate = useNavigate()
 
@@ -19,7 +18,7 @@ const Logout = () => {
 	}, [])
 
 	return (
-		<CenterContainer theme={theme}>
+		<CenterContainer>
 			<ModalLogout controller={modalLogout} onCancel={handleCancel} />
 		</CenterContainer>
 	)

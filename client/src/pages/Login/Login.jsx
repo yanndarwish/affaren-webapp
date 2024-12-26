@@ -9,8 +9,6 @@ const Login = () => {
 	const navigate = useNavigate()
 	const { isLoggedIn } = useSession()
 
-	const theme = useSelector((state) => state.theme.theme)
-
 	useEffect(() => {
 		if (isLoggedIn) {
 			navigate("/pos")
@@ -18,8 +16,8 @@ const Login = () => {
 	}, [isLoggedIn])
 
 	return (
-		<CenterContainer theme={theme}>
-			<LoginForm theme={theme} />
+		<CenterContainer>
+			<LoginForm />
 		</CenterContainer>
 	)
 }

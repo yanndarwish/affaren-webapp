@@ -9,11 +9,13 @@ import { CardTitle, CardHeader, CardFooter, CardContent } from "../../ui/card"
 import { useSale } from "../../../lib/providers/sale"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { Separator } from "../../ui/separator"
+import { Modal, useModal } from "../../shared/modal"
 
 export const CardBookmark = () => {
 	const { notifySuccess } = useNotify()
 	const [selected, setSelected] = useState(null)
 	const { bookmarks, applyBookmark, clearBookmarks, removeBookmark } = useSale()
+	const modalDeleteBookmarks = useModal()
 
 	const handleApplyBookmark = () => {
 		applyBookmark(selected)
@@ -26,8 +28,13 @@ export const CardBookmark = () => {
 	}
 
 	const handleClearBookmarks = () => {
+		modalDeleteBookmarks.openModal()
+	}
+
+	const handleConfirmClearBookmarks = () => {
 		clearBookmarks()
 		notifySuccess("Bookmarks cleared")
+		modalDeleteBookmarks.closeModal()
 	}
 
 	const handleSelectBookmark = (bookmarkId) => {
@@ -83,6 +90,10 @@ export const CardBookmark = () => {
 					Apply Bookmark
 				</Button>
 			</CardFooter>
+			<ModalDeleteAllBookmarks
+				controller={modalDeleteBookmarks}
+				onConfirm={handleConfirmClearBookmarks}
+			/>
 		</>
 	)
 }
@@ -117,5 +128,33 @@ const Bookmark = ({ bookmark, isSelected, onSelect, onRemove }) => {
 				</Stack>
 			)}
 		</Stack>
+	)
+}
+
+const ModalDeleteAllBookmarks = ({ controller, onConfirm = () => null }) => {
+	return (
+		<Modal
+			open={controller.open}
+			handleClose={controller.closeModal}
+			title="Clear all bookmarks"
+		>
+			<Stack direction="column" spacing={4}>
+				<p className="text-center text-lg font-medium text-gray-900">
+					Are you sure you want to clear all bookmarks ?
+				</p>
+				<Stack direction="row" spacing={2}>
+					<Button
+						onClick={controller.closeModal}
+						variant="outline"
+						className="w-full"
+					>
+						Cancel
+					</Button>
+					<Button onClick={onConfirm} variant="destructive" className="w-full">
+						Delete
+					</Button>
+				</Stack>
+			</Stack>
+		</Modal>
 	)
 }
