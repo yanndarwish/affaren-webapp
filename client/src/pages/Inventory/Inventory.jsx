@@ -1,12 +1,10 @@
-
 import InventoryTable from "../../components/INVENTORY/InventoryTable/InventoryTable"
 import { useState } from "react"
 import { useEffect } from "react"
-import {  useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import { ModalCreateProduct } from "../../components/INVENTORY/modals/create"
 import { useModal } from "../../components/shared/modal"
 import { Stack } from "@mui/material"
-import { PageTitle } from "../../components/shared/pageTitle"
 import BarcodeSection from "../../components/POS/BarcodeSection/BarcodeSection"
 import { PlusIcon } from "lucide-react"
 import { Button } from "../../components/ui/button"
@@ -14,12 +12,16 @@ import { useQuery } from "../../lib/hooks/useQuery"
 import { useNotify } from "../../lib/hooks/useNotify"
 import { getProducts } from "../../lib/api"
 import { Input } from "../../components/ui/input"
+import {
+	FixedContainer,
+	PageContainer,
+} from "../../components/shared/containers"
 
 const Inventory = () => {
 	const { notifyError } = useNotify()
 	let [searchParams] = useSearchParams()
 	const createProductController = useModal()
-	
+
 	const [name, setName] = useState("")
 	const [products, setProducts] = useState([])
 	const [pagination, setPagination] = useState({
@@ -27,7 +29,7 @@ const Inventory = () => {
 		pageNumber: 1,
 		pageTotal: 0,
 	})
-	
+
 	const barcodeParam = searchParams.get("new")
 
 	const queryGetProducts = useQuery({
@@ -92,43 +94,37 @@ const Inventory = () => {
 	}, [pagination.pageNumber, name])
 
 	return (
-		<Stack direction="column" spacing={2} className="w-full h-full">
-			<Stack
-				direction="row"
-				alignItems="center"
-				justifyContent="space-between"
-				spacing={2}
-			>
-				<PageTitle title="Inventory" />
-				<Button onClick={handleCreateProduct}>
-					<PlusIcon />
-				</Button>
-			</Stack>
-			<Stack direction="row" spacing={2} justifyContent="space-between">
-				<Stack direction="row" spacing={2}>
-					<BarcodeSection onSuccess={setProducts} />
-					<NameSection name={name} handleNameChange={handleNameChange} />
+		<PageContainer className="grid gap-4 md:grid-cols-12 grid-rows-1 h-full">
+			<FixedContainer className="col-span-12">
+				<Stack className="space-y-4 h-full overflow-y-hidden">
+					<Stack direction="row" spacing={2} justifyContent="space-between">
+						<Stack direction="row" spacing={2}>
+							<BarcodeSection onSuccess={setProducts} />
+							<NameSection name={name} handleNameChange={handleNameChange} />
+							<Button onClick={handleCreateProduct}>
+								<PlusIcon />
+							</Button>
+						</Stack>
+						<Button onClick={handleReset}>Reset</Button>
+					</Stack>
+					<InventoryTable
+						products={products}
+						pagination={pagination}
+						handlePreviousPage={handlePreviousPage}
+						handleNextPage={handleNextPage}
+						onSuccess={() => {
+							queryGetProducts.send(pagination)
+						}}
+					/>
 				</Stack>
-				<Button onClick={handleReset}>Reset</Button>
-			</Stack>
-			<Stack className="space-y-8 h-full overflow-y-hidden">
-				<InventoryTable
-					products={products}
-					pagination={pagination}
-					handlePreviousPage={handlePreviousPage}
-					handleNextPage={handleNextPage}
+				<ModalCreateProduct
+					controller={createProductController}
 					onSuccess={() => {
 						queryGetProducts.send(pagination)
 					}}
 				/>
-			</Stack>
-			<ModalCreateProduct
-				controller={createProductController}
-				onSuccess={() => {
-					queryGetProducts.send(pagination)
-				}}
-			/>
-		</Stack>
+			</FixedContainer>
+		</PageContainer>
 	)
 }
 

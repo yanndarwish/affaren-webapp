@@ -20,7 +20,7 @@ import { Modal, useModal } from "../../shared/modal"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { useQuery } from "../../../lib/hooks/useQuery"
 import { deleteSale, getSales } from "../../../lib/api"
-import {  Euro, EyeIcon } from "lucide-react"
+import { Euro, EyeIcon } from "lucide-react"
 import { Stack } from "@mui/material"
 import { Card } from "../../ui/card"
 import { Button } from "../../ui/button"
@@ -28,11 +28,7 @@ import { Trash2Icon } from "lucide-react"
 import { useDailyTotal } from "../../../lib/providers/dailyTotal"
 import { formatSale } from "../../../lib/sales"
 
-import {
-	Banknote,
-	CreditCard,
-	Tag,
-} from "lucide-react"
+import { Banknote, CreditCard, Tag } from "lucide-react"
 import { formatDailyTotals } from "../../../lib/sales"
 import { SaleDetails } from "../details"
 import { DateNavigator } from "../../shared/datePicker"
@@ -187,174 +183,177 @@ export default function SalesTable() {
 	}, [])
 
 	return (
-		<>
-			<Stack className="space-y-4 h-full overflow-y-hidden">
-				<Stack
-					direction="row"
-					justifyContent="space-between"
-					className="flex-wrap"
-					columnGap={2}
-					rowGap={2}
-				>
-					<DateNavigator
-						selectedDate={selectedDate}
-						disabledRules={{ after: new Date() }}
-						handlePreviousDay={handlePreviousDay}
-						handleNextDay={handleNextDay}
-						handleDateChange={handleDateChange}
-						disableNextDay={
-							selectedDate?.toDateString() === new Date().toDateString()
-						}
-					/>
-					<DayTotalSummary
-						date={selectedDate}
-						totalCash={totalCash}
-						totalCard={totalCard}
-						totalCheck={totalCheck}
-						total={totalTotal}
-					/>
-				</Stack>
-				<Card className="flex flex-col h-[calc(100%-115px)] overflow-hidden">
-					<div className="flex flex-col h-full relative">
-						{/* Sticky Header */}
-						<Table>
-							<TableHeader className="sticky top-0 bg-white z-10 border-b">
-								<TableRow>
-									{columns.map((column, index) => (
-										<TableHead key={index} className={column.className}>
-											{column.label}
-										</TableHead>
-									))}
-									<TableHead className="text-right"></TableHead>
-								</TableRow>
-							</TableHeader>
-						</Table>
-
-						{/* Scrollable Body */}
-						<div id="scrollable-body" className="flex-1 overflow-auto">
-							<Table>
-								<TableBody>
-									{/* Empty state rows to maintain height */}
-									{!sales || sales.length === 0 ? (
-										<EmptyData
-											message="No sales found"
-											span={columns.length + 1}
-											className="h-[calc(100vh-350px)]"
-										/>
-									) : (
-										sales?.map((sale, i) => (
-											<TableRow key={i}>
-												<TableCell>{sale.sale_id}</TableCell>
-												<TableCell className="text-center">
-													{sale.sale_amount}
-												</TableCell>
-												<TableCell className="text-right">
-													<Stack
-														direction="row"
-														justifyContent="flex-end"
-														spacing={2}
-													>
-														<Button
-															size="icon"
-															onClick={() => handleClickDetails(sale)}
-														>
-															<EyeIcon />
-														</Button>
-														<Button
-															size="icon"
-															variant="destructive"
-															onClick={() => handleClickDelete(sale.sale_id)}
-														>
-															<Trash2Icon />
-														</Button>
-													</Stack>
-												</TableCell>
-											</TableRow>
-										))
-									)}
-								</TableBody>
-							</Table>
-						</div>
-
-						{/* Sticky Footer */}
-						<div className="sticky bottom-0 bg-white border-t">
-							<Pagination className="py-2">
-								<PaginationContent>
-									<PaginationItem>
-										<PaginationPrevious
-											onClick={handlePreviousPage}
-											isActive={pagination.pageNumber >= 1}
-											className={
-												pagination.pageNumber === 1
-													? "opacity-20 cursor-not-allowed"
-													: ""
-											}
-										/>
-									</PaginationItem>
-									<PaginationItem>
-										<PaginationLink>{pagination.pageNumber}</PaginationLink>
-									</PaginationItem>
-									{pagination.pageTotal !== pagination.pageNumber &&
-										pagination.pageTotal !== 0 && (
-											<>
-												<PaginationItem>
-													<PaginationEllipsis />
-												</PaginationItem>
-												<PaginationItem>
-													<PaginationLink>
-														{pagination.pageTotal}
-													</PaginationLink>
-												</PaginationItem>
-											</>
-										)}
-									<PaginationItem>
-										<PaginationNext
-											onClick={handleNextPage}
-											isActive={pagination.pageNumber <= pagination.pageTotal}
-											className={
-												pagination.pageNumber >= pagination.pageTotal
-													? "opacity-20 cursor-not-allowed"
-													: ""
-											}
-										/>
-									</PaginationItem>
-								</PaginationContent>
-							</Pagination>
-						</div>
-					</div>
-					<ModalDeleteSale
-						controller={modalDeleteSale}
-						onConfirm={handleConfirmDelete}
-					/>
-					<ModalSaleDetails controller={modalSaleDetails} />
-				</Card>
+		<Stack className="space-y-4 h-full overflow-y-hidden">
+			<Stack
+				direction="row"
+				justifyContent="space-between"
+				className="flex-wrap"
+				columnGap={2}
+				rowGap={2}
+			>
+				<DateNavigator
+					selectedDate={selectedDate}
+					disabledRules={{ after: new Date() }}
+					handlePreviousDay={handlePreviousDay}
+					handleNextDay={handleNextDay}
+					handleDateChange={handleDateChange}
+					disableNextDay={
+						selectedDate?.toDateString() === new Date().toDateString()
+					}
+				/>
+				<DayTotalSummary
+					date={selectedDate}
+					totalCash={totalCash}
+					totalCard={totalCard}
+					totalCheck={totalCheck}
+					total={totalTotal}
+				/>
 			</Stack>
-		</>
+			<Card className="flex flex-col overflow-hidden">
+				<div className="flex flex-col h-full relative">
+					{/* Sticky Header */}
+					<Table>
+						<TableHeader className="sticky top-0 bg-white z-10 border-b">
+							<TableRow>
+								{columns.map((column, index) => (
+									<TableHead key={index} className={column.className}>
+										{column.label}
+									</TableHead>
+								))}
+								<TableHead className="text-right"></TableHead>
+							</TableRow>
+						</TableHeader>
+					</Table>
+
+					{/* Scrollable Body */}
+					<div id="scrollable-body" className="flex-1 overflow-auto h-full">
+						<Table>
+							<TableBody>
+								{/* Empty state rows to maintain height */}
+								{!sales || sales.length === 0 ? (
+									<EmptyData
+										message="No sales found"
+										span={columns.length + 1}
+									/>
+								) : (
+									sales?.map((sale, i) => (
+										<TableRow key={i}>
+											<TableCell>{sale.sale_id}</TableCell>
+											<TableCell className="text-center">
+												{sale.sale_amount}
+											</TableCell>
+											<TableCell className="text-right">
+												<Stack
+													direction="row"
+													justifyContent="flex-end"
+													spacing={2}
+												>
+													<Button
+														size="icon"
+														onClick={() => handleClickDetails(sale)}
+													>
+														<EyeIcon />
+													</Button>
+													<Button
+														size="icon"
+														variant="destructive"
+														onClick={() => handleClickDelete(sale.sale_id)}
+													>
+														<Trash2Icon />
+													</Button>
+												</Stack>
+											</TableCell>
+										</TableRow>
+									))
+								)}
+							</TableBody>
+						</Table>
+					</div>
+
+					{/* Sticky Footer */}
+					<div className="sticky bottom-0 bg-white border-t">
+						<Pagination className="py-2">
+							<PaginationContent>
+								<PaginationItem>
+									<PaginationPrevious
+										onClick={handlePreviousPage}
+										isActive={pagination.pageNumber >= 1}
+										className={
+											pagination.pageNumber === 1
+												? "opacity-20 cursor-not-allowed"
+												: ""
+										}
+									/>
+								</PaginationItem>
+								<PaginationItem>
+									<PaginationLink>{pagination.pageNumber}</PaginationLink>
+								</PaginationItem>
+								{pagination.pageTotal !== pagination.pageNumber &&
+									pagination.pageTotal !== 0 && (
+										<>
+											<PaginationItem>
+												<PaginationEllipsis />
+											</PaginationItem>
+											<PaginationItem>
+												<PaginationLink>{pagination.pageTotal}</PaginationLink>
+											</PaginationItem>
+										</>
+									)}
+								<PaginationItem>
+									<PaginationNext
+										onClick={handleNextPage}
+										isActive={pagination.pageNumber <= pagination.pageTotal}
+										className={
+											pagination.pageNumber >= pagination.pageTotal
+												? "opacity-20 cursor-not-allowed"
+												: ""
+										}
+									/>
+								</PaginationItem>
+							</PaginationContent>
+						</Pagination>
+					</div>
+				</div>
+				<ModalDeleteSale
+					controller={modalDeleteSale}
+					onConfirm={handleConfirmDelete}
+				/>
+				<ModalSaleDetails controller={modalSaleDetails} />
+			</Card>
+		</Stack>
 	)
 }
 
-export const DayTotalSummary = ({ date, totalCash, totalCard, totalCheck, total }) => {
+export const DayTotalSummary = ({
+	date,
+	totalCash,
+	totalCard,
+	totalCheck,
+	total,
+}) => {
 	if (!date) return null
 
 	return (
-		<Stack
-			direction="row"
-			justifyContent="space-between"
-			className="w-full space-x-4"
-		>
-			{totalCash > 0 && (
-				<PaymentTotal label="Cash" value={totalCash} icon={<Banknote />} />
-			)}
-			{totalCard > 0 && (
-				<PaymentTotal label="Card" value={totalCard} icon={<CreditCard />} />
-			)}
-			{totalCheck > 0 && (
-				<PaymentTotal label="Check" value={totalCheck} icon={<Tag />} />
-			)}
-			{total > 0 && (
-				<PaymentTotal label="Total" value={total} icon={<Euro />} primary />
-			)}
-		</Stack>
+		total > 0 && (
+			<Stack
+				direction="row"
+				justifyContent="space-between"
+				className="w-full space-x-4"
+			>
+				{totalCash > 0 && (
+					<PaymentTotal label="Cash" value={totalCash} icon={<Banknote />} />
+				)}
+				{totalCard > 0 && (
+					<PaymentTotal label="Card" value={totalCard} icon={<CreditCard />} />
+				)}
+				{totalCheck > 0 && (
+					<PaymentTotal label="Check" value={totalCheck} icon={<Tag />} />
+				)}
+				{total > 0 && (
+					<PaymentTotal label="Total" value={total} icon={<Euro />} primary />
+				)}
+			</Stack>
+		)
 	)
 }
 

@@ -1,15 +1,13 @@
 import SalesTable from "../../components/SALES/SalesTable/SalesTable"
-import { Stack } from "@mui/material"
-import { PageTitle } from "../../components/shared/pageTitle"
+import { FixedContainer, PageContainer } from "../../components/shared/containers"
 
 const Sales = () => {
 	return (
-		<Stack direction="column" spacing={3} className="w-full h-full">
-			<PageTitle title="Sales" />
-			<Stack className="space-y-8 h-full overflow-y-hidden">
+		<PageContainer className="grid gap-4 md:grid-cols-12 grid-rows-1 h-full">
+			<FixedContainer className="col-span-12">
 				<SalesTable />
-			</Stack>
-		</Stack>
+			</FixedContainer>
+		</PageContainer>
 	)
 }
 

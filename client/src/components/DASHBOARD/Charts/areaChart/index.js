@@ -34,6 +34,7 @@ import {
 	TableRow,
 } from "../../../ui/table"
 import { Button } from "../../../ui/button"
+import { DataGrid } from "../../../shared/datagrid"
 
 const chartConfig = {
 	sales: {
@@ -110,62 +111,61 @@ export function MonthSalesChart({ monthString, month, year }) {
 	}, [month, year])
 
 	return (
-		<Card className="flex flex-col h-full">
-			<CardHeader>
-				<CardTitle>
-					<Stack
-						direction="row"
-						spacing={2}
-						className="justify-between items-center"
-					>
-						Sales
-						<Stack direction="row" spacing={2}>
-							{selectedTab === "table" && (
-								<Button
-									onClick={exportToExcel}
-									disabled={chartData.length === 0}
+		<Card className="flex flex-col overflow-hidden h-full">
+			<div className="flex flex-col h-full relative">
+				<CardHeader>
+					<CardTitle>
+						<Stack
+							direction="row"
+							spacing={2}
+							className="justify-between items-center"
+						>
+							Sales
+							<Stack direction="row" spacing={2}>
+								{selectedTab === "table" && (
+									<Button
+										onClick={exportToExcel}
+										disabled={chartData.length === 0}
+									>
+										Export to Excel
+									</Button>
+								)}
+								<Tabs
+									value={selectedTab}
+									onValueChange={setSelectedTab}
+									className="h-full"
 								>
-									Export to Excel
-								</Button>
-							)}
-							<Tabs
-								value={selectedTab}
-								onValueChange={setSelectedTab}
-								className="h-full"
-							>
-								<TabsList className="w-full">
-									{tabs.map((tab) => (
-										<TabsTrigger
-											key={tab.name}
-											value={tab.name}
-											className="w-full"
-										>
-											{tab.label}
-										</TabsTrigger>
-									))}
-								</TabsList>
-							</Tabs>
+									<TabsList className="w-full">
+										{tabs.map((tab) => (
+											<TabsTrigger
+												key={tab.name}
+												value={tab.name}
+												className="w-full"
+											>
+												{tab.label}
+											</TabsTrigger>
+										))}
+									</TabsList>
+								</Tabs>
+							</Stack>
 						</Stack>
-					</Stack>
-				</CardTitle>
-				<CardDescription>
-					Showing total sales for {monthString} {year}
-				</CardDescription>
-			</CardHeader>
-			<CardContent className="h-full overflow-hidden">
-				{selectedTab === "chart" ? (
-					<Card className="h-full overflow-auto">
-						{chartData.length === 0 ? (
-							<div className="flex flex-col items-center justify-center space-y-8 ">
-								<CircleOff className="w-10 h-10 text-gray-200" />
-								<p className="text-md text-gray-500">No sales data available</p>
-							</div>
-						) : (
-							<div className="grid grid-cols-1 h-96">
-								<ChartContainer
-									config={chartConfig}
-									className="row-start-1 row-span-1 h-full "
-								>
+					</CardTitle>
+					<CardDescription>
+						Showing total sales for {monthString} {year}
+					</CardDescription>
+				</CardHeader>
+				<CardContent className="h-full overflow-auto">
+					{selectedTab === "chart" ? (
+						<>
+							{chartData.length === 0 ? (
+								<div className="flex flex-col items-center justify-center space-y-8 ">
+									<CircleOff className="w-10 h-10 text-gray-200" />
+									<p className="text-md text-gray-500">
+										No sales data available
+									</p>
+								</div>
+							) : (
+								<ChartContainer config={chartConfig} className="h-full w-full">
 									<AreaChart
 										accessibilityLayer
 										data={chartData}
@@ -173,7 +173,6 @@ export function MonthSalesChart({ monthString, month, year }) {
 											left: 3,
 											right: 3,
 										}}
-										className="h-full"
 									>
 										<CartesianGrid vertical={false} />
 										<XAxis
@@ -196,13 +195,13 @@ export function MonthSalesChart({ monthString, month, year }) {
 										/>
 									</AreaChart>
 								</ChartContainer>
-							</div>
-						)}
-					</Card>
-				) : (
-					<TableMonthSales month={month} year={year} />
-				)}
-			</CardContent>
+							)}
+						</>
+					) : (
+						<TableMonthSales month={month} year={year} />
+					)}
+				</CardContent>
+			</div>
 		</Card>
 	)
 }
@@ -211,71 +210,89 @@ const columns = [
 	{
 		label: "Date",
 		field: "day",
+		align: "left",
 		className: "text-left",
 	},
 	{
 		label: "Food",
 		field: "total1",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "Magazine",
 		field: "total2",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "Other",
 		field: "total3",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "HT Food",
 		field: "ht1",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "HT Magazine",
 		field: "ht2",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "HT Other",
 		field: "ht3",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "TVA Food",
 		field: "tva1",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "TVA Magazine",
 		field: "tva2",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "TVA Other",
 		field: "tva3",
+		align: "right",
 		className: "text-right",
 	},
 	{
 		label: "Cash",
 		field: "cash",
+		align: "right",
+		highlight: "gray",
 		className: "text-right",
 	},
 	{
 		label: "Card",
 		field: "card",
+		align: "right",
+		highlight: "gray",
 		className: "text-right",
 	},
 	{
 		label: "Check",
 		field: "check",
+		align: "right",
+		highlight: "gray",
 		className: "text-right",
 	},
 	{
 		label: "Total",
 		field: "total",
+		align: "right",
+		highlight: "dark",
 		className: "text-right",
 	},
 ]
@@ -435,144 +452,103 @@ const TableMonthSales = ({ month, year }) => {
 	}, [month, year])
 
 	return (
-		<Card className="flex flex-col h-[calc(100vh-200px)]">
-			<div className="flex flex-col h-full">
-				{/* Sticky Header */}
-				<div className="sticky top-0 z-20 bg-white border-b">
-					<Table>
-						<TableHeader>
-							<TableRow>
-								{columns.map((column, index) => (
-									<TableHead key={index} className={column.className}>
-										{column.label}
-									</TableHead>
-								))}
-							</TableRow>
-						</TableHeader>
-					</Table>
-				</div>
-				<div id="scrollable-body" className="flex-1 overflow-auto">
-					<Table>
-						<TableBody>
-							{/* Empty state rows to maintain height */}
-							{!data || data.length === 1 ? (
-								<EmptyData
-									message="No sales data available"
-									span={columns.length + 1}
-									className="h-[calc(100vh-350px)]"
-								/>
-							) : (
-								data?.map(
-									(sale, i) =>
-										i < data.length - 1 && (
-											<TableRow
-												key={i}
-												className={
-													i === data.length - 1
-														? "bg-gray-100 font-bold sticky bottom-0"
-														: ""
-												}
-											>
-												<TableCell className="text-left">{sale.day}</TableCell>
-												<TableCell className="text-right">
-													{sale.total1}
-												</TableCell>
-												<TableCell className="text-right">
-													{sale.total2}
-												</TableCell>
-												<TableCell className="text-right">
-													{sale.total3}
-												</TableCell>
-												<TableCell className="text-right">{sale.ht1}</TableCell>
-												<TableCell className="text-right">{sale.ht2}</TableCell>
-												<TableCell className="text-right">{sale.ht3}</TableCell>
-												<TableCell className="text-right">
-													{sale.tva1}
-												</TableCell>
-												<TableCell className="text-right">
-													{sale.tva2}
-												</TableCell>
-												<TableCell className="text-right">
-													{sale.tva3}
-												</TableCell>
-												<TableCell
-													className={`text-right ${
-														i === data.length - 1
-															? "bg-gray-100"
-															: "bg-gray-50 font-medium"
-													}`}
-												>
-													{sale.cash}
-												</TableCell>
-												<TableCell
-													className={`text-right ${
-														i === data.length - 1
-															? "bg-gray-100"
-															: "bg-gray-50 font-medium"
-													}`}
-												>
-													{sale.card}
-												</TableCell>
-												<TableCell
-													className={`text-right ${
-														i === data.length - 1
-															? "bg-gray-100"
-															: "bg-gray-50 font-medium"
-													}`}
-												>
-													{sale.check}
-												</TableCell>
-												<TableCell className="text-right font-bold bg-gray-100">
-													{sale.total}
-												</TableCell>
-											</TableRow>
-										)
-								)
-							)}
-						</TableBody>
-						<TableFooter className="sticky bottom-0 bg-white border-t">
-							<TableRow className="bg-gray-100 font-bold">
-								<TableCell className="text-left">
-									{data[data.length - 1]?.day}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.total1}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.total2}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.total3}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.ht1}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.ht2}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.ht3}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.tva1}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.tva2}
-								</TableCell>
-								<TableCell className="text-right">
-									{data[data.length - 1]?.tva3}
-								</TableCell>
-								<TableCell>{data[data.length - 1]?.cash}</TableCell>
-								<TableCell>{data[data.length - 1]?.card}</TableCell>
-								<TableCell>{data[data.length - 1]?.check}</TableCell>
-								<TableCell className="text-right font-bold bg-gray-100">
-									{data[data.length - 1]?.total}
-								</TableCell>
-							</TableRow>
-						</TableFooter>
-					</Table>
-				</div>
-			</div>
-		</Card>
+		<DataGrid
+			id="month-sales-table"
+			data={data}
+			columns={columns}
+			emptyMessage="No sales data available"
+		/>
+		// <Card className="flex flex-col h-full overflow-hidden">
+		// 	<Table className="h-full">
+		// 		<TableHeader className="sticky top-0 bg-white z-10">
+		// 			<TableRow>
+		// 				{columns.map((column, index) => (
+		// 					<TableHead key={index} className={column.className}>
+		// 						{column.label}
+		// 					</TableHead>
+		// 				))}
+		// 			</TableRow>
+		// 		</TableHeader>
+		// 		<TableBody className="overflow-auto w-full h-full">
+		// 			{/* Empty state rows to maintain height */}
+		// 			{!data || data.length === 1 ? (
+		// 				<EmptyData
+		// 					message="No sales data available"
+		// 					span={columns.length + 1}
+		// 				/>
+		// 			) : (
+		// 				data?.map(
+		// 					(sale, i) =>
+		// 						i < data.length - 1 && (
+		// 							<TableRow key={i}>
+		// 								<TableCell className="text-left">{sale.day}</TableCell>
+		// 								<TableCell className="text-right">{sale.total1}</TableCell>
+		// 								<TableCell className="text-right">{sale.total2}</TableCell>
+		// 								<TableCell className="text-right">{sale.total3}</TableCell>
+		// 								<TableCell className="text-right">{sale.ht1}</TableCell>
+		// 								<TableCell className="text-right">{sale.ht2}</TableCell>
+		// 								<TableCell className="text-right">{sale.ht3}</TableCell>
+		// 								<TableCell className="text-right">{sale.tva1}</TableCell>
+		// 								<TableCell className="text-right">{sale.tva2}</TableCell>
+		// 								<TableCell className="text-right">{sale.tva3}</TableCell>
+		// 								<TableCell className="text-right bg-gray-50 font-medium">
+		// 									{sale.cash}
+		// 								</TableCell>
+		// 								<TableCell className="text-right bg-gray-50 font-medium">
+		// 									{sale.card}
+		// 								</TableCell>
+		// 								<TableCell className="text-right bg-gray-50 font-medium">
+		// 									{sale.check}
+		// 								</TableCell>
+		// 								<TableCell className="text-right font-bold bg-gray-100">
+		// 									{sale.total}
+		// 								</TableCell>
+		// 							</TableRow>
+		// 						)
+		// 				)
+		// 			)}
+		// 		</TableBody>
+		// 		<TableFooter className="py-2 sticky bottom-0 bg-white">
+		// 			<TableRow className="bg-gray-100 font-bold">
+		// 				<TableCell className="text-left">
+		// 					{data[data.length - 1]?.day}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.total1}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.total2}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.total3}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.ht1}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.ht2}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.ht3}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.tva1}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.tva2}
+		// 				</TableCell>
+		// 				<TableCell className="text-right">
+		// 					{data[data.length - 1]?.tva3}
+		// 				</TableCell>
+		// 				<TableCell>{data[data.length - 1]?.cash}</TableCell>
+		// 				<TableCell>{data[data.length - 1]?.card}</TableCell>
+		// 				<TableCell>{data[data.length - 1]?.check}</TableCell>
+		// 				<TableCell className="text-right font-bold bg-gray-100">
+		// 					{data[data.length - 1]?.total}
+		// 				</TableCell>
+		// 			</TableRow>
+		// 		</TableFooter>
+		// 	</Table>
+		// </Card>
 	)
 }

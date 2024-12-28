@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom"
 import Root from "../components/Root/Root"
 import Login from "../pages/Login/Login"
-import Pos from "../pages/Pos/Pos"
+import Pos from "../pages/Pos"
 import Sales from "../pages/Sales/Sales"
 import Orders from "../pages/Orders/Orders"
 import Dashboard from "../pages/Dashboard"

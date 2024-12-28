@@ -9,6 +9,10 @@ import { PaymentTotal } from "../../components/SALES/SalesTable/SalesTable"
 import { Euro } from "lucide-react"
 import { useNotify } from "../../lib/hooks/useNotify"
 import { RepartitionChart } from "../../components/DASHBOARD/Charts/pieChart"
+import {
+	FixedContainer,
+	PageContainer,
+} from "../../components/shared/containers"
 
 const Dashboard = () => {
 	const [selectedDate, setSelectedDate] = useState(new Date())
@@ -30,14 +34,13 @@ const Dashboard = () => {
 	}, [])
 
 	return (
-		<>
-			<div className="grid auto-rows-min gap-4 md:grid-cols-3">
-				{/* <div className="aspect-video rounded-xl bg-muted/50" />
-				<div className="aspect-video rounded-xl bg-muted/50" />
-				<div className="aspect-video rounded-xl bg-muted/50" /> */}
-			</div>
-			<div className="flex-1 md:min-h-min col-span-3">
-				<Stack direction="column" spacing={2} className="w-full h-full">
+		<PageContainer className="grid gap-4 md:grid-cols-12 grid-rows-1 h-full">
+			<FixedContainer className="col-span-12">
+				<Stack
+					direction="column"
+					spacing={2}
+					className="w-full h-full overflow-y-hidden"
+				>
 					<Stack direction="row" spacing={2} className="w-full justify-between">
 						<DateNavigator
 							selectedDate={selectedDate}
@@ -59,8 +62,8 @@ const Dashboard = () => {
 						month={selectedDate?.getMonth() + 1}
 					/>
 				</Stack>
-			</div>
-		</>
+			</FixedContainer>
+		</PageContainer>
 	)
 }
 

@@ -28,6 +28,7 @@ import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
 import { useConfig } from "../../../lib/hooks/useConfig"
 import { cn } from "../../../lib/utils"
+import { FixedContainer } from "../../shared/containers"
 
 const COLUMNS = [
 	{ label: "Name", field: "name", className: "" },
@@ -181,7 +182,7 @@ const Cart = ({ onDiscount, onBookmark }) => {
 	}, [sale.paidProducts])
 
 	return (
-		<Card className="h-full overflow-hidden">
+		<Card className="h-full flex flex-col relative">
 			<CartHeader
 				sale={sale}
 				onRefund={handleRefund}
@@ -226,7 +227,7 @@ const CartHeader = ({ sale, onRefund, onBookmark, onDiscount, onClear }) => {
 	const { isActiveComponent } = useConfig()
 
 	return (
-		<CardHeader>
+		<CardHeader className="sticky top-0">
 			<Stack direction="row" className="space-x-4 justify-between">
 				<CardTitle>Shopping Cart</CardTitle>
 				<Stack direction="row" spacing={2}>
@@ -274,9 +275,11 @@ const CartContent = ({
 	onRemove,
 	onAddToDiscount,
 }) => (
-	<CardContent className="h-[75%] overflow-y-auto">
+	<CardContent className="h-full overflow-hidden">
 		{sale.products.length === 0 ? (
-			<EmptyCart />
+			<FixedContainer className="h-[80%]">
+				<EmptyCart />
+			</FixedContainer>
 		) : (
 			<CartTable
 				sale={sale}
@@ -305,35 +308,37 @@ const CartTable = ({
 	onRemove,
 	onAddToDiscount,
 }) => (
-	<Table>
-		<TableHeader>
-			<TableRow>
-				<TableHead className="text-left">Select</TableHead>
-				<TableHead className="text-left">N°</TableHead>
-				{COLUMNS.map((column, index) => (
-					<TableHead key={index} className={column.className}>
-						{column.label}
-					</TableHead>
+	<div className="h-full flex flex-col relative">
+		<Table>
+			<TableHeader className="sticky top-0 bg-white z-10 border-b">
+				<TableRow>
+					<TableHead className="text-left">Select</TableHead>
+					<TableHead className="text-left">N°</TableHead>
+					{COLUMNS.map((column, index) => (
+						<TableHead key={index} className={column.className}>
+							{column.label}
+						</TableHead>
+					))}
+					<TableHead className="text-right"></TableHead>
+				</TableRow>
+			</TableHeader>
+			<TableBody className="h-full overflow-y-auto">
+				{sale.products.map((product, i) => (
+					<CartRow
+						key={i}
+						index={i}
+						product={product}
+						sale={sale}
+						onSelect={onSelect}
+						onQuantityUpdate={onQuantityUpdate}
+						onSelectedQuantityUpdate={onSelectedQuantityUpdate}
+						onRemove={onRemove}
+						onAddToDiscount={onAddToDiscount}
+					/>
 				))}
-				<TableHead className="text-right"></TableHead>
-			</TableRow>
-		</TableHeader>
-		<TableBody>
-			{sale.products.map((product, i) => (
-				<CartRow
-					key={i}
-					index={i}
-					product={product}
-					sale={sale}
-					onSelect={onSelect}
-					onQuantityUpdate={onQuantityUpdate}
-					onSelectedQuantityUpdate={onSelectedQuantityUpdate}
-					onRemove={onRemove}
-					onAddToDiscount={onAddToDiscount}
-				/>
-			))}
-		</TableBody>
-	</Table>
+			</TableBody>
+		</Table>
+	</div>
 )
 
 const CartRow = ({

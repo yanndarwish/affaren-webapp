@@ -107,7 +107,7 @@ export default function InventoryTable({
 	}
 
 	return (
-		<Card className="flex flex-col h-[calc(100vh-195px)]  overflow-hidden">
+		<Card className="flex flex-col overflow-hidden">
 			<div className="flex flex-col h-full relative">
 				{/* Sticky Header */}
 				<Table>
@@ -123,7 +123,7 @@ export default function InventoryTable({
 				</Table>
 
 				{/* Scrollable Body */}
-				<div id="scrollable-body" className="flex-1 overflow-auto">
+				<div id="scrollable-body" className="flex-1 overflow-auto h-full">
 					<Table>
 						<TableBody>
 							{/* Empty state rows to maintain height */}
@@ -131,7 +131,7 @@ export default function InventoryTable({
 								<EmptyData
 									message="No products found"
 									span={columns.length + 1}
-									className="h-[calc(100vh-300px)]"
+									// className="h-[calc(100vh-300px)]"
 								/>
 							) : (
 								products?.map((product) => (
