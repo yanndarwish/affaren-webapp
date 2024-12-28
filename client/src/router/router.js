@@ -13,6 +13,7 @@ import Menu from "../pages/Menu/Menu"
 import Lunch from "../pages/Lunch/Lunch"
 import Opening from "../pages/Opening/Opening"
 import Closing from "../pages/Closing/Closing"
+import Settings from "../pages/settings"
 
 const router = createBrowserRouter([
 	{
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
 			{
 				path: "logout",
 				element: <Logout />,
+			},
+			{
+				path: "settings",
+				element: <Settings />,
 			},
 			{
 				path: "forgot-password",

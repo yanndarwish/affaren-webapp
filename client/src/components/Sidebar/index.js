@@ -1,4 +1,4 @@
-import { Command, LogOut, Store } from "lucide-react"
+import {  LogOut, Settings, Store } from "lucide-react"
 import {
 	Sidebar,
 	SidebarContent,
@@ -51,7 +51,6 @@ export function AppSidebar() {
 								<span className="truncate font-semibold">Affären</span>
 								<span className="truncate text-xs">Paris</span>
 							</div>
-							{/* <ChevronsUpDown className="ml-auto" /> */}
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
@@ -61,29 +60,44 @@ export function AppSidebar() {
 					{/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
 					<SidebarGroupContent>
 						<SidebarMenu>
-							{config.modules.map((module) => (
-								<SidebarMenuItem key={module.name} className="h-10">
-									<SidebarMenuButton asChild isActive={isActive(module.url)}>
-										<a href={module.url}>
-											<module.icon />
-											<span>{module.label}</span>
-										</a>
-									</SidebarMenuButton>
-								</SidebarMenuItem>
-							))}
+							{config.modules.map((module) => {
+								if (!module.active) return null
+								return (
+									<SidebarMenuItem key={module.name} className="h-10">
+										<SidebarMenuButton asChild isActive={isActive(module.url)}>
+											<a href={module.url}>
+												<module.icon />
+												<span>{module.label}</span>
+											</a>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+								)
+							})}
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
 			</SidebarContent>
 			<SidebarFooter className="pb-4">
-				<SidebarMenuButton
-					variant="destructive"
-					className="w-full"
-					onClick={handleClickLogout}
-				>
-					<LogOut />
-					<span>Logout</span>
-				</SidebarMenuButton>
+				<SidebarMenu>
+					<SidebarMenuItem className="h-10">
+						<SidebarMenuButton asChild isActive={isActive("settings")}>
+							<a href={"/settings"}>
+								<Settings />
+								<span>Settings</span>
+							</a>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+					<SidebarMenuItem className="h-10">
+						<SidebarMenuButton
+							variant="destructive"
+							className="w-full"
+							onClick={handleClickLogout}
+						>
+							<LogOut />
+							<span>Logout</span>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+				</SidebarMenu>
 			</SidebarFooter>
 			<ModalLogout controller={modalLogout} />
 		</Sidebar>
