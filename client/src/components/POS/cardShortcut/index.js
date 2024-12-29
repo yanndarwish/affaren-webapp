@@ -97,7 +97,11 @@ export const CardShortcut = () => {
 
 	const handleChangeTab = (value) => {
 		setFilter(value)
-		setFilteredCards(cards.filter((card) => value === "all" ? true : card.card_type === value))
+		setFilteredCards(
+			cards.filter((card) =>
+				value === "all" ? true : card.card_type === value
+			)
+		)
 	}
 
 	useEffect(() => {
@@ -106,15 +110,14 @@ export const CardShortcut = () => {
 
 	return (
 		<>
-			<CardHeader>
-				<CardTitle>Shortcuts</CardTitle>
-			</CardHeader>
-			<CardContent className="space-y-2 overflow-y-auto max-h-[520px]">
-				<div className="space-y-2">
+			<div className="flex flex-col h-full p-4 space-y-2 justify-between overflow-hidden">
+				{/* <CardTitle>Shortcuts</CardTitle> */}
+
+				<Stack className="overflow-hidden h-full space-y-2">
 					<Tabs
 						defaultValue={filter}
 						onValueChange={handleChangeTab}
-						className="w-full h-full space-y-4"
+						className="w-full space-y-4"
 					>
 						<TabsList className="w-full p-0 bg-white">
 							{cardFilters.map((tab) => (
@@ -132,24 +135,23 @@ export const CardShortcut = () => {
 							))}
 						</TabsList>
 					</Tabs>
-					<Grid
-						container
-						rowSpacing={1}
-						columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-					>
-						{filteredCards.map((card) => (
-							<Grid item key={card.card_id} xs={6}>
-								<ProductCard card={card} onDelete={handleDelete} />
-							</Grid>
-						))}
-					</Grid>
-				</div>
-			</CardContent>
-			<CardFooter className="flex justify-center absolute bottom-0 w-full bg-white pt-6">
-				<Button className="w-full " onClick={handleAddCard}>
-					Add Shortcut
-				</Button>
-			</CardFooter>
+					<Stack className="overflow-y-auto h-full">
+						<Grid container rowSpacing={1} columnSpacing={1}>
+							{filteredCards.map((card) => (
+								<Grid item key={card.card_id} xs={6}>
+									<ProductCard card={card} onDelete={handleDelete} />
+								</Grid>
+							))}
+						</Grid>
+					</Stack>
+				</Stack>
+
+				<Stack className="w-full pt-2">
+					<Button className="w-full" onClick={handleAddCard}>
+						Add Shortcut
+					</Button>
+				</Stack>
+			</div>
 			<ModalDeleteCard
 				controller={modalDelete}
 				onConfirm={handleConfirmDelete}

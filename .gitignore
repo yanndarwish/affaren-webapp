@@ -4,3 +4,5 @@ server/node_modules/
 .DS_Store
 
 client/src/redux/ip.js
+server/logger/errors.log
+server/logger/warnings.log

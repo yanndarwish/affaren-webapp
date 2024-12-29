@@ -99,11 +99,11 @@ const Pos = () => {
 				</Stack>
 			</FixedContainer>
 			<FixedContainer className="col-span-4">
-				<Card className="relative h-full">
+				<Card className="relative h-full overflow-hidden">
 					<Tabs
 						value={selectedTab}
 						onValueChange={setSelectedTab}
-						className="w-full h-full"
+						className="flex flex-col w-full h-full justify-between"
 					>
 						<TabsList className="w-full">
 							{displayedTabs().map((tab) => (
@@ -112,11 +112,21 @@ const Pos = () => {
 								</TabsTrigger>
 							))}
 						</TabsList>
-						{displayedTabs().map((tab) => (
-							<TabsContent key={tab.name} value={tab.name}>
-								{tab.component}
-							</TabsContent>
-						))}
+						<FixedContainer className="h-full">
+							{displayedTabs().map((tab) => {
+								if (tab.name === selectedTab) {
+									return (
+										<TabsContent
+											key={tab.name}
+											value={tab.name}
+											className="h-full m-0"
+										>
+											{tab.component}
+										</TabsContent>
+									)
+								}
+							})}
+						</FixedContainer>
 					</Tabs>
 				</Card>
 			</FixedContainer>
