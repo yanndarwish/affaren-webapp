@@ -87,7 +87,21 @@ export const CardDiscount = () => {
 		if (discountAmount === "00.00") {
 			setDiscountAmount("00.00")
 		} else {
-			setDiscountAmount(discountAmount)
+			// Remove the decimal point and get all digits
+			let digits = discountAmount.replace(".", "")
+
+			// Remove last digit
+			digits = digits.slice(0, -1)
+
+			// Pad with zeros at the start until we have 4 digits
+			while (digits.length < 4) {
+				digits = "0" + digits
+			}
+
+			// Insert decimal point at correct position
+			const newPrice = digits.slice(0, -2) + "." + digits.slice(-2)
+
+			setDiscountAmount(newPrice)
 		}
 	}
 
@@ -119,25 +133,29 @@ export const CardDiscount = () => {
 	}
 
 	const handlePercentDiscount = (discountPercent) => {
+		const totalReductionToApply = sale.amount * (discountPercent / 100)
+		let remainingReductionToApply = totalReductionToApply
+
 		const newDiscount = sale.discount.map((target, i) => {
 			const found = sale.products.find(
 				(product) => product.id === target.productId
 			)
 
-			// if last item to be discounted, check if the reduction applied correspond to the remaining applied discount
-			// and fill the difference if necessary
-
-			let remainingDiscountAmount = discountAmount
 			let reduction = (found.price * Number(discountPercent)) / 100
+			reduction = Math.round(reduction * 100) / 100
+			let newPrice = Math.ceil((found.price - reduction) * 100) / 100
 
 			if (i === sale.discount.length - 1) {
+				newPrice =
+					found.price - Math.ceil(remainingReductionToApply * 100) / 100
+				reduction = Math.ceil(remainingReductionToApply * 100) / 100
+			} else {
+				remainingReductionToApply -= reduction
 			}
-			const newPrice = found.price - reduction
 
 			let productDiscount = {
 				productId: found.id,
 				discountType: discountType,
-				discountAmount: remainingDiscountAmount,
 				originalPrice: target.originalPrice,
 				reduction: reduction,
 				newPrice: newPrice,
