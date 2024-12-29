@@ -2,7 +2,15 @@ require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
 const path = require("path")
+const pinoHTTP = require("pino-http")
+const logger = require("./logger")
 const app = express()
+
+app.use(
+	pinoHTTP({
+		logger,
+	})
+)
 
 const login = require("./routes/login")
 const register = require("./routes/register")

@@ -1,4 +1,6 @@
-const pool = require("../db")
+const pool = require("../../db")
+const logger = require("../../logger")
+const { queryGetAllCards } = require("./query")
 
 // create a card
 const createCard = async (req, res) => {
@@ -22,11 +24,20 @@ const createCard = async (req, res) => {
 
 // get all cards
 const getCards = async (_req, res) => {
+	const fnLogger = logger.child({
+		module: "cards",
+		method: "getCards",
+	})
+
 	try {
-		const response = await pool.query("SELECT * FROM cards")
+		fnLogger.trace("getting cards")
+
+		const response = await pool.query(queryGetAllCards.statement)
+
+		fnLogger.trace("cards fetched")
 		res.status(200).send(response.rows)
 	} catch (err) {
-		console.log(err)
+		fnLogger.error(err, "error fetching cards")
 		res.status(500).send("Internal server error")
 	}
 }

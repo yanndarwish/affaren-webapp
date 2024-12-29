@@ -3,14 +3,22 @@ const pool = require("../db")
 const router = express.Router()
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const logger = require("../logger")
 
 router.post("/", async (req, res) => {
+	const fnLogger = logger.child({
+		module: "login",
+		method: "login",
+	})
 	try {
 		// get user input
 		const { email, password } = req.body
+
+		fnLogger.info({ email, password }, "checking password")
 		// validate user input
 		if (!(email && password)) {
 			res.status(400).send("All inputs are required")
+			fnLogger.warn("All inputs are required")
 		}
 
 		// validate if user exists in db
@@ -37,30 +45,31 @@ router.post("/", async (req, res) => {
 
 			// update user's token
 			const user = {
-				...foundUser,
-				user_token: token,
+				id: foundUser.user_id,
+				firstName: foundUser.user_first_name,
+				lastName: foundUser.user_last_name,
+				email: foundUser.user_email,
+				role: foundUser.user_role,
 			}
 
 			// save user token
 			const response = await pool.query(
 				"UPDATE users SET user_token = $1 WHERE user_id = $2",
-				[token, user.user_id]
+				[token, user.id]
 			)
+
+			fnLogger.info({ ...user }, "User logged in")
 			res.status(200).json({
 				token: token,
-				user: {
-					id: user.user_id,
-					firstName: user.user_first_name,
-					lastName: user.user_last_name,
-					email: user.user_email,
-					role: user.user_role,
-				},
+				user,
 			})
 			return
 		}
+		fnLogger.warn("Invalid Credentials")
 		res.status(400).send("Invalid Credentials")
 		return
 	} catch (err) {
+		fnLogger.error(err, "error checking password")
 		console.log(err)
 	}
 })
