@@ -499,7 +499,7 @@ const ProductActions = ({
 				variant="outline"
 				size="icon"
 				onClick={() => onAddToDiscount([product])}
-				disabled={disabled || !isSelected}
+				disabled={disabled}
 			>
 				<BadgePercent />
 			</Button>

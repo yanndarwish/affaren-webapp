@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react"
-import { NumPad } from "../../common/NumPad/NumPad"
-import { Button } from "../../ui/button"
-import { CardTitle, CardHeader, CardFooter, CardContent } from "../../ui/card"
+import { Grid, Stack } from "@mui/material"
+import { BadgePercent, Trash2Icon } from "lucide-react"
+
+import { useNotify } from "../../../lib/hooks/useNotify"
+import { useSale } from "../../../lib/providers/sale"
 
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
-import { useSale } from "../../../lib/providers/sale"
-import { Stack } from "@mui/material"
-import { BadgePercent, Trash2Icon } from "lucide-react"
-import {
-	getTotalNewPrice,
-	getTotalOriginalPrice,
-	getTotalReduction,
-} from "../../../lib/pos"
-import { useNotify } from "../../../lib/hooks/useNotify"
+import { NumPad } from "../../common/NumPad/NumPad"
 import { Separator } from "../../ui/separator"
 import { Checkbox } from "../../ui/checkbox"
+import { Button } from "../../ui/button"
 
 const discountTypes = [
 	{ name: "percent", label: "Percent", unit: "%" },
@@ -133,52 +128,130 @@ export const CardDiscount = () => {
 	}
 
 	const handlePercentDiscount = (discountPercent) => {
-		const totalReductionToApply = sale.amount * (discountPercent / 100)
-		let remainingReductionToApply = totalReductionToApply
+		// Convert to number and validate
+		const percentValue = Number(discountPercent)
+		if (percentValue < 0 || percentValue > 100) {
+			console.error("Invalid discount percentage")
+			return
+		}
 
-		const newDiscount = sale.discount.map((target, i) => {
-			const found = sale.products.find(
-				(product) => product.id === target.productId
+		// Calculate total selected products amount
+		const selectedAmount = selected.reduce((sum, target) => {
+			// First check in discount array
+			const discountedProduct = sale.discount.find(
+				(d) => d.productId === target.productId
 			)
-
-			let reduction = (found.price * Number(discountPercent)) / 100
-			reduction = Math.round(reduction * 100) / 100
-			let newPrice = Math.ceil((found.price - reduction) * 100) / 100
-
-			if (i === sale.discount.length - 1) {
-				newPrice =
-					found.price - Math.ceil(remainingReductionToApply * 100) / 100
-				reduction = Math.ceil(remainingReductionToApply * 100) / 100
+			if (discountedProduct) {
+				return sum + discountedProduct.originalPrice
 			} else {
-				remainingReductionToApply -= reduction
+				// If not found in discount array, check products array
+				const product = sale.products.find((p) => p.id === target.productId)
+				return sum + (product?.price || 0)
 			}
+		}, 0)
 
-			let productDiscount = {
-				productId: found.id,
-				discountType: discountType,
-				originalPrice: target.originalPrice,
-				reduction: reduction,
-				newPrice: newPrice,
-				productName: found.name,
-			}
+		const totalReductionToApply =
+			Math.round(selectedAmount * (percentValue / 100) * 100) / 100
+		let appliedReduction = 0
 
-			return productDiscount
-		})
+		const newDiscountedProducts = selected
+			.map((target, i) => {
+				// First check in discount array
+				const discountedProduct = sale.discount.find(
+					(d) => d.productId === target.productId
+				)
+
+				// Then check in products array
+				const found = sale.products.find(
+					(product) => product.id === target.productId
+				)
+
+				if (!found) return null
+
+				// Use originalPrice from discount if exists, otherwise use product price
+				const basePrice = discountedProduct
+					? discountedProduct.originalPrice
+					: found.price
+
+				// Calculate proportional reduction for this item
+				const itemProportion = basePrice / selectedAmount
+				let reduction =
+					i === selected.length - 1
+						? Math.round((totalReductionToApply - appliedReduction) * 100) / 100
+						: Math.round(totalReductionToApply * itemProportion * 100) / 100
+
+				// Ensure we don't reduce more than the item's price
+				reduction = Math.min(reduction, basePrice)
+
+				if (i !== selected.length - 1) {
+					appliedReduction += reduction
+				}
+
+				const newPrice = Math.max(
+					0,
+					Math.round((basePrice - reduction) * 100) / 100
+				)
+
+				return {
+					productId: found.id,
+					discountType: discountType,
+					originalPrice: discountedProduct
+						? discountedProduct.originalPrice
+						: found.price,
+					reduction,
+					newPrice,
+					productName: found.name,
+				}
+			})
+			.filter(Boolean) // Remove null entries
 
 		const updatedProducts = sale.products.map((product) => {
-			const found = newDiscount.find((item) => item.productId === product.id)
-			if (found) {
-				return { ...product, price: found.newPrice }
-			} else {
-				return product
-			}
+			const found = newDiscountedProducts.find(
+				(item) => item.productId === product.id
+			)
+			return found ? { ...product, price: found.newPrice } : product
 		})
+
+		// check existing discount
+		const newDiscount = [
+			// Keep existing discounts that aren't in newDiscountedProducts
+			...sale.discount.filter(
+				(oldItem) =>
+					!newDiscountedProducts.some(
+						(newItem) => newItem.productId === oldItem.productId
+					)
+			),
+			// Add new/updated discounts
+			...newDiscountedProducts.map((item) => {
+				const existingDiscount = sale.discount.find(
+					(oldItem) => oldItem.productId === item.productId
+				)
+				// If item exists in current discount, keep its price
+				return existingDiscount
+					? { ...item, newPrice: existingDiscount.newPrice }
+					: item
+			}),
+		]
 
 		sale.updateSale({ products: updatedProducts, discount: newDiscount })
 	}
 
 	const handleAmountDiscount = () => {
-		const percentDiscount = (discountAmount / sale.amount) * 100
+		const totalAmount = selected.reduce((sum, target) => {
+			// First check in discount array
+			const discountedProduct = sale.discount.find(
+				(d) => d.productId === target.productId
+			)
+			if (discountedProduct) {
+				return sum + discountedProduct.originalPrice
+			}
+
+			// If not found in discount array, check products array
+			const product = sale.products.find((p) => p.id === target.productId)
+			return sum + (product?.price || 0)
+		}, 0)
+
+		const percentDiscount = (discountAmount / totalAmount) * 100
 
 		handlePercentDiscount(percentDiscount)
 	}
@@ -209,82 +282,38 @@ export const CardDiscount = () => {
 		}
 	}, [discountType])
 
+	useEffect(() => {
+		setSelected(sale.discount)
+	}, [sale.discount])
+
 	return (
 		<>
-			<CardHeader>
+			{/* <CardHeader>
 				<CardTitle>
-					<Stack direction="row" className="justify-between">
-						Discount
-						{sale.discount.length > 0 && (
-							<Button onClick={handleResetDiscount} variant="destructive">
-								<Trash2Icon />
-							</Button>
-						)}
+				<Stack direction="row" className="justify-between">
+				Discount
+				{sale.discount.length > 0 && (
+					<Button onClick={handleResetDiscount} variant="destructive">
+					<Trash2Icon />
+					</Button>
+					)}
 					</Stack>
-				</CardTitle>
-			</CardHeader>
-			<CardContent className="space-y-2">
+					</CardTitle>
+					</CardHeader> */}
+			<div className="flex flex-col h-full p-4 space-y-2 justify-between overflow-hidden">
 				{sale.discount.length === 0 ? (
-					<div className="flex flex-col items-center justify-center space-y-8 h-[55vh]">
+					<div className="flex flex-col items-center justify-center space-y-8 h-full">
 						<BadgePercent className="w-10 h-10 text-gray-200" />
 						<p className="text-md text-gray-500">
 							No products in discount list
 						</p>
 					</div>
 				) : (
-					<div className="space-y-4 ">
-						{/* <div>
-							<p>Original Price: {getTotalOriginalPrice(sale.discount)} €</p>
-							<p>Reduction: {getTotalReduction(sale.discount)} €</p>
-							<p>New Price: {getTotalNewPrice(sale.discount)} €</p>
-						</div> */}
-
-						<article className="space-y-2 flex flex-col border border-gray-200 rounded-md p-2 overflow-y-auto max-h-[20vh]">
-							{sale.discount.map((product, i) => (
-								<Stack key={product.productId} className="space-y-2">
-									<Stack
-										direction="row"
-										alignItems="center"
-										justifyContent="space-between"
-									>
-										<Checkbox
-											checked={selected.some(
-												(p) => p.productId === product.productId
-											)}
-											onCheckedChange={() => handleSelect(product)}
-											aria-label="Select row"
-										/>
-										<div>{product.productName}</div>
-										<Stack
-											direction="row"
-											justifyContent="flex-end"
-											alignItems="center"
-											className="space-x-2"
-										>
-											{/* <div className="text-gray-500">
-												{product.originalPrice}
-											</div>
-											<div className="w-[50px] text-end">
-												{product.newPrice} €
-											</div> */}
-											<Button
-												size="icon"
-												onClick={() => handleRemoveDiscount(product.id)}
-											>
-												<Trash2Icon />
-											</Button>
-										</Stack>
-									</Stack>
-									{i !== sale.discount.length - 1 && (
-										<Separator className="p-0 m-0" />
-									)}
-								</Stack>
-							))}
-						</article>
+					<Stack className="space-y-2 h-full overflow-hidden">
 						<Tabs
 							defaultValue={discountType.name}
 							onValueChange={setDiscountType}
-							className="w-full h-full space-y-4"
+							className="w-full space-y-4"
 						>
 							<TabsList className="w-full p-0 bg-white">
 								{discountTypes.map((tab) => (
@@ -302,6 +331,60 @@ export const CardDiscount = () => {
 								))}
 							</TabsList>
 						</Tabs>
+						<Stack className="overflow-y-auto h-full">
+							<Grid container rowSpacing={1} columnSpacing={1}>
+								{sale.discount.map((product, i) => (
+									<Grid
+										item
+										xs={12}
+										key={product.productId}
+										className="space-y-2"
+									>
+										<Stack
+											direction="row"
+											alignItems="center"
+											justifyContent="space-between"
+										>
+											<Stack
+												direction="row"
+												alignItems="center"
+												className="space-x-4"
+											>
+												<Checkbox
+													checked={selected.some(
+														(p) => p.productId === product.productId
+													)}
+													onCheckedChange={() => handleSelect(product)}
+													aria-label="Select row"
+												/>
+												<div>{product.productName}</div>
+											</Stack>
+											<Stack
+												direction="row"
+												justifyContent="flex-end"
+												alignItems="center"
+												className="space-x-2"
+											>
+												<Button
+													size="icon"
+													onClick={() => handleRemoveDiscount(product.id)}
+												>
+													<Trash2Icon />
+												</Button>
+											</Stack>
+										</Stack>
+										{i !== sale.discount.length - 1 && (
+											<Separator className="p-0 m-0" />
+										)}
+									</Grid>
+								))}
+							</Grid>
+						</Stack>
+					</Stack>
+				)}
+
+				<Stack className="flex flex-col w-full pt-2 space-y-8">
+					{sale.discount.length !== 0 && (
 						<NumPad
 							display
 							unit={discountTypes.find((tab) => tab.name === discountType).unit}
@@ -310,18 +393,16 @@ export const CardDiscount = () => {
 							onClick={handleTypeNumber}
 							onCorrect={handleCorrect}
 						/>
-					</div>
-				)}
-			</CardContent>
-			<CardFooter className="flex justify-center absolute bottom-0 w-full">
-				<Button
-					className="w-full"
-					disabled={sale.discount.length === 0}
-					onClick={handleApplyDiscount}
-				>
-					Apply Discount
-				</Button>
-			</CardFooter>
+					)}
+					<Button
+						className="w-full"
+						disabled={sale.discount.length === 0}
+						onClick={handleApplyDiscount}
+					>
+						Apply Discount
+					</Button>
+				</Stack>
+			</div>
 		</>
 	)
 }

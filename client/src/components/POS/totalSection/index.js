@@ -96,7 +96,7 @@ export const TotalSection = () => {
 						{sale.isActiveDiscount && hasDiscount(sale.discount) && (
 							<>
 								<CardDescription className="text-xl">
-									Original Price: {getTotalOriginalPrice(sale.discount)} €
+									Original Price: {getTotalOriginalPrice(sale)} €
 								</CardDescription>
 								<Separator orientation="vertical" className="mx-8 h-8" />
 								<CardDescription className="text-xl">

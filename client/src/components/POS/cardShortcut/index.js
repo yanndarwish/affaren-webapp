@@ -111,8 +111,6 @@ export const CardShortcut = () => {
 	return (
 		<>
 			<div className="flex flex-col h-full p-4 space-y-2 justify-between overflow-hidden">
-				{/* <CardTitle>Shortcuts</CardTitle> */}
-
 				<Stack className="overflow-hidden h-full space-y-2">
 					<Tabs
 						defaultValue={filter}

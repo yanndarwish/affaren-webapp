@@ -1,7 +1,7 @@
 import Toastify from "toastify-js"
 
 const baseOptions = {
-	duration: 3000,
+	duration: 2000,
 	close: true,
 	position: "center",
 	style: {

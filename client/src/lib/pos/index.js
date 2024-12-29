@@ -88,10 +88,26 @@ export const roundUpToTwoDecimals = (number) => {
 	return Math.ceil(number * 100) / 100
 }
 
-export const getTotalOriginalPrice = (products) => {
-	return roundUpToTwoDecimals(
-		products.reduce((acc, product) => acc + product.originalPrice, 0)
+export const getTotalOriginalPrice = (sale) => {
+	// Get all discounted product IDs for easier lookup
+	const discountedProductIds = new Set(
+		sale.discount.map((item) => item.productId)
 	)
+
+	// Sum up original prices from the discount array
+	const sumOfDiscountedPrices = sale.discount.reduce((acc, product) => {
+		return acc + product.originalPrice
+	}, 0)
+
+	// Sum up prices of products that are NOT in the discount array
+	const sumOfOriginalPrices = sale.products.reduce((acc, product) => {
+		if (!discountedProductIds.has(product.id)) {
+			return acc + product.price
+		}
+		return acc
+	}, 0)
+
+	return roundUpToTwoDecimals(sumOfOriginalPrices + sumOfDiscountedPrices)
 }
 
 export const getTotalReduction = (products) => {
