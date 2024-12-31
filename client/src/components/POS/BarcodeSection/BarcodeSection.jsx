@@ -6,11 +6,13 @@ import { useQuery } from "../../../lib/hooks/useQuery"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { useNavigate } from "react-router-dom"
 import { Stack } from "@mui/material"
+import { useSale } from "../../../lib/providers/sale"
 
 const BarcodeSection = ({ onSuccess }) => {
 	const [barcode, setBarcode] = useState("")
 	const { notifyError } = useNotify()
 	const navigate = useNavigate()
+	const sale = useSale()
 
 	const queryGetProduct = useQuery({
 		queryFn: getProducts,
@@ -78,8 +80,9 @@ const BarcodeSection = ({ onSuccess }) => {
 					placeholder="Barcode"
 					value={barcode}
 					onChange={handleBarcodeChange}
+					disabled={sale.isRefund}
 				/>
-				<Button type="submit" onClick={handleBarcodeSearch}>
+				<Button type="submit" onClick={handleBarcodeSearch} disabled={sale.isRefund}>
 					Search
 				</Button>
 			</div>

@@ -1,10 +1,9 @@
 import { Button } from "../../ui/button"
-import { CardContent, CardFooter, CardHeader, CardTitle } from "../../ui/card"
 import { Input } from "../../ui/input"
 import { Label } from "../../ui/label"
 
 import { NumPad } from "../../common/NumPad/NumPad"
-import { FormControl, Stack } from "@mui/material"
+import {  Stack } from "@mui/material"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 import { useState } from "react"
 
@@ -250,7 +249,7 @@ export const CardNoBarcode = () => {
 				</Stack>
 				<Stack className="flex flex-col w-full pt-2 space-y-8">
 					<NumPad onClick={handleTypeNumber} />
-					<Button onClick={addNoBarcodeProduct} className="w-full">
+					<Button onClick={addNoBarcodeProduct} className="w-full" disabled={sale.isRefund}>
 						Add product
 					</Button>
 				</Stack>

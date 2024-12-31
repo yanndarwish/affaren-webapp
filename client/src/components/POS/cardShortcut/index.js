@@ -11,7 +11,6 @@ import { Grid, Stack } from "@mui/material"
 import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
 import { Button } from "../../ui/button"
-import { CardContent, CardFooter, CardHeader, CardTitle } from "../../ui/card"
 import { Modal, useModal } from "../../shared/modal"
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
 import useLongPress from "../../../lib/hooks/useLongPress"
@@ -206,13 +205,17 @@ const ProductCard = ({ card, onDelete = () => null }) => {
 		if (action === "longpress") {
 			handleDelete()
 		} else if (action === "click") {
-			handleClick()
+			if (!sale.isRefund) {
+				handleClick()
+			}
 		}
 	}, [action])
 
 	return (
 		<Stack
-			className="relative long-press w-full h-20 bg-slate-900 text-white rounded-md flex items-center justify-center"
+			className={`relative long-press w-full h-20 text-white rounded-md flex items-center justify-center ${
+				sale.isRefund ? "bg-slate-900/50" : "bg-slate-900"
+			}`}
 			{...handlers}
 		>
 			{card.card_name}
