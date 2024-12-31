@@ -4,7 +4,7 @@ import { Input } from "../../ui/input"
 import { Label } from "../../ui/label"
 
 import { NumPad } from "../../common/NumPad/NumPad"
-import { FormControl } from "@mui/material"
+import { FormControl, Stack } from "@mui/material"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 import { useState } from "react"
 
@@ -173,95 +173,88 @@ export const CardNoBarcode = () => {
 
 	return (
 		<>
-			<CardHeader>
-				<CardTitle>No Barcode</CardTitle>
-			</CardHeader>
-			<CardContent className="space-y-2">
-				<div className="flex flex-col gap-6">
-					<FormControl fullWidth>
-						<div className="space-y-2">
-							<Tabs
-								defaultValue={product.taxe}
-								onValueChange={handleChangeTab}
-								className="w-full h-full space-y-4"
-							>
-								<TabsList className="w-full p-0 bg-white">
-									{tabs.map((tab) => (
-										<TabsTrigger
-											key={tab.value}
-											value={tab.value}
-											className={`w-full ${
-												product.taxe === tab.value
-													? "!bg-slate-900 !text-white"
-													: "!bg-white"
-											}`}
-										>
-											{tab.label}
-										</TabsTrigger>
-									))}
-								</TabsList>
-							</Tabs>
-							<div className="space-y-1">
-								<Label htmlFor="nb-qty">Quantity</Label>
-								<div className="flex w-full max-w-sm items-center space-x-2">
-									<Button
-										onClick={handleSubtractQuantity}
-										className="w-full"
-										variant="outline"
-									>
-										-
-									</Button>
-									<Input
-										id="nb-qty"
-										onClick={handleInputClick}
-										value={product.quantity}
-										onChange={handleTypeQuantity}
-										className={
-											"text-center" +
-											(focusedInput === "nb-qty"
-												? " border-2 border-black"
-												: "")
-										}
-									/>
-									<Button
-										onClick={handleAddQuantity}
-										className="w-full"
-										variant="outline"
-									>
-										+
-									</Button>
-									<Button onClick={handleCorrectQuantity}>
-										<BackspaceOutlinedIcon data-id="nb-qty" />
-									</Button>
-								</div>
+			<div className="flex flex-col h-full p-4 space-y-2 justify-between overflow-hidden">
+				<Stack className="overflow-hidden h-full space-y-4">
+					<Tabs
+						defaultValue={product.taxe}
+						onValueChange={handleChangeTab}
+						className="w-full"
+					>
+						<TabsList className="w-full p-0 bg-white">
+							{tabs.map((tab) => (
+								<TabsTrigger
+									key={tab.value}
+									value={tab.value}
+									className={`w-full ${
+										product.taxe === tab.value
+											? "!bg-slate-900 !text-white"
+											: "!bg-white"
+									}`}
+								>
+									{tab.label}
+								</TabsTrigger>
+							))}
+						</TabsList>
+					</Tabs>
+					<Stack className="space-y-4">
+						<Stack className="space-y-1">
+							<Label htmlFor="nb-qty">Quantity</Label>
+							<div className="flex w-full max-w-sm items-center space-x-2">
+								<Button
+									onClick={handleSubtractQuantity}
+									className="w-full"
+									variant="outline"
+								>
+									-
+								</Button>
+								<Input
+									id="nb-qty"
+									onClick={handleInputClick}
+									value={product.quantity}
+									onChange={handleTypeQuantity}
+									className={
+										"text-center" +
+										(focusedInput === "nb-qty" ? " border-2 border-black" : "")
+									}
+								/>
+								<Button
+									onClick={handleAddQuantity}
+									className="w-full"
+									variant="outline"
+								>
+									+
+								</Button>
+								<Button onClick={handleCorrectQuantity}>
+									<BackspaceOutlinedIcon data-id="nb-qty" />
+								</Button>
 							</div>
-							<div className="space-y-1">
-								<Label htmlFor="nb-price">Price</Label>
-								<div className="flex w-full max-w-sm items-center space-x-2">
-									<Input
-										id="nb-price"
-										onClick={handleInputClick}
-										value={product.price}
-										onChange={handleTypePrice}
-										className={
-											focusedInput === "nb-price" ? "border-2 border-black" : ""
-										}
-									/>
-									<Button onClick={handleCorrectPrice}>
-										<BackspaceOutlinedIcon data-id="nb-price" />
-									</Button>
-								</div>
+						</Stack>
+						<Stack className="space-y-1">
+							<Label htmlFor="nb-price">Price</Label>
+							<div className="flex w-full max-w-sm items-center space-x-2">
+								<Input
+									id="nb-price"
+									onClick={handleInputClick}
+									value={product.price}
+									onChange={handleTypePrice}
+									className={
+										focusedInput === "nb-price" ? "border-2 border-black" : ""
+									}
+								/>
+								<Button onClick={handleCorrectPrice}>
+									<BackspaceOutlinedIcon data-id="nb-price" />
+								</Button>
 							</div>
-						</div>
-					</FormControl>
+						</Stack>
+					</Stack>
+				</Stack>
+				<Stack className="flex flex-col w-full pt-2 space-y-8">
 					<NumPad onClick={handleTypeNumber} />
-				</div>
-			</CardContent>
-			<CardFooter className="flex justify-center absolute bottom-0 w-full">
-				<Button onClick={addNoBarcodeProduct} className="w-full">
-					Add product
-				</Button>
-			</CardFooter>
+					<Button onClick={addNoBarcodeProduct} className="w-full">
+						Add product
+					</Button>
+				</Stack>
+			</div>
 		</>
 	)
 }

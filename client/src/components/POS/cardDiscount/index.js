@@ -288,18 +288,6 @@ export const CardDiscount = () => {
 
 	return (
 		<>
-			{/* <CardHeader>
-				<CardTitle>
-				<Stack direction="row" className="justify-between">
-				Discount
-				{sale.discount.length > 0 && (
-					<Button onClick={handleResetDiscount} variant="destructive">
-					<Trash2Icon />
-					</Button>
-					)}
-					</Stack>
-					</CardTitle>
-					</CardHeader> */}
 			<div className="flex flex-col h-full p-4 space-y-2 justify-between overflow-hidden">
 				{sale.discount.length === 0 ? (
 					<div className="flex flex-col items-center justify-center space-y-8 h-full">
@@ -394,13 +382,23 @@ export const CardDiscount = () => {
 							onCorrect={handleCorrect}
 						/>
 					)}
-					<Button
-						className="w-full"
-						disabled={sale.discount.length === 0}
-						onClick={handleApplyDiscount}
-					>
-						Apply Discount
-					</Button>
+					<Stack direction="row" className="w-full space-x-4">
+						<Button
+							onClick={handleResetDiscount}
+							variant="destructive"
+							className="w-full"
+							disabled={sale.discount.length === 0}
+						>
+							Clear all
+						</Button>
+						<Button
+							className="w-full"
+							disabled={sale.discount.length === 0}
+							onClick={handleApplyDiscount}
+						>
+							Apply Discount
+						</Button>
+					</Stack>
 				</Stack>
 			</div>
 		</>

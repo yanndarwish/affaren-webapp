@@ -299,8 +299,12 @@ const FormAddCard = ({ onSuccess = () => null }) => {
 	})
 
 	const handleSubmit = () => {
+		let trimmedName = name.trim()
+
+		trimmedName = trimmedName.replace(/ /g, "-")
+
 		const payload = {
-			id: `c-${name}`,
+			id: `c-${trimmedName}`,
 			name: name,
 			price: price,
 			taxe: taxe,
