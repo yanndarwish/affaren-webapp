@@ -35,6 +35,7 @@ import {
 } from "../../../ui/table"
 import { Button } from "../../../ui/button"
 import { DataGrid } from "../../../shared/datagrid"
+import { useConfig } from "../../../../lib/hooks/useConfig"
 
 const chartConfig = {
 	sales: {
@@ -45,11 +46,11 @@ const chartConfig = {
 
 const tabs = [
 	{
-		name: "chart",
+		name: "chart-monthly-sales",
 		label: "Chart",
 	},
 	{
-		name: "table",
+		name: "table-monthly-sales",
 		label: "Table",
 	},
 ]
@@ -78,7 +79,8 @@ const formatData = (data) => {
 export function MonthSalesChart({ monthString, month, year }) {
 	const { notifyError } = useNotify()
 	const [chartData, setChartData] = useState([])
-	const [selectedTab, setSelectedTab] = useState("chart")
+	const [selectedTab, setSelectedTab] = useState()
+	const { config, isActiveComponent } = useConfig()
 
 	const queryGetMonthSales = useQuery({
 		queryFn: getMonthSales,
@@ -104,11 +106,22 @@ export function MonthSalesChart({ monthString, month, year }) {
 		})
 	}
 
+	const displayableTabs = () =>
+		tabs.filter((tab) => isActiveComponent("dashboard", tab.name))
+
 	useEffect(() => {
 		if (month && year) {
 			fetchData()
 		}
 	}, [month, year])
+
+	useEffect(() => {
+		if (displayableTabs().length > 0) {
+			setSelectedTab(displayableTabs()[0].name)
+		} else {
+			setSelectedTab(null)
+		}
+	}, [config])
 
 	return (
 		<Card className="flex flex-col overflow-hidden h-full">
@@ -122,31 +135,34 @@ export function MonthSalesChart({ monthString, month, year }) {
 						>
 							Sales
 							<Stack direction="row" spacing={2}>
-								{selectedTab === "table" && (
-									<Button
-										onClick={exportToExcel}
-										disabled={chartData.length === 0}
+								{selectedTab === tabs[1].name &&
+									isActiveComponent("dashboard", "table-monthly-sales") && (
+										<Button
+											onClick={exportToExcel}
+											disabled={chartData.length === 0}
+										>
+											Export to Excel
+										</Button>
+									)}
+								{displayableTabs().length > 1 && (
+									<Tabs
+										value={selectedTab}
+										onValueChange={setSelectedTab}
+										className="h-full"
 									>
-										Export to Excel
-									</Button>
+										<TabsList className="w-full">
+											{displayableTabs().map((tab) => (
+												<TabsTrigger
+													key={tab.name}
+													value={tab.name}
+													className="w-full"
+												>
+													{tab.label}
+												</TabsTrigger>
+											))}
+										</TabsList>
+									</Tabs>
 								)}
-								<Tabs
-									value={selectedTab}
-									onValueChange={setSelectedTab}
-									className="h-full"
-								>
-									<TabsList className="w-full">
-										{tabs.map((tab) => (
-											<TabsTrigger
-												key={tab.name}
-												value={tab.name}
-												className="w-full"
-											>
-												{tab.label}
-											</TabsTrigger>
-										))}
-									</TabsList>
-								</Tabs>
 							</Stack>
 						</Stack>
 					</CardTitle>
@@ -155,7 +171,7 @@ export function MonthSalesChart({ monthString, month, year }) {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="h-full overflow-auto">
-					{selectedTab === "chart" ? (
+					{selectedTab === tabs[0].name ? (
 						<>
 							{chartData.length === 0 ? (
 								<div className="flex flex-col items-center justify-center space-y-8 ">
@@ -165,40 +181,47 @@ export function MonthSalesChart({ monthString, month, year }) {
 									</p>
 								</div>
 							) : (
-								<ChartContainer config={chartConfig} className="h-full w-full">
-									<AreaChart
-										accessibilityLayer
-										data={chartData}
-										margin={{
-											left: 3,
-											right: 3,
-										}}
+								isActiveComponent("dashboard", "chart-monthly-sales") && (
+									<ChartContainer
+										config={chartConfig}
+										className="h-full w-full"
 									>
-										<CartesianGrid vertical={false} />
-										<XAxis
-											dataKey="day"
-											tickLine={false}
-											axisLine={false}
-											tickMargin={8}
-											tickFormatter={(value) => value.slice(0, 3)}
-										/>
-										<ChartTooltip
-											cursor={false}
-											content={<ChartTooltipContent indicator="line" />}
-										/>
-										<Area
-											dataKey="amount"
-											type="natural"
-											fill="var(--color-desktop)"
-											fillOpacity={0.4}
-											stroke="var(--color-desktop)"
-										/>
-									</AreaChart>
-								</ChartContainer>
+										<AreaChart
+											accessibilityLayer
+											data={chartData}
+											margin={{
+												left: 3,
+												right: 3,
+											}}
+										>
+											<CartesianGrid vertical={false} />
+											<XAxis
+												dataKey="day"
+												tickLine={false}
+												axisLine={false}
+												tickMargin={8}
+												tickFormatter={(value) => value.slice(0, 3)}
+											/>
+											<ChartTooltip
+												cursor={false}
+												content={<ChartTooltipContent indicator="line" />}
+											/>
+											<Area
+												dataKey="amount"
+												type="natural"
+												fill="var(--color-desktop)"
+												fillOpacity={0.4}
+												stroke="var(--color-desktop)"
+											/>
+										</AreaChart>
+									</ChartContainer>
+								)
 							)}
 						</>
 					) : (
-						<TableMonthSales month={month} year={year} />
+						isActiveComponent("dashboard", "table-monthly-sales") && (
+							<TableMonthSales month={month} year={year} />
+						)
 					)}
 				</CardContent>
 			</div>

@@ -201,6 +201,7 @@ const SaleProvider = ({ children }) => {
 				clearBookmarks,
 				applyBookmark,
 				refocus,
+				queryGetNextSaleId
 			}}
 		>
 			{children}

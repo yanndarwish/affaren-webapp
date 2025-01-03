@@ -80,6 +80,11 @@ const Cart = ({ onDiscount, onBookmark }) => {
 		const product = findProduct(id)
 		if (!product) return
 
+		const discountedProduct = findDiscountedProduct(id)
+		if (discountedProduct) {
+			removeFromDiscount(id)
+		}
+
 		const updatedProducts = sale.products.filter(
 			(p) => p.id.toString() !== id.toString()
 		)
@@ -167,6 +172,17 @@ const Cart = ({ onDiscount, onBookmark }) => {
 				: product
 		)
 		sale.updateSale({ products: updated })
+	}
+
+	const findDiscountedProduct = (id) => {
+		return sale.discount.find((p) => p.productId.toString() === id.toString())
+	}
+
+	const removeFromDiscount = (id) => {
+		const updatedDiscount = sale.discount.filter(
+			(p) => p.productId.toString() !== id.toString()
+		)
+		sale.updateSale({ discount: updatedDiscount })
 	}
 
 	const refocusBarcode = () => {
@@ -277,9 +293,7 @@ const CartContent = ({
 }) => (
 	<CardContent className="h-full overflow-hidden">
 		{sale.products.length === 0 ? (
-			<FixedContainer className="h-[80%]">
-				<EmptyCart />
-			</FixedContainer>
+			<EmptyCart />
 		) : (
 			<CartTable
 				sale={sale}

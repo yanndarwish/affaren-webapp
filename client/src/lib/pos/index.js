@@ -85,7 +85,7 @@ export const updateTaxes = (products) => {
 }
 
 export const roundUpToTwoDecimals = (number) => {
-	return Math.ceil(number * 100) / 100
+	return Math.round(number * 100) / 100
 }
 
 export const getTotalOriginalPrice = (sale) => {
@@ -96,13 +96,18 @@ export const getTotalOriginalPrice = (sale) => {
 
 	// Sum up original prices from the discount array
 	const sumOfDiscountedPrices = sale.discount.reduce((acc, product) => {
-		return acc + product.originalPrice
+		// find quantity of product in sale.products
+		const quantity = sale.products.find(
+			(p) => p.id === product.productId
+		)?.quantity || 0
+		return acc + product.originalPrice * quantity
 	}, 0)
 
 	// Sum up prices of products that are NOT in the discount array
 	const sumOfOriginalPrices = sale.products.reduce((acc, product) => {
 		if (!discountedProductIds.has(product.id)) {
-			return acc + product.price
+			const quantity = sale.products.find((p) => p.id === product.id)?.quantity || 0
+			return acc + product.price * quantity
 		}
 		return acc
 	}, 0)
@@ -110,9 +115,14 @@ export const getTotalOriginalPrice = (sale) => {
 	return roundUpToTwoDecimals(sumOfOriginalPrices + sumOfDiscountedPrices)
 }
 
-export const getTotalReduction = (products) => {
+export const getTotalReduction = (sale) => {
 	return roundUpToTwoDecimals(
-		products.reduce((acc, product) => acc + product.reduction, 0)
+		sale.discount.reduce((acc, product) => {
+			const quantity = sale.products.find(
+				(p) => p.id === product.productId
+			)?.quantity || 0
+			return acc + product.reduction * quantity
+		}, 0)
 	)
 }
 

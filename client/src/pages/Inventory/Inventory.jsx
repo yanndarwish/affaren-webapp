@@ -16,10 +16,12 @@ import {
 	FixedContainer,
 	PageContainer,
 } from "../../components/shared/containers"
+import { useConfig } from "../../lib/hooks/useConfig"
 
 const Inventory = () => {
 	const { notifyError } = useNotify()
 	let [searchParams] = useSearchParams()
+	const { isActiveComponent } = useConfig()
 	const createProductController = useModal()
 
 	const [name, setName] = useState("")
@@ -99,23 +101,31 @@ const Inventory = () => {
 				<Stack className="space-y-4 h-full overflow-y-hidden">
 					<Stack direction="row" spacing={2} justifyContent="space-between">
 						<Stack direction="row" spacing={2}>
-							<BarcodeSection onSuccess={setProducts} />
-							<NameSection name={name} handleNameChange={handleNameChange} />
+							{isActiveComponent("inventory", "search-barcode") && (
+								<BarcodeSection onSuccess={setProducts} />
+							)}
+							{isActiveComponent("inventory", "search-name") && (
+								<NameSection name={name} handleNameChange={handleNameChange} />
+							)}
 							<Button onClick={handleCreateProduct}>
 								<PlusIcon />
 							</Button>
 						</Stack>
-						<Button onClick={handleReset}>Reset</Button>
+						{isActiveComponent("inventory", "search-name") && (
+							<Button onClick={handleReset}>Reset</Button>
+						)}
 					</Stack>
-					<InventoryTable
-						products={products}
-						pagination={pagination}
-						handlePreviousPage={handlePreviousPage}
-						handleNextPage={handleNextPage}
-						onSuccess={() => {
-							queryGetProducts.send(pagination)
-						}}
-					/>
+					{isActiveComponent("inventory", "table") && (
+						<InventoryTable
+							products={products}
+							pagination={pagination}
+							handlePreviousPage={handlePreviousPage}
+							handleNextPage={handleNextPage}
+							onSuccess={() => {
+								queryGetProducts.send(pagination)
+							}}
+						/>
+					)}
 				</Stack>
 				<ModalCreateProduct
 					controller={createProductController}

@@ -10,8 +10,7 @@ import {
 	CardDescription,
 } from "../../ui/card"
 
-import ReceiptIcon from "@mui/icons-material/Receipt"
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
+import { ReceiptText, Computer, BadgePercent, ShoppingBasket } from "lucide-react"
 import { useQuery } from "../../../lib/hooks/useQuery"
 import { openDrawer, printTicket } from "../../../lib/api"
 import { useModal } from "../../shared/modal"
@@ -22,9 +21,12 @@ import {
 	getTotalReduction,
 	hasDiscount,
 } from "../../../lib/pos"
+import { useConfig } from "../../../lib/hooks/useConfig"
+import { Typography } from "../../ui/typography"
 
 export const TotalSection = () => {
 	const { notifySuccess, notifyError } = useNotify()
+	const { isActiveComponent } = useConfig()
 	const paymentModal = useModal()
 	const sale = useSale()
 
@@ -81,33 +83,57 @@ export const TotalSection = () => {
 			<CardHeader>
 				<Stack direction="row" className="space-x-4 justify-between">
 					<Stack direction="row" className="space-x-4">
-						<Button onClick={handleOpenDrawer}>
-							<PointOfSaleIcon />
-						</Button>
-						<Button
-							onClick={handlePrintTicket}
-							className="bg-orange-400"
-							disabled={sale.products.length === 0}
-						>
-							<ReceiptIcon />
-						</Button>
+						{isActiveComponent("pos", "drawer") && (
+							<Button onClick={handleOpenDrawer}>
+								<Computer />
+							</Button>
+						)}
+						{isActiveComponent("pos", "receipt") && (
+							<Button
+								onClick={handlePrintTicket}
+								className="bg-orange-400"
+								disabled={sale.products.length === 0}
+							>
+								<ReceiptText />
+							</Button>
+						)}
 					</Stack>
 					<Stack direction="row" className="space-x-4" alignItems="center">
-						{sale.isActiveDiscount && hasDiscount(sale.discount) && (
-							<>
-								<CardDescription className="text-xl">
-									Original Price: {getTotalOriginalPrice(sale)} €
-								</CardDescription>
-								<Separator orientation="vertical" className="mx-8 h-8" />
-								<CardDescription className="text-xl">
-									Discount: {getTotalReduction(sale.discount)} €
-								</CardDescription>
-								<Separator orientation="vertical" className="mx-8 h-8" />
-							</>
-						)}
-						<CardTitle className="text-end text-3xl">
+						{isActiveComponent("pos", "discount") &&
+							hasDiscount(sale.discount) && (
+								<Stack
+									direction="row"
+									alignItems="center"
+									className="space-x-4"
+								>
+									<Stack
+										direction="row"
+										alignItems="center"
+										className="text-muted-foreground space-x-2"
+									>
+										<ShoppingBasket />
+										<Typography variant="lead">
+											{getTotalOriginalPrice(sale)} €
+										</Typography>
+									</Stack>
+									<Separator orientation="vertical" className="mx-8 h-8" />
+									<Stack
+										direction="row"
+										alignItems="center"
+										className="text-muted-foreground space-x-2"
+									>
+										<BadgePercent />
+										<Typography variant="lead">
+											{getTotalReduction(sale)} €
+										</Typography>
+									</Stack>
+
+									<Separator orientation="vertical" className="mx-8 h-8" />
+								</Stack>
+							)}
+						<Typography variant="h2" className="text-end">
 							Total {sale.amount}€
-						</CardTitle>
+						</Typography>
 					</Stack>
 				</Stack>
 			</CardHeader>

@@ -165,7 +165,7 @@ const CashCheckout = () => {
 	const queryGetTodayCashBase = useQuery({
 		queryFn: getDayCash,
 		onSuccess: (data) => {
-			setCashBase(data.drawer)
+			setCashBase(data.amount)
 		},
 		onError: () => {
 			notifyError("An error occurred while fetching the cash base")

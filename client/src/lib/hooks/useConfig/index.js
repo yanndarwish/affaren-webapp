@@ -1,5 +1,20 @@
 import { createContext, useContext, useState, useEffect } from "react"
-import { Home, List, ChartSpline, Box, KeyRound, Settings } from "lucide-react"
+import {
+	Home,
+	List,
+	ChartSpline,
+	Box,
+	KeyRound,
+	BadgePercent,
+	Barcode,
+	Layers2,
+	BookmarkCheck,
+	ShoppingCart,
+	Undo2,
+	ReceiptText,
+	Computer,
+} from "lucide-react"
+import { NoBarcode } from "../../../pages/Pos/config"
 const ConfigContext = createContext()
 
 const defaultConfig = {
@@ -18,6 +33,7 @@ const defaultConfig = {
 				{
 					name: "barcode",
 					label: "Barcode",
+					icon: Barcode,
 					active: true,
 					description:
 						"The barcode component is used to scan products via barcode.",
@@ -25,12 +41,14 @@ const defaultConfig = {
 				{
 					name: "cart",
 					label: "Cart",
+					icon: ShoppingCart,
 					active: true,
 					description: "The cart component is used to display the cart.",
 				},
 				{
 					name: "shortcuts",
 					label: "Shortcuts",
+					icon: Layers2,
 					active: true,
 					description:
 						"The shortcuts component is used to create and use shortcuts for recurrent products.",
@@ -38,6 +56,7 @@ const defaultConfig = {
 				{
 					name: "no-barcode",
 					label: "No barcode",
+					icon: NoBarcode,
 					active: true,
 					description:
 						"The no barcode component is used to sell products without scanning a barcode.",
@@ -45,6 +64,7 @@ const defaultConfig = {
 				{
 					name: "bookmarks",
 					label: "Bookmarks",
+					icon: BookmarkCheck,
 					active: true,
 					description:
 						"The bookmarks component is used to save sales for later.",
@@ -52,18 +72,21 @@ const defaultConfig = {
 				{
 					name: "refund",
 					label: "Refund",
+					icon: Undo2,
 					active: true,
 					description: "The refund component is used to refund an amount.",
 				},
 				{
 					name: "discount",
 					label: "Discount",
+					icon: BadgePercent,
 					active: true,
 					description: "The discount component is used to apply a discount.",
 				},
 				{
 					name: "drawer",
 					label: "Drawer",
+					icon: Computer,
 					active: true,
 					description:
 						"The drawer component is used to pair a drawer with the point of sale.",
@@ -71,6 +94,7 @@ const defaultConfig = {
 				{
 					name: "receipt",
 					label: "Receipt",
+					icon: ReceiptText,
 					active: true,
 					description:
 						"The receipt component is used to pair a receipt printer with the point of sale.",
@@ -213,17 +237,34 @@ const ConfigProvider = ({ children }) => {
 	}
 
 	const getMutableModules = () => {
-		console.log(config.modules)
 		return config.modules.filter((module) => module.isMutable)
 	}
 
 	useEffect(() => {
 		const storedConfig = JSON.parse(localStorage.getItem("config") || "null")
 		if (storedConfig) {
-			const modulesWithIcons = storedConfig.modules.map((module) => ({
-				...module,
-				icon: defaultConfig.modules.find((m) => m.name === module.name).icon,
-			}))
+			const modulesWithIcons = storedConfig.modules.map((storedModule) => {
+				const defaultModule = defaultConfig.modules.find(
+					(m) => m.name === storedModule.name
+				)
+				const componentsWithIcons = storedModule.components.map(
+					(storedComponent) => {
+						const defaultComponent = defaultModule.components.find(
+							(c) => c.name === storedComponent.name
+						)
+						return {
+							...storedComponent,
+							icon: defaultComponent?.icon,
+						}
+					}
+				)
+
+				return {
+					...storedModule,
+					icon: defaultModule?.icon,
+					components: componentsWithIcons,
+				}
+			})
 
 			setConfig({ ...storedConfig, modules: modulesWithIcons })
 		}

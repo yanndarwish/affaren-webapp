@@ -30,7 +30,7 @@ export const Typography = ({ variant = "p", className, children }) => {
 			return (
 				<h2
 					className={cn(
-						"scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+						"scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0",
 						className
 					)}
 				>
@@ -73,7 +73,7 @@ export const Typography = ({ variant = "p", className, children }) => {
 			)
 		case "lead":
 			return (
-				<p className={cn("text-xl text-mu  ted-foreground", className)}>
+				<p className={cn("text-xl text-muted-foreground", className)}>
 					{children}
 				</p>
 			)

@@ -194,6 +194,8 @@ export const ModalPayment = ({ controller }) => {
 		if (sale.bookmarkId) {
 			sale.removeBookmark(sale.bookmarkId)
 		}
+
+		sale.queryGetNextSaleId.send()
 	}
 
 	const updateInventory = async (confirmedSale) => {
@@ -208,12 +210,6 @@ export const ModalPayment = ({ controller }) => {
 			})
 		}
 	}
-
-	// const productsToUpdate = (sale) => {
-	// 	return sale.selectedProducts.length > 0
-	// 		? sale.selectedProducts
-	// 		: sale.products
-	// }
 
 	const productsToUpdate = (sale) => {
 		// First determine which products to use as base
