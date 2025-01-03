@@ -1,23 +1,41 @@
 const pool = require("../../db")
 const logger = require("../../logger")
-const { queryGetAllCards } = require("./query")
+const {
+	queryGetAllCards,
+	queryCreateCard,
+	queryDeleteCard,
+} = require("./query")
+
+const moduleName = "cards"
 
 // create a card
 const createCard = async (req, res) => {
+	const fnLogger = logger.child({
+		module: moduleName,
+		method: queryCreateCard.id,
+	})
+
 	try {
+		fnLogger.debug("creating card")
 		const { id, name, price, taxe, type } = req.body
 
 		if (!id || !name || !price || !taxe || !type) {
+			fnLogger.error("all fields are required")
 			return res.status(400).send("All fields are required")
 		}
 
-		const response = await pool.query(
-			"INSERT INTO cards (card_id, card_name, card_price, card_taxe, card_type) VALUES ($1, $2, $3, $4, $5)",
-			[id, name, price, taxe, type]
-		)
+		const response = await pool.query(queryCreateCard.statement, [
+			id,
+			name,
+			price,
+			taxe,
+			type,
+		])
+
+		fnLogger.debug("card created")
 		res.status(200).send(response.rows)
 	} catch (err) {
-		console.log(err)
+		fnLogger.error(err, "error creating card")
 		res.status(500).send("Internal server error")
 	}
 }
@@ -25,8 +43,8 @@ const createCard = async (req, res) => {
 // get all cards
 const getCards = async (_req, res) => {
 	const fnLogger = logger.child({
-		module: "cards",
-		method: "getCards",
+		module: moduleName,
+		method: queryGetAllCards.id,
 	})
 
 	try {
@@ -44,19 +62,26 @@ const getCards = async (_req, res) => {
 
 // delete a card
 const deleteCard = async (req, res) => {
+	const fnLogger = logger.child({
+		module: moduleName,
+		method: queryDeleteCard.id,
+	})
+
 	try {
+		fnLogger.debug("deleting card")
 		const id = req.params.id
 
 		if (!id) {
+			fnLogger.error("card id is required")
 			return res.status(400).send("Card ID is required")
 		}
 
-		const response = await pool.query("DELETE FROM cards WHERE card_id = $1", [
-			id,
-		])
+		const response = await pool.query(queryDeleteCard.statement, [id])
+
+		fnLogger.debug("card deleted")
 		res.status(200).send(response.rows)
 	} catch (err) {
-		console.log(err)
+		fnLogger.error(err, "error deleting card")
 		res.status(500).send("Internal server error")
 	}
 }

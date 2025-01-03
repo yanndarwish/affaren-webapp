@@ -1,21 +1,37 @@
-const pool = require("../db")
+const pool = require("../../db")
+const logger = require("../../logger")
+const { queryCreateProduct } = require("./query")
+
+const moduleName = "products"
 
 // create a product
 const createProduct = async (req, res) => {
+	const fnLogger = logger.child({
+		module: moduleName,
+		method: queryCreateProduct.id,
+	})
+
 	try {
+		fnLogger.debug("creating product")
 		const { name, price, quantity, taxe, barcode } = req.body
 
 		if (!(name, price, quantity, taxe, barcode)) {
+			fnLogger.error("All inputs are required")
 			res.status(400).send("All inputs are required")
 		}
 
-		const response = await pool.query(
-			"INSERT INTO products (product_name, product_price, product_taxe, product_quantity, product_barcode) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-			[name, price, taxe, quantity, barcode]
-		)
+		const response = await pool.query(queryCreateProduct.statement, [
+			name,
+			price,
+			taxe,
+			quantity,
+			barcode,
+		])
+
+		fnLogger.debug("product created")
 		res.status(200).send(response.rows)
 	} catch (err) {
-		console.log(err)
+		fnLogger.error(err, "error creating product")
 		res.status(500).send("Internal server error")
 	}
 }
@@ -23,7 +39,6 @@ const createProduct = async (req, res) => {
 // getproducts with all the query filters possible
 const getProducts = async (req, res) => {
 	try {
-
 		// pagination (default return all products)
 		const offset = Number(req.query.offset) || ""
 		const limit = Number(req.query.limit) || ""
