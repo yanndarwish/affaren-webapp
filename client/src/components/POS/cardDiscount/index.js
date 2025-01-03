@@ -24,8 +24,26 @@ export const CardDiscount = () => {
 	const [selected, setSelected] = useState(sale?.discount || [])
 
 	const handleRemoveDiscount = (id) => {
-		const updatedList = sale.discount.filter((product) => product.id !== id)
-		sale.updateSale({ discount: updatedList })
+		const discountedProduct = sale.discount.find(
+			(product) => product.productId.toString() === id.toString()
+		)
+
+		const updatedDiscount = sale.discount.filter(
+			(product) => product.productId.toString() !== id.toString()
+		)
+
+		const updatedProducts = sale.products.map((product) => {
+			if (product.id.toString() === id.toString()) {
+				return {
+					...product,
+					price: discountedProduct.originalPrice,
+				}
+			} else {
+				return product
+			}
+		})
+
+		sale.updateSale({ discount: updatedDiscount, products: updatedProducts })
 	}
 
 	const handleTypeNumber = (value) => {
@@ -222,15 +240,7 @@ export const CardDiscount = () => {
 					)
 			),
 			// Add new/updated discounts
-			...newDiscountedProducts.map((item) => {
-				const existingDiscount = sale.discount.find(
-					(oldItem) => oldItem.productId === item.productId
-				)
-				// If item exists in current discount, keep its price
-				return existingDiscount
-					? { ...item, newPrice: existingDiscount.newPrice }
-					: item
-			}),
+			...newDiscountedProducts,
 		]
 
 		sale.updateSale({ products: updatedProducts, discount: newDiscount })
@@ -355,7 +365,9 @@ export const CardDiscount = () => {
 											>
 												<Button
 													size="icon"
-													onClick={() => handleRemoveDiscount(product.id)}
+													onClick={() =>
+														handleRemoveDiscount(product.productId)
+													}
 												>
 													<Trash2Icon />
 												</Button>
