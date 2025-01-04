@@ -22,7 +22,6 @@ import { useConfig } from "../../lib/hooks/useConfig"
 import { Switch } from "../../components/ui/switch"
 import { Separator } from "../../components/ui/separator"
 import { Label } from "../../components/ui/label"
-import { Button } from "../../components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs"
 
 const sections = [
@@ -88,6 +87,8 @@ const MainContent = forwardRef(({}, ref) => {
 					</Typography>
 				</Stack>
 				<Stack spacing={4}>
+					{/* <LanguageElement />
+					<Separator /> */}
 					<CurrencyElement />
 					<Separator />
 					<PaymentMethodElement />
@@ -410,6 +411,54 @@ const CurrencyElement = () => {
 			>
 				<TabsList className="w-full">
 					{config.general.currency.options.map((option) => (
+						<TabsTrigger
+							key={option.name}
+							value={option.name}
+							className="w-full"
+						>
+							<Stack direction="row" spacing={2} alignItems="center">
+								{option.icon && <option.icon className="w-4 h-4" />}
+								<Typography variant="muted">{option.label}</Typography>
+							</Stack>
+						</TabsTrigger>
+					))}
+				</TabsList>
+			</Tabs>
+		</Stack>
+	)
+}
+
+const LanguageElement = () => {
+	const { config, updateConfig } = useConfig()
+
+	const handleChangeLanguage = (value) => {
+		const newConfig = { ...config }
+		newConfig.general.language.value = value
+
+		updateConfig(newConfig)
+	}
+
+	return (
+		<Stack spacing={2}>
+			<Stack spacing={1}>
+				<Stack direction="row" spacing={1} alignItems="center">
+					{config.general.language.icon && (
+						<config.general.language.icon className="w-4 h-4" />
+					)}
+					<Typography variant="h4">{config.general.language.label}</Typography>
+				</Stack>
+				<Typography variant="muted">
+					{config.general.language.description}
+				</Typography>
+			</Stack>
+
+			<Tabs
+				value={config.general.language.value}
+				onValueChange={handleChangeLanguage}
+				className="w-full h-full space-y-4"
+			>
+				<TabsList className="w-full">
+					{config.general.language.options.map((option) => (
 						<TabsTrigger
 							key={option.name}
 							value={option.name}

@@ -18,14 +18,23 @@ import {
 	Percent,
 	DollarSign,
 	Euro,
+	Languages
 } from "lucide-react"
 import { NoBarcode } from "../../../pages/Pos/config"
-import { currencyOptions } from "./utils"
+import { currencyOptions, languageOptions } from "./utils"
 
 const ConfigContext = createContext()
 
 const defaultConfig = {
 	general: {
+		language: {
+			name: "language",
+			label: "Language",
+			icon: Languages,
+			description: "The language used by the application.",
+			value: "en",
+			options: languageOptions,
+		},
 		currency: {
 			name: "currency",
 			label: "Currency",
@@ -407,11 +416,22 @@ const ConfigProvider = ({ children }) => {
 				}
 			}
 
+			const languageWithIcons = () => {
+				const defaultLanguage = defaultConfig.general.language
+
+				return {
+					...storedConfig.general.language,
+					icon: defaultLanguage.icon,
+					options: defaultLanguage.options,
+				}
+			}
+
 			setConfig({
 				...storedConfig,
 				modules: modulesWithIcons,
 				general: {
 					...storedConfig.general,
+					language: languageWithIcons(),
 					currency: currencyWithIcons(),
 					paymentMethods: paymentMethodsWithIcons(),
 					taxes: taxesWithIcons(),
