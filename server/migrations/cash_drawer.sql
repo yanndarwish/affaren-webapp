@@ -18,7 +18,9 @@ BEGIN
     VALUES
         (_year, _month, _day, _amount);
     RETURN QUERY
-    SELECT * FROM drawer WHERE id = LASTVAL();
+    SELECT d.year, d.month, d.day, d.amount 
+    FROM drawer d 
+    WHERE id = LASTVAL();
 END;
 $$;
 

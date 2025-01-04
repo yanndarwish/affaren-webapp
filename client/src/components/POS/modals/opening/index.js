@@ -5,26 +5,21 @@ import { useNavigate } from "react-router-dom"
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
 import ReceiptIcon from "@mui/icons-material/Receipt"
 
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "../../components/ui/card"
-import { Input } from "../../components/ui/input"
-import { Button } from "../../components/ui/button"
-import { useNotify } from "../../lib/hooks/useNotify"
-import { useQuery } from "../../lib/hooks/useQuery"
+import { Input } from "../../../../components/ui/input"
+import { Button } from "../../../../components/ui/button"
+import { useNotify } from "../../../../lib/hooks/useNotify"
+import { useQuery } from "../../../../lib/hooks/useQuery"
 import {
 	getDayCash,
 	postDayCash,
 	printCashTicket,
 	openDrawer,
-} from "../../lib/api"
-import { useSession } from "../../lib/hooks/useSession"
-import { UserStep } from "../../components/userStep"
+} from "../../../../lib/api"
+import { useSession } from "../../../../lib/hooks/useSession"
+import { UserStep } from "../../../../components/userStep"
+import { Modal } from "../../../shared/modal"
 
-const Opening = () => {
+export const ModalOpening = ({ controller }) => {
 	const [cashInput, setCashInput] = useState(0)
 
 	const { user } = useSession()
@@ -44,8 +39,8 @@ const Opening = () => {
 	const queryGetTodayCashBase = useQuery({
 		queryFn: getDayCash,
 		onSuccess: (data) => {
-			if (data.drawer > 0) {
-				navigate("/pos")
+			if (data.amount > 0) {
+				handleClose()
 			}
 		},
 		onError: () => {
@@ -57,7 +52,7 @@ const Opening = () => {
 		queryFn: postDayCash,
 		onSuccess: () => {
 			notifySuccess("Cash amount saved successfully")
-			navigate("/pos")
+			handleClose()
 		},
 		onError: () => {
 			notifyError("Failed to save cash amount")
@@ -112,66 +107,64 @@ const Opening = () => {
 		queryOpenDrawer.send()
 	}
 
+	const handleClose = () => {
+		navigate("/pos")
+		controller.closeModal()
+	}
+
 	useEffect(() => {
 		fetchDayCash()
 	}, [])
 
 	return (
-		<Stack className="items-center justify-center h-full ">
-			<Card className="w-[400px]">
-				<CardHeader>
-					<CardTitle>Opening</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-4">
-					<UserStep
-						number={1}
-						title="Count the cash"
-						description="Print the ticket and fill in the details"
-					>
-						<Button
-							onClick={handlePrintTicket}
-							className="bg-orange-400 w-full"
-						>
-							<ReceiptIcon />
+		<Modal
+			open={controller.open}
+			title="Opening"
+			handleClose={handleClose}
+			className="!w-[50vw]"
+		>
+			<Stack className="h-full w-full space-y-4">
+				<UserStep
+					number={1}
+					title="Count the cash"
+					description="Print the ticket and fill in the details"
+				>
+					<Button onClick={handlePrintTicket} className="bg-orange-400 w-full">
+						<ReceiptIcon />
+					</Button>
+				</UserStep>
+				<UserStep
+					number={2}
+					title="Enter the total"
+					description="Then put the ticket in the drawer"
+				>
+					<Stack className="space-y-4">
+						<Input
+							type="number"
+							value={cashInput}
+							onChange={(e) => setCashInput(e.target.value)}
+						/>
+						<Button onClick={handleOpenDrawer} className="w-full">
+							<PointOfSaleIcon />
 						</Button>
-					</UserStep>
-					<UserStep
-						number={2}
-						title="Enter the total"
-						description="Then put the ticket in the drawer"
-					>
-						<Stack className="space-y-4">
-							<Input
-								type="number"
-								value={cashInput}
-								onChange={(e) => setCashInput(e.target.value)}
-							/>
-							<Button onClick={handleOpenDrawer} className="w-full">
-								<PointOfSaleIcon />
-							</Button>
-						</Stack>
-					</UserStep>
-					<UserStep
-						number={3}
-						title="Turn on everything"
-						description="Make sure everything is on"
-					>
-						<Stack className="space-y-4">
-							<p className="text-gray-500">
-								Make sure everything is on: the ticket printer, the keyboard.
-								Turn on the speaker and put some music
-							</p>
-							<Button onClick={handleOpen} className="w-full">
-								Open
-							</Button>
-						</Stack>
-					</UserStep>
-				</CardContent>
-			</Card>
-		</Stack>
+					</Stack>
+				</UserStep>
+				<UserStep
+					number={3}
+					title="Turn on everything"
+					description="Make sure everything is on"
+				>
+					<Stack className="space-y-4">
+						<p className="text-gray-500">
+							Make sure everything is on: the ticket printer, the keyboard. Turn
+							on the speaker and put some music
+						</p>
+						<Button onClick={handleOpen} className="w-full">
+							Open
+						</Button>
+					</Stack>
+				</UserStep>
+			</Stack>
+		</Modal>
 	)
 }
-
-export default Opening
-
-

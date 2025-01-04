@@ -1,4 +1,6 @@
-import {  LogOut, Settings, Store } from "lucide-react"
+import { useEffect } from "react"
+import { useLocation } from "react-router-dom"
+import { KeyRound, LogOut, Settings, Store } from "lucide-react"
 import {
 	Sidebar,
 	SidebarContent,
@@ -11,16 +13,16 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "../ui/sidebar"
-import { ModalLogout } from "../Cards/ModalLogout/ModalLogout"
-import { useLocation } from "react-router-dom"
-import { useEffect } from "react"
 import { useModal } from "../shared/modal"
+import { ModalClose } from "../modals/close"
+import { ModalLogout } from "../modals/logout"
 import { useConfig } from "../../lib/hooks/useConfig"
 
 export function AppSidebar() {
 	const { setActiveItem } = useSidebar()
 	const location = useLocation()
 	const modalLogout = useModal()
+	const modalClose = useModal()
 	const { config } = useConfig()
 
 	const isActive = (url) => {
@@ -29,6 +31,10 @@ export function AppSidebar() {
 
 	const handleClickLogout = () => {
 		modalLogout.openModal()
+	}
+
+	const handleClickClose = () => {
+		modalClose.openModal()
 	}
 
 	useEffect(() => {
@@ -57,7 +63,6 @@ export function AppSidebar() {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
-					{/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{config.modules.map((module) => {
@@ -88,18 +93,25 @@ export function AppSidebar() {
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 					<SidebarMenuItem className="h-10">
+						<SidebarMenuButton className="w-full" onClick={handleClickLogout}>
+							<LogOut />
+							<span>Logout</span>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+					<SidebarMenuItem className="h-10">
 						<SidebarMenuButton
 							variant="destructive"
 							className="w-full"
-							onClick={handleClickLogout}
+							onClick={handleClickClose}
 						>
-							<LogOut />
-							<span>Logout</span>
+							<KeyRound />
+							<span>Closing</span>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarFooter>
 			<ModalLogout controller={modalLogout} />
+			<ModalClose controller={modalClose} />
 		</Sidebar>
 	)
 }

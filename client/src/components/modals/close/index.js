@@ -1,34 +1,26 @@
-import React, { useState } from "react"
-import { useEffect } from "react"
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "../../components/ui/card"
+import React, { useState, useEffect } from "react"
+
 import {
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbSeparator,
-} from "../../components/ui/breadcrumb"
-import { UserStep } from "../../components/userStep"
-import { Button } from "../../components/ui/button"
+} from "../../../components/ui/breadcrumb"
+import { Button } from "../../../components/ui/button"
+import { UserStep } from "../../../components/userStep"
+import { Modal, useModal } from "../../../components/shared/modal"
 import { Stack } from "@mui/material"
-import { useModal } from "../../components/shared/modal"
-import { ModalLogout } from "../../components/Cards/ModalLogout/ModalLogout"
-import { useDailyTotal } from "../../lib/providers/dailyTotal"
-import { getDayCash, printCashTicket, openDrawer } from "../../lib/api"
-import { useQuery } from "../../lib/hooks/useQuery"
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
-import ReceiptIcon from "@mui/icons-material/Receipt"
-import { Banknote, CreditCard } from "lucide-react"
-import { useNotify } from "../../lib/hooks/useNotify"
-import { useSession } from "../../lib/hooks/useSession"
+import { useDailyTotal } from "../../../lib/providers/dailyTotal"
+import { getDayCash, printCashTicket, openDrawer } from "../../../lib/api"
+import { useQuery } from "../../../lib/hooks/useQuery"
+import { Banknote, CreditCard, Computer, ReceiptText } from "lucide-react"
+import { useNotify } from "../../../lib/hooks/useNotify"
+import { useSession } from "../../../lib/hooks/useSession"
+import { Typography } from "../../ui/typography"
+import { ModalLogout } from "../logout"
 
-const Closing = () => {
+export const ModalClose = ({ controller }) => {
 	const [step, setStep] = useState(1)
 	const modalLogout = useModal()
 
@@ -47,49 +39,47 @@ const Closing = () => {
 	}
 
 	return (
-		<Stack className="items-center justify-center h-full">
-			<Card className="relative w-[510px] h-[650px]">
-				<CardHeader>
-					<CardTitle>Closing</CardTitle>
-				</CardHeader>
-				<CardContent>
-					{step === 1 && <CardCheckout />}
-					{step === 2 && <CashCheckout />}
-					{step === 3 && <FinalCheckout />}
-				</CardContent>
-				<CardFooter className="absolute bottom-0 w-full">
-					<Stack direction="row" className="space-x-4 w-full">
-						{step > 1 && (
-							<Button
-								variant="outline"
-								onClick={handlePreviousStep}
-								className="w-full"
-							>
-								Previous
-							</Button>
-						)}
-						{step < 3 ? (
-							<Button onClick={handleNextStep} className="w-full">
-								Next
-							</Button>
-						) : (
-							<Button
-								variant="destructive"
-								onClick={handleOpenLogout}
-								className="w-full"
-							>
-								Logout
-							</Button>
-						)}
-					</Stack>
-				</CardFooter>
-			</Card>
-			<ModalLogout controller={modalLogout} />
-		</Stack>
+		<Modal
+			open={controller.open}
+			handleClose={controller.closeModal}
+			title="Closing"
+			className="!w-[60%]"
+		>
+			<Stack className="items-center justify-center h-full space-y-4">
+				{step === 1 && <CardCheckout />}
+				{step === 2 && <CashCheckout />}
+				{step === 3 && <FinalCheckout />}
+
+				<Stack direction="row" className="space-x-4 w-full">
+					{step > 1 && (
+						<Button
+							variant="outline"
+							onClick={handlePreviousStep}
+							className="w-full"
+						>
+							Previous
+						</Button>
+					)}
+					{step < 3 ? (
+						<Button onClick={handleNextStep} className="w-full">
+							Next
+						</Button>
+					) : (
+						<Button
+							variant="destructive"
+							onClick={handleOpenLogout}
+							className="w-full"
+						>
+							Logout
+						</Button>
+					)}
+				</Stack>
+
+				<ModalLogout controller={modalLogout} />
+			</Stack>
+		</Modal>
 	)
 }
-
-export default Closing
 
 const CardCheckout = () => {
 	const { credit } = useDailyTotal()
@@ -115,13 +105,15 @@ const CardCheckout = () => {
 				<BreadcrumbTuto items={AMEXItems} />
 				<BreadcrumbTuto items={AXQuickPayItems} />
 
-				<p className="text-gray-500">
-					Once you have the tickets, add the totals together to get today's
-					Total Card Revenue
-				</p>
-				<p className="text-gray-500">
-					Now, make sure this number matches with the card amount above.
-				</p>
+				<Stack className="space-y-2">
+					<Typography variant="muted" className="font-medium">
+						Once you have the tickets, add the totals together to get today's
+						Total Card Revenue
+					</Typography>
+					<Typography variant="muted" className="font-medium">
+						Now, make sure this number matches with the card amount above.
+					</Typography>
+				</Stack>
 				<Stack
 					direction="row"
 					spacing={2}
@@ -141,7 +133,7 @@ const CardCheckout = () => {
 
 const BreadcrumbTuto = ({ items }) => {
 	return (
-		<Breadcrumb className="border border-gray-100 rounded-lg p-2 w-full">
+		<Breadcrumb className="border border-gray-100 rounded-lg py-2 px-4 w-full">
 			<BreadcrumbList>
 				{items.map((item, index) => (
 					<Stack direction="row" key={index} className="items-center gap-2">
@@ -253,13 +245,13 @@ const CashCheckout = () => {
 				</Stack>
 				<Stack direction="row" className="space-x-4">
 					<Button onClick={handleOpenDrawer} className="w-full">
-						<PointOfSaleIcon />
+						<Computer />
 					</Button>
 					<Button
 						onClick={handlePrintCashTicket}
 						className="w-full bg-orange-400"
 					>
-						<ReceiptIcon />
+						<ReceiptText />
 					</Button>
 				</Stack>
 			</Stack>
@@ -274,14 +266,14 @@ const FinalCheckout = () => {
 			title="Turn off everything"
 			description="Make sure everything is off"
 		>
-			<Stack className="space-y-4">
-				<p className="text-gray-500">
+			<Stack className="space-y-2">
+				<Typography variant="muted" className="font-medium">
 					Now you can turn off everything: the ticket printer, the keyboard, and
 					the speaker.
-				</p>
-				<p className="text-gray-500">
+				</Typography>
+				<Typography variant="muted" className="font-medium">
 					You can turn off the iPad after you log out.
-				</p>
+				</Typography>
 			</Stack>
 		</UserStep>
 	)

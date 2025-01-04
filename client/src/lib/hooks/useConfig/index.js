@@ -4,7 +4,6 @@ import {
 	List,
 	ChartSpline,
 	Box,
-	KeyRound,
 	BadgePercent,
 	Barcode,
 	Layers2,
@@ -65,7 +64,7 @@ const defaultConfig = {
 					name: "intermediate",
 					label: "Intermediate",
 					value: 10,
-					active: true,
+					active: false,
 				},
 				{
 					name: "reduced",
@@ -267,42 +266,42 @@ const defaultConfig = {
 				},
 			],
 		},
-		{
-			name: "closing",
-			label: "Closing",
-			url: "closing",
-			icon: KeyRound,
-			position: 5,
-			isMutable: true,
-			active: true,
-			description:
-				"The closing module is used to apply a routine closing of the day.",
-			components: [
-				{
-					name: "card",
-					label: "Card",
-					active: true,
-					description:
-						"The card component is used to implement a card closing routine",
-					hasSettings: false,
-				},
-				{
-					name: "cash",
-					label: "Cash",
-					active: true,
-					description:
-						"The cash component is used to implement a cash closing routine",
-					hasSettings: false,
-				},
-				{
-					name: "close-day",
-					label: "Close day",
-					active: true,
-					description: "The close day component is used to close the day.",
-					hasSettings: false,
-				},
-			],
-		},
+		// {
+		// 	name: "closing",
+		// 	label: "Closing",
+		// 	url: "closing",
+		// 	icon: KeyRound,
+		// 	position: 5,
+		// 	isMutable: true,
+		// 	active: true,
+		// 	description:
+		// 		"The closing module is used to apply a routine closing of the day.",
+		// 	components: [
+		// 		{
+		// 			name: "card",
+		// 			label: "Card",
+		// 			active: true,
+		// 			description:
+		// 				"The card component is used to implement a card closing routine",
+		// 			hasSettings: false,
+		// 		},
+		// 		{
+		// 			name: "cash",
+		// 			label: "Cash",
+		// 			active: true,
+		// 			description:
+		// 				"The cash component is used to implement a cash closing routine",
+		// 			hasSettings: false,
+		// 		},
+		// 		{
+		// 			name: "close-day",
+		// 			label: "Close day",
+		// 			active: true,
+		// 			description: "The close day component is used to close the day.",
+		// 			hasSettings: false,
+		// 		},
+		// 	],
+		// },
 	],
 }
 

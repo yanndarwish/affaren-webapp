@@ -1,7 +1,7 @@
 import BarcodeSection from "../../components/POS/BarcodeSection/BarcodeSection.jsx"
 import Cart from "../../components/POS/Cart/index.js"
 import { Stack } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
 	Tabs,
 	TabsContent,
@@ -20,12 +20,19 @@ import {
 	FixedContainer,
 	PageContainer,
 } from "../../components/shared/containers/index.js"
+import { useSearchParams } from "react-router-dom"
+import { useModal } from "../../components/shared/modal/index.jsx"
+import { ModalOpening } from "../../components/POS/modals/opening/index.js"
 
 const Pos = () => {
 	const [selectedTab, setSelectedTab] = useState(config.tabs[0].name)
+	const [searchParams] = useSearchParams()
 	const { notifySuccess, notifyInfo } = useNotify()
 	const { isActiveComponent } = useConfig()
 	const sale = useSale()
+	const modalOpening = useModal()
+
+	const opening = searchParams.get("opening")
 
 	const handleDiscount = () => {
 		setSelectedTab(config.tabs[2].name)
@@ -75,6 +82,12 @@ const Pos = () => {
 			return isActiveComponent(config.name, tab.name)
 		})
 	}
+
+	useEffect(() => {
+		if (opening) {
+			modalOpening.openModal()
+		}
+	}, [opening])
 
 	return (
 		<PageContainer className="grid gap-4 md:grid-cols-12 grid-rows-1 h-full">
@@ -130,6 +143,7 @@ const Pos = () => {
 					</Tabs>
 				</Card>
 			</FixedContainer>
+			<ModalOpening controller={modalOpening} />
 		</PageContainer>
 	)
 }

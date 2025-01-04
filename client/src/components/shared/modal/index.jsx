@@ -14,7 +14,7 @@ const style = {
 	maxHeight: "90%",
 	overflow: "auto",
 	boxShadow: 24,
-	p: 4,
+	p: 3,
 }
 
 export const Modal = ({ open, title, handleClose, children, className }) => {

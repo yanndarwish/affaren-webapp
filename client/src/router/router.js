@@ -7,12 +7,9 @@ import Orders from "../pages/Orders/Orders"
 import Dashboard from "../pages/Dashboard"
 import Inventory from "../pages/Inventory/Inventory"
 import Help from "../pages/Help/Help"
-import Logout from "../pages/Logout/Logout"
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword"
 import Menu from "../pages/Menu/Menu"
 import Lunch from "../pages/Lunch/Lunch"
-import Opening from "../pages/Opening/Opening"
-import Closing from "../pages/Closing/Closing"
 import Settings from "../pages/settings"
 
 const router = createBrowserRouter([
@@ -61,24 +58,12 @@ const router = createBrowserRouter([
 				element: <Help />,
 			},
 			{
-				path: "closing",
-				element: <Closing />,
-			},
-			{
-				path: "logout",
-				element: <Logout />,
-			},
-			{
 				path: "settings",
 				element: <Settings />,
 			},
 			{
 				path: "forgot-password",
 				element: <ForgotPassword />,
-			},
-			{
-				path: "opening",
-				element: <Opening />,
 			},
 		],
 	},

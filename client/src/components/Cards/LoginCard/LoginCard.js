@@ -56,7 +56,7 @@ export const LoginForm = ({ ...props }) => {
 				"expirationDate",
 				new Date(new Date().getTime() + 1000 * 60 * 60 * 10)
 			) // 10 hours
-			navigate("/opening")
+			navigate("/pos?opening=true")
 			notifySuccess("Login successful")
 		},
 		onError: () => {
