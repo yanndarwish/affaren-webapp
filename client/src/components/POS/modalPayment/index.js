@@ -18,6 +18,7 @@ import { formatDailyTotals } from "../../../lib/sales"
 import { Stack } from "@mui/material"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { SaleDetails } from "../../SALES/details"
+import { useConfig } from "../../../lib/hooks/useConfig"
 
 const PAYMENT_TABS = [
 	{ name: "cash", label: "Cash", icon: Banknote },
@@ -29,12 +30,15 @@ export const ModalPayment = ({ controller }) => {
 	const sale = useSale()
 	const { notifySuccess, notifyError } = useNotify()
 	const { setCash, setCredit, setCheck, setTotal } = useDailyTotal()
+	const { config } = useConfig()
 
 	// Local state
 	const [paymentState, setPaymentState] = useState({
 		paid: 0,
 		amount: "00.00",
-		selectedTab: "card",
+		selectedTab: config.general.paymentMethods.options.filter(
+			(option) => option.active
+		)[0].name,
 		giveBack: 0,
 		actualSale: {},
 		paymentCompleted: false,
@@ -292,10 +296,18 @@ export const ModalPayment = ({ controller }) => {
 	}
 
 	const resetModalStates = () => {
+		const activePaymentMethod = config.general.paymentMethods.options.filter(
+			(option) => option.active
+		)
+
+		const hasCardPaymentMethod = activePaymentMethod.some(
+			(option) => option.name === "card"
+		)
+
 		setPaymentState({
 			paid: 0,
 			amount: "00.00",
-			selectedTab: "card",
+			selectedTab: hasCardPaymentMethod ? "card" : activePaymentMethod[0].name,
 			giveBack: 0,
 			actualSale: {},
 			paymentCompleted: false,
@@ -309,12 +321,29 @@ export const ModalPayment = ({ controller }) => {
 			products: productsToUpdate(sale),
 		}
 
+		const activePaymentMethod = config.general.paymentMethods.options.filter(
+			(option) => option.active
+		)
+
+		const hasCashPaymentMethod = activePaymentMethod.some(
+			(option) => option.name === "cash"
+		)
+
+		const hasCardPaymentMethod = activePaymentMethod.some(
+			(option) => option.name === "card"
+		)
+
 		setPaymentState((prev) => ({
 			...prev,
 			actualSale: activeSale,
 			amount: (sale.amount - getPaidAmount(sale)).toFixed(2),
 			paid: getPaidAmount(sale),
-			selectedTab: sale.isRefund ? "cash" : "card",
+			selectedTab:
+				sale.isRefund && hasCashPaymentMethod
+					? "cash"
+					: hasCardPaymentMethod
+					? "card"
+					: activePaymentMethod[0].name,
 		}))
 	}, [controller.data, sale.isRefund])
 
@@ -372,14 +401,15 @@ const PaymentModalContent = ({
 const CompletedPaymentView = ({ giveBack, actualSale }) => {
 	return (
 		<Stack direction="column" spacing={4}>
-		{giveBack > 0 && (
-			<h1 className="text-2xl font-extrabold text-center">
-				Give back : {giveBack} €
-			</h1>
-		)}
-		<SaleDetails sale={actualSale} />
-	</Stack>
-)}
+			{giveBack > 0 && (
+				<h1 className="text-2xl font-extrabold text-center">
+					Give back : {giveBack} €
+				</h1>
+			)}
+			<SaleDetails sale={actualSale} />
+		</Stack>
+	)
+}
 
 const ActivePaymentView = ({
 	sale,
@@ -413,21 +443,28 @@ const ActivePaymentView = ({
 	</>
 )
 
-const PaymentTabs = ({ selectedTab, onTabChange }) => (
-	<Tabs
-		defaultValue={selectedTab}
-		onValueChange={onTabChange}
-		className="w-full h-full space-y-4"
-	>
-		<TabsList className="w-full">
-			{PAYMENT_TABS.map((tab) => (
-				<TabsTrigger key={tab.name} value={tab.name} className="w-full">
-					{tab.label}
-				</TabsTrigger>
-			))}
-		</TabsList>
-	</Tabs>
-)
+const PaymentTabs = ({ selectedTab, onTabChange }) => {
+	const { config } = useConfig()
+	const paymentMethods = config.general.paymentMethods.options.filter(
+		(option) => option.active
+	)
+
+	return (
+		<Tabs
+			defaultValue={selectedTab}
+			onValueChange={onTabChange}
+			className="w-full h-full space-y-4"
+		>
+			<TabsList className="w-full">
+				{paymentMethods.map((tab) => (
+					<TabsTrigger key={tab.name} value={tab.name} className="w-full">
+						{tab.label}
+					</TabsTrigger>
+				))}
+			</TabsList>
+		</Tabs>
+	)
+}
 
 const PaymentDetails = ({ state, handlePrice, handleCorrectPrice }) => (
 	<Stack className="w-full space-y-4">
@@ -449,7 +486,10 @@ const PaymentDetails = ({ state, handlePrice, handleCorrectPrice }) => (
 )
 
 const PaymentButton = ({ selectedTab, onPayment }) => {
-	const tab = PAYMENT_TABS.find((t) => t.name === selectedTab)
+	const { config } = useConfig()
+	const tab = config.general.paymentMethods.options
+		.filter((option) => option.active)
+		.find((t) => t.name === selectedTab)
 	const Icon = tab.icon
 
 	return (

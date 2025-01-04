@@ -13,11 +13,75 @@ import {
 	Undo2,
 	ReceiptText,
 	Computer,
+	Banknote,
+	CreditCard,
+	Tag,
+	Percent,
 } from "lucide-react"
 import { NoBarcode } from "../../../pages/Pos/config"
 const ConfigContext = createContext()
 
 const defaultConfig = {
+	general: {
+		paymentMethods: {
+			name: "payment-methods",
+			label: "Payment methods",
+			icon: CreditCard,
+			description: "The payment methods accepted by the business.",
+			options: [
+				{
+					name: "cash",
+					label: "Cash",
+					icon: Banknote,
+					active: true,
+				},
+				{
+					name: "card",
+					label: "Card",
+					icon: CreditCard,
+					active: true,
+				},
+				{
+					name: "check",
+					label: "Check",
+					icon: Tag,
+					active: true,
+				},
+			],
+		},
+		taxes: {
+			name: "taxes",
+			label: "Taxes",
+			icon: Percent,
+			description: "The taxes applied to the products sold by the business.",
+			options: [
+				{
+					name: "normal",
+					label: "Normal",
+					value: 20,
+					active: true,
+				},
+				{
+					name: "intermediate",
+					label: "Intermediate",
+					value: 10,
+					active: true,
+				},
+				{
+					name: "reduced",
+					label: "Reduced",
+					value: 5.5,
+					active: true,
+				},
+				{
+					name: "particular",
+					label: "Particular",
+					value: 2.1,
+					active: true,
+				},
+			],
+		},
+	},
 	modules: [
 		{
 			name: "pos",
@@ -37,6 +101,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The barcode component is used to scan products via barcode.",
+					hasSettings: false,
 				},
 				{
 					name: "cart",
@@ -44,6 +109,7 @@ const defaultConfig = {
 					icon: ShoppingCart,
 					active: true,
 					description: "The cart component is used to display the cart.",
+					hasSettings: false,
 				},
 				{
 					name: "shortcuts",
@@ -52,6 +118,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The shortcuts component is used to create and use shortcuts for recurrent products.",
+					hasSettings: true,
 				},
 				{
 					name: "no-barcode",
@@ -60,6 +127,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The no barcode component is used to sell products without scanning a barcode.",
+					hasSettings: true,
 				},
 				{
 					name: "bookmarks",
@@ -68,6 +136,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The bookmarks component is used to save sales for later.",
+					hasSettings: false,
 				},
 				{
 					name: "refund",
@@ -75,6 +144,7 @@ const defaultConfig = {
 					icon: Undo2,
 					active: true,
 					description: "The refund component is used to refund an amount.",
+					hasSettings: false,
 				},
 				{
 					name: "discount",
@@ -82,6 +152,7 @@ const defaultConfig = {
 					icon: BadgePercent,
 					active: true,
 					description: "The discount component is used to apply a discount.",
+					hasSettings: false,
 				},
 				{
 					name: "drawer",
@@ -90,6 +161,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The drawer component is used to pair a drawer with the point of sale.",
+					hasSettings: false,
 				},
 				{
 					name: "receipt",
@@ -98,6 +170,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The receipt component is used to pair a receipt printer with the point of sale.",
+					hasSettings: false,
 				},
 			],
 		},
@@ -117,6 +190,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The table component is used to display the sales in a table.",
+					hasSettings: false,
 				},
 			],
 		},
@@ -137,6 +211,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The monthly chart component is used to display the monthly sales in a chart.",
+					hasSettings: false,
 				},
 				{
 					name: "table-monthly-sales",
@@ -144,6 +219,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The monthly table component is used to display the monthly sales in a table.",
+					hasSettings: false,
 				},
 				{
 					name: "table-monthly-best-sellers",
@@ -151,6 +227,7 @@ const defaultConfig = {
 					active: false,
 					description:
 						"The monthly best sellers component is used to display the best selling products in a table.",
+					hasSettings: false,
 				},
 			],
 		},
@@ -164,13 +241,21 @@ const defaultConfig = {
 			active: true,
 			description: "The inventory module is used to manage the inventory.",
 			components: [
-				{ name: "table", label: "Table", active: true },
+				{
+					name: "table",
+					label: "Table",
+					active: true,
+					description:
+						"The table component is used to display the inventory in a table.",
+					hasSettings: false,
+				},
 				{
 					name: "search-barcode",
 					label: "Search barcode",
 					active: true,
 					description:
 						"The search barcode component is used to search for a product by barcode.",
+					hasSettings: false,
 				},
 				{
 					name: "search-name",
@@ -178,6 +263,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The search name component is used to search for a product by name.",
+					hasSettings: false,
 				},
 			],
 		},
@@ -198,6 +284,7 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The card component is used to implement a card closing routine",
+					hasSettings: false,
 				},
 				{
 					name: "cash",
@@ -205,12 +292,14 @@ const defaultConfig = {
 					active: true,
 					description:
 						"The cash component is used to implement a cash closing routine",
+					hasSettings: false,
 				},
 				{
 					name: "close-day",
 					label: "Close day",
 					active: true,
 					description: "The close day component is used to close the day.",
+					hasSettings: false,
 				},
 			],
 		},
@@ -266,7 +355,41 @@ const ConfigProvider = ({ children }) => {
 				}
 			})
 
-			setConfig({ ...storedConfig, modules: modulesWithIcons })
+			const paymentMethodsWithIcons = () => {
+				const defaultPaymentMethods = defaultConfig.general.paymentMethods
+				const optionsWithIcons =
+					storedConfig.general.paymentMethods.options.map((option) => {
+						return {
+							...option,
+							icon: defaultConfig.general.paymentMethods.options.find(
+								(o) => o.name === option.name
+							).icon,
+						}
+					})
+				return {
+					...defaultPaymentMethods,
+					options: optionsWithIcons,
+				}
+			}
+
+			const taxesWithIcons = () => {
+				const defaultTaxes = defaultConfig.general.taxes
+
+				return {
+					...storedConfig.general.taxes,
+					icon: defaultTaxes.icon,
+				}
+			}
+
+			setConfig({
+				...storedConfig,
+				modules: modulesWithIcons,
+				general: {
+					...storedConfig.general,
+					paymentMethods: paymentMethodsWithIcons(),
+					taxes: taxesWithIcons(),
+				},
+			})
 		}
 	}, [])
 

@@ -28,7 +28,7 @@ import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
 import { useConfig } from "../../../lib/hooks/useConfig"
 import { cn } from "../../../lib/utils"
-import { FixedContainer } from "../../shared/containers"
+import { Typography } from "../../ui/typography"
 
 const COLUMNS = [
 	{ label: "Name", field: "name", className: "" },
@@ -371,10 +371,14 @@ const CartRow = ({
 			(p) => p.id === product.id
 		)
 		const isSelected = !!selectedProduct
+		const discountedProduct = sale.discount.find(
+			(p) => p.productId === product.id
+		)
 
 		const info = {
 			isSelected,
 			selectedProduct,
+			discountedProduct,
 			paidProduct,
 			isFullyPaid: false,
 			isPartiallyPaid: false,
@@ -409,10 +413,10 @@ const CartRow = ({
 	const {
 		isSelected,
 		isFullyPaid,
-		displayQuantity,
 		price,
 		addIsDisabled,
 		removeIsDisabled,
+		discountedProduct,
 	} = getProductInfo(product, sale)
 
 	const handleQuantityUpdate = (id, value) => {
@@ -444,7 +448,27 @@ const CartRow = ({
 				/>
 			</TableCell>
 			<TableCell className="text-right">
-				{(Math.round(price * 100) / 100).toFixed(2)}
+				{discountedProduct ? (
+					<Stack
+						direction="row"
+						spacing={2}
+						alignItems="center"
+						justifyContent="flex-end"
+					>
+						<Typography variant="muted" className="text-gray-400">
+							{(
+								Math.round(discountedProduct.originalPrice * 100) / 100
+							).toFixed(2)}
+						</Typography>
+						<Typography variant="small" className="w-10">
+							{(Math.round(discountedProduct.newPrice * 100) / 100).toFixed(2)}
+						</Typography>
+					</Stack>
+				) : (
+					<Typography variant="small" className="w-10">
+						{(Math.round(price * 100) / 100).toFixed(2)}
+					</Typography>
+				)}
 			</TableCell>
 			<TableCell className="text-right">
 				<ProductActions
@@ -499,34 +523,31 @@ const QuantityControl = ({
 	)
 }
 
-const ProductActions = ({
-	product,
-	sale,
-	isSelected,
-	disabled,
-	onRemove,
-	onAddToDiscount,
-}) => (
-	<Stack direction="row" justifyContent="flex-end" spacing={2}>
-		{sale.isActiveDiscount && (
+const ProductActions = ({ product, disabled, onRemove, onAddToDiscount }) => {
+	const { isActiveComponent } = useConfig()
+
+	return (
+		<Stack direction="row" justifyContent="flex-end" spacing={2}>
+			{isActiveComponent("pos", "discount") && (
+				<Button
+					variant="outline"
+					size="icon"
+					onClick={() => onAddToDiscount([product])}
+					disabled={disabled}
+				>
+					<BadgePercent />
+				</Button>
+			)}
 			<Button
-				variant="outline"
 				size="icon"
-				onClick={() => onAddToDiscount([product])}
+				onClick={() => onRemove(product.id)}
 				disabled={disabled}
 			>
-				<BadgePercent />
+				<Trash2Icon />
 			</Button>
-		)}
-		<Button
-			size="icon"
-			onClick={() => onRemove(product.id)}
-			disabled={disabled}
-		>
-			<Trash2Icon />
-		</Button>
-	</Stack>
-)
+		</Stack>
+	)
+}
 
 export default Cart
 

@@ -9,7 +9,12 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "../../components/ui/sidebar"
-import { Puzzle, SlidersHorizontal, User, Terminal } from "lucide-react"
+import {
+	Puzzle,
+	SlidersHorizontal,
+	User,
+	Settings as SettingsIcon,
+} from "lucide-react"
 import { Stack } from "@mui/material"
 import { Typography } from "../../components/ui/typography"
 import { useConfig } from "../../lib/hooks/useConfig"
@@ -17,6 +22,7 @@ import { useConfig } from "../../lib/hooks/useConfig"
 import { Switch } from "../../components/ui/switch"
 import { Separator } from "../../components/ui/separator"
 import { Label } from "../../components/ui/label"
+import { Button } from "../../components/ui/button"
 
 const sections = [
 	{
@@ -72,12 +78,19 @@ const MainContent = forwardRef(({}, ref) => {
 		<Stack spacing={2} ref={ref}>
 			<Stack
 				id="general"
-				className="h-[200px] border border-gray-200 p-4 rounded-xl"
+				className="border border-gray-200 p-4 rounded-xl space-y-4"
 			>
-				<Typography variant="h3">General</Typography>
-				<Typography variant="muted">
-					General settings for the application.
-				</Typography>
+				<Stack>
+					<Typography variant="h3">General</Typography>
+					<Typography variant="muted">
+						General settings for the application.
+					</Typography>
+				</Stack>
+				<Stack spacing={4}>
+					<PaymentMethodElement />
+					<Separator />
+					<TaxesElement />
+				</Stack>
 			</Stack>
 			<Stack
 				id="modules"
@@ -207,22 +220,153 @@ const ComponentElement = ({
 	onCheckedChange = () => null,
 }) => {
 	return (
-		<div className="p-4 flex justify-between items-center bg-muted/30 rounded-lg space-x-2">
+		<div className="p-4 justify-between items-center bg-muted/30 rounded-lg space-y-2">
 			<Stack
 				spacing={1}
 				className={!component.active || !module.active ? "opacity-50" : ""}
 			>
-				<Stack direction="row" spacing={1} alignItems="center">
-					{component.icon && <component.icon className="w-4 h-4" />}
-					<Label>{component.label}</Label>
+				<Stack
+					direction="row"
+					spacing={1}
+					alignItems="flex-start"
+					justifyContent="space-between"
+				>
+					<Stack direction="row" spacing={1} alignItems="center">
+						{component.icon && <component.icon className="w-4 h-4" />}
+						<Label>{component.label}</Label>
+					</Stack>
+					{component.hasSettings && (
+						<SettingsIcon
+							className="w-4 h-4 cursor-pointer"
+							onClick={() => console.log("settings", component.name)}
+						/>
+					)}
 				</Stack>
-				<Typography variant="muted">{component.description}</Typography>
 			</Stack>
-			<Switch
-				checked={component.active}
-				onCheckedChange={onCheckedChange}
-				disabled={!module.active}
-			/>
+			<Stack direction="row" spacing={1} alignItems="flex-start">
+				<Typography variant="muted">{component.description}</Typography>
+				<Switch
+					checked={component.active}
+					onCheckedChange={onCheckedChange}
+					disabled={!module.active}
+				/>
+			</Stack>
 		</div>
+	)
+}
+
+const PaymentMethodElement = () => {
+	const { config, updateConfig } = useConfig()
+
+	const handleTogglePaymentMethod = (name) => {
+		const newConfig = { ...config }
+		const option = newConfig.general.paymentMethods.options.find(
+			(option) => option.name === name
+		)
+
+		option.active = !option.active
+		updateConfig(newConfig)
+	}
+	return (
+		<Stack spacing={2}>
+			<Stack spacing={1}>
+				<Stack direction="row" spacing={1} alignItems="center">
+					{config.general.paymentMethods.icon && (
+						<config.general.paymentMethods.icon className="w-4 h-4" />
+					)}
+					<Typography variant="h4">
+						{config.general.paymentMethods.label}
+					</Typography>
+				</Stack>
+				<Typography variant="muted">
+					{config.general.paymentMethods.description}
+				</Typography>
+			</Stack>
+			<Stack spacing={2} direction="row">
+				{config.general.paymentMethods.options.map((option) => (
+					<Stack
+						key={option.name}
+						direction="row"
+						spacing={4}
+						alignItems="center"
+						justifyContent="space-between"
+						className="bg-muted/30 rounded-lg space-x-2 p-4 w-full"
+					>
+						<Stack direction="row" spacing={1} alignItems="center">
+							<option.icon className="w-4 h-4" />
+							<Label>{option.label}</Label>
+						</Stack>
+						<Switch
+							checked={option.active}
+							onCheckedChange={() => handleTogglePaymentMethod(option.name)}
+							className="!opacity-100"
+							disabled={
+								config.general.paymentMethods.options.filter(
+									(option) => option.active
+								).length === 1 && option.active
+							}
+						/>
+					</Stack>
+				))}
+			</Stack>
+		</Stack>
+	)
+}
+
+const TaxesElement = () => {
+	const { config, updateConfig } = useConfig()
+
+	const handleToggleTax = (name) => {
+		const newConfig = { ...config }
+		const option = newConfig.general.taxes.options.find(
+			(option) => option.name === name
+		)
+
+		option.active = !option.active
+		updateConfig(newConfig)
+	}
+
+	return (
+		<Stack spacing={2}>
+			<Stack spacing={1}>
+				<Stack direction="row" spacing={1} alignItems="center">
+					{config.general.taxes.icon && (
+						<config.general.taxes.icon className="w-4 h-4" />
+					)}
+					<Typography variant="h4">{config.general.taxes.label}</Typography>
+				</Stack>
+				<Typography variant="muted">
+					{config.general.taxes.description}
+				</Typography>
+			</Stack>
+			<div className={`grid grid-cols-2 gap-4`}>
+				{config.general.taxes.options.map((option) => (
+					<Stack
+						key={option.name}
+						direction="row"
+						spacing={4}
+						alignItems="center"
+						justifyContent="space-between"
+						className="bg-muted/30 rounded-lg space-x-2 p-4 w-full"
+					>
+						<Stack direction="row" spacing={1} alignItems="center">
+							<Typography variant="muted" className="text-md font-medium">
+								{option.value}%
+							</Typography>
+							<Label>{option.label}</Label>
+						</Stack>
+						<Switch
+							checked={option.active}
+							onCheckedChange={() => handleToggleTax(option.name)}
+							className="!opacity-100"
+							disabled={
+								config.general.taxes.options.filter((option) => option.active)
+									.length === 1 && option.active
+							}
+						/>
+					</Stack>
+				))}
+			</div>
+		</Stack>
 	)
 }

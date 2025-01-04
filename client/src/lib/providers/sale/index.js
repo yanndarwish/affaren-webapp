@@ -22,7 +22,6 @@ const initialState = {
 	selectedProducts: [],
 	paidProducts: [],
 	isRefund: false,
-	isActiveDiscount: true,
 }
 
 // Helper function to get products to calculate
@@ -50,7 +49,10 @@ const getProductsToCalculate = (sale) => {
 
 		// For partially paid, include the selected product
 		// (the quantity is already adjusted in the selection)
-		return [...acc, { ...product, quantity: originalProduct.quantity - paidProduct.quantity }]
+		return [
+			...acc,
+			{ ...product, quantity: originalProduct.quantity - paidProduct.quantity },
+		]
 	}, [])
 }
 
@@ -201,7 +203,7 @@ const SaleProvider = ({ children }) => {
 				clearBookmarks,
 				applyBookmark,
 				refocus,
-				queryGetNextSaleId
+				queryGetNextSaleId,
 			}}
 		>
 			{children}
