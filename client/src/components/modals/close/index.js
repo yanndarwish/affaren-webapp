@@ -113,7 +113,7 @@ const CardCheckout = () => {
 						Total Card Revenue
 					</Typography>
 					<Typography variant="muted" className="font-medium">
-						Now, make sure this number matches with the card amount above.
+						Now, make sure this number matches with the card amount below.
 					</Typography>
 				</Stack>
 				<Stack

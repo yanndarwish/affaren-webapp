@@ -105,7 +105,7 @@ export function AppSidebar() {
 							onClick={handleClickClose}
 						>
 							<KeyRound />
-							<span>Closing</span>
+							<span>Close day</span>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>

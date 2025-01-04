@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Input } from "../../ui/input"
 import { Button } from "../../ui/button"
-import { getProductByBarcode, getProducts } from "../../../lib/api"
+import { getProducts } from "../../../lib/api"
 import { useQuery } from "../../../lib/hooks/useQuery"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { useNavigate } from "react-router-dom"
@@ -57,19 +57,13 @@ const BarcodeSection = ({ onSuccess }) => {
 		}
 	}
 
-	
-
 	const handleBarcodeChange = (e) => {
 		setBarcode(e.target.value)
 	}
 
-	
-
 	useEffect(() => {
 		handleBarcodeInput(barcode)
 	}, [barcode])
-
-
 
 	return (
 		<Stack direction="row" spacing={2}>
@@ -82,7 +76,11 @@ const BarcodeSection = ({ onSuccess }) => {
 					onChange={handleBarcodeChange}
 					disabled={sale.isRefund}
 				/>
-				<Button type="submit" onClick={handleBarcodeSearch} disabled={sale.isRefund}>
+				<Button
+					type="submit"
+					onClick={handleBarcodeSearch}
+					disabled={sale.isRefund}
+				>
 					Search
 				</Button>
 			</div>
