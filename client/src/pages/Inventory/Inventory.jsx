@@ -105,15 +105,16 @@ const Inventory = () => {
 								<BarcodeSection onSuccess={setProducts} />
 							)}
 							{isActiveComponent("inventory", "search-name") && (
-								<NameSection name={name} handleNameChange={handleNameChange} />
+								<NameSection
+									name={name}
+									handleNameChange={handleNameChange}
+									handleReset={handleReset}
+								/>
 							)}
-							<Button onClick={handleCreateProduct}>
-								<PlusIcon />
-							</Button>
 						</Stack>
-						{isActiveComponent("inventory", "search-name") && (
-							<Button onClick={handleReset}>Reset</Button>
-						)}
+						<Button onClick={handleCreateProduct}>
+							<PlusIcon />
+						</Button>
 					</Stack>
 					{isActiveComponent("inventory", "table") && (
 						<InventoryTable
@@ -140,7 +141,11 @@ const Inventory = () => {
 
 export default Inventory
 
-const NameSection = ({ name, handleNameChange }) => {
+const NameSection = ({
+	name,
+	handleNameChange = () => {},
+	handleReset = () => {},
+}) => {
 	return (
 		<div className="flex max-w-sm items-center space-x-2">
 			<Input
@@ -150,6 +155,7 @@ const NameSection = ({ name, handleNameChange }) => {
 				value={name}
 				onChange={handleNameChange}
 			/>
+			<Button onClick={handleReset}>Reset</Button>
 		</div>
 	)
 }
