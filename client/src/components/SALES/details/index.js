@@ -68,11 +68,11 @@ export const SaleDetails = ({ sale, readOnly = false }) => {
 	}, [sale?.id])
 
 	return (
-		<Stack className="space-y-4">
+		<Stack className={readOnly ? "space-y-2" : "space-y-4"}>
 			{!readOnly && <SaleTotalSummary sale={sale} />}
 			<Stack
-				className={`space-y-4 overflow-scroll max-h-[calc(100vh-400px)] ${
-					!readOnly ? "p-4 border border-gray-100 rounded-lg" : ""
+				className={`space-y-2 overflow-scroll max-h-[calc(100vh-400px)] ${
+					!readOnly ? "space-y-4 p-4 border border-gray-100 rounded-lg" : ""
 				}`}
 			>
 				<SaleProductSummary products={products} readOnly={readOnly} />

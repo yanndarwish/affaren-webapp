@@ -132,7 +132,7 @@ const Cart = ({ onDiscount, onBookmark }) => {
 
 	const handleSaveToBookmarks = (name, number) => {
 		sale.saveToBookmarks({ name, number })
-		notifySuccess("Sale saved to bookmarks")
+		notifyInfo("Sale saved to bookmarks")
 		onBookmark()
 		sale.resetSale()
 	}

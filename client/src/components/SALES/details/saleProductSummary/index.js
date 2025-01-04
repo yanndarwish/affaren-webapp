@@ -30,14 +30,14 @@ export const SaleProductSummary = ({ products, readOnly = false }) => {
 							icon={<Newspaper />}
 						/>
 						<ProductTypeCard value={otherProducts.length} icon={<Shapes />} />
+						<ProductTypeCard
+							value={products.length}
+							icon={<Flag />}
+							primary
+							className="w-full"
+						/>
 					</>
 				)}
-				<ProductTypeCard
-					value={products.length}
-					icon={<Flag />}
-					primary
-					className="w-full"
-				/>
 			</Stack>
 
 			<Stack
