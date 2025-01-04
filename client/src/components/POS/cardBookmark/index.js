@@ -10,6 +10,7 @@ import { useSale } from "../../../lib/providers/sale"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { Separator } from "../../ui/separator"
 import { Modal, useModal } from "../../shared/modal"
+import { useConfig } from "../../../lib/hooks/useConfig"
 
 export const CardBookmark = () => {
 	const { notifySuccess } = useNotify()
@@ -95,6 +96,8 @@ export const CardBookmark = () => {
 }
 
 const Bookmark = ({ bookmark, isSelected, onSelect, onRemove }) => {
+	const { config } = useConfig()
+
 	return (
 		<Stack spacing={2} className="rounded-md overflow-hidden">
 			<Stack
@@ -112,7 +115,10 @@ const Bookmark = ({ bookmark, isSelected, onSelect, onRemove }) => {
 					direction="row"
 					className="justify-between items-center space-x-2 "
 				>
-					<p className="text-sm p-2">{bookmark.sale.amount}€</p>
+					<Stack direction="row" spacing={1} className="items-center">
+						<p className="text-sm">{bookmark.sale.amount}</p>
+						<config.general.currency.symbol className="w-4 h-4" />
+					</Stack>
 					<Button size="icon" onClick={onRemove}>
 						<Trash2Icon />
 					</Button>

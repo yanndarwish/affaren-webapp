@@ -19,6 +19,7 @@ import { useNotify } from "../../../lib/hooks/useNotify"
 import { useSession } from "../../../lib/hooks/useSession"
 import { Typography } from "../../ui/typography"
 import { ModalLogout } from "../logout"
+import { useConfig } from "../../../lib/hooks/useConfig"
 
 export const ModalClose = ({ controller }) => {
 	const [step, setStep] = useState(1)
@@ -82,6 +83,7 @@ export const ModalClose = ({ controller }) => {
 }
 
 const CardCheckout = () => {
+	const { config } = useConfig()
 	const { credit } = useDailyTotal()
 	const EMVItems = ["Grey Button", "Param", "CB EMV", "Consultation"]
 	const CLESSItems = ["Grey Button", "Param", "CB CLESS", "Consultation"]
@@ -124,7 +126,10 @@ const CardCheckout = () => {
 						<CreditCard />
 						<p className="text-sm font-bold">Total Card Revenue</p>
 					</Stack>
-					<p className="text-sm font-bold">{credit} €</p>
+					<Stack direction="row" spacing={1} className="items-center">
+						<p className="text-sm font-bold">{credit}</p>
+						<config.general.currency.symbol className="w-4 h-4" />
+					</Stack>
 				</Stack>
 			</Stack>
 		</UserStep>
@@ -152,6 +157,7 @@ const CashCheckout = () => {
 	const [cashBase, setCashBase] = useState(0)
 	const { user } = useSession()
 	const { cash } = useDailyTotal()
+	const { config } = useConfig()
 	const { notifyError, notifySuccess } = useNotify()
 
 	const queryGetTodayCashBase = useQuery({
@@ -220,7 +226,10 @@ const CashCheckout = () => {
 					className="border border-gray-100 rounded-lg p-2 w-full"
 				>
 					<p className="text-sm font-bold">Cash from yesterday</p>
-					<p className="text-sm font-bold">{cashBase} €</p>
+					<Stack direction="row" spacing={1} className="items-center">
+						<p className="text-sm font-bold">{cashBase}</p>
+						<config.general.currency.symbol className="w-4 h-4" />
+					</Stack>
 				</Stack>
 				<Stack
 					direction="row"
@@ -229,7 +238,10 @@ const CashCheckout = () => {
 					className="border border-gray-100 rounded-lg p-2 w-full"
 				>
 					<p className="text-sm font-bold">Cash from today</p>
-					<p className="text-sm font-bold">{cash} €</p>
+					<Stack direction="row" spacing={1} className="items-center">
+						<p className="text-sm font-bold">{cash}</p>
+						<config.general.currency.symbol className="w-4 h-4" />
+					</Stack>
 				</Stack>
 				<Stack
 					direction="row"
@@ -241,7 +253,12 @@ const CashCheckout = () => {
 						<Banknote />
 						<p className="text-sm font-bold">Total in Drawer</p>
 					</Stack>
-					<p className="text-sm font-bold">{cashBase + cash} €</p>
+					<Stack direction="row" spacing={1} className="items-center">
+						<p className="text-sm font-bold">
+							{(cashBase + cash).toFixed(2)}
+						</p>
+						<config.general.currency.symbol className="w-4 h-4" />
+					</Stack>
 				</Stack>
 				<Stack direction="row" className="space-x-4">
 					<Button onClick={handleOpenDrawer} className="w-full">

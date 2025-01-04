@@ -1,4 +1,6 @@
-export const Stat = ({ icon, value, accent = false,border = true }) => {
+import { Stack } from "@mui/material"
+
+export const Stat = ({ icon, value, accent = false, border = true, extra }) => {
 	return (
 		<article
 			className={`flex items-center gap-4 ${
@@ -8,13 +10,16 @@ export const Stat = ({ icon, value, accent = false,border = true }) => {
 			<span className="rounded-full border border-gray-100 p-2">{icon}</span>
 
 			<div>
-				<p
-					className={`text-xl font-normal ${
-						accent ? "text-slate-900" : "text-slate-400"
-					}`}
-				>
-					{value}
-				</p>
+				<Stack direction="row" alignItems="center" spacing={0.5}>
+					<p
+						className={`text-xl font-normal ${
+							accent ? "text-slate-900" : "text-slate-400"
+						}`}
+					>
+						{value}
+					</p>
+					{extra && extra}
+				</Stack>
 			</div>
 		</article>
 	)

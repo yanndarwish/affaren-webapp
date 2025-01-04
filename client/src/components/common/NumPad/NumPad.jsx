@@ -3,6 +3,7 @@ import { ArtTitle } from "../../../assets/common/common.styles"
 import { CorrectBtn, Display, Keypad, NumRow } from "./NumPad.styles"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 import { Button } from "../../ui/button"
+import { Stack } from "@mui/material"
 
 export const NumPad = ({
 	size,
@@ -25,7 +26,9 @@ export const NumPad = ({
 			{display ? (
 				<Display className="display space-x-4">
 					<ArtTitle>
-						{value} {unit}
+						<Stack direction="row" spacing={1} className="items-center">
+							{value} {unit}
+						</Stack>
 					</ArtTitle>
 					<Button onClick={handleCorrect}>
 						<BackspaceOutlinedIcon />

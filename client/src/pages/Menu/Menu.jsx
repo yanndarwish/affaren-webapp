@@ -18,11 +18,11 @@ import {
 	useDeleteDishMutation,
 	useGetDishesQuery,
 } from "../../redux/services/dishApi"
-import CreateDishSlider from "../../components/MENU/Sliders/CreateDishSlider"
-import EditDishSlider from "../../components/MENU/Sliders/EditDishSlider"
+// import CreateDishSlider from "../../components/MENU/Sliders/CreateDishSlider"
+// import EditDishSlider from "../../components/MENU/Sliders/EditDishSlider"
 import { Modal } from "modal-rjs"
-import CreateFormulaSlider from "../../components/MENU/Sliders/CreateFormulaSlider"
-import EditFormulaSlider from "../../components/MENU/Sliders/EditFormulaSlider"
+// import CreateFormulaSlider from "../../components/MENU/Sliders/CreateFormulaSlider"
+// import EditFormulaSlider from "../../components/MENU/Sliders/EditFormulaSlider"
 
 const Menu = () => {
 	const loggedIn = useSelector((state) => state.login.loggedIn)
@@ -130,7 +130,7 @@ const Menu = () => {
 					/>
 				</Column>
 			)}
-			<CreateDishSlider isOpen={createIsOpen} setIsOpen={setCreateIsOpen} />
+			{/* <CreateDishSlider isOpen={createIsOpen} setIsOpen={setCreateIsOpen} />
 			<CreateFormulaSlider
 				isOpen={createFormulaIsOpen}
 				setIsOpen={setCreateFormulaIsOpen}
@@ -150,7 +150,7 @@ const Menu = () => {
 					dish={selected}
 					setDish={setSelected}
 				/>
-			)}
+			)} */}
 			<Modal
 				title="Delete"
 				isOpen={deleteIsOpen}

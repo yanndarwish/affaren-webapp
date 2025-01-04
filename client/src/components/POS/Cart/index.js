@@ -553,6 +553,7 @@ export default Cart
 
 // Refund Modal Component
 const ModalRefund = ({ controller, onRefund }) => {
+	const { config } = useConfig()
 	const [refundValue, setRefundValue] = useState("00.00")
 
 	const handleChange = (value) => {
@@ -596,7 +597,7 @@ const ModalRefund = ({ controller, onRefund }) => {
 			<NumPad
 				display
 				value={refundValue}
-				unit="€"
+				unit={<config.general.currency.symbol className="w-5 h-5" />}
 				onClick={handleChange}
 				onCorrect={handleCorrect}
 			/>

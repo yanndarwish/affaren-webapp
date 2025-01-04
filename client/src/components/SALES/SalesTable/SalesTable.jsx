@@ -33,6 +33,7 @@ import { formatDailyTotals } from "../../../lib/sales"
 import { SaleDetails } from "../details"
 import { DateNavigator } from "../../shared/datePicker"
 import { EmptyData } from "../../shared/emptyData"
+import { useConfig } from "../../../lib/hooks/useConfig"
 
 const columns = [
 	{
@@ -358,6 +359,8 @@ export const DayTotalSummary = ({
 }
 
 export const PaymentTotal = ({ label, value, icon, primary }) => {
+	const { config } = useConfig()
+
 	return (
 		<Stack
 			direction="row"
@@ -371,7 +374,10 @@ export const PaymentTotal = ({ label, value, icon, primary }) => {
 				{icon}
 				<p>{label}</p>
 			</Stack>
-			<p>{value} €</p>
+			<Stack direction="row" alignItems="center" spacing={0.5}>
+				<p>{value} </p>
+				<config.general.currency.symbol className="w-4 h-4" />
+			</Stack>
 		</Stack>
 	)
 }

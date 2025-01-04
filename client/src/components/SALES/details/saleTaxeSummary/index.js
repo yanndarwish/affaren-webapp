@@ -1,10 +1,13 @@
 import { Stack } from "@mui/material"
+import { useConfig } from "../../../../lib/hooks/useConfig"
 
 export const SaleTaxeSummary = ({ taxes, detailed = false }) => {
+	const { config } = useConfig()
+
 	if (!taxes) return null
 
 	// Helper function to format numbers
-	const formatNumber = (num) => Number(num).toFixed(2) + " €"
+	const formatNumber = (num) => Number(num).toFixed(2)
 
 	// Group the tax data
 	const groupedTaxes = {
@@ -54,7 +57,12 @@ export const SaleTaxeSummary = ({ taxes, detailed = false }) => {
 								className="w-full"
 							>
 								<p className="text-sm text-gray-500">{tax.label}</p>
-								<p className="text-sm font-medium">{formatNumber(tax.value)}</p>
+								<Stack direction="row" alignItems="center" spacing={0.5}>
+									<p className="text-sm font-medium">
+										{formatNumber(tax.value)}
+									</p>
+									<config.general.currency.symbol className="w-4 h-4" />
+								</Stack>
 							</Stack>
 						))}
 					</Stack>
@@ -77,7 +85,12 @@ export const SaleTaxeSummary = ({ taxes, detailed = false }) => {
 								className="w-full"
 							>
 								<p className="text-sm text-gray-500">{tax.label}</p>
-								<p className="text-sm font-medium">{formatNumber(tax.value)}</p>
+								<Stack direction="row" alignItems="center" spacing={0.5}>
+									<p className="text-sm font-medium">
+										{formatNumber(tax.value)}
+									</p>
+									<config.general.currency.symbol className="w-4 h-4" />
+								</Stack>
 							</Stack>
 						))}
 					</Stack>
@@ -101,14 +114,19 @@ export const SaleTaxeSummary = ({ taxes, detailed = false }) => {
 							className="w-full"
 						>
 							<p className="text-sm text-gray-500">{tax.label}</p>
-							<p className="text-sm font-medium">{formatNumber(tax.value)}</p>
+							<Stack direction="row" alignItems="center" spacing={0.5}>
+								<p className="text-sm font-medium">
+									{formatNumber(tax.value)}
+								</p>
+								<config.general.currency.symbol className="w-4 h-4" />
+							</Stack>
 						</Stack>
 					))}
 				</Stack>
 			)}
 
 			{groupedTaxes.totals.length > 0 && (
-				<Stack direction="row" spacing={2} >
+				<Stack direction="row" spacing={2}>
 					{groupedTaxes.totals.map((tax) => (
 						<Stack
 							key={tax.label}
@@ -118,7 +136,12 @@ export const SaleTaxeSummary = ({ taxes, detailed = false }) => {
 							className="border border-gray-100 rounded-lg p-2 w-full"
 						>
 							<p className="text-sm font-bold">{tax.label}</p>
-							<p className="text-sm font-bold">{formatNumber(tax.value)}</p>
+							<Stack direction="row" alignItems="center" spacing={0.5}>
+								<p className="text-sm font-bold">
+									{formatNumber(tax.value)}
+								</p>
+								<config.general.currency.symbol className="w-4 h-4" />
+							</Stack>
 						</Stack>
 					))}
 				</Stack>

@@ -10,18 +10,25 @@ import { NumPad } from "../../common/NumPad/NumPad"
 import { Separator } from "../../ui/separator"
 import { Checkbox } from "../../ui/checkbox"
 import { Button } from "../../ui/button"
-
-const discountTypes = [
-	{ name: "percent", label: "Percent", unit: "%" },
-	{ name: "amount", label: "Amount", unit: "€" },
-]
+import { useConfig } from "../../../lib/hooks/useConfig"
 
 export const CardDiscount = () => {
+	const { config } = useConfig()
 	const { notifySuccess } = useNotify()
 	const sale = useSale()
-	const [discountType, setDiscountType] = useState(discountTypes[0].name)
 	const [discountAmount, setDiscountAmount] = useState("0")
 	const [selected, setSelected] = useState(sale?.discount || [])
+
+	const discountTypes = [
+		{ name: "percent", label: "Percent", unit: "%" },
+		{
+			name: "amount",
+			label: "Amount",
+			unit: <config.general.currency.symbol className="w-5 h-5" />,
+		},
+	]
+	
+	const [discountType, setDiscountType] = useState(discountTypes[0].name)
 
 	const handleRemoveDiscount = (id) => {
 		const discountedProduct = sale.discount.find(

@@ -16,12 +16,25 @@ import {
 	CreditCard,
 	Tag,
 	Percent,
+	DollarSign,
+	Euro,
 } from "lucide-react"
 import { NoBarcode } from "../../../pages/Pos/config"
+import { currencyOptions } from "./utils"
+
 const ConfigContext = createContext()
 
 const defaultConfig = {
 	general: {
+		currency: {
+			name: "currency",
+			label: "Currency",
+			icon: DollarSign,
+			description: "The currency used by the business.",
+			value: "EUR",
+			symbol: Euro,
+			options: currencyOptions,
+		},
 		paymentMethods: {
 			name: "payment-methods",
 			label: "Payment methods",
@@ -380,11 +393,26 @@ const ConfigProvider = ({ children }) => {
 				}
 			}
 
+			const currencyWithIcons = () => {
+				const defaultCurrency = defaultConfig.general.currency
+
+
+				return {
+					...storedConfig.general.currency,
+					icon: defaultCurrency.icon,
+					symbol: defaultCurrency.options.find(
+						(option) => option.name === storedConfig.general.currency.value
+					).icon,
+					options: defaultCurrency.options,
+				}
+			}
+
 			setConfig({
 				...storedConfig,
 				modules: modulesWithIcons,
 				general: {
 					...storedConfig.general,
+					currency: currencyWithIcons(),
 					paymentMethods: paymentMethodsWithIcons(),
 					taxes: taxesWithIcons(),
 				},

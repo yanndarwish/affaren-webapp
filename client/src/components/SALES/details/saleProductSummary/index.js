@@ -1,7 +1,10 @@
 import { Divider, Stack } from "@mui/material"
 import { Apple, Flag, Newspaper, Shapes } from "lucide-react"
+import { useConfig } from "../../../../lib/hooks/useConfig"
 
 export const SaleProductSummary = ({ products, readOnly = false }) => {
+	const { config } = useConfig()
+
 	if (!products) return null
 
 	const foodProducts = products.filter(
@@ -63,9 +66,12 @@ export const SaleProductSummary = ({ products, readOnly = false }) => {
 									{product.product_quantity}
 								</p>
 								{!readOnly && (
-									<p className="text-sm text text-end font-medium w-20">
-										{product.product_price} €
-									</p>
+									<Stack direction="row" alignItems="center" spacing={0.5}>
+										<p className="text-sm text text-end font-medium w-20">
+											{product.product_price}
+										</p>
+										<config.general.currency.symbol className="w-4 h-4" />
+									</Stack>
 								)}
 							</Stack>
 						</Stack>

@@ -23,6 +23,7 @@ import { Switch } from "../../components/ui/switch"
 import { Separator } from "../../components/ui/separator"
 import { Label } from "../../components/ui/label"
 import { Button } from "../../components/ui/button"
+import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs"
 
 const sections = [
 	{
@@ -87,6 +88,8 @@ const MainContent = forwardRef(({}, ref) => {
 					</Typography>
 				</Stack>
 				<Stack spacing={4}>
+					<CurrencyElement />
+					<Separator />
 					<PaymentMethodElement />
 					<Separator />
 					<TaxesElement />
@@ -367,6 +370,59 @@ const TaxesElement = () => {
 					</Stack>
 				))}
 			</div>
+		</Stack>
+	)
+}
+
+const CurrencyElement = () => {
+	const { config, updateConfig } = useConfig()
+
+	const handleChangeCurrency = (value) => {
+		const newConfig = { ...config }
+		newConfig.general.currency.value = value
+		const symbol = newConfig.general.currency.options.find(
+			(option) => option.name === value
+		).icon
+
+		newConfig.general.currency.symbol = symbol
+
+		updateConfig(newConfig)
+	}
+
+	return (
+		<Stack spacing={2}>
+			<Stack spacing={1}>
+				<Stack direction="row" spacing={1} alignItems="center">
+					{config.general.currency.icon && (
+						<config.general.currency.symbol className="w-4 h-4" />
+					)}
+					<Typography variant="h4">{config.general.currency.label}</Typography>
+				</Stack>
+				<Typography variant="muted">
+					{config.general.currency.description}
+				</Typography>
+			</Stack>
+
+			<Tabs
+				value={config.general.currency.value}
+				onValueChange={handleChangeCurrency}
+				className="w-full h-full space-y-4"
+			>
+				<TabsList className="w-full">
+					{config.general.currency.options.map((option) => (
+						<TabsTrigger
+							key={option.name}
+							value={option.name}
+							className="w-full"
+						>
+							<Stack direction="row" spacing={2} alignItems="center">
+								{option.icon && <option.icon className="w-4 h-4" />}
+								<Typography variant="muted">{option.label}</Typography>
+							</Stack>
+						</TabsTrigger>
+					))}
+				</TabsList>
+			</Tabs>
 		</Stack>
 	)
 }

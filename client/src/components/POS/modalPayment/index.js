@@ -20,12 +20,6 @@ import { useNotify } from "../../../lib/hooks/useNotify"
 import { SaleDetails } from "../../SALES/details"
 import { useConfig } from "../../../lib/hooks/useConfig"
 
-const PAYMENT_TABS = [
-	{ name: "cash", label: "Cash", icon: Banknote },
-	{ name: "card", label: "Card", icon: CreditCard },
-	{ name: "check", label: "Check", icon: Tag },
-]
-
 export const ModalPayment = ({ controller }) => {
 	const sale = useSale()
 	const { notifySuccess, notifyError } = useNotify()
@@ -399,12 +393,22 @@ const PaymentModalContent = ({
 }
 
 const CompletedPaymentView = ({ giveBack, actualSale }) => {
+	const { config } = useConfig()
+
 	return (
 		<Stack direction="column" spacing={4}>
 			{giveBack > 0 && (
-				<h1 className="text-2xl font-extrabold text-center">
-					Give back : {giveBack} €
-				</h1>
+				<Stack
+					direction="row"
+					spacing={1}
+					justifyContent="center"
+					className="items-center"
+				>
+					<h1 className="text-2xl font-extrabold text-center">
+						Give back : {giveBack}
+					</h1>
+					<config.general.currency.symbol className="w-5 h-5" />
+				</Stack>
 			)}
 			<SaleDetails sale={actualSale} />
 		</Stack>
@@ -418,30 +422,42 @@ const ActivePaymentView = ({
 	handlePrice,
 	handleCorrectPrice,
 	handlePayment,
-}) => (
-	<>
-		<h1 className="text-2xl font-extrabold text-center">
-			Total : {sale.amount} €
-		</h1>
-		<Stack direction="column" spacing={4}>
-			<PaymentTabs
-				selectedTab={state.selectedTab}
-				onTabChange={(tab) =>
-					setState((prev) => ({ ...prev, selectedTab: tab }))
-				}
-			/>
-			<PaymentDetails
-				state={state}
-				handlePrice={handlePrice}
-				handleCorrectPrice={handleCorrectPrice}
-			/>
-			<PaymentButton
-				selectedTab={state.selectedTab}
-				onPayment={handlePayment}
-			/>
-		</Stack>
-	</>
-)
+}) => {
+	const { config } = useConfig()
+
+	return (
+		<>
+			<Stack
+				direction="row"
+				spacing={1}
+				justifyContent="center"
+				className="items-center"
+			>
+				<h1 className="text-2xl font-extrabold text-center">
+					Total : {sale.amount}
+				</h1>
+				<config.general.currency.symbol className="w-5 h-5" />
+			</Stack>
+			<Stack direction="column" spacing={4}>
+				<PaymentTabs
+					selectedTab={state.selectedTab}
+					onTabChange={(tab) =>
+						setState((prev) => ({ ...prev, selectedTab: tab }))
+					}
+				/>
+				<PaymentDetails
+					state={state}
+					handlePrice={handlePrice}
+					handleCorrectPrice={handleCorrectPrice}
+				/>
+				<PaymentButton
+					selectedTab={state.selectedTab}
+					onPayment={handlePayment}
+				/>
+			</Stack>
+		</>
+	)
+}
 
 const PaymentTabs = ({ selectedTab, onTabChange }) => {
 	const { config } = useConfig()
@@ -466,10 +482,13 @@ const PaymentTabs = ({ selectedTab, onTabChange }) => {
 	)
 }
 
-const PaymentDetails = ({ state, handlePrice, handleCorrectPrice }) => (
-	<Stack className="w-full space-y-4">
-		<Stack direction="row" className="w-full space-x-4" alignItems="center">
-			<PaymentStat label="Paid" value={state.paid} />
+const PaymentDetails = ({ state, handlePrice, handleCorrectPrice }) => {
+	const { config } = useConfig()
+
+	return (
+		<Stack className="w-full space-y-4">
+			<Stack direction="row" className="w-full space-x-4" alignItems="center">
+				<PaymentStat label="Paid" value={state.paid} />
 			<PaymentStat
 				label="Remaining"
 				value={(state.actualSale.amount - state.paid).toFixed(2)}
@@ -477,13 +496,14 @@ const PaymentDetails = ({ state, handlePrice, handleCorrectPrice }) => (
 		</Stack>
 		<NumPad
 			display
-			value={state.amount}
-			onClick={handlePrice}
-			onCorrect={handleCorrectPrice}
-			unit="€"
-		/>
-	</Stack>
-)
+				value={state.amount}
+				onClick={handlePrice}
+				onCorrect={handleCorrectPrice}
+				unit={<config.general.currency.symbol className="w-5 h-5" />}
+			/>
+		</Stack>
+	)
+}
 
 const PaymentButton = ({ selectedTab, onPayment }) => {
 	const { config } = useConfig()
@@ -500,16 +520,28 @@ const PaymentButton = ({ selectedTab, onPayment }) => {
 	)
 }
 
-const PaymentStat = ({ label, value }) => (
-	<article className="rounded-lg border border-gray-100 bg-white p-6 w-full">
-		<div>
-			<p className="text-sm text-gray-500 text-center">{label}</p>
-			<p className="text-2xl font-medium text-gray-900 text-center">
-				{value} €
-			</p>
-		</div>
-	</article>
-)
+const PaymentStat = ({ label, value }) => {
+	const { config } = useConfig()
+
+	return (
+		<article className="rounded-lg border border-gray-100 bg-white p-6 w-full">
+			<div>
+				<p className="text-sm text-gray-500 text-center">{label}</p>
+			<Stack
+				direction="row"
+				spacing={1}
+				justifyContent="center"
+				className="items-center"
+			>
+				<p className="text-2xl font-medium text-gray-900 text-center">
+					{value}
+				</p>
+					<config.general.currency.symbol className="w-5 h-5" />
+				</Stack>
+			</div>
+		</article>
+	)
+}
 
 // Utility functions
 const getPaidAmount = (sale) =>

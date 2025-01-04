@@ -10,7 +10,12 @@ import {
 	CardDescription,
 } from "../../ui/card"
 
-import { ReceiptText, Computer, BadgePercent, ShoppingBasket } from "lucide-react"
+import {
+	ReceiptText,
+	Computer,
+	BadgePercent,
+	ShoppingBasket,
+} from "lucide-react"
 import { useQuery } from "../../../lib/hooks/useQuery"
 import { openDrawer, printTicket } from "../../../lib/api"
 import { useModal } from "../../shared/modal"
@@ -26,7 +31,7 @@ import { Typography } from "../../ui/typography"
 
 export const TotalSection = () => {
 	const { notifySuccess, notifyError } = useNotify()
-	const { isActiveComponent } = useConfig()
+	const { config, isActiveComponent } = useConfig()
 	const paymentModal = useModal()
 	const sale = useSale()
 
@@ -112,9 +117,12 @@ export const TotalSection = () => {
 										className="text-muted-foreground space-x-2"
 									>
 										<ShoppingBasket />
-										<Typography variant="lead">
-											{getTotalOriginalPrice(sale)} €
-										</Typography>
+										<Stack direction="row" alignItems="center">
+											<Typography variant="lead">
+												{getTotalOriginalPrice(sale)}
+											</Typography>
+											<config.general.currency.symbol className="w-5 h-5" />
+										</Stack>
 									</Stack>
 									<Separator orientation="vertical" className="mx-8 h-8" />
 									<Stack
@@ -123,17 +131,23 @@ export const TotalSection = () => {
 										className="text-muted-foreground space-x-2"
 									>
 										<BadgePercent />
-										<Typography variant="lead">
-											{getTotalReduction(sale)} €
-										</Typography>
+										<Stack direction="row" alignItems="center">
+											<Typography variant="lead">
+												{getTotalReduction(sale)}
+											</Typography>
+											<config.general.currency.symbol className="w-5 h-5" />
+										</Stack>
 									</Stack>
 
 									<Separator orientation="vertical" className="mx-8 h-8" />
 								</Stack>
 							)}
-						<Typography variant="h2" className="text-end">
-							Total {sale.amount}€
-						</Typography>
+						<Stack direction="row" alignItems="center">
+							<Typography variant="h2" className="text-end">
+								Total {sale.amount}
+							</Typography>
+							<config.general.currency.symbol className="w-7 h-7" />
+						</Stack>
 					</Stack>
 				</Stack>
 			</CardHeader>
