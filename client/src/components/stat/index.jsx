@@ -12,8 +12,8 @@ export const Stat = ({ icon, value, accent = false, border = true, extra }) => {
 			<div>
 				<Stack direction="row" alignItems="center" spacing={0.5}>
 					<p
-						className={`text-xl font-normal ${
-							accent ? "text-slate-900" : "text-slate-400"
+						className={`text-xl ${
+							accent ? "text-slate-900 font-bold" : "text-slate-400 font-normal"
 						}`}
 					>
 						{value}

@@ -29,12 +29,12 @@ import { useDailyTotal } from "../../../lib/providers/dailyTotal"
 import { formatSale } from "../../../lib/sales"
 
 import { Banknote, CreditCard, Tag } from "lucide-react"
-import { formatDailyTotals } from "../../../lib/sales"
 import { SaleDetails } from "../details"
 import { DateNavigator } from "../../shared/datePicker"
 import { EmptyData } from "../../shared/emptyData"
 import { useConfig } from "../../../lib/hooks/useConfig"
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
+import { roundUpToTwoDecimals } from "../../../lib/pos"
 
 const columns = [
 	{
@@ -380,16 +380,16 @@ export const DayTotalSummary = ({
 				className="w-full space-x-4"
 			>
 				{totalCash > 0 && (
-					<PaymentTotal label="Cash" value={totalCash} icon={<Banknote />} />
+					<PaymentTotal label="Cash" value={roundUpToTwoDecimals(totalCash)} icon={<Banknote />} />
 				)}
 				{totalCard > 0 && (
-					<PaymentTotal label="Card" value={totalCard} icon={<CreditCard />} />
+					<PaymentTotal label="Card" value={roundUpToTwoDecimals(totalCard)} icon={<CreditCard />} />
 				)}
 				{totalCheck > 0 && (
-					<PaymentTotal label="Check" value={totalCheck} icon={<Tag />} />
+					<PaymentTotal label="Check" value={roundUpToTwoDecimals(totalCheck)} icon={<Tag />} />
 				)}
 				{total > 0 && (
-					<PaymentTotal label="Total" value={total} icon={<Euro />} primary />
+					<PaymentTotal label="Total" value={roundUpToTwoDecimals(total)} icon={<Euro />} primary />
 				)}
 			</Stack>
 		)
@@ -413,7 +413,7 @@ export const PaymentTotal = ({ label, value, icon, primary }) => {
 				<p>{label}</p>
 			</Stack>
 			<Stack direction="row" alignItems="center" spacing={0.5}>
-				<p>{value} </p>
+				<p>{roundUpToTwoDecimals(value)} </p>
 				<config.general.currency.symbol className="w-4 h-4" />
 			</Stack>
 		</Stack>

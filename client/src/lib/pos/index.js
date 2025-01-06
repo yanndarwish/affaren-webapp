@@ -85,7 +85,7 @@ export const updateTaxes = (products) => {
 }
 
 export const roundUpToTwoDecimals = (number) => {
-	return Math.round(number * 100) / 100
+	return (Math.round(number * 100) / 100).toFixed(2)
 }
 
 export const getTotalOriginalPrice = (sale) => {

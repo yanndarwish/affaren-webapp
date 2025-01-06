@@ -1,18 +1,17 @@
 import { Stack } from "@mui/material"
-import { PageTitle } from "../../components/shared/pageTitle"
 import { useEffect, useState } from "react"
 import { DateNavigator } from "../../components/shared/datePicker"
 import { MonthSalesChart } from "../../components/DASHBOARD/Charts/areaChart"
 import { useQuery } from "../../lib/hooks/useQuery"
 import { getSales } from "../../lib/api"
 import { PaymentTotal } from "../../components/SALES/SalesTable/SalesTable"
-import { Euro } from "lucide-react"
 import { useNotify } from "../../lib/hooks/useNotify"
 import { RepartitionChart } from "../../components/DASHBOARD/Charts/pieChart"
 import {
 	FixedContainer,
 	PageContainer,
 } from "../../components/shared/containers"
+import { useConfig } from "../../lib/hooks/useConfig"
 
 const Dashboard = () => {
 	const [selectedDate, setSelectedDate] = useState(new Date())
@@ -70,6 +69,7 @@ const Dashboard = () => {
 const DayTotal = ({ date }) => {
 	const { notifyError } = useNotify()
 	const [total, setTotal] = useState(0)
+	const { config } = useConfig()
 
 	const queryGetDaysSales = useQuery({
 		queryFn: getSales,
@@ -97,7 +97,7 @@ const DayTotal = ({ date }) => {
 
 	return (
 		<Stack direction="row" className=" w-[200px] justify-between">
-			<PaymentTotal label="Total" value={total} icon={<Euro />} primary />
+			<PaymentTotal label="Total" value={total} icon={<config.general.currency.symbol />} primary />
 		</Stack>
 	)
 }

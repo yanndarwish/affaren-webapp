@@ -1,10 +1,11 @@
 import { Stack } from "@mui/material"
-import { Banknote, CreditCard, Tag, Euro } from "lucide-react"
+import { Banknote, CreditCard, Tag } from "lucide-react"
 
 import { Stat } from "../../stat"
 import { Separator } from "../../ui/separator"
 import { useConfig } from "../../../lib/hooks/useConfig"
 import { useDailyTotal } from "../../../lib/providers/dailyTotal"
+import { roundUpToTwoDecimals } from "../../../lib/pos"
 
 export const DailyTotal = () => {
 	const { config } = useConfig()
@@ -24,7 +25,7 @@ export const DailyTotal = () => {
 				className="px-2"
 			>
 				<Stat
-					value={`${cash}`}
+					value={`${roundUpToTwoDecimals(cash)}`}
 					extra={
 						<config.general.currency.symbol className="w-5 h-5 text-slate-400" />
 					}
@@ -33,7 +34,7 @@ export const DailyTotal = () => {
 				/>
 				<Separator orientation="vertical" className="mx-4 h-4" />
 				<Stat
-					value={`${credit}`}
+					value={`${roundUpToTwoDecimals(credit)}`}
 					extra={
 						<config.general.currency.symbol className="w-5 h-5 text-slate-400" />
 					}
@@ -42,7 +43,7 @@ export const DailyTotal = () => {
 				/>
 				<Separator orientation="vertical" className="mx-4 h-4" />
 				<Stat
-					value={`${check}`}
+					value={`${roundUpToTwoDecimals(check)}`}
 					extra={
 						<config.general.currency.symbol className="w-5 h-5 text-slate-400" />
 					}
@@ -52,11 +53,11 @@ export const DailyTotal = () => {
 				<Separator orientation="vertical" className="mx-4 h-4" />
 			</Stack>
 			<Stat
-				value={`${total}`}
+				value={`${roundUpToTwoDecimals(total)}`}
 				extra={
 					<config.general.currency.symbol className="w-5 h-5 text-slate-900" />
 				}
-				icon={<Euro size={16} strokeWidth={2} />}
+				icon={<config.general.currency.symbol size={16} strokeWidth={2} />}
 				border={false}
 				accent={true}
 			/>

@@ -2,13 +2,7 @@ import { Stack } from "@mui/material"
 import { Button } from "../../ui/button"
 import { Separator } from "../../ui/separator"
 import { useSale } from "../../../lib/providers/sale"
-import {
-	Card,
-	CardTitle,
-	CardHeader,
-	CardFooter,
-	CardDescription,
-} from "../../ui/card"
+import { Card, CardHeader, CardFooter } from "../../ui/card"
 
 import {
 	ReceiptText,

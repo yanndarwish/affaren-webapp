@@ -8,7 +8,6 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "../../../ui/card"
@@ -21,21 +20,12 @@ import { useQuery } from "../../../../lib/hooks/useQuery"
 import { getMonthSales } from "../../../../lib/api"
 import { useNotify } from "../../../../lib/hooks/useNotify"
 import { useEffect, useState } from "react"
-import { EmptyData } from "../../../shared/emptyData"
 import { Stack } from "@mui/material"
 import { Tabs, TabsList, TabsTrigger } from "../../../ui/tabs"
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableFooter,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "../../../ui/table"
 import { Button } from "../../../ui/button"
 import { DataGrid } from "../../../shared/datagrid"
 import { useConfig } from "../../../../lib/hooks/useConfig"
+import { roundUpToTwoDecimals } from "../../../../lib/pos"
 
 const chartConfig = {
 	sales: {
@@ -402,8 +392,16 @@ const formatMonthData = (sales, month, year) => {
 	// Convert to array format
 	const formattedDataArray = Object.entries(formattedData).map(
 		([day, data]) => ({
-			day: `${day}/${month}/${year}`,
-			...data,
+			day: `${String(day).padStart(2, "0")}/${String(month).padStart(
+				2,
+				"0"
+			)}/${year}`,
+			...Object.fromEntries(
+				Object.entries(data).map(([key, value]) => [
+					key,
+					typeof value === "number" ? value.toFixed(2) : value,
+				])
+			),
 		})
 	)
 
@@ -411,36 +409,62 @@ const formatMonthData = (sales, month, year) => {
 		(total, dayData) => {
 			return {
 				day: "Total",
-				ht1: Math.round((total.ht1 + dayData.ht1) * 100) / 100,
-				ht2: Math.round((total.ht2 + dayData.ht2) * 100) / 100,
-				ht3: Math.round((total.ht3 + dayData.ht3) * 100) / 100,
-				tva1: Math.round((total.tva1 + dayData.tva1) * 100) / 100,
-				tva2: Math.round((total.tva2 + dayData.tva2) * 100) / 100,
-				tva3: Math.round((total.tva3 + dayData.tva3) * 100) / 100,
-				total1: Math.round((total.total1 + dayData.total1) * 100) / 100,
-				total2: Math.round((total.total2 + dayData.total2) * 100) / 100,
-				total3: Math.round((total.total3 + dayData.total3) * 100) / 100,
-				cash: Math.round((total.cash + dayData.cash) * 100) / 100,
-				card: Math.round((total.card + dayData.card) * 100) / 100,
-				check: Math.round((total.check + dayData.check) * 100) / 100,
-				total: Math.round((total.total + dayData.total) * 100) / 100,
+				ht1: roundUpToTwoDecimals(
+					parseFloat(total.ht1) + parseFloat(dayData.ht1)
+				),
+				ht2: roundUpToTwoDecimals(
+					parseFloat(total.ht2) + parseFloat(dayData.ht2)
+				),
+				ht3: roundUpToTwoDecimals(
+					parseFloat(total.ht3) + parseFloat(dayData.ht3)
+				),
+				tva1: roundUpToTwoDecimals(
+					parseFloat(total.tva1) + parseFloat(dayData.tva1)
+				),
+				tva2: roundUpToTwoDecimals(
+					parseFloat(total.tva2) + parseFloat(dayData.tva2)
+				),
+				tva3: roundUpToTwoDecimals(
+					parseFloat(total.tva3) + parseFloat(dayData.tva3)
+				),
+				total1: roundUpToTwoDecimals(
+					parseFloat(total.total1) + parseFloat(dayData.total1)
+				),
+				total2: roundUpToTwoDecimals(
+					parseFloat(total.total2) + parseFloat(dayData.total2)
+				),
+				total3: roundUpToTwoDecimals(
+					parseFloat(total.total3) + parseFloat(dayData.total3)
+				),
+				cash: roundUpToTwoDecimals(
+					parseFloat(total.cash) + parseFloat(dayData.cash)
+				),
+				card: roundUpToTwoDecimals(
+					parseFloat(total.card) + parseFloat(dayData.card)
+				),
+				check: roundUpToTwoDecimals(
+					parseFloat(total.check) + parseFloat(dayData.check)
+				),
+				total: roundUpToTwoDecimals(
+					parseFloat(total.total) + parseFloat(dayData.total)
+				),
 			}
 		},
 		{
 			day: "Total",
-			ht1: 0,
-			ht2: 0,
-			ht3: 0,
-			tva1: 0,
-			tva2: 0,
-			tva3: 0,
-			total1: 0,
-			total2: 0,
-			total3: 0,
-			cash: 0,
-			card: 0,
-			check: 0,
-			total: 0,
+			ht1: "0.00",
+			ht2: "0.00",
+			ht3: "0.00",
+			tva1: "0.00",
+			tva2: "0.00",
+			tva3: "0.00",
+			total1: "0.00",
+			total2: "0.00",
+			total3: "0.00",
+			cash: "0.00",
+			card: "0.00",
+			check: "0.00",
+			total: "0.00",
 		}
 	)
 
@@ -481,97 +505,5 @@ const TableMonthSales = ({ month, year }) => {
 			columns={columns}
 			emptyMessage="No sales data available"
 		/>
-		// <Card className="flex flex-col h-full overflow-hidden">
-		// 	<Table className="h-full">
-		// 		<TableHeader className="sticky top-0 bg-white z-10">
-		// 			<TableRow>
-		// 				{columns.map((column, index) => (
-		// 					<TableHead key={index} className={column.className}>
-		// 						{column.label}
-		// 					</TableHead>
-		// 				))}
-		// 			</TableRow>
-		// 		</TableHeader>
-		// 		<TableBody className="overflow-auto w-full h-full">
-		// 			{/* Empty state rows to maintain height */}
-		// 			{!data || data.length === 1 ? (
-		// 				<EmptyData
-		// 					message="No sales data available"
-		// 					span={columns.length + 1}
-		// 				/>
-		// 			) : (
-		// 				data?.map(
-		// 					(sale, i) =>
-		// 						i < data.length - 1 && (
-		// 							<TableRow key={i}>
-		// 								<TableCell className="text-left">{sale.day}</TableCell>
-		// 								<TableCell className="text-right">{sale.total1}</TableCell>
-		// 								<TableCell className="text-right">{sale.total2}</TableCell>
-		// 								<TableCell className="text-right">{sale.total3}</TableCell>
-		// 								<TableCell className="text-right">{sale.ht1}</TableCell>
-		// 								<TableCell className="text-right">{sale.ht2}</TableCell>
-		// 								<TableCell className="text-right">{sale.ht3}</TableCell>
-		// 								<TableCell className="text-right">{sale.tva1}</TableCell>
-		// 								<TableCell className="text-right">{sale.tva2}</TableCell>
-		// 								<TableCell className="text-right">{sale.tva3}</TableCell>
-		// 								<TableCell className="text-right bg-gray-50 font-medium">
-		// 									{sale.cash}
-		// 								</TableCell>
-		// 								<TableCell className="text-right bg-gray-50 font-medium">
-		// 									{sale.card}
-		// 								</TableCell>
-		// 								<TableCell className="text-right bg-gray-50 font-medium">
-		// 									{sale.check}
-		// 								</TableCell>
-		// 								<TableCell className="text-right font-bold bg-gray-100">
-		// 									{sale.total}
-		// 								</TableCell>
-		// 							</TableRow>
-		// 						)
-		// 				)
-		// 			)}
-		// 		</TableBody>
-		// 		<TableFooter className="py-2 sticky bottom-0 bg-white">
-		// 			<TableRow className="bg-gray-100 font-bold">
-		// 				<TableCell className="text-left">
-		// 					{data[data.length - 1]?.day}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.total1}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.total2}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.total3}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.ht1}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.ht2}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.ht3}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.tva1}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.tva2}
-		// 				</TableCell>
-		// 				<TableCell className="text-right">
-		// 					{data[data.length - 1]?.tva3}
-		// 				</TableCell>
-		// 				<TableCell>{data[data.length - 1]?.cash}</TableCell>
-		// 				<TableCell>{data[data.length - 1]?.card}</TableCell>
-		// 				<TableCell>{data[data.length - 1]?.check}</TableCell>
-		// 				<TableCell className="text-right font-bold bg-gray-100">
-		// 					{data[data.length - 1]?.total}
-		// 				</TableCell>
-		// 			</TableRow>
-		// 		</TableFooter>
-		// 	</Table>
-		// </Card>
 	)
 }
