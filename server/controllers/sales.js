@@ -199,6 +199,9 @@ const deleteSale = async (req, res) => {
 		const response = await pool.query("DELETE FROM sales WHERE sale_id = $1", [
 			id,
 		])
+
+		await pool.query("DELETE FROM sales_products WHERE sale_id = $1", [id])
+
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)

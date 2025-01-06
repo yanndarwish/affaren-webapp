@@ -4,11 +4,15 @@ const pool = require("../db")
 const getNextId = async (req, res) => {
 	try {
 		const response = await pool.query(
-			"SELECT * FROM sales ORDER BY sale_id DESC LIMIT 1"
+			"SELECT nextval('sales_sale_id_seq') as next_id"
 		)
 
-		const lastSale = response.rows[0]
-		const nextSaleId = lastSale ? lastSale.sale_id + 1 : 1
+		const nextSaleId = response.rows[0].next_id
+
+		// Roll back the sequence since we just want to peek at the next value
+		await pool.query(
+			"SELECT setval('sales_sale_id_seq', currval('sales_sale_id_seq') - 1)"
+		)
 
 		res.status(200).send({ nextSaleId: nextSaleId })
 	} catch (err) {
