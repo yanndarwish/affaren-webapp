@@ -155,7 +155,7 @@ const AddShortcutType = ({ onAdd = () => null }) => {
 	return (
 		<Stack direction="row" spacing={1} className="w-full">
 			<Input
-				placeholder="Add a shortcut type"
+				placeholder="Name"
 				className="w-full"
 				value={name}
 				onChange={(e) => setName(e.target.value)}
