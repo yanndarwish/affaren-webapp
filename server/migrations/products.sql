@@ -12,8 +12,7 @@ RETURNS TABLE (
     product_price NUMERIC(6, 2),
     product_taxe DOUBLE PRECISION,
     product_quantity INT,
-    product_barcode VARCHAR(20),
-    product_alert INT
+    product_barcode VARCHAR(20)
 )
 LANGUAGE plpgsql
 AS $$
