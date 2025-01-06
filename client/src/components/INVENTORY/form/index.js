@@ -75,9 +75,7 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 		})
 	}
 
-	const handleSubmit = (e) => {
-		e.preventDefault()
-
+	const handleSubmit = () => {
 		if (isFormValid()) {
 			if (data) {
 				handleUpdate()
@@ -94,88 +92,85 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 	}, [barcodeParam])
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<div className="flex flex-col gap-6">
-				<div className="grid gap-2">
-					<Label htmlFor="taxe">Category</Label>
-
-					<Tabs
-						id="taxe"
-						value={taxe}
-						onValueChange={setTaxe}
-						className="w-full h-full space-y-4"
-					>
-						<TabsList className="w-full p-0 bg-white">
-							{tabs.map((tab) => (
-								<TabsTrigger
-									key={tab.value}
-									value={tab.value}
-									className={`w-full ${
-										taxe === tab.value ? "!bg-black !text-white" : "!bg-white"
-									}`}
-								>
-									{tab.label}
-								</TabsTrigger>
-							))}
-						</TabsList>
-					</Tabs>
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="name">Name</Label>
-					<Input
-						id="name"
-						type="text"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-						placeholder="Product Name"
-						required
-						autoFocus
-					/>
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="price">Price</Label>
-					<Input
-						id="price"
-						type="number"
-						value={price}
-						onChange={(e) => setPrice(e.target.value)}
-						placeholder="Product Price"
-						required
-						step="0.01"
-						min="0"
-						inputMode="decimal"
-					/>
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="quantity">Quantity in Stock</Label>
-					<Input
-						id="quantity"
-						type="number"
-						value={quantity}
-						onChange={(e) => setQuantity(e.target.value)}
-						placeholder="Product Quantity"
-						required
-						step="1"
-						min="0"
-						inputMode="numeric"
-					/>
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="barcode">Barcode</Label>
-					<Input
-						id="barcode"
-						type="text"
-						value={barcode}
-						onChange={(e) => setBarcode(e.target.value)}
-						placeholder="Product Barcode"
-						required
-						inputMode="numeric"
-					/>
-				</div>
-				<Button type="submit">
-					{data ? "Update Product" : "Create Product"}
-				</Button>
+		<div className="flex flex-col gap-6">
+			<div className="grid gap-2">
+				<Label htmlFor="taxe">Category</Label>
+				<Tabs
+					id="taxe"
+					value={taxe}
+					onValueChange={setTaxe}
+					className="w-full space-y-4"
+				>
+					<TabsList className="w-full p-0 bg-white">
+						{tabs.map((tab) => (
+							<TabsTrigger
+								key={tab.value}
+								value={tab.value}
+								className={`w-full ${
+									taxe === tab.value ? "!bg-black !text-white" : "!bg-white"
+								}`}
+							>
+								{tab.label}
+							</TabsTrigger>
+						))}
+					</TabsList>
+				</Tabs>
 			</div>
-		</form>
+			<div className="grid gap-2">
+				<Label htmlFor="name">Name</Label>
+				<Input
+					id="name"
+					type="text"
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+					placeholder="Product Name"
+					required
+					autoFocus
+				/>
+			</div>
+			<div className="grid gap-2">
+				<Label htmlFor="price">Price</Label>
+				<Input
+					id="price"
+					type="number"
+					value={price}
+					onChange={(e) => setPrice(e.target.value)}
+					placeholder="Product Price"
+					required
+					step="0.01"
+					min="0"
+					inputMode="decimal"
+				/>
+			</div>
+			<div className="grid gap-2">
+				<Label htmlFor="quantity">Quantity in Stock</Label>
+				<Input
+					id="quantity"
+					type="number"
+					value={quantity}
+					onChange={(e) => setQuantity(e.target.value)}
+					placeholder="Product Quantity"
+					required
+					step="1"
+					min="0"
+					inputMode="numeric"
+				/>
+			</div>
+			<div className="grid gap-2">
+				<Label htmlFor="barcode">Barcode</Label>
+				<Input
+					id="barcode"
+					type="text"
+					value={barcode}
+					onChange={(e) => setBarcode(e.target.value)}
+					placeholder="Product Barcode"
+					required
+					inputMode="numeric"
+				/>
+			</div>
+			<Button type="submit" onClick={handleSubmit}>
+				{data ? "Update Product" : "Create Product"}
+			</Button>
+		</div>
 	)
 }
