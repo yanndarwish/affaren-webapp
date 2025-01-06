@@ -163,7 +163,7 @@ const CashCheckout = () => {
 	const queryGetTodayCashBase = useQuery({
 		queryFn: getDayCash,
 		onSuccess: (data) => {
-			setCashBase(data.amount)
+			setCashBase(data.amount || 0)
 		},
 		onError: () => {
 			notifyError("An error occurred while fetching the cash base")
