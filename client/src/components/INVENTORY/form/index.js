@@ -51,13 +51,16 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 	})
 
 	const isFormValid = () => {
+		const numPrice = parseFloat(price)
+		const numQuantity = parseInt(quantity)
+		const numBarcode = String(barcode).trim()
+
 		return (
 			name &&
-			price &&
-			!isNaN(price) &&
-			!isNaN(quantity) &&
-			barcode &&
-			!isNaN(barcode)
+			numPrice > 0 &&
+			!isNaN(numPrice) &&
+			!isNaN(numQuantity) &&
+			numBarcode.length > 0
 		)
 	}
 
@@ -74,7 +77,7 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		
+
 		if (isFormValid()) {
 			if (data) {
 				handleUpdate()
@@ -138,6 +141,9 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 						onChange={(e) => setPrice(e.target.value)}
 						placeholder="Product Price"
 						required
+						step="0.01"
+						min="0"
+						inputMode="decimal"
 					/>
 				</div>
 				<div className="grid gap-2">
@@ -149,6 +155,9 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 						onChange={(e) => setQuantity(e.target.value)}
 						placeholder="Product Quantity"
 						required
+						step="1"
+						min="0"
+						inputMode="numeric"
 					/>
 				</div>
 				<div className="grid gap-2">
@@ -160,6 +169,7 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 						onChange={(e) => setBarcode(e.target.value)}
 						placeholder="Product Barcode"
 						required
+						inputMode="numeric"
 					/>
 				</div>
 				<Button type="submit">
