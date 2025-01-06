@@ -80,7 +80,7 @@ export const ModalOpening = ({ controller }) => {
 	}
 
 	const handlePrintTicket = () => {
-		queryPrintCashTicket.send({ user: user.name })
+		queryPrintCashTicket.send({ user: user.firstName })
 	}
 
 	const handleOpen = () => {
