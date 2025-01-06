@@ -75,6 +75,12 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 		})
 	}
 
+	const handleBarcodeChange = (e) => {
+		const value = e.target.value
+		const trimmedValue = value.endsWith("/n") ? value.slice(0, -2) : value
+		setBarcode(trimmedValue)
+	}
+
 	const handleSubmit = () => {
 		if (isFormValid()) {
 			if (data) {
@@ -162,7 +168,7 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 					id="barcode"
 					type="text"
 					value={barcode}
-					onChange={(e) => setBarcode(e.target.value)}
+					onChange={handleBarcodeChange}
 					placeholder="Product Barcode"
 					required
 					inputMode="numeric"
