@@ -1,4 +1,3 @@
-import { Banknote, CreditCard, Tag } from "lucide-react"
 import { useEffect, useState } from "react"
 import { NumPad } from "../../common/NumPad/NumPad"
 import { Modal } from "../../shared/modal"

@@ -41,6 +41,8 @@ const getSales = async (req, res) => {
 		const offset = Number(req.query.offset) || ""
 		const limit = Number(req.query.limit) || ""
 
+		const paymentMethod = req.query.paymentMethod || ""
+
 		if (offset === undefined || limit === undefined) {
 			return res.status(400).send("All fields are required")
 		}
@@ -95,8 +97,16 @@ const getSales = async (req, res) => {
 
 		const response = await pool.query(request)
 
+		let sales = response.rows
+
+		if (paymentMethod) {
+			sales = sales.filter((sale) => {
+				return sale.sale_payment_methods[paymentMethod]
+			})
+		}
+
 		const data = {
-			data: response.rows,
+			data: sales,
 			totalCash,
 			totalCard,
 			totalCheck,

@@ -202,11 +202,14 @@ export const createProductCard = async (body) => {
 	return response
 }
 
-export const getSales = async ({ pagination, dateFilters }) => {
+export const getSales = async ({ pagination, dateFilters, paymentMethod }) => {
 	const paginationParams = getPagination(pagination)
 	const dateFiltersParams = getDateFilters(dateFilters)
-
-	const response = await get(`sales?${paginationParams}&${dateFiltersParams}`)
+	const paymentMethodParams = getPaymentMethodParams(paymentMethod)
+	
+	const response = await get(
+		`sales?${paginationParams}&${dateFiltersParams}&${paymentMethodParams}`
+	)
 	return response
 }
 
@@ -250,6 +253,12 @@ const getDateFilters = (date) => {
 	const { year, month, day } = date
 
 	return `year=${year}&month=${month}&day=${day}`
+}
+
+const getPaymentMethodParams = (paymentMethod) => {
+	if (!paymentMethod || paymentMethod === "") return ""
+
+	return `paymentMethod=${paymentMethod}`
 }
 
 export const forgotPassword = async (body) => {

@@ -34,6 +34,7 @@ import { SaleDetails } from "../details"
 import { DateNavigator } from "../../shared/datePicker"
 import { EmptyData } from "../../shared/emptyData"
 import { useConfig } from "../../../lib/hooks/useConfig"
+import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
 
 const columns = [
 	{
@@ -46,9 +47,16 @@ const columns = [
 		field: "sale_amount",
 		className: "text-center",
 	},
+	{
+		label: "Payment Method",
+		field: "sale_payment_methods",
+		className: "text-center",
+	},
 ]
 
 export default function SalesTable() {
+	const { config } = useConfig()
+	const [selectedTab, setSelectedTab] = useState(null)
 	const [selectedDate, setSelectedDate] = useState()
 	const [pagination, setPagination] = useState({
 		pageSize: 25,
@@ -130,18 +138,12 @@ export default function SalesTable() {
 		}
 	}
 
-	const fetchSales = () => {
-		const year = selectedDate.getFullYear()
-		const month = selectedDate.getMonth() + 1
-		const day = selectedDate.getDate()
-
-		const dateFilters = {
-			year,
-			month,
-			day,
+	const handleTabChange = (tab) => {
+		if (tab === selectedTab) {
+			setSelectedTab(null)
+		} else {
+			setSelectedTab(tab)
 		}
-
-		queryGetSales.send({ pagination, dateFilters })
 	}
 
 	const handlePreviousDay = () => {
@@ -167,6 +169,20 @@ export default function SalesTable() {
 		setSelectedDate(date)
 	}
 
+	const fetchSales = () => {
+		const year = selectedDate.getFullYear()
+		const month = selectedDate.getMonth() + 1
+		const day = selectedDate.getDate()
+
+		const dateFilters = {
+			year,
+			month,
+			day,
+		}
+
+		queryGetSales.send({ pagination, dateFilters, paymentMethod: selectedTab })
+	}
+
 	const scrollToTop = () => {
 		const scrollableBody = document.getElementById("scrollable-body")
 		scrollableBody.scrollTo({ top: 0, behavior: "smooth" })
@@ -177,7 +193,7 @@ export default function SalesTable() {
 			fetchSales()
 			scrollToTop()
 		}
-	}, [pagination.pageNumber, selectedDate])
+	}, [pagination.pageNumber, selectedDate, selectedTab])
 
 	useEffect(() => {
 		setSelectedDate(new Date())
@@ -185,23 +201,41 @@ export default function SalesTable() {
 
 	return (
 		<Stack className="space-y-4 h-full overflow-y-hidden">
-			<Stack
-				direction="row"
-				justifyContent="space-between"
-				className="flex-wrap"
-				columnGap={2}
-				rowGap={2}
-			>
-				<DateNavigator
-					selectedDate={selectedDate}
-					disabledRules={{ after: new Date() }}
-					handlePreviousDay={handlePreviousDay}
-					handleNextDay={handleNextDay}
-					handleDateChange={handleDateChange}
-					disableNextDay={
-						selectedDate?.toDateString() === new Date().toDateString()
-					}
-				/>
+			<Stack spacing={2}>
+				<Stack
+					direction="row"
+					justifyContent="space-between"
+					className="flex-wrap"
+					columnGap={2}
+					rowGap={2}
+				>
+					<DateNavigator
+						selectedDate={selectedDate}
+						disabledRules={{ after: new Date() }}
+						handlePreviousDay={handlePreviousDay}
+						handleNextDay={handleNextDay}
+						handleDateChange={handleDateChange}
+						disableNextDay={
+							selectedDate?.toDateString() === new Date().toDateString()
+						}
+					/>
+					<Stack className="max-w-[50%]">
+						<Tabs value={selectedTab} className="w-full h-full space-y-4">
+							<TabsList className="w-full">
+								{config.general.paymentMethods.options.map((tab) => (
+									<TabsTrigger
+										key={tab.name}
+										value={tab.name}
+										className="w-full"
+										onClick={() => handleTabChange(tab.name)}
+									>
+										{tab.label}
+									</TabsTrigger>
+								))}
+							</TabsList>
+						</Tabs>
+					</Stack>
+				</Stack>
 				<DayTotalSummary
 					date={selectedDate}
 					totalCash={totalCash}
@@ -210,6 +244,7 @@ export default function SalesTable() {
 					total={totalTotal}
 				/>
 			</Stack>
+
 			<Card className="flex flex-col overflow-hidden">
 				<div className="flex flex-col h-full relative">
 					{/* Sticky Header */}
@@ -242,6 +277,9 @@ export default function SalesTable() {
 											<TableCell>{sale.sale_id}</TableCell>
 											<TableCell className="text-center">
 												{sale.sale_amount}
+											</TableCell>
+											<TableCell>
+												<CellPaymentMethod sale={sale} />
 											</TableCell>
 											<TableCell className="text-right">
 												<Stack
@@ -438,4 +476,8 @@ const ModalDeleteSale = ({ controller, onConfirm = () => null }) => {
 			</Stack>
 		</Modal>
 	)
+}
+
+const CellPaymentMethod = ({ sale }) => {
+	return <p>{Object.keys(sale.sale_payment_methods).join(", ")}</p>
 }
