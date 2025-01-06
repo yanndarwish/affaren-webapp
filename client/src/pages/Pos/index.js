@@ -89,6 +89,10 @@ const Pos = () => {
 		}
 	}, [opening])
 
+	useEffect(() => {
+		sale.refocus()
+	}, [])
+
 	return (
 		<PageContainer className="grid gap-4 md:grid-cols-12 grid-rows-1 h-full">
 			<FixedContainer className="col-span-8">
