@@ -123,7 +123,7 @@ const Inventory = () => {
 							handlePreviousPage={handlePreviousPage}
 							handleNextPage={handleNextPage}
 							onSuccess={() => {
-								queryGetProducts.send(pagination)
+								queryGetProducts.send({ pagination })
 							}}
 						/>
 					)}
@@ -131,7 +131,7 @@ const Inventory = () => {
 				<ModalCreateProduct
 					controller={createProductController}
 					onSuccess={() => {
-						queryGetProducts.send(pagination)
+						queryGetProducts.send({ pagination })
 					}}
 				/>
 			</FixedContainer>
