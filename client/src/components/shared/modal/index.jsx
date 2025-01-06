@@ -21,31 +21,29 @@ export const Modal = ({ open, title, handleClose, children, className }) => {
 	if (!open) return null
 
 	return (
-		<div>
-			<MuiModal
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description"
+		<MuiModal
+			open={open}
+			onClose={handleClose}
+			aria-labelledby="modal-modal-title"
+			aria-describedby="modal-modal-description"
+		>
+			<Stack
+				direction="column"
+				spacing={2}
+				sx={style}
+				className={`${className} rounded-lg`}
 			>
-				<Stack
-					direction="column"
-					spacing={2}
-					sx={style}
-					className={`${className} rounded-lg`}
-				>
-					<SpaceBetween>
-						<Typography id="modal-modal-title" variant="h6" component="h2">
-							{title}
-						</Typography>
-						<IconButton onClick={handleClose}>
-							<CloseOutlinedIcon />
-						</IconButton>
-					</SpaceBetween>
-					{children}
-				</Stack>
-			</MuiModal>
-		</div>
+				<SpaceBetween>
+					<Typography id="modal-modal-title" variant="h6" component="h2">
+						{title}
+					</Typography>
+					<IconButton onClick={handleClose}>
+						<CloseOutlinedIcon />
+					</IconButton>
+				</SpaceBetween>
+				{children}
+			</Stack>
+		</MuiModal>
 	)
 }
 

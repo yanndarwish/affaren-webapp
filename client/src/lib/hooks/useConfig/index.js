@@ -18,7 +18,7 @@ import {
 	Percent,
 	DollarSign,
 	Euro,
-	Languages
+	Languages,
 } from "lucide-react"
 import { NoBarcode } from "../../../pages/Pos/config"
 import { currencyOptions, languageOptions } from "./utils"
@@ -140,6 +140,14 @@ const defaultConfig = {
 					description:
 						"The shortcuts component is used to create and use shortcuts for recurrent products.",
 					hasSettings: true,
+					settings: {
+						shortcutTypes: [
+							{
+								name: "all",
+								label: "All",
+							},
+						],
+					},
 				},
 				{
 					name: "no-barcode",
@@ -339,6 +347,11 @@ const ConfigProvider = ({ children }) => {
 		return config.modules.find((module) => module.name === name)
 	}
 
+	const getComponent = (moduleName, componentName) => {
+		const module = getModule(moduleName)
+		return module.components.find((component) => component.name === componentName)
+	}
+
 	const isActiveComponent = (moduleName, componentName) => {
 		const module = getModule(moduleName)
 		return module.components.find(
@@ -405,7 +418,6 @@ const ConfigProvider = ({ children }) => {
 			const currencyWithIcons = () => {
 				const defaultCurrency = defaultConfig.general.currency
 
-
 				return {
 					...storedConfig.general.currency,
 					icon: defaultCurrency.icon,
@@ -446,6 +458,7 @@ const ConfigProvider = ({ children }) => {
 				config,
 				updateConfig,
 				getModule,
+				getComponent,
 				isActiveComponent,
 				getMutableModules,
 			}}

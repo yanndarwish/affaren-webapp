@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom"
+import { useLocation, useSearchParams } from "react-router-dom"
 import { useEffect, useRef, forwardRef } from "react"
 import {
 	FixedContainer,
@@ -23,6 +23,8 @@ import { Switch } from "../../components/ui/switch"
 import { Separator } from "../../components/ui/separator"
 import { Label } from "../../components/ui/label"
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs"
+import { ModalComponentSettings } from "./modal"
+import { useModal } from "../../components/shared/modal"
 
 const sections = [
 	{
@@ -223,6 +225,20 @@ const ComponentElement = ({
 	component,
 	onCheckedChange = () => null,
 }) => {
+	const modalComponentSettings = useModal()
+	let [searchParams] = useSearchParams()
+	const componentParam = searchParams.get(component.name)
+
+	const handleOpenComponentSettings = () => {
+		modalComponentSettings.openModal()
+	}
+
+	useEffect(() => {
+		if (componentParam) {
+			modalComponentSettings.openModal()
+		}
+	}, [componentParam])
+
 	return (
 		<div className="p-4 justify-between items-center bg-muted/30 rounded-lg space-y-2">
 			<Stack
@@ -242,7 +258,7 @@ const ComponentElement = ({
 					{component.hasSettings && (
 						<SettingsIcon
 							className="w-4 h-4 cursor-pointer"
-							onClick={() => console.log("settings", component.name)}
+							onClick={handleOpenComponentSettings}
 						/>
 					)}
 				</Stack>
@@ -255,6 +271,10 @@ const ComponentElement = ({
 					disabled={!module.active}
 				/>
 			</Stack>
+			<ModalComponentSettings
+				component={component}
+				controller={modalComponentSettings}
+			/>
 		</div>
 	)
 }

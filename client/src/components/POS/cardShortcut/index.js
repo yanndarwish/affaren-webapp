@@ -14,6 +14,9 @@ import { Button } from "../../ui/button"
 import { Modal, useModal } from "../../shared/modal"
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
 import useLongPress from "../../../lib/hooks/useLongPress"
+import { useConfig } from "../../../lib/hooks/useConfig"
+import { Typography } from "../../ui/typography"
+import { useNavigate } from "react-router-dom"
 
 const mockCards = [
 	{ card_id: "1", card_name: "Card 1", card_price: 10, card_taxe: 5.5 },
@@ -38,20 +41,20 @@ const mockCards = [
 	{ card_id: "20", card_name: "Card 20", card_price: 200, card_taxe: 2.1 },
 ]
 
-const cardFilters = [
-	{ label: "Basic", value: "basic" },
-	{ label: "Lunch", value: "lunch" },
-	{ label: "Other", value: "other" },
-	{ label: "All", value: "all" },
-]
-
 export const CardShortcut = () => {
+	const { getComponent } = useConfig()
 	const modalDelete = useModal()
 	const modalAdd = useModal()
 
+	const shortcutComponent = getComponent("pos", "shortcuts")
+
+	const shortcutFilters = shortcutComponent.settings.shortcutTypes
+
 	const { notifyError, notifySuccess } = useNotify()
 	const [cards, setCards] = useState([])
-	const [filter, setFilter] = useState(cardFilters[0].value)
+	const [filter, setFilter] = useState(
+		shortcutComponent.settings.shortcutTypes[0].name
+	)
 	const [filteredCards, setFilteredCards] = useState([])
 
 	const queryDeleteCard = useQuery({
@@ -70,7 +73,11 @@ export const CardShortcut = () => {
 		queryFn: getProductCards,
 		onSuccess: (data) => {
 			setCards(data)
-			setFilteredCards(data.filter((card) => card.card_type === filter))
+			setFilteredCards(
+				data.filter((card) =>
+					filter === "all" ? true : card.card_type === filter
+				)
+			)
 		},
 		onError: () => {
 			notifyError("An error occurred while fetching the product cards")
@@ -94,12 +101,10 @@ export const CardShortcut = () => {
 		queryDeleteCard.send(card.card_id)
 	}
 
-	const handleChangeTab = (value) => {
-		setFilter(value)
+	const handleChangeTab = (name) => {
+		setFilter(name)
 		setFilteredCards(
-			cards.filter((card) =>
-				value === "all" ? true : card.card_type === value
-			)
+			cards.filter((card) => (name === "all" ? true : card.card_type === name))
 		)
 	}
 
@@ -117,12 +122,12 @@ export const CardShortcut = () => {
 						className="w-full space-y-4"
 					>
 						<TabsList className="w-full p-0 bg-white">
-							{cardFilters.map((tab) => (
+							{shortcutFilters.map((tab) => (
 								<TabsTrigger
-									key={tab.value}
-									value={tab.value}
+									key={tab.name}
+									value={tab.name}
 									className={`w-full ${
-										filter === tab.value
+										filter === tab.name
 											? "!bg-slate-900 !text-white"
 											: "!bg-white"
 									}`}
@@ -283,11 +288,18 @@ const tabs = [
 ]
 
 const FormAddCard = ({ onSuccess = () => null }) => {
+	const { getComponent } = useConfig()
+	const navigate = useNavigate()
+	const shortcutComponent = getComponent("pos", "shortcuts")
+	const shortcutFilters = shortcutComponent.settings.shortcutTypes.filter(
+		(type) => type.name !== "all"
+	)
+
 	const { notifySuccess, notifyError } = useNotify()
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState("")
 	const [taxe, setTaxe] = useState(5.5)
-	const [type, setType] = useState("basic")
+	const [type, setType] = useState(shortcutFilters[0]?.name || null)
 
 	const queryCreateCard = useQuery({
 		queryFn: createProductCard,
@@ -324,30 +336,50 @@ const FormAddCard = ({ onSuccess = () => null }) => {
 		setType("basic")
 	}
 
+	const handleAddType = () => {
+		navigate("/settings?shortcuts=true")
+	}
+
 	return (
 		<Stack direction="column" spacing={2}>
 			<div className="space-y-1">
-				<Label htmlFor="card-type">Type</Label>
-
-				<Tabs
-					defaultValue={type}
-					onValueChange={setType}
-					className="w-full h-full space-y-4"
+				<Stack
+					direction="row"
+					spacing={2}
+					justifyContent="space-between"
+					alignItems="center"
 				>
-					<TabsList className="w-full p-0 bg-white">
-						{cardFilters.map((tab) => (
-							<TabsTrigger
-								key={tab.value}
-								value={tab.value}
-								className={`w-full ${
-									type === tab.value ? "!bg-slate-900 !text-white" : "!bg-white"
-								}`}
-							>
-								{tab.label}
-							</TabsTrigger>
-						))}
-					</TabsList>
-				</Tabs>
+					<Label htmlFor="card-type">Type</Label>
+					<Button variant="outline" onClick={handleAddType}>
+						Add a shortcut type
+					</Button>
+				</Stack>
+
+				{shortcutFilters.length > 0 ? (
+					<Tabs
+						defaultValue={type}
+						onValueChange={setType}
+						className="w-full h-full space-y-4"
+					>
+						<TabsList className="w-full p-0 bg-white">
+							{shortcutFilters.map((tab) => (
+								<TabsTrigger
+									key={tab.name}
+									value={tab.name}
+									className={`w-full ${
+										type === tab.name
+											? "!bg-slate-900 !text-white"
+											: "!bg-white"
+									}`}
+								>
+									{tab.label}
+								</TabsTrigger>
+							))}
+						</TabsList>
+					</Tabs>
+				) : (
+					<Typography variant="muted">No shortcut types found.</Typography>
+				)}
 			</div>
 			<div className="space-y-1">
 				<Label htmlFor="card-name">Name</Label>
