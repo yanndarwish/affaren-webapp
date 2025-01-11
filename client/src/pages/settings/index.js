@@ -156,6 +156,7 @@ const SettingsSidebar = ({ sections }) => {
 
 const ModuleElement = ({ module, index }) => {
 	const { config, updateConfig } = useConfig()
+	const modalModuleSettings = useModal()
 
 	const handleToggleModule = (index) => {
 		const newModules = config.modules.map((module, i) => {
@@ -174,6 +175,9 @@ const ModuleElement = ({ module, index }) => {
 					...module,
 					components: module.components.map((component, i) => {
 						if (i === componentIndex) {
+							if (component.dependsOn.length > 0 && !component.active) {
+								handleDependencies(component)
+							}
 							return { ...component, active: !component.active }
 						}
 						return component
@@ -184,20 +188,53 @@ const ModuleElement = ({ module, index }) => {
 		})
 		updateConfig({ ...config, modules: newModules })
 	}
+
+	const handleDependencies = (component) => {
+		const dependencies = component.dependsOn
+
+		dependencies.forEach((dependency) => {
+			if (dependency.entity === "module") {
+				const module = config.modules.find((m) => m.name === dependency.name)
+				if (module) {
+					module.active = true
+				}
+			}
+		})
+
+		updateConfig({ ...config })
+	}
+
+	const handleOpenModuleSettings = () => {
+		modalModuleSettings.openModal()
+	}
+
 	return (
 		<Stack key={module.name} spacing={4}>
 			<Stack spacing={2}>
 				<Stack spacing={1}>
-					<Stack direction="row" spacing={4} alignItems="center">
-						<Stack direction="row" spacing={1} alignItems="center">
-							{module.icon && <module.icon className="w-4 h-4" />}
-							<Typography variant="h4">{module.label}</Typography>
+					<Stack
+						direction="row"
+						spacing={4}
+						alignItems="center"
+						justifyContent="space-between"
+					>
+						<Stack direction="row" spacing={4} alignItems="center">
+							<Stack direction="row" spacing={1} alignItems="center">
+								{module.icon && <module.icon className="w-4 h-4" />}
+								<Typography variant="h4">{module.label}</Typography>
+							</Stack>
+							{module.isMutable && (
+								<Switch
+									checked={module.active}
+									onCheckedChange={() => handleToggleModule(index)}
+									className="!opacity-100"
+								/>
+							)}
 						</Stack>
-						{module.isMutable && (
-							<Switch
-								checked={module.active}
-								onCheckedChange={() => handleToggleModule(index)}
-								className="!opacity-100"
+						{module.hasSettings && (
+							<SettingsIcon
+								className="w-5 h-5 cursor-pointer"
+								onClick={handleOpenModuleSettings}
 							/>
 						)}
 					</Stack>
@@ -216,6 +253,10 @@ const ModuleElement = ({ module, index }) => {
 				</div>
 			</Stack>
 			{index !== config.modules.length - 1 && <Separator />}
+			<ModalComponentSettings
+				component={module}
+				controller={modalModuleSettings}
+			/>
 		</Stack>
 	)
 }

@@ -11,6 +11,7 @@ import ForgotPassword from "../pages/ForgotPassword/ForgotPassword"
 import Menu from "../pages/Menu/Menu"
 import Lunch from "../pages/Lunch/Lunch"
 import Settings from "../pages/settings"
+import Calendar from "../pages/calendar"
 
 const router = createBrowserRouter([
 	{
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
 			{
 				path: "forgot-password",
 				element: <ForgotPassword />,
+			},
+			{
+				path: "calendar",
+				element: <Calendar />,
 			},
 		],
 	},

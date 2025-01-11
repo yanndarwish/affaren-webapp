@@ -19,6 +19,9 @@ import {
 	DollarSign,
 	Euro,
 	Languages,
+	ChefHat,
+	Utensils,
+	Calendar,
 } from "lucide-react"
 import { NoBarcode } from "../../../pages/Pos/config"
 import { currencyOptions, languageOptions } from "./utils"
@@ -123,6 +126,7 @@ const defaultConfig = {
 					description:
 						"The barcode component is used to scan products via barcode.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "cart",
@@ -131,6 +135,7 @@ const defaultConfig = {
 					active: true,
 					description: "The cart component is used to display the cart.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "shortcuts",
@@ -148,6 +153,7 @@ const defaultConfig = {
 							},
 						],
 					},
+					dependsOn: []
 				},
 				{
 					name: "no-barcode",
@@ -157,6 +163,7 @@ const defaultConfig = {
 					description:
 						"The no barcode component is used to sell products without scanning a barcode.",
 					hasSettings: true,
+					dependsOn: []
 				},
 				{
 					name: "bookmarks",
@@ -166,6 +173,7 @@ const defaultConfig = {
 					description:
 						"The bookmarks component is used to save sales for later.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "refund",
@@ -174,6 +182,7 @@ const defaultConfig = {
 					active: true,
 					description: "The refund component is used to refund an amount.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "discount",
@@ -182,6 +191,7 @@ const defaultConfig = {
 					active: true,
 					description: "The discount component is used to apply a discount.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "drawer",
@@ -191,6 +201,7 @@ const defaultConfig = {
 					description:
 						"The drawer component is used to pair a drawer with the point of sale.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "receipt",
@@ -200,6 +211,7 @@ const defaultConfig = {
 					description:
 						"The receipt component is used to pair a receipt printer with the point of sale.",
 					hasSettings: false,
+					dependsOn: []
 				},
 			],
 		},
@@ -220,6 +232,7 @@ const defaultConfig = {
 					description:
 						"The table component is used to display the sales in a table.",
 					hasSettings: false,
+					dependsOn: []
 				},
 			],
 		},
@@ -241,6 +254,7 @@ const defaultConfig = {
 					description:
 						"The monthly chart component is used to display the monthly sales in a chart.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "table-monthly-sales",
@@ -249,6 +263,7 @@ const defaultConfig = {
 					description:
 						"The monthly table component is used to display the monthly sales in a table.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "table-monthly-best-sellers",
@@ -257,6 +272,7 @@ const defaultConfig = {
 					description:
 						"The monthly best sellers component is used to display the best selling products in a table.",
 					hasSettings: false,
+					dependsOn: []
 				},
 			],
 		},
@@ -277,6 +293,7 @@ const defaultConfig = {
 					description:
 						"The table component is used to display the inventory in a table.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "search-barcode",
@@ -285,6 +302,7 @@ const defaultConfig = {
 					description:
 						"The search barcode component is used to search for a product by barcode.",
 					hasSettings: false,
+					dependsOn: []
 				},
 				{
 					name: "search-name",
@@ -293,9 +311,66 @@ const defaultConfig = {
 					description:
 						"The search name component is used to search for a product by name.",
 					hasSettings: false,
+					dependsOn: []
 				},
 			],
 		},
+		{
+			name: "calendar",
+			label: "Calendar",
+			url: "calendar",
+			icon: Calendar,
+			position: 5,
+			isMutable: true,
+			active: true,
+			description: "The calendar module is used to add and manage events.",
+			hasSettings: true,
+			components: [
+				// {
+				// 	name: "menu",
+				// 	label: "Menu",
+				// 	active: true,
+				// 	icon: Utensils,
+				// 	description:
+				// 		"The menu component is used to create and manage restaurant menus.",
+				// 	hasSettings: false,
+				// },
+			],
+		},
+		{
+			name: "restauration",
+			label: "Restauration",
+			url: "restauration",
+			icon: ChefHat,
+			position: 6,
+			isMutable: true,
+			active: true,
+			description:
+				"The restauration module is used to manage the restauration.",
+			components: [
+				{
+					name: "menu",
+					label: "Menu",
+					active: true,
+					icon: Utensils,
+					description:
+						"The menu component is used to create and manage restaurant menus.",
+					hasSettings: false,
+					dependsOn: []
+				},
+				{
+					name: "reservations",
+					label: "Reservations",
+					active: true,
+					icon: Calendar,
+					description:
+						"The reservations component is used to create and manage customer reservations.",
+					hasSettings: false,
+					dependsOn: [{ entity: "module", name: "calendar" }],
+				},
+			],
+		},
+
 		// {
 		// 	name: "closing",
 		// 	label: "Closing",
@@ -349,7 +424,9 @@ const ConfigProvider = ({ children }) => {
 
 	const getComponent = (moduleName, componentName) => {
 		const module = getModule(moduleName)
-		return module.components.find((component) => component.name === componentName)
+		return module.components.find(
+			(component) => component.name === componentName
+		)
 	}
 
 	const isActiveComponent = (moduleName, componentName) => {
@@ -382,12 +459,27 @@ const ConfigProvider = ({ children }) => {
 					}
 				)
 
+				// add default components if not present in storedModule
+				const defaultComponents = defaultModule.components.filter(
+					(component) =>
+						!componentsWithIcons.some((c) => c.name === component.name)
+				)
+
+				const newComponents = [...componentsWithIcons, ...defaultComponents]
+
 				return {
 					...storedModule,
 					icon: defaultModule?.icon,
-					components: componentsWithIcons,
+					components: newComponents,
 				}
 			})
+
+			// add default modules if not present in storedConfig
+			const defaultModules = defaultConfig.modules.filter(
+				(module) => !modulesWithIcons.some((m) => m.name === module.name)
+			)
+
+			const newModules = [...modulesWithIcons, ...defaultModules]
 
 			const paymentMethodsWithIcons = () => {
 				const defaultPaymentMethods = defaultConfig.general.paymentMethods
@@ -440,7 +532,7 @@ const ConfigProvider = ({ children }) => {
 
 			setConfig({
 				...storedConfig,
-				modules: modulesWithIcons,
+				modules: newModules,
 				general: {
 					...storedConfig.general,
 					language: languageWithIcons(),

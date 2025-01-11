@@ -21,9 +21,9 @@ async function runMigrations() {
 				path.join(__dirname, "../migrations", file),
 				"utf8"
 			)
-			console.log(`Running migration: ${file}`)
+			console.log(`⏳ Running migration: ${file}`)
 			await pool.query(sql)
-			console.log(`Completed migration: ${file}`)
+			console.log(`✅ Completed migration: ${file}`)
 		} catch (err) {
 			console.error(`Error running migration ${file}:`, err)
 			process.exit(1)

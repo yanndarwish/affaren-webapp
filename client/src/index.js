@@ -6,6 +6,7 @@ import App from "./App"
 import DailyTotalProvider from "./lib/providers/dailyTotal"
 import SaleProvider from "./lib/providers/sale"
 import ConfigProvider from "./lib/hooks/useConfig"
+import { EventsProvider } from "./lib/hooks/useEvents"
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
@@ -13,7 +14,9 @@ root.render(
 		<ConfigProvider>
 			<DailyTotalProvider>
 				<SaleProvider>
-					<App />
+					<EventsProvider>
+						<App />
+					</EventsProvider>
 				</SaleProvider>
 			</DailyTotalProvider>
 		</ConfigProvider>

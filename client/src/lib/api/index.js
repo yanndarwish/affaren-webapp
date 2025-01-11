@@ -206,7 +206,7 @@ export const getSales = async ({ pagination, dateFilters, paymentMethod }) => {
 	const paginationParams = getPagination(pagination)
 	const dateFiltersParams = getDateFilters(dateFilters)
 	const paymentMethodParams = getPaymentMethodParams(paymentMethod)
-	
+
 	const response = await get(
 		`sales?${paginationParams}&${dateFiltersParams}&${paymentMethodParams}`
 	)
@@ -235,6 +235,43 @@ export const deleteSale = async (id) => {
 
 export const getSaleProducts = async (id) => {
 	const response = await get(`sales/${id}/products`)
+	return response
+}
+
+export const createEvent = async (body) => {
+	const response = await post("events", body)
+	return response
+}
+
+export const createEventType = async (body) => {
+	const response = await post("events/types", body)
+	return response
+}
+
+export const getEventTypes = async () => {
+	const response = await get("events/types")
+	return response
+}
+
+export const removeEventType = async (id) => {
+	const response = await del(`events/types/${id}`)
+	return response
+}
+
+export const getEvents = async ({ start_date, end_date }) => {
+	const response = await get(
+		`events?start_date=${start_date}&end_date=${end_date}`
+	)
+	return response
+}
+
+export const updateEvent = async ({ id, body }) => {
+	const response = await put(`events/${id}`, body)
+	return response
+}
+
+export const deleteEvent = async (id) => {
+	const response = await del(`events/${id}`)
 	return response
 }
 

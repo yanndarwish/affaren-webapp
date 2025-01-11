@@ -15,6 +15,7 @@ const style = {
 	overflow: "auto",
 	boxShadow: 24,
 	p: 3,
+	zIndex: 1,
 }
 
 export const Modal = ({ open, title, handleClose, children, className }) => {
@@ -26,6 +27,7 @@ export const Modal = ({ open, title, handleClose, children, className }) => {
 			onClose={handleClose}
 			aria-labelledby="modal-modal-title"
 			aria-describedby="modal-modal-description"
+			className="!z-10"
 		>
 			<Stack
 				direction="column"

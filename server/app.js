@@ -27,6 +27,7 @@ const tables = require("./routes/tables")
 const tableProducts = require("./routes/tableProducts")
 const printer = require("./routes/printer")
 const cashDrawer = require("./routes/cashDrawer")
+const events = require("./routes/events")
 
 app.set("view engine", "ejs")
 app.use(express.static(path.join(__dirname, "public")))
@@ -49,5 +50,6 @@ app.use("/tables", tables)
 app.use("/table-products", tableProducts)
 app.use("/print", printer)
 app.use("/cash-drawer", cashDrawer)
+app.use("/events", events)
 
 module.exports = app
