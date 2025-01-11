@@ -14,7 +14,6 @@ import { useEffect, useRef, useState } from "react"
 import CalendarNav from "./calendar-nav"
 import { earliestTime, latestTime } from "../../utils/data"
 import { getDateFromMinutes } from "../../lib/utils"
-import { Card } from "../ui/card"
 import { EventEditForm } from "./event-edit-form"
 import { EventView } from "./event-view"
 import { EventAddForm } from "./event-add-form"
@@ -264,8 +263,8 @@ export function Calendar() {
 				setCurrentView={setCurrentView}
 			/>
 
-			<Stack className="border border-gray-100 rounded-md overflow-hidden flex-1 min-h-0">
-				<Stack className="rounded-md p-2 overflow-auto h-full">
+			<Stack className="border border-gray-100 rounded-md p-2 overflow-hidden flex-1 min-h-0">
+				<Stack className="rounded-md overflow-auto h-full">
 					<FullCalendar
 						ref={calendarRef}
 						timeZone="local"
@@ -282,6 +281,7 @@ export function Calendar() {
 						slotMaxTime={calendarLatestTime}
 						allDaySlot={false}
 						firstDay={1}
+						stickyHeaderDates={true}
 						displayEventEnd={true}
 						windowResizeDelay={0}
 						events={events}

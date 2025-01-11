@@ -204,6 +204,11 @@ td.fc-daygrid-day.fc-day.fc-day-today {
 	@apply bg-gray-200 dark:bg-secondary !important;
 }
 
+
+.fc-col-header {
+	@apply bg-white !important;
+}
+
 .fc-daygrid-day-top {
 	@apply flex flex-row h-8 w-full items-center  !important;
 }
