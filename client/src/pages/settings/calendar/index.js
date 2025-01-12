@@ -1,6 +1,5 @@
 import { Stack } from "@mui/material"
 import { Typography } from "../../../components/ui/typography"
-import { useConfig } from "../../../lib/hooks/useConfig"
 import { z } from "zod"
 import { Button } from "../../../components/ui/button"
 import { Trash2Icon, PlusIcon } from "lucide-react"
@@ -67,7 +66,12 @@ export const CalendarSettings = () => {
 	})
 
 	const handleAddType = (data) => {
-		queryCreateEventType.send(data)
+		let formattedData = {
+			...data,
+			name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
+		}
+
+		queryCreateEventType.send(formattedData)
 	}
 
 	const handleRemoveType = (id) => {
@@ -117,11 +121,14 @@ export const CalendarSettings = () => {
 
 const EventType = ({ eventType, onRemove }) => {
 	return (
-		<div
-			className="flex items-center justify-between border border-muted rounded-lg p-2 pl-4"
-			style={{ backgroundColor: eventType.event_type_color }}
-		>
-			<Typography variant="small">{eventType.event_type_name}</Typography>
+		<div className="flex items-center justify-between border border-muted rounded-lg p-2 pl-4">
+			<Stack direction="row" spacing={2} className="items-center">
+				<div
+					className="w-6 h-6 rounded-lg"
+					style={{ backgroundColor: eventType.event_type_color }}
+				></div>
+				<Typography variant="small">{eventType.event_type_name}</Typography>
+			</Stack>
 			<Button
 				variant="destructive"
 				size="icon"
@@ -145,19 +152,27 @@ const addEventTypeSchema = z.object({
 const AddShortcutType = ({ onAdd = () => null }) => {
 	const form = useForm({
 		resolver: zodResolver(addEventTypeSchema),
+		defaultValues: {
+			name: "",
+			color: "#000000",
+		},
 	})
 
-	useEffect(() => {
+	const onSubmit = (data) => {
+		onAdd(data)
 		form.reset({
 			name: "",
 			color: "#000000",
 		})
-	}, [form])
+	}
 
 	return (
 		<Stack direction="row" spacing={1} className="w-full">
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onAdd)} className="space-y-4 w-full">
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="space-y-4 w-full"
+				>
 					<Stack direction="row" spacing={2} className="w-full">
 						<FormField
 							control={form.control}
