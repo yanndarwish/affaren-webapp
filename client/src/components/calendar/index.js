@@ -261,6 +261,7 @@ export function Calendar() {
 				viewedDate={viewedDate}
 				currentView={currentView}
 				setCurrentView={setCurrentView}
+				onSuccess={fetchEvents}
 			/>
 
 			<Stack className="border border-gray-100 rounded-md p-2 overflow-hidden flex-1 min-h-0">

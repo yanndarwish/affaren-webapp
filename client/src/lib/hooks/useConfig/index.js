@@ -126,7 +126,7 @@ const defaultConfig = {
 					description:
 						"The barcode component is used to scan products via barcode.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "cart",
@@ -135,7 +135,7 @@ const defaultConfig = {
 					active: true,
 					description: "The cart component is used to display the cart.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "shortcuts",
@@ -153,7 +153,7 @@ const defaultConfig = {
 							},
 						],
 					},
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "no-barcode",
@@ -163,7 +163,7 @@ const defaultConfig = {
 					description:
 						"The no barcode component is used to sell products without scanning a barcode.",
 					hasSettings: true,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "bookmarks",
@@ -173,7 +173,7 @@ const defaultConfig = {
 					description:
 						"The bookmarks component is used to save sales for later.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "refund",
@@ -182,7 +182,7 @@ const defaultConfig = {
 					active: true,
 					description: "The refund component is used to refund an amount.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "discount",
@@ -191,7 +191,7 @@ const defaultConfig = {
 					active: true,
 					description: "The discount component is used to apply a discount.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "drawer",
@@ -201,7 +201,7 @@ const defaultConfig = {
 					description:
 						"The drawer component is used to pair a drawer with the point of sale.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "receipt",
@@ -211,7 +211,7 @@ const defaultConfig = {
 					description:
 						"The receipt component is used to pair a receipt printer with the point of sale.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 			],
 		},
@@ -232,7 +232,7 @@ const defaultConfig = {
 					description:
 						"The table component is used to display the sales in a table.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 			],
 		},
@@ -254,7 +254,7 @@ const defaultConfig = {
 					description:
 						"The monthly chart component is used to display the monthly sales in a chart.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "table-monthly-sales",
@@ -263,7 +263,7 @@ const defaultConfig = {
 					description:
 						"The monthly table component is used to display the monthly sales in a table.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "table-monthly-best-sellers",
@@ -272,7 +272,7 @@ const defaultConfig = {
 					description:
 						"The monthly best sellers component is used to display the best selling products in a table.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 			],
 		},
@@ -293,7 +293,7 @@ const defaultConfig = {
 					description:
 						"The table component is used to display the inventory in a table.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "search-barcode",
@@ -302,7 +302,7 @@ const defaultConfig = {
 					description:
 						"The search barcode component is used to search for a product by barcode.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "search-name",
@@ -311,7 +311,7 @@ const defaultConfig = {
 					description:
 						"The search name component is used to search for a product by name.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 			],
 		},
@@ -347,6 +347,44 @@ const defaultConfig = {
 			active: true,
 			description:
 				"The restauration module is used to manage the restauration.",
+			hasSettings: true,
+			settings: {
+				maxCapacity: 20,
+				tables: 5,
+				maxCapacityPerTable: 4,
+				filters: [
+					{
+						name: "starter",
+						label: "Starter",
+						color: "#bfdbfe",
+						order: 1,
+					},
+					{
+						name: "main",
+						label: "Main",
+						color: "#fca5a5",
+						order: 2,
+					},
+					{
+						name: "dessert",
+						label: "Dessert",
+						color: "#fed7aa",
+						order: 3,
+					},
+					{
+						name: "soft-drink",
+						label: "Soft Drink",
+						color: "#a7f3d0",
+						order: 4,
+					},
+					{
+						name: "alcohol",
+						label: "Alcohol",
+						color: "#fbcfe8",
+						order: 5,
+					},
+				],
+			},
 			components: [
 				{
 					name: "menu",
@@ -356,7 +394,7 @@ const defaultConfig = {
 					description:
 						"The menu component is used to create and manage restaurant menus.",
 					hasSettings: false,
-					dependsOn: []
+					dependsOn: [],
 				},
 				{
 					name: "reservations",
@@ -429,11 +467,18 @@ const ConfigProvider = ({ children }) => {
 		)
 	}
 
+	const isActiveModule = (moduleName) => {
+		const module = getModule(moduleName)
+		if (!module) return false
+		return module.active
+	}
+
 	const isActiveComponent = (moduleName, componentName) => {
 		const module = getModule(moduleName)
+		if (!module) return false
 		return module.components.find(
 			(component) => component.name === componentName
-		).active
+		)?.active
 	}
 
 	const getMutableModules = () => {
@@ -541,6 +586,9 @@ const ConfigProvider = ({ children }) => {
 					taxes: taxesWithIcons(),
 				},
 			})
+		} else {
+			setConfig(defaultConfig)
+			localStorage.setItem("config", JSON.stringify(defaultConfig))
 		}
 	}, [])
 
@@ -552,6 +600,7 @@ const ConfigProvider = ({ children }) => {
 				getModule,
 				getComponent,
 				isActiveComponent,
+				isActiveModule,
 				getMutableModules,
 			}}
 		>

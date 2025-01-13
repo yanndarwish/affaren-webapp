@@ -28,7 +28,7 @@ const Pos = () => {
 	const [selectedTab, setSelectedTab] = useState(config.tabs[0].name)
 	const [searchParams] = useSearchParams()
 	const { notifySuccess, notifyInfo } = useNotify()
-	const { isActiveComponent } = useConfig()
+	const { isActiveComponent, isActiveModule } = useConfig()
 	const sale = useSale()
 	const modalOpening = useModal()
 
@@ -79,7 +79,9 @@ const Pos = () => {
 
 	const displayedTabs = () => {
 		return config.tabs.filter((tab) => {
-			return isActiveComponent(config.name, tab.name)
+			return (
+				isActiveComponent(config.name, tab.name) || isActiveModule(tab.name)
+			)
 		})
 	}
 

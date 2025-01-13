@@ -47,6 +47,7 @@ export default function CalendarNav({
 	viewedDate,
 	currentView,
 	setCurrentView = () => null,
+	onSuccess = () => null,
 }) {
 	const modalAddEvent = useModal()
 
@@ -269,7 +270,12 @@ export default function CalendarNav({
 					<Plus className="h-4 w-4" />
 				</Button>
 			</div>
-			<EventAddForm controller={modalAddEvent} start={start} end={end} />
+			<EventAddForm
+				controller={modalAddEvent}
+				start={start}
+				end={end}
+				onSuccess={onSuccess}
+			/>
 		</div>
 	)
 }

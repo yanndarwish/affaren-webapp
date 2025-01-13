@@ -437,7 +437,9 @@ const CartRow = ({
 				/>
 			</TableCell>
 			<TableCell className="font-medium">{index + 1}</TableCell>
-			<TableCell>{product.name}</TableCell>
+			<TableCell className="max-w-40 text-ellipsis overflow-hidden whitespace-nowrap">
+				{product.name}
+			</TableCell>
 			<TableCell>
 				<QuantityControl
 					product={product}

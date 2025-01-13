@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { Modal } from "../../../components/shared/modal"
 import { ShortcutSettings } from "../shortcut"
 import { CalendarSettings } from "../calendar"
+import { RestaurationSettings } from "../restauration"
 
 export const ModalComponentSettings = ({ component, controller }) => {
 	const navigate = useNavigate()
@@ -18,6 +19,7 @@ export const ModalComponentSettings = ({ component, controller }) => {
 		>
 			{component.name === "shortcuts" && <ShortcutSettings />}
 			{component.name === "calendar" && <CalendarSettings />}
+			{component.name === "restauration" && <RestaurationSettings onSuccess={controller.closeModal}/>}
 		</Modal>
 	)
 }

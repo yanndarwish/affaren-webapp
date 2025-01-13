@@ -77,6 +77,9 @@ const SaleProvider = ({ children }) => {
 	const [bookmarks, setBookmarks] = useState(() => {
 		return JSON.parse(localStorage.getItem("bookmarks") || "{}")
 	})
+	const [tables, setTables] = useState(() => {
+		return JSON.parse(localStorage.getItem("tables") || "{}")
+	})
 
 	const { isLoggedIn, user: sessionUser } = useSession()
 	const { notifyError } = useNotify()
@@ -173,6 +176,81 @@ const SaleProvider = ({ children }) => {
 		removeBookmark(bookmarkId)
 	}
 
+	const addTable = (id, people) => {
+		const newTable = {
+			id,
+			people,
+			products: [],
+		}
+
+		const newTables = { ...tables, [uuidv4()]: newTable }
+		setTables(newTables)
+		localStorage.setItem("tables", JSON.stringify(newTables))
+	}
+
+	const removeTable = (uuid) => {
+		const newTables = { ...tables }
+		delete newTables[uuid]
+		setTables(newTables)
+		localStorage.setItem("tables", JSON.stringify(newTables))
+	}
+
+	const addPerson = (uuid) => {
+		const newTables = { ...tables }
+		newTables[uuid].people++
+
+		setTables(newTables)
+		localStorage.setItem("tables", JSON.stringify(newTables))
+	}
+
+	const removePerson = (uuid) => {
+		const newTables = { ...tables }
+		newTables[uuid].people--
+		setTables(newTables)
+		localStorage.setItem("tables", JSON.stringify(newTables))
+	}
+
+	const addTableProduct = (uuid, product) => {
+		const newTables = { ...tables }
+
+		// check if product already exists
+		const productExists = newTables[uuid].products.find(
+			(p) => p.id === product.id
+		)
+		if (productExists) {
+			productExists.quantity++
+		} else {
+			newTables[uuid].products.push({ ...product, quantity: 1 })
+		}
+		setTables(newTables)
+		localStorage.setItem("tables", JSON.stringify(newTables))
+	}
+
+	const updateTableProductQty = (uuid, productId, qty) => {
+		const newTables = { ...tables }
+		const product = newTables[uuid].products.find((p) => p.id === productId)
+		product.quantity += qty
+
+		if (product.quantity <= 0) {
+			newTables[uuid].products = newTables[uuid].products.filter(
+				(p) => p.id !== productId
+			)
+		}
+
+		setTables(newTables)
+		localStorage.setItem("tables", JSON.stringify(newTables))
+	}
+
+	const applyTable = (uuid) => {
+		const table = tables[uuid]
+		if (table) {
+			updateSale({
+				products: table.products,
+				table: table.id,
+			})
+		}
+	}
+
 	// UI Helper
 	const refocus = () => {
 		document.getElementById("barcode-input")?.focus()
@@ -204,6 +282,14 @@ const SaleProvider = ({ children }) => {
 				applyBookmark,
 				refocus,
 				queryGetNextSaleId,
+				addTable,
+				removeTable,
+				addPerson,
+				removePerson,
+				addTableProduct,
+				updateTableProductQty,
+				applyTable,
+				tables,
 			}}
 		>
 			{children}

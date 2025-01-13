@@ -10,6 +10,7 @@ import { useNotify } from "../../../lib/hooks/useNotify"
 import { Separator } from "../../ui/separator"
 import { Modal, useModal } from "../../shared/modal"
 import { useConfig } from "../../../lib/hooks/useConfig"
+import { Typography } from "../../ui/typography"
 
 export const CardBookmark = () => {
 	const { notifySuccess } = useNotify()
@@ -141,10 +142,9 @@ const Bookmark = ({ bookmark, isSelected, onSelect, onRemove }) => {
 				>
 					<Stack
 						direction="row"
-						spacing={1}
 						className={`items-center ${isSelected ? "text-white" : ""}`}
 					>
-						<p className="text-sm">{bookmark.sale.amount}</p>
+						<Typography variant="large">{bookmark.sale.amount}</Typography>
 						<config.general.currency.symbol className="w-4 h-4" />
 					</Stack>
 					<Button size="icon" onClick={onRemove}>

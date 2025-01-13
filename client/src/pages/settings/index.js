@@ -304,7 +304,13 @@ const ComponentElement = ({
 					)}
 				</Stack>
 			</Stack>
-			<Stack direction="row" spacing={1} alignItems="flex-start">
+			<Stack
+				direction="row"
+				spacing={1}
+				alignItems="flex-start"
+				justifyContent="space-between"
+				className="w-full"
+			>
 				<Typography variant="muted">{component.description}</Typography>
 				<Switch
 					checked={component.active}
