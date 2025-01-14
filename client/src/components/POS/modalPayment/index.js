@@ -185,14 +185,37 @@ export const ModalPayment = ({ controller }) => {
 		}
 	}
 
-	const handleSaleCompletion = (confirmedSale) => {
-		sale.updateSale({ paidProducts: newPaidProducts(confirmedSale) })
+	const handleSaleCompletion = async (confirmedSale) => {
+		const updatedPaidProducts = newPaidProducts(confirmedSale)
+		await sale.updateSale({ paidProducts: updatedPaidProducts })
 
-		if (sale.bookmarkId) {
-			sale.removeBookmark(sale.bookmarkId)
+		// Create a temporary sale object with the updated paidProducts
+		const updatedSale = {
+			...sale,
+			paidProducts: updatedPaidProducts,
+		}
+
+		if (isFullyPaid(updatedSale)) {
+			console.log("fully paid")
+			if (sale.bookmarkId) {
+				sale.removeBookmark(sale.bookmarkId)
+			}
+			if (sale.table) {
+				sale.removeTable(sale.table)
+			}
 		}
 
 		sale.queryGetNextSaleId.send()
+	}
+
+	const isFullyPaid = (sale) => {
+		return sale.products.every((product) =>
+			sale.paidProducts.some(
+				(paidProduct) =>
+					paidProduct.id === product.id &&
+					paidProduct.quantity === product.quantity
+			)
+		)
 	}
 
 	const updateInventory = async (confirmedSale) => {
@@ -488,13 +511,13 @@ const PaymentDetails = ({ state, handlePrice, handleCorrectPrice }) => {
 		<Stack className="w-full space-y-4">
 			<Stack direction="row" className="w-full space-x-4" alignItems="center">
 				<PaymentStat label="Paid" value={state.paid} />
-			<PaymentStat
-				label="Remaining"
-				value={(state.actualSale.amount - state.paid).toFixed(2)}
-			/>
-		</Stack>
-		<NumPad
-			display
+				<PaymentStat
+					label="Remaining"
+					value={(state.actualSale.amount - state.paid).toFixed(2)}
+				/>
+			</Stack>
+			<NumPad
+				display
 				value={state.amount}
 				onClick={handlePrice}
 				onCorrect={handleCorrectPrice}
@@ -526,15 +549,15 @@ const PaymentStat = ({ label, value }) => {
 		<article className="rounded-lg border border-gray-100 bg-white p-6 w-full">
 			<div>
 				<p className="text-sm text-gray-500 text-center">{label}</p>
-			<Stack
-				direction="row"
-				spacing={1}
-				justifyContent="center"
-				className="items-center"
-			>
-				<p className="text-2xl font-medium text-gray-900 text-center">
-					{value}
-				</p>
+				<Stack
+					direction="row"
+					spacing={1}
+					justifyContent="center"
+					className="items-center"
+				>
+					<p className="text-2xl font-medium text-gray-900 text-center">
+						{value}
+					</p>
 					<config.general.currency.symbol className="w-5 h-5" />
 				</Stack>
 			</div>

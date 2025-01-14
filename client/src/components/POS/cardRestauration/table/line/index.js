@@ -17,7 +17,7 @@ export const TableLine = ({ table, uuid, onClick = () => null }) => {
 	const { notifySuccess } = useNotify()
 
 	const tablePrice = getTablePrice(table)
-	const isSelected = saleTable === table.id
+	const isSelected = saleTable === uuid
 
 	const handleClickRemove = (e) => {
 		e.stopPropagation()

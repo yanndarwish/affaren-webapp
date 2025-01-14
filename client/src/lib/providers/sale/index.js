@@ -246,7 +246,7 @@ const SaleProvider = ({ children }) => {
 		if (table) {
 			updateSale({
 				products: table.products,
-				table: table.id,
+				table: uuid,
 			})
 		}
 	}
