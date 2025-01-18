@@ -1,4 +1,7 @@
 const pool = require("../db")
+const logger = require("../logger")
+
+const moduleName = "sales"
 
 const roundUpToTwoDecimals = (number) => {
 	return Math.ceil(number * 100) / 100
@@ -6,7 +9,13 @@ const roundUpToTwoDecimals = (number) => {
 
 // create a sale
 const createSale = async (req, res) => {
+	const fnLogger = logger.child({
+		module: moduleName,
+		method: "create_sale",
+	})
+
 	try {
+		fnLogger.debug("creating sale")
 		const { year, month, day, amount, paymentMethods, discount, taxes, user } =
 			req.body
 
@@ -20,6 +29,7 @@ const createSale = async (req, res) => {
 			!taxes ||
 			!user
 		) {
+			fnLogger.error("all fields are required")
 			return res.status(400).send("All fields are required")
 		}
 
@@ -27,9 +37,12 @@ const createSale = async (req, res) => {
 			"INSERT INTO sales (sale_year, sale_month, sale_day, sale_amount, sale_payment_methods, sale_discount, sale_taxes, sale_user) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
 			[year, month, day, amount, paymentMethods, discount, taxes, user]
 		)
+
+		fnLogger.debug("sale created")
 		res.status(200).send(response.rows)
 	} catch (err) {
 		console.log(err)
+		fnLogger.error(err, "error creating sale")
 		res.status(500).send("Internal server error")
 	}
 }

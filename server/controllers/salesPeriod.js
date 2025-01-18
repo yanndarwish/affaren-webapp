@@ -1,20 +1,29 @@
 const pool = require("../db")
 
 // get next sale id
-const getNextId = async (req, res) => {
+const getNextId = async (_req, res) => {
 	try {
-		const response = await pool.query(
-			"SELECT nextval('sales_sale_id_seq') as next_id"
-		)
+		// Start a transaction
+		const client = await pool.connect()
+		try {
+			await client.query("BEGIN")
 
-		const nextSaleId = response.rows[0].next_id
+			// Get the next value without committing it
+			const response = await client.query(
+				"SELECT nextval('sales_sale_id_seq') as next_id"
+			)
+			const nextId = response.rows[0].next_id
 
-		// Roll back the sequence since we just want to peek at the next value
-		await pool.query(
-			"SELECT setval('sales_sale_id_seq', currval('sales_sale_id_seq') - 1)"
-		)
+			// Rollback the transaction to avoid claiming the ID
+			await client.query("ROLLBACK")
+			client.release()
 
-		res.status(200).send({ nextSaleId: nextSaleId })
+			res.status(200).send({ nextSaleId: nextId })
+		} catch (err) {
+			await client.query("ROLLBACK")
+			client.release()
+			throw err
+		}
 	} catch (err) {
 		console.log(err)
 		res.status(500).send(err)
