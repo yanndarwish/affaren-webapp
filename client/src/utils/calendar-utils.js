@@ -1,5 +1,3 @@
-import FullCalendar from "@fullcalendar/react"
-
 export function generateDaysInMonth(daysInMonth) {
 	const daysArray = []
 
