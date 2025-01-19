@@ -20,11 +20,14 @@ import {
 	FixedContainer,
 	PageContainer,
 } from "../../components/shared/containers/index.js"
-import { useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { useModal } from "../../components/shared/modal/index.jsx"
 import { ModalOpening } from "../../components/POS/modals/opening/index.js"
+import { Button } from "../../components/ui/button/index.js"
+import { Utensils } from "lucide-react"
 
 const Pos = () => {
+	const navigate = useNavigate()
 	const [selectedTab, setSelectedTab] = useState(config.tabs[0].name)
 	const [searchParams] = useSearchParams()
 	const { notifySuccess, notifyInfo } = useNotify()
@@ -40,6 +43,14 @@ const Pos = () => {
 
 	const handleBookmark = () => {
 		setSelectedTab(config.tabs[3].name)
+	}
+
+	const handleClickReservations = () => {
+		navigate("/calendar?new=reservation")
+	}
+
+	const handleClickOrder = () => {
+		navigate("/calendar?new=order")
 	}
 
 	const updateCart = (data) => {
@@ -103,10 +114,25 @@ const Pos = () => {
 					spacing={2}
 					className="w-full h-full relative"
 				>
-					<PageTitle title={`Sale N°${sale.id ?? 1}`} />
-					{isActiveComponent("pos", "barcode") && (
-						<BarcodeSection onSuccess={updateCart} />
-					)}
+					<Stack
+						direction="row"
+						spacing={2}
+						justifyContent="space-between"
+						className="w-full"
+					>
+						{isActiveComponent("pos", "barcode") && (
+							<BarcodeSection onSuccess={updateCart} />
+						)}
+						{isActiveComponent("restauration", "reservations") && (
+							<Button
+								variant="outline"
+								size="icon"
+								onClick={handleClickReservations}
+							>
+								<Utensils />
+							</Button>
+						)}
+					</Stack>
 					<Stack className="h-full overflow-y-hidden">
 						{isActiveComponent("pos", "cart") && (
 							<Cart onDiscount={handleDiscount} onBookmark={handleBookmark} />

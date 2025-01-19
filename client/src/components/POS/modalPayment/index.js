@@ -9,7 +9,6 @@ import {
 	getDaySales,
 	openDrawer,
 	postSale,
-	postSaleProducts,
 	updateProduct,
 } from "../../../lib/api"
 import { useDailyTotal } from "../../../lib/providers/dailyTotal"
@@ -160,13 +159,6 @@ export const ModalPayment = ({ controller }) => {
 				},
 			})
 			await updateInventory(confirmedSale)
-			await queries.postSaleProducts.send({
-				products: productsToUpdate(confirmedSale),
-				year: confirmedSale.year,
-				month: confirmedSale.month,
-				day: confirmedSale.day,
-				id: parseInt(confirmedSale.id),
-			})
 
 			setPaymentState((prev) => ({
 				...prev,
@@ -196,7 +188,6 @@ export const ModalPayment = ({ controller }) => {
 		}
 
 		if (isFullyPaid(updatedSale)) {
-			console.log("fully paid")
 			if (sale.bookmarkId) {
 				sale.removeBookmark(sale.bookmarkId)
 			}
@@ -205,7 +196,7 @@ export const ModalPayment = ({ controller }) => {
 			}
 		}
 
-		sale.queryGetNextSaleId.send()
+		sale.getNextSaleId()
 	}
 
 	const isFullyPaid = (sale) => {
@@ -598,11 +589,6 @@ const usePaymentQueries = ({
 		postSale: useQuery({
 			queryFn: postSale,
 			onError: () => notifyError("An error occurred while posting the sale"),
-		}),
-		postSaleProducts: useQuery({
-			queryFn: postSaleProducts,
-			onError: () =>
-				notifyError("An error occurred while posting the sale products"),
 		}),
 		updateProduct: useQuery({
 			queryFn: updateProduct,

@@ -82,18 +82,10 @@ const SaleProvider = ({ children }) => {
 	})
 
 	const { isLoggedIn, user: sessionUser } = useSession()
-	const { notifyError } = useNotify()
 
-	const queryGetNextSaleId = useQuery({
-		queryFn: getNextSaleId,
-		onSuccess: (data) => {
-			updateSale({ id: data.nextSaleId })
-		},
-		onError: () => {
-			updateSale({ id: 0 })
-			notifyError("An error occurred while getting the next sale id")
-		},
-	})
+	const getNextSaleId = () => {
+		updateSale({ id: uuidv4() })
+	}
 
 	// Master update function
 	const updateSale = (updates) => {
@@ -143,7 +135,7 @@ const SaleProvider = ({ children }) => {
 		setSale(resetState)
 		localStorage.removeItem("sale")
 		if (isLoggedIn) {
-			queryGetNextSaleId.send()
+			getNextSaleId()
 		}
 	}
 
@@ -259,13 +251,13 @@ const SaleProvider = ({ children }) => {
 	// Setup and cleanup
 	useEffect(() => {
 		if (isLoggedIn && sale.id === 0) {
-			queryGetNextSaleId.send()
+			getNextSaleId()
 		}
 	}, [isLoggedIn])
 
 	useEffect(() => {
 		if (sale.paidProducts.length) {
-			queryGetNextSaleId.send()
+			getNextSaleId()
 		}
 	}, [sale.paidProducts])
 
@@ -281,7 +273,7 @@ const SaleProvider = ({ children }) => {
 				clearBookmarks,
 				applyBookmark,
 				refocus,
-				queryGetNextSaleId,
+				getNextSaleId,
 				addTable,
 				removeTable,
 				addPerson,

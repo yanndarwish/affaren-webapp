@@ -16,8 +16,17 @@ const createSale = async (req, res) => {
 
 	try {
 		fnLogger.debug("creating sale")
-		const { year, month, day, amount, paymentMethods, discount, taxes, user } =
-			req.body
+		const {
+			year,
+			month,
+			day,
+			amount,
+			paymentMethods,
+			discount,
+			taxes,
+			user,
+			products,
+		} = req.body
 
 		if (
 			!year ||
@@ -27,15 +36,27 @@ const createSale = async (req, res) => {
 			!paymentMethods ||
 			!discount ||
 			!taxes ||
-			!user
+			!user ||
+			!products
 		) {
 			fnLogger.error("all fields are required")
 			return res.status(400).send("All fields are required")
 		}
 
 		const response = await pool.query(
-			"INSERT INTO sales (sale_year, sale_month, sale_day, sale_amount, sale_payment_methods, sale_discount, sale_taxes, sale_user) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+			"INSERT INTO sales (sale_year, sale_month, sale_day, sale_amount, sale_payment_methods, sale_discount, sale_taxes, sale_user) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING sale_id",
 			[year, month, day, amount, paymentMethods, discount, taxes, user]
+		)
+
+		await createSaleProduct(
+			{
+				saleId: response.rows[0].sale_id,
+				products,
+				year,
+				month,
+				day,
+			},
+			res
 		)
 
 		fnLogger.debug("sale created")
@@ -44,6 +65,32 @@ const createSale = async (req, res) => {
 		console.log(err)
 		fnLogger.error(err, "error creating sale")
 		res.status(500).send("Internal server error")
+	}
+}
+
+//  create a product in a sale
+const createSaleProduct = async (data, res) => {
+	try {
+		const { saleId, products, year, month, day } = data
+
+		if (!products || !year || !month || !day) {
+			return res.status(400).send("All fields are required")
+		}
+
+		let responses = []
+
+		products.forEach(async (product) => {
+			const { name, quantity, price, taxe, id } = product
+			const response = await pool.query(
+				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe, sale_year, sale_month, sale_day ) VALUEs ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+				[saleId, id, name, quantity, price, taxe, year, month, day]
+			)
+
+			responses.push(response.rows)
+		})
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(err)
 	}
 }
 
@@ -223,35 +270,6 @@ const deleteSale = async (req, res) => {
 }
 
 // * SALES PRODUCTS * //
-//  create a product in a sale
-const createSaleProduct = async (req, res) => {
-	try {
-		const saleId = req.params.id
-
-		const { products, year, month, day } = req.body
-
-		if (!products || !year || !month || !day) {
-			return res.status(400).send("All fields are required")
-		}
-
-		let responses = []
-
-		products.forEach(async (product) => {
-			const { name, quantity, price, taxe, id } = product
-			const response = await pool.query(
-				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe, sale_year, sale_month, sale_day ) VALUEs ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-				[saleId, id, name, quantity, price, taxe, year, month, day]
-			)
-
-			responses.push(response.rows)
-		})
-		res.status(200).send(responses)
-	} catch (err) {
-		console.log(err)
-		res.status(500).send(err)
-	}
-}
-
 // get all products of a sale
 const getSaleProducts = async (req, res) => {
 	try {
