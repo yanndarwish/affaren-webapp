@@ -123,7 +123,7 @@ const Pos = () => {
 						{isActiveComponent("pos", "barcode") && (
 							<BarcodeSection onSuccess={updateCart} />
 						)}
-						{isActiveComponent("restauration", "reservations") && (
+						{isActiveModule("restauration") && isActiveComponent("restauration", "reservations") && (
 							<Button
 								variant="outline"
 								size="icon"
