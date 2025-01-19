@@ -42,7 +42,7 @@ const logger = pino(
 	pino.multistream([
 		{ stream: errorTransport, level: "error" },
 		{ stream: warnTransport, level: "warn" },
-		{ stream: consoleTransport, level: "debug" },
+		{ stream: consoleTransport, level: "info" },
 	])
 )
 
