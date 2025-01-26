@@ -69,14 +69,14 @@ const deleteCard = async (req, res) => {
 
 	try {
 		fnLogger.debug("deleting card")
-		const id = req.params.id
+		const uuid = req.params.uuid
 
-		if (!id) {
-			fnLogger.error("card id is required")
-			return res.status(400).send("Card ID is required")
+		if (!uuid) {
+			fnLogger.error("card uuid is required")
+			return res.status(400).send("Card UUID is required")
 		}
 
-		const response = await pool.query(queryDeleteCard.statement, [id])
+		const response = await pool.query(queryDeleteCard.statement, [uuid])
 
 		fnLogger.debug("card deleted")
 		res.status(200).send(response.rows)

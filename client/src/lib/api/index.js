@@ -192,8 +192,8 @@ export const getProductCards = async () => {
 	return response
 }
 
-export const deleteCard = async (id) => {
-	const response = await del(`cards/${id}`)
+export const deleteCard = async (uuid) => {
+	const response = await del(`cards/${uuid}`)
 	return response
 }
 

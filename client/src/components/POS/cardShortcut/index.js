@@ -98,7 +98,7 @@ export const CardShortcut = () => {
 	}
 
 	const handleConfirmDelete = (card) => {
-		queryDeleteCard.send(card.card_id)
+		queryDeleteCard.send(card.card_uuid)
 	}
 
 	const handleChangeTab = (name) => {

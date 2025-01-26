@@ -8,6 +8,6 @@ router.post("/", auth, createCard)
 
 router.get("/", auth, getCards)
 
-router.delete("/:id", auth, deleteCard)
+router.delete("/:uuid", auth, deleteCard)
 
 module.exports = router

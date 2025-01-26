@@ -4,7 +4,8 @@ RETURNS TABLE(
     card_name VARCHAR, 
     card_price DOUBLE PRECISION, 
     card_taxe DOUBLE PRECISION, 
-    card_type VARCHAR(50)
+    card_type VARCHAR(50),
+    card_uuid uuid
 )
 LANGUAGE plpgsql
 AS $$
@@ -26,7 +27,8 @@ RETURNS TABLE(
     card_name VARCHAR, 
     card_price DOUBLE PRECISION, 
     card_taxe DOUBLE PRECISION, 
-    card_type VARCHAR(50)
+    card_type VARCHAR(50),
+    card_uuid uuid
 )
 LANGUAGE plpgsql
 AS $$
@@ -40,18 +42,11 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION delete_card(_card_id VARCHAR(15))
-RETURNS TABLE(
-    card_id VARCHAR(15), 
-    card_name VARCHAR, 
-    card_price DOUBLE PRECISION, 
-    card_taxe DOUBLE PRECISION, 
-    card_type VARCHAR(50)
-)
+CREATE OR REPLACE FUNCTION delete_card(_card_uuid uuid)
+RETURNS void
 LANGUAGE plpgsql AS $$
 BEGIN
-    DELETE FROM cards c WHERE c.card_id = _card_id;
-    RETURN QUERY
-    SELECT * FROM cards c WHERE c.card_id = _card_id;
+    DELETE FROM cards 
+    WHERE uuid = _card_uuid;
 END;
 $$;
