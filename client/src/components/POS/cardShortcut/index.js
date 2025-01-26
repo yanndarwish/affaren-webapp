@@ -6,6 +6,7 @@ import {
 	createProductCard,
 	deleteCard,
 	getProductCards,
+	updateCard,
 } from "../../../lib/api"
 import { Grid, Stack } from "@mui/material"
 import { Label } from "../../ui/label"
@@ -43,7 +44,6 @@ const mockCards = [
 
 export const CardShortcut = () => {
 	const { getComponent } = useConfig()
-	const modalDelete = useModal()
 	const modalAdd = useModal()
 
 	const shortcutComponent = getComponent("pos", "shortcuts")
@@ -56,18 +56,6 @@ export const CardShortcut = () => {
 		shortcutComponent.settings.shortcutTypes[0].name
 	)
 	const [filteredCards, setFilteredCards] = useState([])
-
-	const queryDeleteCard = useQuery({
-		queryFn: deleteCard,
-		onSuccess: () => {
-			modalDelete.closeModal()
-			notifySuccess("Card deleted successfully")
-			queryGetProductCards.send()
-		},
-		onError: () => {
-			notifyError("An error occurred while deleting the card")
-		},
-	})
 
 	const queryGetProductCards = useQuery({
 		queryFn: getProductCards,
@@ -90,15 +78,6 @@ export const CardShortcut = () => {
 
 	const handleAddCard = () => {
 		modalAdd.openModal()
-	}
-
-	const handleDelete = (card) => {
-		modalDelete.setData(card)
-		modalDelete.openModal()
-	}
-
-	const handleConfirmDelete = (card) => {
-		queryDeleteCard.send(card.card_uuid)
 	}
 
 	const handleChangeTab = (name) => {
@@ -139,11 +118,16 @@ export const CardShortcut = () => {
 					</Tabs>
 					<Stack className="overflow-y-auto h-full">
 						<Grid container rowSpacing={1} columnSpacing={1}>
-							{filteredCards.map((card) => (
-								<Grid item key={card.card_id} xs={6}>
-									<ProductCard card={card} onDelete={handleDelete} />
-								</Grid>
-							))}
+							{filteredCards
+								.sort((a, b) => a.card_name.localeCompare(b.card_name))
+								.map((card) => (
+									<Grid item key={card.card_uuid} xs={6}>
+										<ProductCard
+											card={card}
+											onSuccess={handleGetProductCards}
+										/>
+									</Grid>
+								))}
 						</Grid>
 					</Stack>
 				</Stack>
@@ -154,19 +138,21 @@ export const CardShortcut = () => {
 					</Button>
 				</Stack>
 			</div>
-			<ModalDeleteCard
-				controller={modalDelete}
-				onConfirm={handleConfirmDelete}
-			/>
 			<ModalAddCard controller={modalAdd} onSuccess={handleGetProductCards} />
 		</>
 	)
 }
 
-const ProductCard = ({ card, onDelete = () => null }) => {
+const ProductCard = ({ card, onSuccess = () => null }) => {
 	const sale = useSale()
 	const { notifySuccess, notifyInfo } = useNotify()
 	const { action, handlers } = useLongPress()
+	const modalUpdate = useModal()
+
+	const handleUpdate = () => {
+		modalUpdate.setData(card)
+		modalUpdate.openModal()
+	}
 
 	const handleClick = () => {
 		const found = sale.products.find((product) => product.id === card.card_id)
@@ -202,13 +188,9 @@ const ProductCard = ({ card, onDelete = () => null }) => {
 		sale.refocus()
 	}
 
-	const handleDelete = () => {
-		onDelete(card)
-	}
-
 	useEffect(() => {
 		if (action === "longpress") {
-			handleDelete()
+			handleUpdate()
 		} else if (action === "click") {
 			if (!sale.isRefund) {
 				handleClick()
@@ -217,14 +199,17 @@ const ProductCard = ({ card, onDelete = () => null }) => {
 	}, [action])
 
 	return (
-		<Stack
-			className={`relative long-press w-full h-20 text-white rounded-md flex items-center justify-center ${
-				sale.isRefund ? "bg-slate-900/50" : "bg-slate-900"
-			}`}
-			{...handlers}
-		>
-			{card.card_name}
-		</Stack>
+		<>
+			<Stack
+				className={`relative long-press w-full h-20 text-white rounded-md flex items-center justify-center ${
+					sale.isRefund ? "bg-slate-900/50" : "bg-slate-900"
+				}`}
+				{...handlers}
+			>
+				{card.card_name}
+			</Stack>
+			<ModalUpdateCard controller={modalUpdate} onSuccess={onSuccess} />
+		</>
 	)
 }
 
@@ -281,13 +266,64 @@ const ModalAddCard = ({ controller, onSuccess = () => null }) => {
 	)
 }
 
+const ModalUpdateCard = ({ controller, onSuccess = () => null }) => {
+	const card = controller.data
+	const modalDelete = useModal()
+	const { notifySuccess, notifyError } = useNotify()
+
+	const queryDeleteCard = useQuery({
+		queryFn: deleteCard,
+		onSuccess: () => {
+			notifySuccess("Card deleted successfully")
+			handleSuccess()
+		},
+		onError: () => {
+			notifyError("An error occurred while deleting the card")
+		},
+	})
+
+	const handleDelete = () => {
+		modalDelete.setData(card)
+		modalDelete.openModal()
+	}
+
+	const handleConfirmDelete = () => {
+		queryDeleteCard.send(card.card_uuid)
+	}
+
+	const handleSuccess = () => {
+		controller.closeModal()
+		onSuccess()
+	}
+
+	return (
+		<Modal
+			open={controller.open}
+			title="Update Card"
+			handleClose={controller.closeModal}
+			className="!w-[50vw]"
+			topRight={
+				<Button variant="destructive" onClick={handleDelete}>
+					Delete
+				</Button>
+			}
+		>
+			<FormAddCard card={card} onSuccess={handleSuccess} />
+			<ModalDeleteCard
+				controller={modalDelete}
+				onConfirm={handleConfirmDelete}
+			/>
+		</Modal>
+	)
+}
+
 const tabs = [
 	{ name: "Alimentation", label: "Food", value: 5.5 },
 	{ name: "Magazine", label: "Press", value: 2.1 },
 	{ name: "Décoration/Alcool", label: "Other", value: 20 },
 ]
 
-const FormAddCard = ({ onSuccess = () => null }) => {
+const FormAddCard = ({ card, onSuccess = () => null }) => {
 	const { getComponent } = useConfig()
 	const navigate = useNavigate()
 	const shortcutComponent = getComponent("pos", "shortcuts")
@@ -313,6 +349,17 @@ const FormAddCard = ({ onSuccess = () => null }) => {
 		},
 	})
 
+	const queryUpdateCard = useQuery({
+		queryFn: updateCard,
+		onSuccess: () => {
+			notifySuccess("Card updated successfully")
+			onSuccess()
+		},
+		onError: () => {
+			notifyError("An error occurred while updating the card")
+		},
+	})
+
 	const handleSubmit = () => {
 		let trimmedName = name.trim()
 
@@ -326,7 +373,11 @@ const FormAddCard = ({ onSuccess = () => null }) => {
 			type: type,
 		}
 
-		queryCreateCard.send(payload)
+		if (card) {
+			queryUpdateCard.send({ uuid: card.card_uuid, body: payload })
+		} else {
+			queryCreateCard.send(payload)
+		}
 	}
 
 	const handleReset = () => {
@@ -339,6 +390,15 @@ const FormAddCard = ({ onSuccess = () => null }) => {
 	const handleAddType = () => {
 		navigate("/settings?shortcuts=true")
 	}
+
+	useEffect(() => {
+		if (card) {
+			setName(card.card_name)
+			setPrice(card.card_price)
+			setTaxe(card.card_taxe)
+			setType(card.card_type)
+		}
+	}, [card])
 
 	return (
 		<Stack direction="column" spacing={2}>
@@ -357,7 +417,7 @@ const FormAddCard = ({ onSuccess = () => null }) => {
 
 				{shortcutFilters.length > 0 ? (
 					<Tabs
-						defaultValue={type}
+						value={type}
 						onValueChange={setType}
 						className="w-full h-full space-y-4"
 					>
@@ -421,7 +481,9 @@ const FormAddCard = ({ onSuccess = () => null }) => {
 					</TabsList>
 				</Tabs>
 			</div>
-			<Button onClick={handleSubmit}>Create Card</Button>
+			<Button onClick={handleSubmit}>
+				{card ? "Update Card" : "Create Card"}
+			</Button>
 		</Stack>
 	)
 }

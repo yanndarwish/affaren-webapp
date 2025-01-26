@@ -18,7 +18,14 @@ const style = {
 	zIndex: 1,
 }
 
-export const Modal = ({ open, title, handleClose, children, className }) => {
+export const Modal = ({
+	open,
+	title,
+	handleClose,
+	children,
+	className,
+	topRight = null,
+}) => {
 	if (!open) return null
 
 	return (
@@ -36,12 +43,22 @@ export const Modal = ({ open, title, handleClose, children, className }) => {
 				className={`${className} rounded-lg`}
 			>
 				<SpaceBetween>
-					<Typography id="modal-modal-title" variant="h6" component="h2">
-						{title}
-					</Typography>
-					<IconButton onClick={handleClose}>
-						<CloseOutlinedIcon />
-					</IconButton>
+					<Stack
+						direction="row"
+						spacing={2}
+						alignItems="center"
+						justifyContent="space-between"
+					>
+						<Typography id="modal-modal-title" variant="h6" component="h2">
+							{title}
+						</Typography>
+					</Stack>
+					<Stack direction="row" spacing={2} alignItems="center">
+						{topRight}
+						<IconButton onClick={handleClose}>
+							<CloseOutlinedIcon />
+						</IconButton>
+					</Stack>
 				</SpaceBetween>
 				{children}
 			</Stack>

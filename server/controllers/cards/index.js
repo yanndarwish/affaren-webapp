@@ -4,6 +4,7 @@ const {
 	queryGetAllCards,
 	queryCreateCard,
 	queryDeleteCard,
+	queryUpdateCard,
 } = require("./query")
 
 const moduleName = "cards"
@@ -36,6 +37,41 @@ const createCard = async (req, res) => {
 		res.status(200).send(response.rows)
 	} catch (err) {
 		fnLogger.error(err, "error creating card")
+		res.status(500).send("Internal server error")
+	}
+}
+
+// update a card
+const updateCard = async (req, res) => {
+	const fnLogger = logger.child({
+		module: moduleName,
+		method: queryUpdateCard.id,
+	})
+
+	try {
+		fnLogger.debug("updating card")
+
+		const uuid = req.params.uuid
+		const { id, name, price, taxe, type } = req.body
+
+		if (!id || !name || !price || !taxe || !type) {
+			fnLogger.error("all fields are required")
+			return res.status(400).send("All fields are required")
+		}
+
+		const response = await pool.query(queryUpdateCard.statement, [
+			uuid,
+			id,
+			name,
+			price,
+			taxe,
+			type,
+		])
+
+		fnLogger.debug("card updated")
+		res.status(200).send(response.rows)
+	} catch (err) {
+		fnLogger.error(err, "error updating card")
 		res.status(500).send("Internal server error")
 	}
 }
@@ -86,4 +122,4 @@ const deleteCard = async (req, res) => {
 	}
 }
 
-module.exports = { createCard, getCards, deleteCard }
+module.exports = { createCard, getCards, deleteCard, updateCard }

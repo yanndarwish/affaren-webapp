@@ -8,6 +8,11 @@ const queryCreateCard = {
 	statement: "SELECT * FROM create_card($1, $2, $3, $4, $5)",
 }
 
+const queryUpdateCard = {
+	id: "update_card",
+	statement: "SELECT * FROM update_card($1, $2, $3, $4, $5, $6)",
+}
+
 const queryDeleteCard = {
 	id: "delete_card",
 	statement: "SELECT * FROM delete_card($1)",
@@ -17,4 +22,5 @@ module.exports = {
 	queryGetAllCards,
 	queryCreateCard,
 	queryDeleteCard,
+	queryUpdateCard,
 }

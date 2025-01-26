@@ -197,6 +197,11 @@ export const deleteCard = async (uuid) => {
 	return response
 }
 
+export const updateCard = async ({ uuid, body }) => {
+	const response = await put(`cards/${uuid}`, body)
+	return response
+}
+
 export const createProductCard = async (body) => {
 	const response = await post("cards", body)
 	return response
