@@ -12,6 +12,8 @@ import Menu from "../pages/Menu/Menu"
 import Lunch from "../pages/Lunch/Lunch"
 import Settings from "../pages/settings"
 import Calendar from "../pages/calendar"
+import Restauration from "../pages/restauration"
+import ProtectedRoute from "./ProtectedRoute"
 
 const router = createBrowserRouter([
 	{
@@ -19,56 +21,62 @@ const router = createBrowserRouter([
 		element: <Root />,
 		children: [
 			{
-				path: "/",
-				element: <Login />,
-			},
-			{
 				path: "login",
 				element: <Login />,
-			},
-			{
-				path: "pos",
-				element: <Pos />,
-			},
-			{
-				path: "sales",
-				element: <Sales />,
-			},
-			{
-				path: "orders",
-				element: <Orders />,
-			},
-			{
-				path: "menu",
-				element: <Menu />,
-			},
-			{
-				path: "dashboard",
-				element: <Dashboard />,
-			},
-			{
-				path: "inventory",
-				element: <Inventory />,
-			},
-			{
-				path: "lunch",
-				element: <Lunch />,
-			},
-			{
-				path: "help",
-				element: <Help />,
-			},
-			{
-				path: "settings",
-				element: <Settings />,
 			},
 			{
 				path: "forgot-password",
 				element: <ForgotPassword />,
 			},
+			// Protect all other routes
 			{
-				path: "calendar",
-				element: <Calendar />,
+				element: <ProtectedRoute />,
+				children: [
+					{
+						path: "pos",
+						element: <Pos />,
+					},
+					{
+						path: "sales",
+						element: <Sales />,
+					},
+					{
+						path: "orders",
+						element: <Orders />,
+					},
+					{
+						path: "menu",
+						element: <Menu />,
+					},
+					{
+						path: "dashboard",
+						element: <Dashboard />,
+					},
+					{
+						path: "inventory",
+						element: <Inventory />,
+					},
+					{
+						path: "lunch",
+						element: <Lunch />,
+					},
+					{
+						path: "help",
+						element: <Help />,
+					},
+					{
+						path: "settings",
+						element: <Settings />,
+					},
+					{
+						path: "calendar",
+						element: <Calendar />,
+					},
+					{
+						path: "restauration",
+						element: <Restauration />,
+					},
+				],
 			},
 		],
 	},

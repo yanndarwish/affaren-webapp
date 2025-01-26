@@ -31,7 +31,7 @@ export const ModalOpening = ({ controller }) => {
 		onSuccess: () => {
 			notifySuccess("Drawer opened successfully")
 		},
-		onError: (error) => {
+		onError: () => {
 			notifyError("Failed to open drawer")
 		},
 	})

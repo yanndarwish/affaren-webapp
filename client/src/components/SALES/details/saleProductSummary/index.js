@@ -53,7 +53,7 @@ export const SaleProductSummary = ({ products, readOnly = false }) => {
 							justifyContent="space-between"
 							className="w-full"
 						>
-							<p className="text-sm text-gray-500 text-left text-ellipsis overflow-hidden w-[100%]">
+							<p className="text-sm text-gray-500 text-left text-ellipsis overflow-hidden whitespace-nowrap w-[100%]">
 								{product.product_name}
 							</p>
 							<Stack

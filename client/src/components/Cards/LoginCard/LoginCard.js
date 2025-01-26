@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom"
 import { useQuery } from "../../../lib/hooks/useQuery"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { auth } from "../../../lib/api"
+import { useSession } from "../../../lib/hooks/useSession"
 
 const ENCRYPTION_KEY = process.env.REACT_APP_ENCRYPTION_KEY
 
@@ -45,19 +46,23 @@ export const LoginForm = ({ ...props }) => {
 	const [isChecked, setIsChecked] = useState(false)
 
 	const navigate = useNavigate()
+	const { login } = useSession()
 	const { notifyError, notifySuccess } = useNotify()
 
 	const queryLogin = useQuery({
 		queryFn: auth,
 		onSuccess: (data) => {
-			localStorage.setItem("token", data.token)
-			localStorage.setItem("user", JSON.stringify(data.user))
-			localStorage.setItem(
-				"expirationDate",
-				new Date(new Date().getTime() + 1000 * 60 * 60 * 10)
-			) // 10 hours
-			navigate("/pos?opening=true")
-			notifySuccess("Login successful")
+			const expirationDate = new Date(
+				new Date().getTime() + 1000 * 60 * 60 * 10
+			)
+
+			login(data.user, data.token, expirationDate)
+
+			// Then navigate after a small delay to ensure state is updated
+			setTimeout(() => {
+				navigate("/pos?opening=true", { replace: true })
+				notifySuccess("Login successful")
+			}, 100)
 		},
 		onError: () => {
 			notifyError("An error occurred while logging in")
