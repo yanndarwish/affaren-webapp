@@ -2,31 +2,6 @@
 import { initialEvents } from "../../../utils/data"
 import React, { createContext, useContext, useState } from "react"
 
-// interface Event {
-//   id: string;
-//   title: string;
-//   description: string;
-//   start: Date;
-//   end: Date;
-//   color: string;
-// }
-
-// interface EventsContextType {
-//   events: CalendarEvent[];
-//   addEvent: (event: Event) => void;
-//   deleteEvent: (id: string) => void;
-//   eventViewOpen: boolean;
-//   setEventViewOpen: (value: boolean) => void;
-//   eventAddOpen: boolean;
-//   setEventAddOpen: (value: boolean) => void;
-//   eventEditOpen: boolean;
-//   setEventEditOpen: (value: boolean) => void;
-//   eventDeleteOpen: boolean;
-//   setEventDeleteOpen: (value: boolean) => void;
-//   availabilityCheckerEventAddOpen: boolean;
-//   setAvailabilityCheckerEventAddOpen: (value: boolean) => void;
-// }
-
 const EventsContext = createContext(undefined)
 
 export const useEvents = () => {

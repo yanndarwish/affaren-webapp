@@ -266,11 +266,11 @@ const defaultConfig = {
 					dependsOn: [],
 				},
 				{
-					name: "table-monthly-best-sellers",
-					label: "Monthly best sellers",
-					active: false,
+					name: "best-sellers",
+					label: "Best sellers",
+					active: true,
 					description:
-						"The monthly best sellers component is used to display the best selling products in a table.",
+						"The best sellers component is used to display the best selling products in a table.",
 					hasSettings: false,
 					dependsOn: [],
 				},
@@ -340,7 +340,7 @@ const defaultConfig = {
 		{
 			name: "restauration",
 			label: "Restauration",
-			url: "restauration",
+			url: "restauration#products",
 			icon: ChefHat,
 			position: 6,
 			isMutable: true,

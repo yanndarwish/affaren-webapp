@@ -11,8 +11,17 @@ CREATE TABLE IF NOT EXISTS events (
     event_end_date TIMESTAMPTZ,
     event_description TEXT,
     event_type_id INTEGER,
-    FOREIGN KEY (event_type_id) REFERENCES event_types(event_type_id)
+    FOREIGN KEY (event_type_id) REFERENCES event_types (event_type_id)
 );
+
+-- Default event types
+INSERT INTO event_types (event_type_id, event_type_name, event_type_color)
+VALUES (1, 'Order', '#fca5a5')
+ON CONFLICT (event_type_id) DO NOTHING;
+
+INSERT INTO event_types (event_type_id, event_type_name, event_type_color)
+VALUES (2, 'Reservation', '#d8b4fe')
+ON CONFLICT (event_type_id) DO NOTHING;
 
 CREATE OR REPLACE FUNCTION get_events(
     _start_date TIMESTAMPTZ,

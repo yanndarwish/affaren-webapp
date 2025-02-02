@@ -222,7 +222,8 @@ const Cart = ({ onDiscount, onBookmark }) => {
 						name: "Refund",
 						quantity: 1,
 						price: -value,
-						taxe: 0,
+						taxe: 5.5,
+						category: 1,
 					}
 					sale.updateSale({
 						products: [...sale.products, newProduct],

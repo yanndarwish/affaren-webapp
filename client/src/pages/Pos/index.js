@@ -46,11 +46,11 @@ const Pos = () => {
 	}
 
 	const handleClickReservations = () => {
-		navigate("/calendar?new=reservation")
+		navigate("/calendar?new=2")
 	}
 
 	const handleClickOrder = () => {
-		navigate("/calendar?new=order")
+		navigate("/calendar?new=1")
 	}
 
 	const updateCart = (data) => {
@@ -66,6 +66,7 @@ const Pos = () => {
 				price: parseFloat(foundProduct.product_price),
 				taxe: foundProduct.product_taxe,
 				quantity: 1,
+				category: foundProduct.product_category_id,
 			}
 
 			sale.updateSale({ products: [...sale.products, product] })

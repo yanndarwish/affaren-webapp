@@ -3,7 +3,7 @@ import { Input } from "../../ui/input"
 import { Label } from "../../ui/label"
 
 import { NumPad } from "../../common/NumPad/NumPad"
-import {  Stack } from "@mui/material"
+import { Stack } from "@mui/material"
 import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined"
 import { useState } from "react"
 
@@ -17,6 +17,11 @@ const tabs = [
 	{ name: "Magazine", label: "Press", value: 2.1 },
 	{ name: "Décoration/Alcool", label: "Other", value: 20 },
 ]
+
+const categories = {
+	SHOP_FOOD: 1,
+	SHOP_DECO: 2,
+}
 
 export const CardNoBarcode = () => {
 	const { notifySuccess } = useNotify()
@@ -44,7 +49,11 @@ export const CardNoBarcode = () => {
 
 	const addNoBarcodeProduct = () => {
 		if (product.quantity > 0 && product.price !== "00.00") {
-			let data = { ...product }
+			let data = {
+				...product,
+				category:
+					product.taxe !== 20 ? categories.SHOP_FOOD : categories.SHOP_DECO,
+			}
 
 			data.quantity = parseInt(product.quantity)
 			data.price = parseFloat(product.price * product.quantity).toFixed(2)
@@ -249,7 +258,11 @@ export const CardNoBarcode = () => {
 				</Stack>
 				<Stack className="flex flex-col w-full pt-2 space-y-8">
 					<NumPad onClick={handleTypeNumber} />
-					<Button onClick={addNoBarcodeProduct} className="w-full" disabled={sale.isRefund}>
+					<Button
+						onClick={addNoBarcodeProduct}
+						className="w-full"
+						disabled={sale.isRefund}
+					>
 						Add product
 					</Button>
 				</Stack>

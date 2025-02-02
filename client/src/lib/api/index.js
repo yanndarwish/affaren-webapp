@@ -130,6 +130,13 @@ export const postSaleProducts = async ({ id, products, year, month, day }) => {
 	return response
 }
 
+export const getSoldProducts = async ({ date, granularity, category }) => {
+	const response = await get(
+		`sales/products?date=${date}&granularity=${granularity}${category ? `&category=${category}` : ""}`
+	)
+	return response
+}
+
 export const patchProductTableStatus = async ({
 	tableId,
 	personId,
@@ -277,6 +284,31 @@ export const updateEvent = async ({ id, body }) => {
 
 export const deleteEvent = async (id) => {
 	const response = await del(`events/${id}`)
+	return response
+}
+
+export const createProductCategory = async (body) => {
+	const response = await post("product-categories", body)
+	return response
+}
+
+export const getProductCategories = async () => {
+	const response = await get("product-categories")
+	return response
+}
+
+export const getProductCategoryById = async (id) => {
+	const response = await get(`product-categories/${id}`)
+	return response
+}
+
+export const updateProductCategory = async ({ id, body }) => {
+	const response = await put(`product-categories/${id}`, body)
+	return response
+}
+
+export const deleteProductCategory = async (id) => {
+	const response = await del(`product-categories/${id}`)
 	return response
 }
 

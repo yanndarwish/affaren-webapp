@@ -26,6 +26,7 @@ import { Button } from "../../../ui/button"
 import { DataGrid } from "../../../shared/datagrid"
 import { useConfig } from "../../../../lib/hooks/useConfig"
 import { roundUpToTwoDecimals } from "../../../../lib/pos"
+import { BestSellers } from "../../best-sellers"
 
 const chartConfig = {
 	sales: {
@@ -42,6 +43,10 @@ const tabs = [
 	{
 		name: "table-monthly-sales",
 		label: "Table",
+	},
+	{
+		name: "best-sellers",
+		label: "Best Sellers",
 	},
 ]
 
@@ -66,7 +71,7 @@ const formatData = (data) => {
 	return formattedDataArray
 }
 
-export function MonthSalesChart({ monthString, month, year }) {
+export function MonthSalesChart({ monthString, month, year, date }) {
 	const { notifyError } = useNotify()
 	const [chartData, setChartData] = useState([])
 	const [selectedTab, setSelectedTab] = useState()
@@ -81,6 +86,15 @@ export function MonthSalesChart({ monthString, month, year }) {
 			notifyError("An error occurred while fetching the month sales")
 		},
 	})
+
+	const sectionTitle = () => {
+		const selectedTabInfo = tabs.find((tab) => tab.name === selectedTab)
+		if (!selectedTabInfo) return ""
+
+		return selectedTab === tabs[2].name
+			? selectedTabInfo.label
+			: `Sales ${selectedTabInfo.label}`
+	}
 
 	const exportToExcel = () => {
 		let wb = XLSX.utils.table_to_book(
@@ -123,7 +137,7 @@ export function MonthSalesChart({ monthString, month, year }) {
 							spacing={2}
 							className="justify-between items-center"
 						>
-							Sales
+							{sectionTitle()}
 							<Stack direction="row" spacing={2}>
 								{selectedTab === tabs[1].name &&
 									isActiveComponent("dashboard", "table-monthly-sales") && (
@@ -161,10 +175,10 @@ export function MonthSalesChart({ monthString, month, year }) {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="h-full overflow-auto">
-					{selectedTab === tabs[0].name ? (
+					{selectedTab === tabs[0].name && (
 						<>
 							{chartData.length === 0 ? (
-								<div className="flex flex-col items-center justify-center space-y-8 ">
+								<div className="flex flex-col items-center justify-center space-y-8 h-full">
 									<CircleOff className="w-10 h-10 text-gray-200" />
 									<p className="text-md text-gray-500">
 										No sales data available
@@ -208,11 +222,15 @@ export function MonthSalesChart({ monthString, month, year }) {
 								)
 							)}
 						</>
-					) : (
+					)}
+					{selectedTab === tabs[1].name &&
 						isActiveComponent("dashboard", "table-monthly-sales") && (
 							<TableMonthSales month={month} year={year} />
-						)
-					)}
+						)}
+					{selectedTab === tabs[2].name &&
+						isActiveComponent("dashboard", "best-sellers") && (
+							<BestSellers date={date} className="h-full w-full" />
+						)}
 				</CardContent>
 			</div>
 		</Card>

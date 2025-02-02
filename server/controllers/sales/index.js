@@ -1,10 +1,61 @@
-const pool = require("../db")
-const logger = require("../logger")
+const pool = require("../../db")
+const logger = require("../../logger")
 
 const moduleName = "sales"
 
+const { queryGetSoldProducts } = require("./query")
+
 const roundUpToTwoDecimals = (number) => {
 	return Math.ceil(number * 100) / 100
+}
+
+// get all sold products
+const getSoldProducts = async (req, res) => {
+	const fnLogger = logger.child({
+		module: moduleName,
+		method: queryGetSoldProducts.id,
+	})
+
+	try {
+		fnLogger.debug("getting sold products")
+		const { date, granularity, category } = req.query
+
+		if (!date || !granularity) {
+			fnLogger.error("All fields are required")
+			return res.status(400).send("All fields are required")
+		}
+
+		const allResponse = await pool.query(queryGetSoldProducts.statement, [
+			date,
+			granularity,
+			null,
+		])
+
+		const response = await pool.query(queryGetSoldProducts.statement, [
+			date,
+			granularity,
+			category || null,
+		])
+
+		const granularityTotal = allResponse.rows.reduce(
+			(acc, row) => acc + Number(row.total_price),
+			0
+		)
+
+		// Format the response to include pagination info
+		const results = response.rows
+
+		fnLogger.debug("sold products fetched")
+		res.status(200).json({
+			data: {
+				data: results,
+				granularityTotal,
+			},
+		})
+	} catch (err) {
+		fnLogger.error(err, "error getting sold products")
+		res.status(500).send(err)
+	}
 }
 
 // create a sale
@@ -80,10 +131,10 @@ const createSaleProduct = async (data, res) => {
 		let responses = []
 
 		products.forEach(async (product) => {
-			const { name, quantity, price, taxe, id } = product
+			const { name, quantity, price, taxe, id, category } = product
 			const response = await pool.query(
-				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe, sale_year, sale_month, sale_day ) VALUEs ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-				[saleId, id, name, quantity, price, taxe, year, month, day]
+				"INSERT INTO sales_products (sale_id, product_id, product_name, product_quantity, product_price, product_taxe, sale_year, sale_month, sale_day, product_category_id ) VALUEs ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+				[saleId, id, name, quantity, price, taxe, year, month, day, category]
 			)
 
 			responses.push(response.rows)
@@ -363,4 +414,5 @@ module.exports = {
 	deleteSaleProducts,
 	getMonthSalesProducts,
 	getDaySalesProducts,
+	getSoldProducts,
 }

@@ -6,7 +6,19 @@ import { Label } from "../../ui/label"
 import { Button } from "../../ui/button"
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
 
-import { createProduct, putProduct } from "../../../lib/api"
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../../ui/select"
+
+import {
+	createProduct,
+	getProductCategories,
+	putProduct,
+} from "../../../lib/api"
 import { useQuery } from "../../../lib/hooks/useQuery"
 import { useNotify } from "../../../lib/hooks/useNotify"
 
@@ -27,6 +39,19 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 	const [taxe, setTaxe] = useState(data?.product_taxe || 5.5)
 	const [quantity, setQuantity] = useState(data?.product_quantity || 0)
 	const [barcode, setBarcode] = useState(data?.product_barcode || "")
+	const [category, setCategory] = useState(data?.product_category_id || "")
+
+	const [productCategories, setProductCategories] = useState([])
+
+	const queryGetProductCategories = useQuery({
+		queryFn: getProductCategories,
+		onSuccess: (data) => {
+			setProductCategories(data)
+		},
+		onError: () => {
+			notifyError("Error while fetching product categories")
+		},
+	})
 
 	const queryCreateProduct = useQuery({
 		queryFn: createProduct,
@@ -65,12 +90,12 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 	}
 
 	const handleCreate = () => {
-		queryCreateProduct.send({ name, price, quantity, taxe, barcode })
+		queryCreateProduct.send({ name, price, quantity, taxe, barcode, category })
 	}
 
 	const handleUpdate = () => {
 		queryUpdateProduct.send({
-			body: { name, price, quantity, taxe, barcode },
+			body: { name, price, quantity, taxe, barcode, category },
 			id: data.product_id,
 		})
 	}
@@ -97,10 +122,14 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 		}
 	}, [barcodeParam])
 
+	useEffect(() => {
+		queryGetProductCategories.send()
+	}, [])
+
 	return (
 		<div className="flex flex-col gap-6">
 			<div className="grid gap-2">
-				<Label htmlFor="taxe">Category</Label>
+				<Label htmlFor="taxe">Taxe</Label>
 				<Tabs
 					id="taxe"
 					value={taxe}
@@ -116,11 +145,29 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 									taxe === tab.value ? "!bg-black !text-white" : "!bg-white"
 								}`}
 							>
-								{tab.label}
+								{tab.value}%
 							</TabsTrigger>
 						))}
 					</TabsList>
 				</Tabs>
+			</div>
+			<div className="grid gap-2">
+				<Label htmlFor="category">Category</Label>
+				<Select value={category} onValueChange={setCategory}>
+					<SelectTrigger>
+						<SelectValue placeholder="Select a category" />
+					</SelectTrigger>
+					<SelectContent>
+						{productCategories.map((category) => (
+							<SelectItem
+								key={category.product_category_id}
+								value={category.product_category_id}
+							>
+								{category.product_category_name}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
 			</div>
 			<div className="grid gap-2">
 				<Label htmlFor="name">Name</Label>

@@ -1,6 +1,6 @@
 const pool = require("../../db")
 const logger = require("../../logger")
-const { queryCreateProduct } = require("./query")
+const { queryCreateProduct, queryUpdateProduct } = require("./query")
 
 const moduleName = "products"
 
@@ -13,9 +13,9 @@ const createProduct = async (req, res) => {
 
 	try {
 		fnLogger.debug("creating product")
-		const { name, price, quantity, taxe, barcode } = req.body
+		const { name, price, quantity, taxe, barcode, category } = req.body
 
-		if (!(name, price, quantity, taxe, barcode)) {
+		if (!(name, price, quantity, taxe, barcode, category)) {
 			fnLogger.error("All inputs are required")
 			res.status(400).send("All inputs are required")
 		}
@@ -26,6 +26,7 @@ const createProduct = async (req, res) => {
 			taxe,
 			quantity,
 			barcode,
+			category,
 		])
 
 		fnLogger.debug("product created")
@@ -125,21 +126,36 @@ const patchProduct = async (req, res) => {
 
 // update a product fully
 const updateProduct = async (req, res) => {
-	try {
-		const { id } = req.params
-		const { name, price, quantity, taxe, barcode } = req.body
+	const fnLogger = logger.child({
+		module: moduleName,
+		method: queryUpdateProduct.id,
+	})
 
-		if (!id || !name || !price || !quantity || !taxe || !barcode) {
+	try {
+		fnLogger.debug("updating product")
+
+		const { id } = req.params
+		const { name, price, quantity, taxe, barcode, category } = req.body
+
+		if (!id || !name || !price || !taxe || !barcode || !category) {
+			fnLogger.error("All fields are required")
 			return res.status(400).send("All fields are required")
 		}
 
-		const response = await pool.query(
-			"UPDATE products SET product_name = $1, product_price = $2, product_taxe = $3, product_quantity = $4, product_barcode = $5 WHERE product_id = $6 RETURNING *",
-			[name, price, taxe, quantity, barcode, id]
-		)
+		const response = await pool.query(queryUpdateProduct.statement, [
+			id,
+			name,
+			price,
+			taxe,
+			quantity,
+			barcode,
+			category,
+		])
+
+		fnLogger.debug("product updated")
 		res.status(200).send(response.rows)
 	} catch (err) {
-		console.log(err)
+		fnLogger.error(err, "error updating product")
 		res.status(500).send("Internal server error")
 	}
 }

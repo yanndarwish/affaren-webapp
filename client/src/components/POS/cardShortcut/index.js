@@ -6,12 +6,22 @@ import {
 	createProductCard,
 	deleteCard,
 	getProductCards,
+	getProductCategories,
 	updateCard,
 } from "../../../lib/api"
 import { Grid, Stack } from "@mui/material"
 import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
 import { Button } from "../../ui/button"
+
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../../ui/select"
+
 import { Modal, useModal } from "../../shared/modal"
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
 import useLongPress from "../../../lib/hooks/useLongPress"
@@ -50,7 +60,7 @@ export const CardShortcut = () => {
 
 	const shortcutFilters = shortcutComponent.settings.shortcutTypes
 
-	const { notifyError, notifySuccess } = useNotify()
+	const { notifyError } = useNotify()
 	const [cards, setCards] = useState([])
 	const [filter, setFilter] = useState(
 		shortcutComponent.settings.shortcutTypes[0].name
@@ -166,6 +176,7 @@ const ProductCard = ({ card, onSuccess = () => null }) => {
 						price: card.card_price,
 						taxe: card.card_taxe,
 						quantity: 1,
+						category: card.product_category_id,
 					},
 				],
 			})
@@ -336,6 +347,19 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 	const [price, setPrice] = useState("")
 	const [taxe, setTaxe] = useState(5.5)
 	const [type, setType] = useState(shortcutFilters[0]?.name || null)
+	const [category, setCategory] = useState("")
+	const [productCategories, setProductCategories] = useState([])
+
+	const queryGetProductCategories = useQuery({
+		queryFn: getProductCategories,
+		onSuccess: (data) => {
+			console.log(data)
+			setProductCategories(data)
+		},
+		onError: () => {
+			notifyError("An error occurred while fetching the product categories")
+		},
+	})
 
 	const queryCreateCard = useQuery({
 		queryFn: createProductCard,
@@ -371,6 +395,7 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 			price: price,
 			taxe: taxe,
 			type: type,
+			category: category,
 		}
 
 		if (card) {
@@ -385,6 +410,7 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 		setPrice("")
 		setTaxe(5.5)
 		setType("basic")
+		setCategory("")
 	}
 
 	const handleAddType = () => {
@@ -397,8 +423,13 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 			setPrice(card.card_price)
 			setTaxe(card.card_taxe)
 			setType(card.card_type)
+			setCategory(card.product_category_id)
 		}
 	}, [card])
+
+	useEffect(() => {
+		queryGetProductCategories.send()
+	}, [])
 
 	return (
 		<Stack direction="column" spacing={2}>
@@ -441,6 +472,24 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 					<Typography variant="muted">No shortcut types found.</Typography>
 				)}
 			</div>
+			<div className="grid gap-2">
+				<Label htmlFor="category">Category</Label>
+				<Select value={category} onValueChange={setCategory}>
+					<SelectTrigger>
+						<SelectValue placeholder="Select a category" />
+					</SelectTrigger>
+					<SelectContent>
+						{productCategories.map((category) => (
+							<SelectItem
+								key={category.product_category_id}
+								value={category.product_category_id}
+							>
+								{category.product_category_name}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</div>
 			<div className="space-y-1">
 				<Label htmlFor="card-name">Name</Label>
 
@@ -460,7 +509,7 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 				/>
 			</div>
 			<div className="space-y-1">
-				<Label htmlFor="card-category">Category</Label>
+				<Label htmlFor="card-category">Taxe</Label>
 				<Tabs
 					defaultValue={taxe}
 					onValueChange={setTaxe}
@@ -475,7 +524,7 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 									taxe === tab.value ? "!bg-black !text-white" : "!bg-white"
 								}`}
 							>
-								{tab.label}
+								{tab.value}%
 							</TabsTrigger>
 						))}
 					</TabsList>

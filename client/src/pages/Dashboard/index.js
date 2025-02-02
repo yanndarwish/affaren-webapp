@@ -59,6 +59,7 @@ const Dashboard = () => {
 						})}
 						year={selectedDate?.getFullYear()}
 						month={selectedDate?.getMonth() + 1}
+						date={selectedDate}
 					/>
 				</Stack>
 			</FixedContainer>
@@ -97,7 +98,12 @@ const DayTotal = ({ date }) => {
 
 	return (
 		<Stack direction="row" className=" w-[200px] justify-between">
-			<PaymentTotal label="Total" value={total} icon={<config.general.currency.symbol />} primary />
+			<PaymentTotal
+				label="Total"
+				value={total}
+				icon={<config.general.currency.symbol />}
+				primary
+			/>
 		</Stack>
 	)
 }

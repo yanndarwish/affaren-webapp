@@ -18,9 +18,9 @@ const createCard = async (req, res) => {
 
 	try {
 		fnLogger.debug("creating card")
-		const { id, name, price, taxe, type } = req.body
+		const { id, name, price, taxe, type, category } = req.body
 
-		if (!id || !name || !price || !taxe || !type) {
+		if (!id || !name || !price || !taxe || !type || !category) {
 			fnLogger.error("all fields are required")
 			return res.status(400).send("All fields are required")
 		}
@@ -31,6 +31,7 @@ const createCard = async (req, res) => {
 			price,
 			taxe,
 			type,
+			category,
 		])
 
 		fnLogger.debug("card created")
@@ -52,9 +53,9 @@ const updateCard = async (req, res) => {
 		fnLogger.debug("updating card")
 
 		const uuid = req.params.uuid
-		const { id, name, price, taxe, type } = req.body
+		const { id, name, price, taxe, type, category } = req.body
 
-		if (!id || !name || !price || !taxe || !type) {
+		if (!id || !name || !price || !taxe || !type || !category) {
 			fnLogger.error("all fields are required")
 			return res.status(400).send("All fields are required")
 		}
@@ -66,6 +67,7 @@ const updateCard = async (req, res) => {
 			price,
 			taxe,
 			type,
+			category,
 		])
 
 		fnLogger.debug("card updated")

@@ -5,12 +5,12 @@ const queryGetAllCards = {
 
 const queryCreateCard = {
 	id: "create_card",
-	statement: "SELECT * FROM create_card($1, $2, $3, $4, $5)",
+	statement: "SELECT * FROM create_card($1, $2, $3, $4, $5, $6)",
 }
 
 const queryUpdateCard = {
 	id: "update_card",
-	statement: "SELECT * FROM update_card($1, $2, $3, $4, $5, $6)",
+	statement: "SELECT * FROM update_card($1, $2, $3, $4, $5, $6, $7)",
 }
 
 const queryDeleteCard = {

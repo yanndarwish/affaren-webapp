@@ -14,7 +14,10 @@ const {
 	deleteSaleProducts,
 	getMonthSalesProducts,
 	getDaySalesProducts,
+	getSoldProducts,
 } = require("../controllers/sales")
+
+router.get("/products", auth, getSoldProducts)
 
 router.post("/", auth, createSale)
 
