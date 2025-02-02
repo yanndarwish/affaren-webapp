@@ -4,13 +4,18 @@ import { Modal, useModal } from "../../shared/modal"
 import { Stack } from "@mui/material"
 import { Typography } from "../../ui/typography"
 import { Button } from "../../ui/button"
+import React from "react"
 
 export function EventView({ event, controller, onSuccess = () => null }) {
 	const modalEditEvent = useModal()
 	const modalDeleteEvent = useModal()
 
 	const handleClickEditEvent = () => {
-		modalEditEvent.setData({ id: event.id, title: event.title })
+		modalEditEvent.setData({
+			id: event.id,
+			title: event.title,
+			type: Number(event.typeId),
+		})
 		modalEditEvent.openModal()
 	}
 
@@ -40,6 +45,8 @@ export function EventView({ event, controller, onSuccess = () => null }) {
 			<div>{event.title}</div>
 		</Stack>
 	)
+
+	console.log(event)
 	return (
 		<Modal
 			title={<Title />}
@@ -47,7 +54,6 @@ export function EventView({ event, controller, onSuccess = () => null }) {
 			handleClose={controller.closeModal}
 		>
 			<Stack spacing={1}>
-				<Typography variant="muted">{event.description}</Typography>
 				<Typography variant="large">
 					{`${event.start.toLocaleTimeString([], {
 						hour: "2-digit",
@@ -56,6 +62,14 @@ export function EventView({ event, controller, onSuccess = () => null }) {
 						hour: "2-digit",
 						minute: "2-digit",
 					})}`}
+				</Typography>
+				<Typography variant="muted">
+					{event.description?.split("\n").map((line, i) => (
+						<React.Fragment key={i}>
+							{line}
+							{i < event.description.split("\n").length - 1 && <br />}
+						</React.Fragment>
+					))}
 				</Typography>
 			</Stack>
 			<Stack

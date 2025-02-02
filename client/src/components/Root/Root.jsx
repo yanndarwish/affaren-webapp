@@ -1,35 +1,24 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { Outlet } from "react-router-dom"
 
-import {
-	SidebarInset,
-	SidebarProvider,
-	SidebarTrigger,
-	useSidebar,
-} from "../ui/sidebar"
 import { AppSidebar } from "../Sidebar"
+import { AppHeader } from "../Sidebar/appHeader"
+import { SidebarInset, SidebarProvider } from "../ui/sidebar"
 
-import { Outlet, useNavigate } from "react-router-dom"
-import { Grid } from "../../assets/common/common.styles"
-// import Sidebar from "../Sidebar/Sidebar"
-import { useDailyTotal } from "../../lib/providers/dailyTotal"
+import { getDaySales } from "../../lib/api"
+import { useQuery } from "../../lib/hooks/useQuery"
 import { formatDailyTotals } from "../../lib/sales"
 import { useSession } from "../../lib/hooks/useSession"
-import { useQuery } from "../../lib/hooks/useQuery"
-import { getDaySales } from "../../lib/api"
-import { useLocation } from "react-router-dom"
-import { AppHeader } from "../Sidebar/appHeader"
+import { useDailyTotal } from "../../lib/providers/dailyTotal"
 
 const Root = () => {
-	const navigate = useNavigate()
 	const { isLoggedIn } = useSession()
 	const { setCash, setCredit, setCheck, setTotal } = useDailyTotal()
-	const location = useLocation()
 
 	const queryGetDaySales = useQuery({
 		queryFn: getDaySales,
 		onSuccess: (data) => {
 			const dailyTotals = formatDailyTotals(data)
-
 			setCash(dailyTotals.cash)
 			setCredit(dailyTotals.card)
 			setCheck(dailyTotals.check)
@@ -41,13 +30,7 @@ const Root = () => {
 	})
 
 	useEffect(() => {
-		if (
-			!isLoggedIn &&
-			location.pathname !== "/login" &&
-			location.pathname !== "/forgot-password"
-		) {
-			navigate("/login")
-		} else if (isLoggedIn) {
+		if (isLoggedIn) {
 			queryGetDaySales.send({
 				year: new Date().getFullYear(),
 				month: new Date().getMonth() + 1,
@@ -56,18 +39,24 @@ const Root = () => {
 		}
 	}, [isLoggedIn])
 
-	return isLoggedIn ? (
+	return (
 		<SidebarProvider>
-			<AppSidebar />
-			<SidebarInset>
-				<AppHeader />
-				<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+			{isLoggedIn ? (
+				<>
+					<AppSidebar />
+					<SidebarInset>
+						<AppHeader />
+						<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+							<Outlet />
+						</div>
+					</SidebarInset>
+				</>
+			) : (
+				<div className="flex flex-1 flex-col gap-4 p-4">
 					<Outlet />
 				</div>
-			</SidebarInset>
+			)}
 		</SidebarProvider>
-	) : (
-		<Outlet />
 	)
 }
 

@@ -119,6 +119,8 @@ export const CalendarSettings = () => {
 	)
 }
 
+const defaultEventTypeIds = [1, 2]
+
 const EventType = ({ eventType, onRemove }) => {
 	return (
 		<div className="flex items-center justify-between border border-muted rounded-lg p-2 pl-4">
@@ -129,13 +131,15 @@ const EventType = ({ eventType, onRemove }) => {
 				></div>
 				<Typography variant="small">{eventType.event_type_name}</Typography>
 			</Stack>
-			<Button
-				variant="destructive"
-				size="icon"
-				onClick={() => onRemove(eventType.event_type_id)}
-			>
-				<Trash2Icon />
-			</Button>
+			{!defaultEventTypeIds.includes(eventType.event_type_id) && (
+				<Button
+					variant="destructive"
+					size="icon"
+					onClick={() => onRemove(eventType.event_type_id)}
+				>
+					<Trash2Icon />
+				</Button>
+			)}
 		</div>
 	)
 }

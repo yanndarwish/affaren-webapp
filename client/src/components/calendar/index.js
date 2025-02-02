@@ -23,12 +23,16 @@ import { useQuery } from "../../lib/hooks/useQuery"
 import { getEvents } from "../../lib/api"
 import { useNotify } from "../../lib/hooks/useNotify"
 import { getMonth, getYear } from "./utils"
+import { useSearchParams } from "react-router-dom"
 
 export function Calendar() {
 	const modalAddEvent = useModal()
 	const modalViewEvent = useModal()
 	const modalEditEvent = useModal()
 	const { notifyError } = useNotify()
+	let [searchParams] = useSearchParams()
+
+	const newParam = searchParams.get("new")
 
 	const calendarRef = useRef(null)
 	const [currentView, setCurrentView] = useState("timeGridWeek")
@@ -251,6 +255,18 @@ export function Calendar() {
 
 	const calendarEarliestTime = `${earliestHour}:${earliestMin}`
 	const calendarLatestTime = `${latestHour}:${latestMin}`
+
+	useEffect(() => {
+		if (newParam) {
+			if (Number(newParam) === 2) {
+				modalAddEvent.openModal()
+				modalAddEvent.setData({ type: 2 }) // reservation
+			} else if (Number(newParam) === 1) {
+				modalAddEvent.openModal()
+				modalAddEvent.setData({ type: 1 }) // order
+			}
+		}
+	}, [newParam])
 
 	return (
 		<div className="flex flex-col space-y-4 h-full overflow-y-hidden">

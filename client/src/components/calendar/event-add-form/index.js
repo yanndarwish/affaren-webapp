@@ -30,6 +30,8 @@ import {
 	SelectValue,
 } from "../../ui/select"
 
+import { AddReservationForm } from "../reservation-form"
+
 const eventAddFormSchema = z.object({
 	title: z
 		.string({ required_error: "Please enter a title." })
@@ -103,128 +105,138 @@ export function EventAddForm({
 		queryGetEventTypes.send()
 	}, [])
 
+	useEffect(() => {
+		console.log(controller.data)
+	}, [controller.data])
+
 	return (
 		<Modal
-			title="Add event"
+			title={
+				controller.data.type === 2 ? "Add reservation" : "Add event"
+			}
 			open={controller.open}
 			handleClose={controller.closeModal}
 		>
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2.5">
-					<FormField
-						control={form.control}
-						name="title"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Title</FormLabel>
-								<FormControl>
-									<Input placeholder="Standup Meeting" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="description"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Description</FormLabel>
-								<FormControl>
-									<Textarea
-										placeholder="Daily session"
-										className="max-h-36"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="start"
-						render={({ field }) => (
-							<FormItem className="flex flex-col">
-								<FormLabel htmlFor="datetime">Start</FormLabel>
-								<FormControl>
-									<DateTimePicker
-										value={field.value}
-										onChange={field.onChange}
-										hourCycle={24}
-										granularity="minute"
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="end"
-						render={({ field }) => (
-							<FormItem className="flex flex-col">
-								<FormLabel htmlFor="datetime">End</FormLabel>
-								<FormControl>
-									<DateTimePicker
-										value={field.value}
-										onChange={field.onChange}
-										hourCycle={24}
-										granularity="minute"
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="type"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Type</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
+			{controller.data.type === 2 ? (
+				<AddReservationForm controller={controller} onSubmit={onSubmit} />
+			) : (
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2.5">
+						<FormField
+							control={form.control}
+							name="title"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Title</FormLabel>
 									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select a type" />
-										</SelectTrigger>
+										<Input placeholder="Standup Meeting" {...field} />
 									</FormControl>
-									<SelectContent>
-										{eventTypes.map((type) => (
-											<SelectItem
-												key={type.event_type_id}
-												value={String(type.event_type_id)}
-											>
-												{type.event_type_name}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<Stack
-						direction="row"
-						justifyContent="flex-end"
-						alignItems="center"
-						spacing={1}
-						className="pt-2"
-					>
-						<Button
-							type="button"
-							variant="outline"
-							onClick={controller.closeModal}
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="description"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Description</FormLabel>
+									<FormControl>
+										<Textarea
+											placeholder="Daily session"
+											className="max-h-36"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="start"
+							render={({ field }) => (
+								<FormItem className="flex flex-col">
+									<FormLabel htmlFor="datetime">Start</FormLabel>
+									<FormControl>
+										<DateTimePicker
+											value={field.value}
+											onChange={field.onChange}
+											hourCycle={24}
+											granularity="minute"
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="end"
+							render={({ field }) => (
+								<FormItem className="flex flex-col">
+									<FormLabel htmlFor="datetime">End</FormLabel>
+									<FormControl>
+										<DateTimePicker
+											value={field.value}
+											onChange={field.onChange}
+											hourCycle={24}
+											granularity="minute"
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="type"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Type</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Select a type" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{eventTypes.map((type) => (
+												<SelectItem
+													key={type.event_type_id}
+													value={String(type.event_type_id)}
+												>
+													{type.event_type_name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<Stack
+							direction="row"
+							justifyContent="flex-end"
+							alignItems="center"
+							spacing={1}
+							className="pt-2"
 						>
-							Cancel
-						</Button>
-						<Button type="submit">Add Event</Button>
-					</Stack>
-				</form>
-			</Form>
+							<Button
+								type="button"
+								variant="outline"
+								onClick={controller.closeModal}
+							>
+								Cancel
+							</Button>
+							<Button type="submit">Add Event</Button>
+						</Stack>
+					</form>
+				</Form>
+			)}
 		</Modal>
 	)
 }
