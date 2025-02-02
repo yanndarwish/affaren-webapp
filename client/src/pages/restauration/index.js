@@ -18,7 +18,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "../../components/ui/sidebar"
-import TestProvider, { useTest } from "../../lib/hooks/useTest"
+// import TestProvider, { useTest } from "../../lib/hooks/useTest"
 
 const sections = [
 	{
@@ -43,7 +43,7 @@ const Restauration = () => {
 	}
 
 	return (
-		<TestProvider>
+		// <TestProvider>
 			<PageContainer className="grid gap-4 md:grid-cols-12 grid-rows-1 h-full">
 				<FixedContainer className="col-span-3 rounded-xl border border-gray-100">
 					<RestaurationSidebar sections={sections} />
@@ -53,7 +53,7 @@ const Restauration = () => {
 					{isActive("/restauration#menus") && <MenuSection />}
 				</FixedContainer>
 			</PageContainer>
-		</TestProvider>
+		// </TestProvider>
 	)
 }
 
@@ -162,20 +162,20 @@ const Menu = ({ filter }) => {
 
 const RestaurationSidebar = ({ sections }) => {
 	const location = useLocation()
-	const { getSaleId } = useTest()
+	// const { getSaleId } = useTest()
 
 	const isActive = (url) => {
 		return `${location.pathname}${location.hash}` === `${url}`
 	}
 
-	useEffect(() => {
-		console.log("here")
-		getSaleId((data) => {
-			// Your custom success handler
-			console.log("Got sale ID:", data.nextSaleId)
-			// Do something with the data
-		})
-	}, [])
+	// useEffect(() => {
+	// 	console.log("here")
+	// 	getSaleId((data) => {
+	// 		// Your custom success handler
+	// 		console.log("Got sale ID:", data.nextSaleId)
+	// 		// Do something with the data
+	// 	})
+	// }, [])
 
 	return (
 		<Stack className="p-4">
