@@ -1,3 +1,4 @@
+import { z } from "zod"
 import { useEffect, useState } from "react"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { useQuery } from "../../../lib/hooks/useQuery"
@@ -28,6 +29,17 @@ import useLongPress from "../../../lib/hooks/useLongPress"
 import { useConfig } from "../../../lib/hooks/useConfig"
 import { Typography } from "../../ui/typography"
 import { useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "../../ui/form"
 
 const mockCards = [
 	{ card_id: "1", card_name: "Card 1", card_price: 10, card_taxe: 5.5 },
@@ -334,26 +346,40 @@ const tabs = [
 	{ name: "Décoration/Alcool", label: "Other", value: 20 },
 ]
 
+const shortcutSchema = z.object({
+	name: z.string().min(1, { message: "Please enter a name." }),
+	price: z
+		.number({ required_error: "Please enter a price." })
+		.min(0.01, { message: "Price must be greater than 0." }),
+	taxe: z.number().min(1, { message: "Please enter a taxe." }),
+	type: z.string().min(1, { message: "Please enter a type." }),
+	category: z.number().min(1, { message: "Please enter a category." }),
+})
+
 const FormAddCard = ({ card, onSuccess = () => null }) => {
-	const { getComponent } = useConfig()
 	const navigate = useNavigate()
+	const { getComponent } = useConfig()
+	const { notifySuccess, notifyError } = useNotify()
+	const [productCategories, setProductCategories] = useState([])
+
 	const shortcutComponent = getComponent("pos", "shortcuts")
 	const shortcutFilters = shortcutComponent.settings.shortcutTypes.filter(
 		(type) => type.name !== "all"
 	)
-
-	const { notifySuccess, notifyError } = useNotify()
-	const [name, setName] = useState("")
-	const [price, setPrice] = useState("")
-	const [taxe, setTaxe] = useState(5.5)
-	const [type, setType] = useState(shortcutFilters[0]?.name || null)
-	const [category, setCategory] = useState("")
-	const [productCategories, setProductCategories] = useState([])
+	const form = useForm({
+		resolver: zodResolver(shortcutSchema),
+		defaultValues: {
+			name: card?.card_name || "",
+			price: card?.card_price || 0,
+			taxe: card?.card_taxe || 5.5,
+			type: card?.card_type || shortcutFilters[0]?.name || null,
+			category: card?.product_category_id || "",
+		},
+	})
 
 	const queryGetProductCategories = useQuery({
 		queryFn: getProductCategories,
 		onSuccess: (data) => {
-			console.log(data)
 			setProductCategories(data)
 		},
 		onError: () => {
@@ -365,7 +391,13 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 		queryFn: createProductCard,
 		onSuccess: () => {
 			notifySuccess("Card created successfully")
-			handleReset()
+			form.reset({
+				name: "",
+				price: 0,
+				taxe: 5.5,
+				type: shortcutFilters[0]?.name || null,
+				category: productCategories[0]?.product_category_id || "",
+			})
 			onSuccess()
 		},
 		onError: () => {
@@ -384,18 +416,18 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 		},
 	})
 
-	const handleSubmit = () => {
-		let trimmedName = name.trim()
+	const handleSubmit = (data) => {
+		let trimmedName = data.name.trim()
 
 		trimmedName = trimmedName.replace(/ /g, "-")
 
 		const payload = {
 			id: `c-${trimmedName}`,
-			name: name,
-			price: price,
-			taxe: taxe,
-			type: type,
-			category: category,
+			name: data.name,
+			price: data.price,
+			taxe: data.taxe,
+			type: data.type,
+			category: data.category,
 		}
 
 		if (card) {
@@ -405,27 +437,9 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 		}
 	}
 
-	const handleReset = () => {
-		setName("")
-		setPrice("")
-		setTaxe(5.5)
-		setType("basic")
-		setCategory("")
-	}
-
 	const handleAddType = () => {
 		navigate("/settings?shortcuts=true")
 	}
-
-	useEffect(() => {
-		if (card) {
-			setName(card.card_name)
-			setPrice(card.card_price)
-			setTaxe(card.card_taxe)
-			setType(card.card_type)
-			setCategory(card.product_category_id)
-		}
-	}, [card])
 
 	useEffect(() => {
 		queryGetProductCategories.send()
@@ -433,106 +447,168 @@ const FormAddCard = ({ card, onSuccess = () => null }) => {
 
 	return (
 		<Stack direction="column" spacing={2}>
-			<div className="space-y-1">
-				<Stack
-					direction="row"
-					spacing={2}
-					justifyContent="space-between"
-					alignItems="center"
+			<Form {...form}>
+				<form
+					onSubmit={form.handleSubmit(handleSubmit)}
+					className="space-y-4 w-full"
 				>
-					<Label htmlFor="card-type">Type</Label>
-					<Button variant="outline" onClick={handleAddType}>
-						Add a shortcut type
+					<div className="space-y-1">
+						<Stack
+							direction="row"
+							spacing={2}
+							justifyContent="space-between"
+							alignItems="center"
+						>
+							<Label htmlFor="card-type">Type</Label>
+							<Button variant="outline" onClick={handleAddType}>
+								Add a shortcut type
+							</Button>
+						</Stack>
+						{shortcutFilters.length > 0 ? (
+							<FormField
+								control={form.control}
+								name="type"
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Tabs
+												value={field.value}
+												onValueChange={field.onChange}
+												className="w-full h-full space-y-4"
+											>
+												<TabsList className="w-full p-0 bg-white">
+													{shortcutFilters.map((tab) => (
+														<TabsTrigger
+															key={tab.name}
+															value={tab.name}
+															className={`w-full ${
+																field.value === tab.name
+																	? "!bg-slate-900 !text-white"
+																	: "!bg-white"
+															}`}
+														>
+															{tab.label}
+														</TabsTrigger>
+													))}
+												</TabsList>
+											</Tabs>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						) : (
+							<Typography variant="muted">No shortcut types found.</Typography>
+						)}
+					</div>
+					<FormField
+						control={form.control}
+						name="category"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel htmlFor="category">Category</FormLabel>
+								<FormControl>
+									<Select
+										value={field.value}
+										onValueChange={(e) => field.onChange(Number(e))}
+									>
+										<SelectTrigger>
+											<SelectValue placeholder="Select a category" />
+										</SelectTrigger>
+										<SelectContent>
+											{productCategories.map((category) => (
+												<SelectItem
+													key={category.product_category_id}
+													value={category.product_category_id}
+												>
+													{category.product_category_name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="name"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel htmlFor="card-name">Name</FormLabel>
+								<FormControl>
+									<Input
+										id="card-name"
+										value={field.value}
+										onChange={field.onChange}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="price"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel htmlFor="card-price">Price</FormLabel>
+								<FormControl>
+									<Input
+										id="card-price"
+										value={field.value}
+										type="number"
+										onChange={(event) =>
+											field.onChange(
+												event.target.value === "" ? "" : +event.target.value
+											)
+										}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="taxe"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel htmlFor="card-category">Taxe</FormLabel>
+								<FormControl>
+									<Tabs
+										defaultValue={field.value}
+										onValueChange={field.onChange}
+										className="w-full h-full space-y-4"
+									>
+										<TabsList className="w-full p-0 bg-white">
+											{tabs.map((tab) => (
+												<TabsTrigger
+													key={tab.value}
+													value={tab.value}
+													className={`w-full ${
+														field.value === tab.value
+															? "!bg-black !text-white"
+															: "!bg-white"
+													}`}
+												>
+													{tab.value}%
+												</TabsTrigger>
+											))}
+										</TabsList>
+									</Tabs>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<Button type="submit" className="w-full">
+						{card ? "Update Card" : "Create Card"}
 					</Button>
-				</Stack>
-
-				{shortcutFilters.length > 0 ? (
-					<Tabs
-						value={type}
-						onValueChange={setType}
-						className="w-full h-full space-y-4"
-					>
-						<TabsList className="w-full p-0 bg-white">
-							{shortcutFilters.map((tab) => (
-								<TabsTrigger
-									key={tab.name}
-									value={tab.name}
-									className={`w-full ${
-										type === tab.name
-											? "!bg-slate-900 !text-white"
-											: "!bg-white"
-									}`}
-								>
-									{tab.label}
-								</TabsTrigger>
-							))}
-						</TabsList>
-					</Tabs>
-				) : (
-					<Typography variant="muted">No shortcut types found.</Typography>
-				)}
-			</div>
-			<div className="grid gap-2">
-				<Label htmlFor="category">Category</Label>
-				<Select value={category} onValueChange={setCategory}>
-					<SelectTrigger>
-						<SelectValue placeholder="Select a category" />
-					</SelectTrigger>
-					<SelectContent>
-						{productCategories.map((category) => (
-							<SelectItem
-								key={category.product_category_id}
-								value={category.product_category_id}
-							>
-								{category.product_category_name}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-			</div>
-			<div className="space-y-1">
-				<Label htmlFor="card-name">Name</Label>
-
-				<Input
-					id="card-name"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-				/>
-			</div>
-			<div className="space-y-1">
-				<Label htmlFor="card-price">Price</Label>
-
-				<Input
-					id="card-price"
-					value={price}
-					onChange={(e) => setPrice(e.target.value)}
-				/>
-			</div>
-			<div className="space-y-1">
-				<Label htmlFor="card-category">Taxe</Label>
-				<Tabs
-					defaultValue={taxe}
-					onValueChange={setTaxe}
-					className="w-full h-full space-y-4"
-				>
-					<TabsList className="w-full p-0 bg-white">
-						{tabs.map((tab) => (
-							<TabsTrigger
-								key={tab.value}
-								value={tab.value}
-								className={`w-full ${
-									taxe === tab.value ? "!bg-black !text-white" : "!bg-white"
-								}`}
-							>
-								{tab.value}%
-							</TabsTrigger>
-						))}
-					</TabsList>
-				</Tabs>
-			</div>
-			<Button onClick={handleSubmit}>
-				{card ? "Update Card" : "Create Card"}
-			</Button>
+				</form>
+			</Form>
 		</Stack>
 	)
 }
