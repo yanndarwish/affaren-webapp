@@ -1,9 +1,3 @@
-import { useState } from "react"
-import {
-	CloseColumn,
-	VerticalCenter,
-} from "../../../assets/common/common.styles"
-import { useEffect } from "react"
 import { Card } from "../../ui/card"
 import {
 	Table,

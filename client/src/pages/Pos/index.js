@@ -1,5 +1,5 @@
-import BarcodeSection from "../../components/POS/BarcodeSection/BarcodeSection.jsx"
-import Cart from "../../components/POS/Cart/index.js"
+import { BarcodeSection } from "../../features/barcode/components"
+import { Cart } from "../../features/cart/components"
 import { Stack } from "@mui/material"
 import { useEffect, useState } from "react"
 import {
@@ -9,9 +9,8 @@ import {
 	TabsTrigger,
 } from "../../components/ui/tabs/index.js"
 
-import { PageTitle } from "../../components/shared/pageTitle/index.jsx"
 import { Card } from "../../components/ui/card/index.js"
-import { TotalSection } from "../../components/POS/totalSection/index.js"
+import { TotalSection } from "../../features/cart/components/total"
 import { useSale } from "../../lib/providers/sale/index.js"
 import { useNotify } from "../../lib/hooks/useNotify/index.js"
 import { useConfig } from "../../lib/hooks/useConfig/index.js"
@@ -22,7 +21,7 @@ import {
 } from "../../components/shared/containers/index.js"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useModal } from "../../components/shared/modal/index.jsx"
-import { ModalOpening } from "../../components/POS/modals/opening/index.js"
+import { ModalOpening } from "../../features/opening"
 import { Button } from "../../components/ui/button/index.js"
 import { Utensils } from "lucide-react"
 
@@ -124,15 +123,16 @@ const Pos = () => {
 						{isActiveComponent("pos", "barcode") && (
 							<BarcodeSection onSuccess={updateCart} />
 						)}
-						{isActiveModule("restauration") && isActiveComponent("restauration", "reservations") && (
-							<Button
-								variant="outline"
-								size="icon"
-								onClick={handleClickReservations}
-							>
-								<Utensils />
-							</Button>
-						)}
+						{isActiveModule("restauration") &&
+							isActiveComponent("restauration", "reservations") && (
+								<Button
+									variant="outline"
+									size="icon"
+									onClick={handleClickReservations}
+								>
+									<Utensils />
+								</Button>
+							)}
 					</Stack>
 					<Stack className="h-full overflow-y-hidden">
 						{isActiveComponent("pos", "cart") && (

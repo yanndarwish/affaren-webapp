@@ -9,9 +9,9 @@ import { Input } from "../../components/ui/input"
 import { Button } from "../../components/ui/button"
 import { useConfig } from "../../lib/hooks/useConfig"
 import { useModal } from "../../components/shared/modal"
-import { ModalAddProduct } from "../../components/restauration/modals/addProduct"
-import { ProductCard } from "../../components/POS/cardRestauration/table/details/product"
-import { RestaurantTabsSelector } from "../../components/POS/cardRestauration/table/details/tabs"
+import { ModalAddProduct } from "../../features/restauration/modals/addProduct"
+import { ProductCard } from "../../features/restauration/table/details/product"
+import { RestaurantTabsSelector } from "../../features/restauration/table/details/tabs"
 import { useLocation } from "react-router-dom"
 import {
 	SidebarMenu,

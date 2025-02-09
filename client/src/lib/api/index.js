@@ -194,22 +194,22 @@ export const postDayCash = async (body) => {
 	return response
 }
 
-export const getProductCards = async () => {
+export const getShortcuts = async () => {
 	const response = await get("cards")
 	return response
 }
 
-export const deleteCard = async (uuid) => {
+export const deleteShortcut = async (uuid) => {
 	const response = await del(`cards/${uuid}`)
 	return response
 }
 
-export const updateCard = async ({ uuid, body }) => {
+export const updateShortcut = async ({ uuid, body }) => {
 	const response = await put(`cards/${uuid}`, body)
 	return response
 }
 
-export const createProductCard = async (body) => {
+export const createShortcut = async (body) => {
 	const response = await post("cards", body)
 	return response
 }

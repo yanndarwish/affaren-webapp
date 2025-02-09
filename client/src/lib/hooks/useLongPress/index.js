@@ -3,20 +3,20 @@ import { useState, useRef } from "react"
 const PRESS_TIMEOUT = 600
 const RESET_TIMEOUT = 500
 
-export default function useLongPress() {
-	const [action, setAction] = useState('none')
+export function useLongPress() {
+	const [action, setAction] = useState("none")
 	const timerRef = useRef()
 
 	function startPressTimer() {
 		timerRef.current = setTimeout(() => {
-			setAction('longpress')
-			setTimeout(() => setAction('none'), RESET_TIMEOUT)
+			setAction("longpress")
+			setTimeout(() => setAction("none"), RESET_TIMEOUT)
 		}, PRESS_TIMEOUT)
 	}
 
 	function handleOnClick() {
 		clearTimeout(timerRef.current)
-		setAction('click')
+		setAction("click")
 	}
 
 	function handleOnTouchStart() {
@@ -24,9 +24,9 @@ export default function useLongPress() {
 	}
 
 	function handleOnTouchEnd() {
-		if (action === 'longpress') return
+		if (action === "longpress") return
 		clearTimeout(timerRef.current)
-		setAction('none')
+		setAction("none")
 	}
 
 	return {

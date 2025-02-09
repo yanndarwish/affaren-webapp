@@ -7,11 +7,11 @@ import {
 	Layers2,
 	Slash,
 } from "lucide-react"
-import { CardNoBarcode } from "../../components/POS/cardNoBarcode"
-import { CardShortcut } from "../../components/POS/cardShortcut"
-import { CardDiscount } from "../../components/POS/cardDiscount"
-import { CardBookmark } from "../../components/POS/cardBookmark"
-import { CardRestauration } from "../../components/POS/cardRestauration"
+import { NoBarcodeContainer } from "../../features/no-barcode/components/container"
+import { ShortcutContainer } from "../../features/shortcut/components/container"
+import { DiscountContainer } from "../../features/discount/components/container"
+import { BookmarkContainer } from "../../features/bookmarks/components/container"
+import { CardRestauration } from "../../features/restauration"
 
 export const NoBarcode = ({ className }) => {
 	return (
@@ -39,22 +39,22 @@ export const config = {
 		{
 			name: "no-barcode",
 			label: <NoBarcode className="w-4 h-4" />,
-			component: <CardNoBarcode />,
+			component: <NoBarcodeContainer />,
 		},
 		{
 			name: "shortcuts",
 			label: <Layers2 className="w-4 h-4" />,
-			component: <CardShortcut />,
+			component: <ShortcutContainer />,
 		},
 		{
 			name: "discount",
 			label: <BadgePercent className="w-4 h-4" />,
-			component: <CardDiscount />,
+			component: <DiscountContainer />,
 		},
 		{
 			name: "bookmarks",
 			label: <BookmarkCheck className="w-4 h-4" />,
-			component: <CardBookmark />,
+			component: <BookmarkContainer />,
 		},
 		{
 			name: "restauration",
