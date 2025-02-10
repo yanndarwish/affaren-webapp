@@ -6,21 +6,21 @@ import {
 	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbSeparator,
-} from "../../../components/ui/breadcrumb"
-import { Button } from "../../../components/ui/button"
-import { UserStep } from "../../../components/userStep"
-import { Modal, useModal } from "../../../components/shared/modal"
+} from "../../components/ui/breadcrumb"
+import { Button } from "../../components/ui/button"
+import { UserStep } from "../../components/userStep"
+import { Modal, useModal } from "../../components/shared/modal"
 import { Stack } from "@mui/material"
-import { useDailyTotal } from "../../../lib/providers/dailyTotal"
-import { getDayCash, printCashTicket, openDrawer } from "../../../lib/api"
-import { useQuery } from "../../../lib/hooks/useQuery"
+import { useDailyTotal } from "../../lib/providers/dailyTotal"
+import { getDayCash, printCashTicket, openDrawer } from "../../lib/api"
+import { useQuery } from "../../lib/hooks/useQuery"
 import { Banknote, CreditCard, Computer, ReceiptText } from "lucide-react"
-import { useNotify } from "../../../lib/hooks/useNotify"
-import { useSession } from "../../../lib/hooks/useSession"
-import { Typography } from "../../ui/typography"
+import { useNotify } from "../../lib/hooks/useNotify"
+import { useSession } from "../../lib/hooks/useSession"
+import { Typography } from "../../components/ui/typography"
 
-import { useConfig } from "../../../lib/hooks/useConfig"
-import { ModalLogout } from "../../../features/logout"
+import { useConfig } from "../../lib/hooks/useConfig"
+import { ModalLogout } from "../logout"
 
 export const ModalClose = ({ controller }) => {
 	const [step, setStep] = useState(1)
@@ -255,9 +255,7 @@ const CashCheckout = () => {
 						<p className="text-sm font-bold">Total in Drawer</p>
 					</Stack>
 					<Stack direction="row" spacing={1} className="items-center">
-						<p className="text-sm font-bold">
-							{(cashBase + cash).toFixed(2)}
-						</p>
+						<p className="text-sm font-bold">{(cashBase + cash).toFixed(2)}</p>
 						<config.general.currency.symbol className="w-4 h-4" />
 					</Stack>
 				</Stack>
