@@ -1,16 +1,16 @@
 import { TriangleAlert } from "lucide-react"
-import { CenterContainer } from "../../../assets/common/common.styles"
-import { Button } from "../../ui/button"
 import {
 	Card,
-	CardContent,
-	CardDescription,
+	CardTitle,
 	CardFooter,
 	CardHeader,
-	CardTitle,
-} from "../../ui/card"
+	CardContent,
+	CardDescription,
+} from "../../components/ui/card"
+import { Button } from "../../components/ui/button"
+import { CenterContainer } from "../../assets/common/common.styles"
 
-const RefreshDialog = ({ theme }) => {
+export const RefreshDialog = ({ theme }) => {
 	const handleRefresh = () => {
 		window.location.reload()
 	}
@@ -36,5 +36,3 @@ const RefreshDialog = ({ theme }) => {
 		</CenterContainer>
 	)
 }
-
-export default RefreshDialog
