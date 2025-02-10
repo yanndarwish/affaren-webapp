@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux"
-import { CenterContainer } from "../../assets/common/common.styles"
-import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
-import { LoginForm } from "../../components/Cards/LoginCard/LoginCard.js"
+import { useNavigate } from "react-router-dom"
+
+import { LoginForm } from "../../features/login/components/form"
 import { useSession } from "../../lib/hooks/useSession/index.js"
+import { CenterContainer } from "../../assets/common/common.styles"
 
 const Login = () => {
 	const navigate = useNavigate()
