@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 
-import { AppSidebar } from "../Sidebar"
-import { AppHeader } from "../Sidebar/appHeader"
+import { AppSidebar } from "../sidebar"
+import { AppHeader } from "../app-header"
 import { SidebarInset, SidebarProvider } from "../ui/sidebar"
 
 import { getDaySales } from "../../lib/api"

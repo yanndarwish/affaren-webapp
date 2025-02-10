@@ -4,12 +4,10 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "../../ui/breadcrumb"
-import { Separator } from "../../ui/separator"
-import { SidebarTrigger, useSidebar } from "../../ui/sidebar"
-import { DailyTotal } from "../dailyTotal"
+} from "../ui/breadcrumb"
+import { Separator } from "../ui/separator"
+import { SidebarTrigger, useSidebar } from "../ui/sidebar"
+import { DailyTotal } from "./daily-total"
 
 export const AppHeader = () => {
 	const { activeItem } = useSidebar()
@@ -28,7 +26,9 @@ export const AppHeader = () => {
 					<Breadcrumb>
 						<BreadcrumbList>
 							<BreadcrumbItem className="hidden md:block">
-								<BreadcrumbLink href={activeItem?.url}>{activeItem?.label}</BreadcrumbLink>
+								<BreadcrumbLink href={activeItem?.url}>
+									{activeItem?.label}
+								</BreadcrumbLink>
 							</BreadcrumbItem>
 							{/* <BreadcrumbSeparator className="hidden md:block" />
 							<BreadcrumbItem>
