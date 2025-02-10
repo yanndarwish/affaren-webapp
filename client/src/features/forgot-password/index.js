@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { forgotPassword } from "../../../lib/api"
-import { useQuery } from "../../../lib/hooks/useQuery"
-import { useNotify } from "../../../lib/hooks/useNotify"
+import { forgotPassword } from "../../lib/api"
+import { useQuery } from "../../lib/hooks/useQuery"
+import { useNotify } from "../../lib/hooks/useNotify"
 
 import {
 	Card,
@@ -11,10 +11,10 @@ import {
 	CardHeader,
 	CardContent,
 	CardDescription,
-} from "../../ui/card"
-import { Label } from "../../ui/label"
-import { Input } from "../../ui/input"
-import { Button } from "../../ui/button"
+} from "../../components/ui/card"
+import { Label } from "../../components/ui/label"
+import { Input } from "../../components/ui/input"
+import { Button } from "../../components/ui/button"
 import { Stack } from "@mui/material"
 
 export const ForgotPasswordCard = () => {

@@ -1,5 +1,5 @@
 import { CenterContainer } from "../../assets/common/common.styles"
-import { ForgotPasswordCard } from "../../components/Cards/ForgotPasswordCard"
+import { ForgotPasswordCard } from "../../features/forgot-password"
 
 const ForgotPassword = () => {
 	return (
