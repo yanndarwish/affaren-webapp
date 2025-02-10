@@ -15,8 +15,8 @@ import {
 } from "../ui/sidebar"
 import { useModal } from "../shared/modal"
 import { ModalClose } from "../modals/close"
-import { ModalLogout } from "../modals/logout"
 import { useConfig } from "../../lib/hooks/useConfig"
+import { ModalLogout } from "../../features/logout"
 
 export function AppSidebar() {
 	const { setActiveItem } = useSidebar()

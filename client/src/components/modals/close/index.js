@@ -18,8 +18,9 @@ import { Banknote, CreditCard, Computer, ReceiptText } from "lucide-react"
 import { useNotify } from "../../../lib/hooks/useNotify"
 import { useSession } from "../../../lib/hooks/useSession"
 import { Typography } from "../../ui/typography"
-import { ModalLogout } from "../logout"
+
 import { useConfig } from "../../../lib/hooks/useConfig"
+import { ModalLogout } from "../../../features/logout"
 
 export const ModalClose = ({ controller }) => {
 	const [step, setStep] = useState(1)

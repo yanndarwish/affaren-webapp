@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom"
 
-import { useSession } from "../../../lib/hooks/useSession"
+import { useSession } from "../../lib/hooks/useSession"
 
-import { Modal } from "../../shared/modal"
-import { Button } from "../../ui/button"
+import { Modal } from "../../components/shared/modal"
+import { Button } from "../../components/ui/button"
 import { Stack } from "@mui/material"
 
 export const ModalLogout = ({
