@@ -119,7 +119,9 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 
 	useEffect(() => {
 		if (barcodeParam) {
-			setBarcode(barcodeParam)
+			setBarcode(
+				barcodeParam.endsWith("/n") ? barcodeParam.slice(0, -2) : barcodeParam
+			)
 		}
 	}, [barcodeParam])
 
