@@ -85,7 +85,8 @@ export const FormProduct = ({ data, onSubmit = () => null }) => {
 			numPrice > 0 &&
 			!isNaN(numPrice) &&
 			!isNaN(numQuantity) &&
-			numBarcode.length > 0
+			numBarcode.length > 0 &&
+			category
 		)
 	}
 
