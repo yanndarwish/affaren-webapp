@@ -328,23 +328,23 @@ const columns = [
 	},
 ]
 
-const formatMonthData = (sales, month, year) => {
-	// Use reduce to accumulate sales data by day
-	const formattedData = sales.reduce((acc, sale) => {
-		const day = sale.sale_day
+// Helper for rounding up to 2 decimals
+const round2 = (num) => Math.round(num * 100) / 100
 
-		// Initialize the day's data if it doesn't exist
-		if (!acc[day]) {
-			acc[day] = {
+const formatMonthData = (sales, month, year) => {
+	const dailyTotals = {}
+
+	// 1. Accumulate raw totals per day
+	sales.forEach((sale) => {
+		const day = sale.sale_day
+		if (!dailyTotals[day]) {
+			dailyTotals[day] = {
 				ht1: 0,
 				ht2: 0,
 				ht3: 0,
 				tva1: 0,
 				tva2: 0,
 				tva3: 0,
-				total1: 0,
-				total2: 0,
-				total3: 0,
 				cash: 0,
 				card: 0,
 				check: 0,
@@ -352,120 +352,77 @@ const formatMonthData = (sales, month, year) => {
 			}
 		}
 
-		// Add the current sale's data to the accumulator
-		acc[day] = {
-			...acc[day],
-			ht1:
-				Math.round(
-					(acc[day].ht1 + parseFloat(sale.sale_taxes?.ht1 || 0)) * 100
-				) / 100,
-			ht2:
-				Math.round(
-					(acc[day].ht2 + parseFloat(sale.sale_taxes?.ht2 || 0)) * 100
-				) / 100,
-			ht3:
-				Math.round(
-					(acc[day].ht3 + parseFloat(sale.sale_taxes?.ht3 || 0)) * 100
-				) / 100,
-			tva1:
-				Math.round(
-					(acc[day].tva1 + parseFloat(sale.sale_taxes?.tva1 || 0)) * 100
-				) / 100,
-			tva2:
-				Math.round(
-					(acc[day].tva2 + parseFloat(sale.sale_taxes?.tva2 || 0)) * 100
-				) / 100,
-			tva3:
-				Math.round(
-					(acc[day].tva3 + parseFloat(sale.sale_taxes?.tva3 || 0)) * 100
-				) / 100,
-			cash:
-				Math.round(
-					(acc[day].cash + parseFloat(sale.sale_payment_methods?.cash || 0)) *
-						100
-				) / 100,
-			card:
-				Math.round(
-					(acc[day].card + parseFloat(sale.sale_payment_methods?.card || 0)) *
-						100
-				) / 100,
-			check:
-				Math.round(
-					(acc[day].check + parseFloat(sale.sale_payment_methods?.check || 0)) *
-						100
-				) / 100,
-			total:
-				Math.round((acc[day].total + parseFloat(sale.sale_amount || 0)) * 100) /
-				100,
-		}
+		const taxes = sale.sale_taxes || {}
+		const payments = sale.sale_payment_methods || {}
 
-		// Calculate totals after updating HT and TVA
-		acc[day].total1 = Math.round((acc[day].ht1 + acc[day].tva1) * 100) / 100
-		acc[day].total2 = Math.round((acc[day].ht2 + acc[day].tva2) * 100) / 100
-		acc[day].total3 = Math.round((acc[day].ht3 + acc[day].tva3) * 100) / 100
+		dailyTotals[day].ht1 += parseFloat(taxes.ht1 || 0)
+		dailyTotals[day].ht2 += parseFloat(taxes.ht2 || 0)
+		dailyTotals[day].ht3 += parseFloat(taxes.ht3 || 0)
 
-		return acc
-	}, {})
+		dailyTotals[day].tva1 += parseFloat(taxes.tva1 || 0)
+		dailyTotals[day].tva2 += parseFloat(taxes.tva2 || 0)
+		dailyTotals[day].tva3 += parseFloat(taxes.tva3 || 0)
 
-	// Convert to array format
-	const formattedDataArray = Object.entries(formattedData).map(
-		([day, data]) => ({
+		dailyTotals[day].cash += parseFloat(payments.cash || 0)
+		dailyTotals[day].card += parseFloat(payments.card || 0)
+		dailyTotals[day].check += parseFloat(payments.check || 0)
+
+		dailyTotals[day].total += parseFloat(sale.sale_amount || 0)
+	})
+
+	// 2. Finalize each day's data and build array
+	const formattedDataArray = Object.entries(dailyTotals).map(([day, data]) => {
+		const ht1 = round2(data.ht1)
+		const ht2 = round2(data.ht2)
+		const ht3 = round2(data.ht3)
+
+		const tva1 = round2(data.tva1)
+		const tva2 = round2(data.tva2)
+		const tva3 = round2(data.tva3)
+
+		const dayData = {
 			day: `${String(day).padStart(2, "0")}/${String(month).padStart(
 				2,
 				"0"
 			)}/${year}`,
-			...Object.fromEntries(
-				Object.entries(data).map(([key, value]) => [
-					key,
-					typeof value === "number" ? value.toFixed(2) : value,
-				])
-			),
-		})
-	)
+			ht1: ht1.toFixed(2),
+			ht2: ht2.toFixed(2),
+			ht3: ht3.toFixed(2),
+			tva1: tva1.toFixed(2),
+			tva2: tva2.toFixed(2),
+			tva3: tva3.toFixed(2),
+			total1: round2(ht1 + tva1).toFixed(2),
+			total2: round2(ht2 + tva2).toFixed(2),
+			total3: round2(ht3 + tva3).toFixed(2),
+			cash: round2(data.cash).toFixed(2),
+			card: round2(data.card).toFixed(2),
+			check: round2(data.check).toFixed(2),
+			total: round2(data.total).toFixed(2),
+		}
 
+		return dayData
+	})
+
+	// 3. Calculate monthly total by summing unrounded values
 	const monthTotal = formattedDataArray.reduce(
-		(total, dayData) => {
+		(sum, day) => {
+			const add = (key) => parseFloat(sum[key]) + parseFloat(day[key])
+
 			return {
 				day: "Total",
-				ht1: roundUpToTwoDecimals(
-					parseFloat(total.ht1) + parseFloat(dayData.ht1)
-				),
-				ht2: roundUpToTwoDecimals(
-					parseFloat(total.ht2) + parseFloat(dayData.ht2)
-				),
-				ht3: roundUpToTwoDecimals(
-					parseFloat(total.ht3) + parseFloat(dayData.ht3)
-				),
-				tva1: roundUpToTwoDecimals(
-					parseFloat(total.tva1) + parseFloat(dayData.tva1)
-				),
-				tva2: roundUpToTwoDecimals(
-					parseFloat(total.tva2) + parseFloat(dayData.tva2)
-				),
-				tva3: roundUpToTwoDecimals(
-					parseFloat(total.tva3) + parseFloat(dayData.tva3)
-				),
-				total1: roundUpToTwoDecimals(
-					parseFloat(total.total1) + parseFloat(dayData.total1)
-				),
-				total2: roundUpToTwoDecimals(
-					parseFloat(total.total2) + parseFloat(dayData.total2)
-				),
-				total3: roundUpToTwoDecimals(
-					parseFloat(total.total3) + parseFloat(dayData.total3)
-				),
-				cash: roundUpToTwoDecimals(
-					parseFloat(total.cash) + parseFloat(dayData.cash)
-				),
-				card: roundUpToTwoDecimals(
-					parseFloat(total.card) + parseFloat(dayData.card)
-				),
-				check: roundUpToTwoDecimals(
-					parseFloat(total.check) + parseFloat(dayData.check)
-				),
-				total: roundUpToTwoDecimals(
-					parseFloat(total.total) + parseFloat(dayData.total)
-				),
+				ht1: round2(add("ht1")).toFixed(2),
+				ht2: round2(add("ht2")).toFixed(2),
+				ht3: round2(add("ht3")).toFixed(2),
+				tva1: round2(add("tva1")).toFixed(2),
+				tva2: round2(add("tva2")).toFixed(2),
+				tva3: round2(add("tva3")).toFixed(2),
+				total1: round2(add("total1")).toFixed(2),
+				total2: round2(add("total2")).toFixed(2),
+				total3: round2(add("total3")).toFixed(2),
+				cash: round2(add("cash")).toFixed(2),
+				card: round2(add("card")).toFixed(2),
+				check: round2(add("check")).toFixed(2),
+				total: round2(add("total")).toFixed(2),
 			}
 		},
 		{
