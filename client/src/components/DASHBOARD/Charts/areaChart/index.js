@@ -328,7 +328,7 @@ const columns = [
 	},
 ]
 
-// Helper for rounding up to 2 decimals
+// Helper for rounding to 2 decimals
 const round2 = (num) => Math.round(num * 100) / 100
 
 const formatMonthData = (sales, month, year) => {
@@ -370,7 +370,7 @@ const formatMonthData = (sales, month, year) => {
 		dailyTotals[day].total += parseFloat(sale.sale_amount || 0)
 	})
 
-	// 2. Finalize each day's data and build array
+	// 2. Finalize each day's data (rounding and string formatting applied here)
 	const formattedDataArray = Object.entries(dailyTotals).map(([day, data]) => {
 		const ht1 = round2(data.ht1)
 		const ht2 = round2(data.ht2)
@@ -380,71 +380,85 @@ const formatMonthData = (sales, month, year) => {
 		const tva2 = round2(data.tva2)
 		const tva3 = round2(data.tva3)
 
-		const dayData = {
+		return {
 			day: `${String(day).padStart(2, "0")}/${String(month).padStart(
 				2,
 				"0"
 			)}/${year}`,
-			ht1: ht1.toFixed(2),
-			ht2: ht2.toFixed(2),
-			ht3: ht3.toFixed(2),
-			tva1: tva1.toFixed(2),
-			tva2: tva2.toFixed(2),
-			tva3: tva3.toFixed(2),
-			total1: round2(ht1 + tva1).toFixed(2),
-			total2: round2(ht2 + tva2).toFixed(2),
-			total3: round2(ht3 + tva3).toFixed(2),
-			cash: round2(data.cash).toFixed(2),
-			card: round2(data.card).toFixed(2),
-			check: round2(data.check).toFixed(2),
-			total: round2(data.total).toFixed(2),
+			ht1: ht1,
+			ht2: ht2,
+			ht3: ht3,
+			tva1: tva1,
+			tva2: tva2,
+			tva3: tva3,
+			total1: round2(ht1 + tva1),
+			total2: round2(ht2 + tva2),
+			total3: round2(ht3 + tva3),
+			cash: round2(data.cash),
+			card: round2(data.card),
+			check: round2(data.check),
+			total: round2(data.total),
 		}
-
-		return dayData
 	})
 
-	// 3. Calculate monthly total by summing unrounded values
-	const monthTotal = formattedDataArray.reduce(
+	// 3. Monthly total from number values (updated: using numbers instead of fixed decimals)
+	const monthTotalRaw = formattedDataArray.reduce(
 		(sum, day) => {
-			const add = (key) => parseFloat(sum[key]) + parseFloat(day[key])
-
 			return {
 				day: "Total",
-				ht1: round2(add("ht1")).toFixed(2),
-				ht2: round2(add("ht2")).toFixed(2),
-				ht3: round2(add("ht3")).toFixed(2),
-				tva1: round2(add("tva1")).toFixed(2),
-				tva2: round2(add("tva2")).toFixed(2),
-				tva3: round2(add("tva3")).toFixed(2),
-				total1: round2(add("total1")).toFixed(2),
-				total2: round2(add("total2")).toFixed(2),
-				total3: round2(add("total3")).toFixed(2),
-				cash: round2(add("cash")).toFixed(2),
-				card: round2(add("card")).toFixed(2),
-				check: round2(add("check")).toFixed(2),
-				total: round2(add("total")).toFixed(2),
+				ht1: sum.ht1 + day.ht1,
+				ht2: sum.ht2 + day.ht2,
+				ht3: sum.ht3 + day.ht3,
+				tva1: sum.tva1 + day.tva1,
+				tva2: sum.tva2 + day.tva2,
+				tva3: sum.tva3 + day.tva3,
+				total1: sum.total1 + day.total1,
+				total2: sum.total2 + day.total2,
+				total3: sum.total3 + day.total3,
+				cash: sum.cash + day.cash,
+				card: sum.card + day.card,
+				check: sum.check + day.check,
+				total: sum.total + day.total,
 			}
 		},
 		{
 			day: "Total",
-			ht1: "0.00",
-			ht2: "0.00",
-			ht3: "0.00",
-			tva1: "0.00",
-			tva2: "0.00",
-			tva3: "0.00",
-			total1: "0.00",
-			total2: "0.00",
-			total3: "0.00",
-			cash: "0.00",
-			card: "0.00",
-			check: "0.00",
-			total: "0.00",
+			ht1: 0,
+			ht2: 0,
+			ht3: 0,
+			tva1: 0,
+			tva2: 0,
+			tva3: 0,
+			total1: 0,
+			total2: 0,
+			total3: 0,
+			cash: 0,
+			card: 0,
+			check: 0,
+			total: 0,
 		}
 	)
 
-	return [...formattedDataArray, monthTotal]
+	// 4. Convert final total fields to strings with 2 decimal places (new step added)
+	const finalMonthTotal = Object.fromEntries(
+		Object.entries(monthTotalRaw).map(([key, value]) =>
+			key === "day" ? [key, value] : [key, round2(value).toFixed(2)]
+		)
+	)
+
+	// 5. Format each day to have stringified values as well (optional consistency)
+	const finalDataArray = formattedDataArray.map((day) => ({
+		...day,
+		...Object.fromEntries(
+			Object.entries(day).map(([key, val]) =>
+				key === "day" ? [key, val] : [key, val.toFixed(2)]
+			)
+		),
+	}))
+
+	return [...finalDataArray, finalMonthTotal]
 }
+
 
 const TableMonthSales = ({ month, year }) => {
 	const { notifyError } = useNotify()
